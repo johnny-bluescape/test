@@ -21,6 +21,12 @@ Object.prototype.empty = function(){
     }
 };
 
+Object.prototype.remove = function(){
+    while(this[0]){
+        this[0].parentNode.removeChild(this[0]);
+    }
+};
+
 Object.prototype.removeclass = function(x){
     var l = this.length;
     while(this[0] && l > 0 ){
