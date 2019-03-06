@@ -1,0 +1,272 @@
+<!--
+
+Something
+
+-->
+<!doctype html>
+<html>
+<head>
+    <meta charset=utf-8>
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1">
+    <meta name="google" content="notranslate"><!-- WTF chrome, it's not in german -->
+    <meta http-equiv="Content-Language" content="en">
+    <title>TEST</title>
+    <link rel="icon" type="image/png" href="./favicon.png" />
+    <script src="../js/gator.js"></script>
+    <script src="../js/base.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Barlow" rel="stylesheet">
+    <style>
+        /*@font-face {
+            font-family: '';
+            font-weight: 200;
+            src: url("./fonts/woff/.woff") format("woff");
+        }*/
+
+        :root {
+            --canvas:#323440;
+            --tool: #282931;
+            --toolselect: #1B1B1C;
+        }
+
+        * {margin:0;padding:0;}
+        html {font-family:Barlow, sans-serif;background:var(--canvas);color:white;}
+
+        #toolbar {position:fixed;top:50%;left:64px;margin-top:-252px;user-select:none;}
+            .tool {width:60px;height:60px;margin-bottom:12px;position:relative;transition:all 150ms ease-in-out;}
+                .tool:last-child {margin-bottom:0;}
+
+                .toolbtn {width:60px;height:60px;background:var(--tool);transition:all 150ms ease-in-out;border-radius:50%;box-shadow:0 2px 20px rgba(0,0,0,.16);cursor:pointer;position:relative;z-index:1337;}
+                    .toolbtn:hover {background:#1e1f25;}
+                    .toolbtn:active {background:#1a1b20;}
+
+                .tool.current .toolbtn {background:var(--toolselect);box-shadow:0 2px 20px rgba(0,0,0,.4);}
+
+                .toolbtn svg {width:32px;height:32px;display:block;position:absolute;z-index:1337;top:50%;left:50%;transform:translate(-50%, -50%);}
+                    .toolbtn svg * {fill:#bbb;}
+                    .current .toolbtn svg * {fill:white;}
+
+                .options {height:40px;background:var(--tool);border-radius:0 20px 20px 0;width:40px;position:absolute;top:calc(50% - 20px);left:20px;overflow:hidden;opacity:0;pointer-events:none;transition:all 150ms ease-in-out;}
+                    .current .options {background:var(--toolselect);opacity:1;pointer-events:all;}
+
+                .toggled .options {width:400px;}
+
+                .controls {padding-left:48px;}
+                        .control {float:left;margin-right:24px;line-height:40px;}
+                        .control .label {font-size:10px;text-transform:uppercase;color:#888;float:left;margin-right:12px;}
+                        .control .option {float:left;}
+
+
+                .panel {position:absolute;bottom:64px;height:350px;width:320px;background:red;}
+
+            .handle {width:48px;height:48px;position:absolute;left:-48px;top:calc(50% - 24px);border-radius:50%;cursor:pointer;}
+                .fakehandle {position:absolute;top:50%;left:50%;transform:translate(-50%, -50%);width:28px;height:28px;background:var(--toolselect);border-radius:50%;box-shadow:0 2px 20px rgba(0,0,0,.4);}
+                    .fakehandle svg {width:16px;height:28px;display:block;margin:0 auto;}
+                        .fakehandle svg * {fill:white;}
+                    .fakehandle .open {display:none;}
+                    .minimized .fakehandle .close {display:none;}
+                    .minimized .fakehandle .open {display:block;}
+
+        #toolbar.minimized {}
+            #toolbar.minimized .tool {transform:translateX(-12px);opacity:0;pointer-events:none;}
+
+            #toolbar.minimized .tool:nth-child(1) {transform:translate(-20px, 20px);}
+            #toolbar.minimized .tool:nth-child(2) {transform:translate(-16px, 12px);}
+            #toolbar.minimized .tool:nth-child(3) {transform:translate(-12px, 4px);}
+            #toolbar.minimized .tool:nth-child(4) {transform:translate(-12px, -4px);}
+            #toolbar.minimized .tool:nth-child(5) {transform:translate(-16px, -12px);}
+            #toolbar.minimized .tool:nth-child(6) {transform:translate(-20px, -20px);}
+            #toolbar.minimized .tool:nth-child(7) {transform:translate(-20px, -20px);}
+
+            #toolbar.minimized .tool:nth-child(1) {transform:translate(-12px, 0);}
+            #toolbar.minimized .tool:nth-child(2) {transform:translate(-12px, 0);}
+            #toolbar.minimized .tool:nth-child(3) {transform:translate(-12px, 0);}
+            #toolbar.minimized .tool:nth-child(4) {transform:translate(-12px, 0);}
+            #toolbar.minimized .tool:nth-child(5) {transform:translate(-12px, 0);}
+            #toolbar.minimized .tool:nth-child(6) {transform:translate(-12px, 0);}
+            #toolbar.minimized .tool:nth-child(7) {transform:translate(-12px, 0);}
+            
+    </style>
+</head>
+<body>
+    <div id=toolbar>
+        <div class=handle>
+            <div class=fakehandle>
+                <svg class=close xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6 11h12v2H6z"/></svg>
+                <svg class=open xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+            </div>
+        </div>
+        <div class=tools>
+            <div class=tool>
+                <div class=toolbtn>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M15.95 10.78c.03-.25.05-.51.05-.78s-.02-.53-.06-.78l1.69-1.32c.15-.12.19-.34.1-.51l-1.6-2.77c-.1-.18-.31-.24-.49-.18l-1.99.8c-.42-.32-.86-.58-1.35-.78L12 2.34c-.03-.2-.2-.34-.4-.34H8.4c-.2 0-.36.14-.39.34l-.3 2.12c-.49.2-.94.47-1.35.78l-1.99-.8c-.18-.07-.39 0-.49.18l-1.6 2.77c-.1.18-.06.39.1.51l1.69 1.32c-.04.25-.07.52-.07.78s.02.53.06.78L2.37 12.1c-.15.12-.19.34-.1.51l1.6 2.77c.1.18.31.24.49.18l1.99-.8c.42.32.86.58 1.35.78l.3 2.12c.04.2.2.34.4.34h3.2c.2 0 .37-.14.39-.34l.3-2.12c.49-.2.94-.47 1.35-.78l1.99.8c.18.07.39 0 .49-.18l1.6-2.77c.1-.18.06-.39-.1-.51l-1.67-1.32zM10 13c-1.65 0-3-1.35-3-3s1.35-3 3-3 3 1.35 3 3-1.35 3-3 3z"/></svg>
+                </div>
+            </div>
+            <div class=tool>
+                <div class=toolbtn>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 13h2v-2H3v2zm4 8h2v-2H7v2zM3 9h2V7H3v2zm10-6h-2v2h2V3zM3 17h2v-2H3v2zM9 3H7v2h2V3zM5 3H3v2h2V3zm6 18h2v-2h-2v2zm8-8h2v-2h-2v2zm0-4h2V7h-2v2zm0 8h2v-2h-2v2zm-4 4h2v-2h-2v2zm0-16h2V3h-2v2zm4 0h2V3h-2v2zm0 16h2v-2h-2v2zM3 21h2v-2H3v2zm4-4h10V7H7v10zm2-8h6v6H9V9z"/></svg>
+                </div>
+                <div class=options>
+                    
+                </div>
+            </div>
+            <div class=tool>
+                <div class=toolbtn>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 4H6c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H6V6h12v12z"/></svg>
+                </div>
+                <div class=options>
+                    
+                </div>
+            </div>
+            <div class=tool>
+                <div class=toolbtn>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5 17v2h14v-2H5zm4.5-4.2h5l.9 2.2h2.1L12.75 4h-1.5L6.5 15h2.1l.9-2.2zM12 5.98L13.87 11h-3.74L12 5.98z"/></svg>
+                </div>
+                <div class=options>
+                    <div class=controls>
+                        <div class=control>
+                            <div class=label>Font</div>
+                            <div class=option>Helvetica</div>
+                        </div>
+                        <div class=control>
+                            <div class=label>Size</div>
+                            <div class=option>24</div>
+                        </div>
+                        <div class=control>
+                            <div class=label>Color</div>
+                            <div class=option>Blue</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tool current">
+                <div class=toolbtn>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7 14c-1.66 0-3 1.34-3 3 0 1.31-1.16 2-2 2 .92 1.22 2.49 2 4 2 2.21 0 4-1.79 4-4 0-1.66-1.34-3-3-3zm13.71-9.37l-1.34-1.34c-.39-.39-1.02-.39-1.41 0L9 12.25 11.75 15l8.96-8.96c.39-.39.39-1.02 0-1.41z"/></svg>
+                </div>
+                <div class=options>
+                    
+                </div>
+            </div>
+            <div class=tool>
+                <div class=toolbtn>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+                </div>
+                <div class=options>
+                    
+                </div>
+            </div>
+            <div class=tool>
+                <div class=toolbtn>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
+                </div>
+                <div class=options>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id=panels style="display:none;">
+        <div class=panel>
+            <div class=slide>
+                1
+            </div>
+            <div class=slide>
+                2
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function tooltoggle(e){
+            this.classList.toggle('toggled');
+        }
+
+        function toolhandler(e){
+            var t = this.getparent('tool')
+            if ( t.classList.contains('current')){
+                tooltoggle.call(t, e);
+                return;
+            }
+            var tb = t.getparent('toolbar');
+            var c = tb.getElementsByClassName('tool current');
+
+            c.removeclass('toggled');
+            c.removeclass('current');
+
+            t.classList.add('current');
+        }
+
+        function handlehandler(e){
+            var ev = e.touches ? e.touches[0] : e;
+            if( ev.which == 3 ){
+                return;
+            }
+            var _h = this;
+            var sx = ev.pageX;
+            var sy = ev.pageY;
+
+            var t = this.getparent('toolbar');
+
+            var ox = Number(t.dataset.x) || 0;
+            var oy = Number(t.dataset.y) || 0;
+
+            var moved = false;
+
+            function move(e){
+                var ev = e.touches ? e.touches[0] : e;
+                var x = ev.pageX;
+                var y = ev.pageY;
+
+                var nx = x - sx;
+                var ny = y - sy;
+
+                if ( !moved && (Math.abs(nx) > 3 || Math.abs(ny) > 3) ){
+                    moved = true;
+                } else if ( !moved ){
+                    return;
+                }
+
+                nx += ox;
+                ny += oy;
+
+                t.style.transform = 'translate(' + nx + 'px, ' + ny + 'px)';
+
+                t.dataset.x = nx;
+                t.dataset.y = ny;
+            }
+
+            function end(e){
+                window.removeEventListener('touchmove', move);
+                window.removeEventListener('touchend', end);
+
+                window.removeEventListener('mousemove', move);
+                window.removeEventListener('mouseup', end);
+
+                if ( !moved ){
+                    console.log('clicked');
+
+                    toggletoolbar.call(t, e);
+                }
+            }
+
+            window.addEventListener('touchmove', move);
+            window.addEventListener('touchend', end);
+
+            window.addEventListener('mousemove', move);
+            window.addEventListener('mouseup', end);
+        }
+
+        function toggletoolbar(e){
+            console.log('toggle');
+
+            this.classList.toggle('minimized');
+        }
+
+
+        Attach.on('touchstart', '.handle', handlehandler);
+        Attach.on('mousedown', '.handle', handlehandler);
+
+        Attach.on('click', '.toolbtn', toolhandler);
+    </script>
+</body>
+</html>
