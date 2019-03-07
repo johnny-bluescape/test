@@ -66,6 +66,12 @@ function resize2(e){
     canvas.height 	= height;
     canvas.width 	= width;
 
+    canvas.style.height = height + 'px';
+    canvas.style.width = width + 'px';
+    
+
+    console.log(width,height);
+
     ctx.putImageData( imgdata, 0, 0);
 }
 

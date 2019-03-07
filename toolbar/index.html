@@ -27,24 +27,39 @@ Something
             --canvas:#323440;
             --tool: #282931;
             --toolselect: #1B1B1C;
+            --icon:#bbb;
+            --iconcurrent:#fff;
+            --color:#fff;
+            --incolor:#000;
+        }
+
+        .light {
+            --canvas:#f8f8f8;
+            --tool: #ddd;
+            --toolselect: #ccc;
+            --icon:#666;
+            --iconcurrent:#000;
+            --color:#000;
+            --incolor:#fff;
         }
 
         * {margin:0;padding:0;-webkit-overflow-scrolling: touch;-ms-overflow-style: -ms-autohiding-scrollbar;outline:none;}
         html, body {height:100%;}
-        html {font-family:Barlow, sans-serif;background:var(--canvas);color:white;}
+        html {font-family:Barlow, sans-serif;background:var(--canvas);color:var(--color);}
 
         ::-webkit-scrollbar {width: 0;}
         ::-webkit-scrollbar-thumb {}
 
-        input {border:none;border-bottom:2px solid white;line-height:36px;font-size:18px;display:block;width:100%;background:transparent;color:white;padding:0 8px;font-weight:600;box-sizing:border-box;}
+        input {border:none;border-bottom:2px solid var(--color);line-height:36px;font-size:18px;background:transparent;color:var(--color);padding:0 8px;font-weight:600;box-sizing:border-box;}
+            input[type=text], input[type=number] {display:block;width:100%;}
 
-        button {background:transparent;color:white;font-size:18px;font-weight:600;border:none;padding:4px 12px;border-radius:4px;}
-            button.selected {background:white;color:black;}
+        button {background:transparent;color:var(--color);font-size:18px;font-weight:600;border:none;padding:4px 12px;border-radius:4px;}
+            button.selected {background:var(--color);color:var(--incolor);}
 
         .buttons button {margin-right:20px;}
 
-        #toolbar {position:fixed;top:50%;left:64px;margin-top:-252px;user-select:none;z-index:1337;}
-            .tool {width:60px;height:60px;margin-bottom:12px;position:relative;transition:all 150ms ease-in-out;}
+        #toolbar {position:fixed;top:50%;left:64px;margin-top:-252px;user-select:none;z-index:1337;pointer-events:none;}
+            .tool {width:60px;height:60px;margin-bottom:12px;position:relative;transition:all 150ms ease-in-out;pointer-events:all;}
                 .tool:last-child {margin-bottom:0;}
 
                 .toolbtn {width:60px;height:60px;background:var(--tool);transition:all 150ms ease-in-out;border-radius:50%;box-shadow:0 2px 20px rgba(0,0,0,.16);cursor:pointer;position:relative;z-index:1337;}
@@ -54,8 +69,8 @@ Something
                 .tool.current .toolbtn {background:var(--toolselect);box-shadow:0 2px 20px rgba(0,0,0,.4);}
 
                 .toolbtn svg {width:32px;height:32px;display:block;position:absolute;z-index:1337;top:50%;left:50%;transform:translate(-50%, -50%);}
-                    .toolbtn svg * {fill:#bbb;}
-                    .current .toolbtn svg * {fill:white;}
+                    .toolbtn svg * {fill:var(--icon);}
+                    .current .toolbtn svg * {fill:var(--iconcurrent);}
 
                 .options {height:40px;background:var(--tool);border-radius:0 20px 20px 0;width:40px;position:absolute;top:calc(50% - 20px);left:20px;overflow:hidden;opacity:0;pointer-events:none;transition:all 150ms ease-in-out;}
                     .current .options {background:var(--toolselect);opacity:1;pointer-events:all;}
@@ -77,7 +92,7 @@ Something
                     .item {line-height:48px;font-size:24px;padding:0 16px;border-radius:12px;font-weight:bold;user-select:none;cursor:pointer;transition:all 150ms ease-in-out;}
                         .item:hover {background:rgba(255, 255, 255, 0.06);}
                         .item:active {background:rgba(255, 255, 255, 0.1);}
-                    .item.current {background:white;color:var(--toolselect);}
+                    .item.current {background:var(--color);color:var(--incolor);}
                        
 
                 .row {padding:0 0 8px 24px;display:flex;}
@@ -91,7 +106,7 @@ Something
                     .dot::after {content:'';width:8px;height:8px;border:2px solid white;position:absolute;top:calc(50% - 6px);left:calc(50% - 6px);border-radius:50%;}
                     .dot.current::after {background:white;}
 
-            .handle {width:48px;height:48px;position:absolute;left:-48px;top:calc(50% - 24px);border-radius:50%;cursor:pointer;}
+            .handle {pointer-events: all !important;width:48px;height:48px;position:absolute;left:-48px;top:calc(50% - 24px);border-radius:50%;cursor:pointer;}
                 .fakehandle {position:absolute;top:50%;left:50%;transform:translate(-50%, -50%);width:28px;height:28px;background:var(--toolselect);border-radius:50%;box-shadow:0 2px 20px rgba(0,0,0,.4);}
                     .fakehandle svg {width:16px;height:28px;display:block;margin:0 auto;}
                         .fakehandle svg * {fill:white;}
@@ -99,7 +114,8 @@ Something
                     .minimized .fakehandle .close {display:none;}
                     .minimized .fakehandle .open {display:block;}
 
-        #toolbar.minimized {}
+        #toolbar.minimized {pointer-events:none;}
+            #toolbar.minimized .tools {pointer-events:none;}
             #toolbar.minimized .tool {transform:translateX(-12px);opacity:0;pointer-events:none;}
 
             #toolbar.minimized .tool:nth-child(1) {transform:translate(-20px, 20px);}
@@ -117,7 +133,18 @@ Something
             #toolbar.minimized .tool:nth-child(5) {transform:translate(-12px, 0);}
             #toolbar.minimized .tool:nth-child(6) {transform:translate(-12px, 0);}
             #toolbar.minimized .tool:nth-child(7) {transform:translate(-12px, 0);}
+
+
+        #tweaks {position:fixed;top:0;right:0;bottom:0;padding:8px;overflow-y:auto;width:200px;box-sizing:border-box;background:white;z-index:1336;color:black;}
             
+
+        .ui2 .tools {background:var(--toolselect);box-shadow:0 3px 40px rgba(0,0,0,.4);padding:4px 0 48px;border-radius:8px;}
+        .ui2 .tool {width:48px;height:48px;margin:0;}
+            .ui2 .toolbtn {width:calc(100% - 8px);margin:4px auto;height:calc(100% - 8px);background:transparent;box-shadow:none;}
+
+                .ui2 .tool.current .toolbtn {background:#0262FD;}
+                
+            .ui2 .handle {bottom:8px;top: auto;left: 0;}
     </style>
 </head>
 <body>
@@ -260,7 +287,60 @@ Something
     </div>
 
     <canvas id="canvas2" style="cursor: crosshair; position: absolute; top: 0px; left: 0px; right: 0px; bottom: 0px; width: 100%; height: 100%;z-index:1;"></canvas>
-    
+
+    <div id=tweaks>
+        <h4>Tweaks</h4>
+        <div class=tweak>
+            <label><input type=checkbox value=light class=tweakr /> Light</label>
+        </div>
+        <div class=tweak>
+            <label><input type=checkbox value=ui2 class=tweakr /> UI 2</label>
+        </div>
+    </div>
+
+
+
+    <div class="toolbar minimized">
+        <div class="handle fob">
+            <div class=fakehandle>
+                <svg class=close xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6 11h12v2H6z"/></svg>
+                <svg class=open xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+            </div>
+
+            <div class=menu>
+                <div class=item>Select</div>
+                <div class=item>Shapes</div>
+                <div class=item>Text</div>
+                <div class=item>Draw</div>
+                <div class=item>Components</div>
+                <div class=item>Canvas</div>
+                <div class=item>Settings</div>
+            </div>
+
+            <div class=submenu>
+                brush size color opacity
+                <div class="suboption brushsize"></div>
+                <div class="suboption brushcolor"></div>
+                <div class="suboption brushopacity"></div>
+            </div>
+        </div>
+
+        <style>
+            .toolbar {position:fixed;z-index:99999999;top:calc(100% - 64px);left:16px;}
+            .fob {left:0;top:0;}
+            .fob .fakehandle {width:36px;height:36px;background:#0262FD;box-shadow:0 3px 30px rgba(0,0,0,.25);}
+            .fob .fakehandle svg {width: 24px;height: 36px;}
+
+            .menu {position:absolute;bottom:56px;left:8px;padding: 4px 0;background:white;border-radius:6px;box-shadow:0 3px 40px rgba(0,0,0,.3);width:200px;min-height:200px;transition:all 150ms ease-in-out;opacity:0;pointer-events:none;transform:translateY(8px);}
+            .toolbar:not(.minimized) .menu {opacity:1;pointer-events:all;transform:translateY(0);}
+
+            .menu .item {font-size:16px;color:black;font-weight:600;}
+
+            .submenu {position:absolute;top:0;left:56px;padding:0 4px;background:white;border-radius:6px;width:200px;height:48px;box-sizing:border-box;}
+                .suboption {width:48px;height:100%;float:left;opacity:0;}
+        </style>
+    </div>
+
     <script>
         function dots(e, x){
             var p = this.getparent('panel');
@@ -319,6 +399,9 @@ Something
         }
 
         function handlehandler(e){
+            e.preventDefault();
+            e.stopPropagation();
+
             var ev = e.touches ? e.touches[0] : e;
             if( ev.which == 3 ){
                 return;
@@ -379,6 +462,8 @@ Something
         }
 
         function toggletoolbar(e){
+            e.preventDefault();
+            e.stopPropagation();
             console.log('toggle');
 
             this.classList.toggle('minimized');
@@ -403,9 +488,7 @@ Something
             var ep = document.getElementsByClassName('panel2');
 
             if (ep[0]){
-
                 closepanel();
-
                 return;
             }
 
@@ -418,7 +501,7 @@ Something
             var x = bounds.x;
             var y = bounds.y;
 
-            c.style.top = (y - 380) + 'px';
+            c.style.top = (y - 376) + 'px';
             c.style.left = x + 'px';
 
             c.id = 'grrr';
@@ -537,8 +620,19 @@ Something
             window.addEventListener('mouseup', end);
         }
 
+        function menuhandler(e){
+            var m = this.getparent('menu');
+
+
+
+        }
+
         function listhandler(e){
             var l = this.getparent('list');
+            if ( !l ){
+                menuhandler.call(this, e);
+                return;
+            }
             var p = l.getparent('panel');
 
             if ( p.classList.contains('moving') ){
@@ -554,6 +648,11 @@ Something
             closepanel();
         }
 
+        function tweak(e){
+            var v = this.value;
+            console.log(v);
+            document.documentElement.classList.toggle(v);
+        }
 
         Attach.on('touchstart', '.handle', handlehandler);
         Attach.on('mousedown', '.handle', handlehandler);
@@ -567,7 +666,12 @@ Something
         Attach.on('touchstart', '.panel', swipehandler);
         Attach.on('mousedown', '.panel', swipehandler);
 
+        Attach.on('change', '.tweakr', tweak);
+
         canvas();
+
+        window.onresize = resize2;
+
     </script>
 </body>
 </html>
