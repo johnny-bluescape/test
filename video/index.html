@@ -9,16 +9,25 @@
       * {margin:0;padding:0;outline:none;}
       html {font:normal 14px sans-serif;background:#323440;}
       html, body {height: 100%;}
-      .videowrap {width:100%;height:100%;position:relative;display:flex;-webkit-font-feature-settings: "tnum" 1;font-feature-settings: "tnum" 1;-webkit-font-smoothing: antialiased;    -moz-osx-font-smoothing: grayscale;font-smoothing: antialiased;max-width:100%;transform:translateZ(0);    box-shadow: 0 4px 40px rgba(0, 0, 0, 0.1);}
-    	.startcover {width:100%;height:100%;position:absolute;top:0;left:0;z-index:20;background:rgba(0,0,0,.4);opacity:0;pointer-events:none;transition:opacity 150ms ease-in-out;transform: translateZ(0);}
+      .videowrap {width:100%;height:100%;position:relative;display:flex;-webkit-font-feature-settings: "tnum" 1;font-feature-settings: "tnum" 1;-webkit-font-smoothing: antialiased;-moz-osx-font-smoothing: grayscale;font-smoothing: antialiased;max-width:100%;transform:translateZ(0);transition:box-shadow 150ms ease-in-out;box-shadow: 0 4px 40px rgba(0, 0, 0, 0.1);border-radius: 5px 5px 3px 3px;}
+    	.startcover {border-radius: 4px;width:100%;height:100%;position:absolute;top:0;left:0;z-index:20;background:rgba(0,0,0,.4);opacity:0;pointer-events:none;transition:opacity 150ms ease-in-out;transform: translateZ(0);}
   			.startcover::after {content:'';width:100%;height:100%;position:absolute;top:0;left:0;background: url(./pause.svg) no-repeat center / 36px;transition:opacity 150ms ease-in-out, background-size 150ms ease-in-out;}
               .paused .startcover::after, .idle .startcover::after {background-image:url(./play.svg);}
   		.idle .startcover, .paused .startcover {opacity:1;}
   			.idle .startcover::after {background-size:36px;opacity:.65;}
 
+            /* .idle .startcover {-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);} */
             .videowrap:hover .startcover {opacity:1;}
 
+            /* .idle video {-webkit-backdrop-filter:blur(8px);filter: blur(1px);} */
+            .idle.videowrap {}
+            .idle .videocontrols {display:none !important;}
+
         .mousepause .videowrap:not(.idle):not(.paused) .startcover, .mousepause .videowrap:not(.idle):not(.paused) .controlsright, .mousepause .videowrap:not(.idle):not(.paused) .vidtitle {opacity:0;}
+
+        .videowrap.selected {box-shadow:0 4px 40px rgba(0, 0, 0, 0.1), 0 0 0 2px #00CEFF;}
+
+
 
   	/*.magictoggle .toggle2 {overflow:hidden;}
   		.magictoggle .trackwrap2 {overflow:hidden;border-radius:6px;box-shadow: inset 1px 0 #999999, inset -12px 0 rgba(225, 225, 225, 0.2);transition:box-shadow 150ms ease-in-out;}
@@ -183,6 +192,9 @@
 
         .resize {position: absolute;bottom:0;right:0;z-index:1337;}
                     .resizehandle {width:48px;height:48px;background:url(./resize.svg) no-repeat 24px 24px / 16px;opacity:.5;pointer-events:all;cursor:se-resize;}
+        
+        .menu {background:#21272A;width:40px;height:120px;position:absolute;top:0; right:-48px;border-radius:4px;opacity:1px;transform:translateX(0);transition:all 150ms ease-in-out;}
+            .nonselected .menu {opacity:0;pointer-events:none;transform:translateX(-8px);}
   </style>
 </head>
 <body>
@@ -200,7 +212,7 @@
     </div>
     <!-- <div class="spinnerlabel">Counting Pixels...</div> -->
   </div>
-  <div class="videowrap" style="max-width: 800px;max-height:450px;margin: 100px auto;">
+  <div class="videowrap nonselected" style="max-width: 800px;max-height:450px;margin: 100px auto;">
       <div class=startcover>
             <div class=resize>
                 <div class=resizehandle></div>
@@ -219,6 +231,10 @@
 
     <div class=vidtitle>
         The Grand Tour: Colorado Outtake #2
+    </div>
+
+    <div class=menu>
+        
     </div>
 
       <div class=videocontrols>
@@ -517,20 +533,27 @@
 
       }
 
-      playpause.onclick = v.onclick = function(){
-
+    playpause.onclick = v.onclick = function(){
         if ( wrap.classList.contains('dragged')){
             return;
         }
 
-          if (v.paused) {
-             v.play();
-          } else {
-             v.pause();
-          }
+        if ( wrap.classList.contains('nonselected') ){
+            wrap.classList.remove('nonselected');
+            wrap.classList.add('selected');
+            return;
+        }
 
-          wrap.classList.remove('ended');
-      }
+        wrap.classList.remove('selected');
+
+        if (v.paused) {
+            v.play();
+        } else {
+            v.pause();
+        }
+
+        wrap.classList.remove('ended');
+    }
 
     //  buffered.style.width = 'auto';
 
