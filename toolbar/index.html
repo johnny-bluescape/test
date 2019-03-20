@@ -78,7 +78,7 @@ Something
                 .toggled .options {width:348px;}
 
                 .controls {padding-left:48px;}
-                        .control {float:left;margin-right:24px;line-height:40px;}
+                        .control {float:left;margin-right:24px;line-height:40px;cursor: pointer;}
                         .control .label {font-size:10px;text-transform:uppercase;color:#888;float:left;margin-right:12px;}
                         .control .option {float:left;}
 
@@ -169,6 +169,8 @@ Something
 
         .swatches .swatch:hover {transform:scale(1.1);z-index:3;}
         .swatches .swatch:active {transform:scale(1.05);}
+
+        .ui1half {}
     </style>
 </head>
 <body>
@@ -341,6 +343,9 @@ Something
         <h4>Tweaks</h4>
         <div class=tweak>
             <label><input type=checkbox value=light class=tweakr /> Light</label>
+        </div>
+        <div class=tweak>
+            <label><input type=checkbox value=ui1half class=tweakr /> UI 1.5</label>
         </div>
         <div class=tweak>
             <label><input type=checkbox value=ui2 class=tweakr /> UI 2</label>
