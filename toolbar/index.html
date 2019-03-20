@@ -50,7 +50,7 @@ Something
         ::-webkit-scrollbar {width: 0;}
         ::-webkit-scrollbar-thumb {}
 
-        input {border:none;border-bottom:2px solid var(--color);line-height:36px;font-size:18px;background:transparent;color:var(--color);padding:0 8px;font-weight:600;box-sizing:border-box;}
+        input {border:none;border-bottom:2px solid var(--color);line-height:36px;font-size:18px;background:transparent;color:var(--color);padding:0 8px;font-weight:600;box-sizing:border-box;border-radius:0;}
             input[type=text], input[type=number] {display:block;width:100%;}
 
         button {background:transparent;color:var(--color);font-size:18px;font-weight:600;border:none;padding:4px 12px;border-radius:4px;}
@@ -580,6 +580,8 @@ Something
         }
 
         function swipehandler(e){
+            e.preventDefault();
+            e.stopPropagation();
             var ev = e.touches ? e.touches[0] : e;
             if( ev.which == 3 ){
                 return;
@@ -719,6 +721,9 @@ Something
         }
 
         function sliderhandler(e){
+            e.preventDefault();
+            e.stopPropagation();
+            
             var ev = e.touches ? e.touches[0] : e;
             if( ev.which == 3 ){
                 return;
