@@ -40,12 +40,23 @@
         _handlers = {},
         _gatorInstances = {};
 
+    var supportsPassiveOption = false;
+    try {
+        var opts = Object.defineProperty({}, 'passive', {
+            get: function() {
+                supportsPassiveOption = true;
+            }
+        });
+        window.addEventListener('test', null, opts);
+    } catch (e) {}
+
     function _addEvent(gator, type, callback) {
 
         // blur and focus do not bubble up but if you use event capturing
         // then you will get them
         var useCapture = type == 'blur' || type == 'focus';
-        gator.element.addEventListener(type, callback, useCapture);
+        
+        gator.element.addEventListener(type, callback, supportsPassiveOption ? { passive : false } : useCapture);
     }
 
     function _cancel(e) {
