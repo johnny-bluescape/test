@@ -580,12 +580,14 @@ Something
         }
 
         function swipehandler(e){
-            e.preventDefault();
+            //e.preventDefault();
             //e.stopPropagation();
             var ev = e.touches ? e.touches[0] : e;
             if( ev.which == 3 ){
                 return;
             }
+
+            var tar = ev.target;
             var _h = this;
             var sx = ev.pageX;
             var sy = ev.pageY;
@@ -615,6 +617,8 @@ Something
                 if ( !moved && (Math.abs(nx) > 3 || Math.abs(ny) > 3) ){
                     moved = true;
                     p.classList.add('moving');
+                    e.preventDefault();
+                    e.stopPropagation();
                 } else if ( !moved ){
                     return;
                 }
@@ -650,6 +654,8 @@ Something
 
                 if ( !moved ){
                     console.log('clicked');
+
+                    tar.click();
                 } else {
 
                     var oc = p.getElementsByClassName('dot current');
