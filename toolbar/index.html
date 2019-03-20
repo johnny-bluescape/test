@@ -1,6 +1,22 @@
 <!--
 
-Something
+        ,----,                                                           
+      ,/   .`|                                                           
+    ,`   .'  :                    ,--,                                   
+  ;    ;     /                  ,--.'|     ,---,                         
+.'___,/    ,'  ,---.     ,---.  |  | :   ,---.'|                 __  ,-. 
+|    :     |  '   ,'\   '   ,'\ :  : '   |   | :               ,' ,'/ /| 
+;    |.';  ; /   /   | /   /   ||  ' |   :   : :      ,--.--.  '  | |' | 
+`----'  |  |.   ; ,. :.   ; ,. :'  | |   :     |,-.  /       \ |  |   ,' 
+    '   :  ;'   | |: :'   | |: :|  | :   |   : '  | .--.  .-. |'  :  /   
+    |   |  ''   | .; :'   | .; :'  : |__ |   |  / :  \__\/: . .|  | '    
+    '   :  ||   :    ||   :    ||  | '.'|'   : |: |  ," .--.; |;  : |    
+    ;   |.'  \   \  /  \   \  / ;  :    ;|   | '/ : /  /  ,.  ||  , ;    
+    '---'     `----'    `----'  |  ,   / |   :    |;  :   .'   \---'     
+                                 ---`-'  /    \  / |  ,     .-./         
+                                         `-'----'   `--`---'             
+                                                                         
+Johnny Hunter
 
 -->
 <!doctype html>
@@ -146,6 +162,26 @@ Something
                 
             .ui2 .handle {bottom:8px;top: auto;left: 0;}
 
+            .ui2 .options {left:56px;border-radius:6px;width:48px;height: auto;}
+                .ui2 .controls {padding:0;float:none;margin:0;}
+                .ui2 .controls * {float:none;}
+                .ui2 .options .label {display:none;}
+                .ui2 .control .option {width:48px;height:48px;display: flex;align-content: center;align-items: center;justify-content: center;justify-items: center;}
+            .ui2 .option .fill {margin:0;}
+
+        .ui3 .tools {height:48px;background:var(--toolselect);box-shadow:0 3px 40px rgba(0,0,0,.4);padding:0px 40px 0 0;border-radius:8px;}
+            .ui3 .tool {float:left;min-width:48px;height:40px;margin:4px 0 0;width:auto;border-radius:4px;}
+            .ui3 .toolbtn {width:48px;float:left;margin:4px auto;height:calc(100% - 8px);background:transparent !important;box-shadow:none !important;}
+
+        .ui3 .tool.current {background:#09090A;}
+            
+
+        .ui3 .handle {bottom:1px;top: auto;left: auto;right:0px;box-shadow:none;}
+
+        .ui3 .options {position:relative;left:0;width:0;background:transparent;border-radius: 0;}
+        .ui3 .controls {padding:0;}
+
+        .ui3 .toggled .options {width:auto;}
 
         .size {width:28px;height:28px;margin-top:6px;border-radius:50%;box-shadow:inset 0 0 0 1px hsla(0, 0%, 100%, 0.5);position:relative;}
             .size .actual {position:absolute;top:50%;left:50%;width:8px;height:8px;background:white;border-radius:50%;transform:translate(-50%, -50%);}
@@ -345,10 +381,14 @@ Something
             <label><input type=checkbox value=light class=tweakr /> Light</label>
         </div>
         <div class=tweak>
-            <label><input type=checkbox value=ui1half class=tweakr /> UI 1.5c</label>
+            <label><input type=checkbox value=ui1half class=tweakr /> UI C</label>
         </div>
         <div class=tweak>
             <label><input type=checkbox value=ui2 class=tweakr /> UI 2</label>
+        </div>
+
+        <div class=tweak>
+            <label><input type=checkbox value=ui3 class=tweakr /> UI 3</label>
         </div>
     </div>
 
@@ -429,6 +469,11 @@ Something
                 tooltoggle.call(t, e);
                 return;
             }
+
+            if ( document.documentElement.classList.contains('ui3') ){
+                tooltoggle.call(t, e);
+            }
+
             var tb = t.getparent('toolbar');
             var c = tb.getElementsByClassName('tool current');
 
@@ -571,12 +616,22 @@ Something
 
             document.body.appendChild(c);
 
-            c.style.top = (y - (c.offsetHeight + 12 )) + 'px';
+
+            //var off = c.offsetTop;
+
+            if (  y < c.offsetHeight + 8 ){
+                c.style.top = y + 56 + 'px';
+            } else {
+                c.style.top = (y - (c.offsetHeight + 12 )) + 'px';
+            }
+
 
             c.offsetLeft;
 
             c.style.opacity = 1;
             c.style.transform = 'translateY(0)';
+
+
         }
 
         function swipehandler(e){
