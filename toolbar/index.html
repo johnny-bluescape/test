@@ -581,7 +581,7 @@ Something
 
         function swipehandler(e){
             e.preventDefault();
-            e.stopPropagation();
+            //e.stopPropagation();
             var ev = e.touches ? e.touches[0] : e;
             if( ev.which == 3 ){
                 return;
@@ -723,7 +723,7 @@ Something
         function sliderhandler(e){
             e.preventDefault();
             e.stopPropagation();
-            
+
             var ev = e.touches ? e.touches[0] : e;
             if( ev.which == 3 ){
                 return;
@@ -787,6 +787,12 @@ Something
 
                 if ( !moved ){
                     console.log('clicked');
+                } else {
+                     var temp = document.getElementById('brushsize_panel');
+                     temp.empty();
+                     var cc = s.cloneNode(true);
+
+                     temp.appendChild(cc);
                 }
             }
 
