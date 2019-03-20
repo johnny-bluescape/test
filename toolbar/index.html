@@ -43,9 +43,20 @@ Something
             --incolor:#fff;
         }
 
-        * {margin:0;padding:0;-webkit-overflow-scrolling: touch;-ms-overflow-style: -ms-autohiding-scrollbar;outline:none;}
+        * {margin:0;padding:0;-ms-overflow-style: -ms-autohiding-scrollbar;outline:none;} /*-webkit-overflow-scrolling: touch;*/
         html, body {height:100%;}
         html {font-family:Barlow, sans-serif;background:var(--canvas);color:var(--color);}
+
+        html {
+    height  : 100%;
+    overflow: hidden;
+    position: relative;
+}
+body {
+    height  : 100%;
+    overflow: auto;
+    position: relative;
+}
 
         ::-webkit-scrollbar {width: 0;}
         ::-webkit-scrollbar-thumb {}
@@ -83,7 +94,7 @@ Something
                         .control .option {float:left;}
 
 
-                .panel {position:absolute;background:var(--toolselect);border-radius:20px;box-shadow:0 2px 20px rgba(0,0,0,.4);transition:all 150ms ease-in-out;overflow:hidden;user-select:none;z-index:1338;transform:translateY(6px);}
+                .panel {position:absolute;background:var(--toolselect);border-radius:20px;box-shadow:0 2px 20px rgba(0,0,0,.4);transition:all 150ms ease-in-out;overflow:hidden;user-select:none;z-index:1338;transform:translateY(6px);touch-action: manipulation;}
 
                     .slide {width:100%;height:316px;position:absolute;top:0;left:0;transition:all 150ms ease-in-out;}
                         .slide:nth-child(2) {left:-100%;}
@@ -152,7 +163,7 @@ Something
 
         .option .fill {width:28px;height:28px;margin-top:6px;border-radius:50%;box-shadow:inset 0 0 0 1px hsla(0, 0%, 100%, 0.175);position:absolute;background:black;}
 
-        .slider {width:48px;height:200px;position:relative;box-shadow:inset 0 0 0 1px rgba(255,255,255,.1);border-radius:24px;}
+        .slider {width:48px;height:200px;position:relative;box-shadow:inset 0 0 0 1px rgba(255,255,255,.1);border-radius:24px;touch-action: manipulation;}
             .slider .knob {width:32px;height:32px;background:white;border-radius:0;position:absolute;top:20px;left:50%;transform:translate(-50%, 0);border-radius:50%;}
 
         .swatches {padding:12px;height:48px;}
@@ -345,7 +356,7 @@ Something
             <label><input type=checkbox value=light class=tweakr /> Light</label>
         </div>
         <div class=tweak>
-            <label><input type=checkbox value=ui1half class=tweakr /> UI 1.5</label>
+            <label><input type=checkbox value=ui1half class=tweakr /> UI 1.5a</label>
         </div>
         <div class=tweak>
             <label><input type=checkbox value=ui2 class=tweakr /> UI 2</label>
@@ -822,13 +833,13 @@ Something
 
         Attach.on('click', '.item', listhandler);
 
-        Attach.on('touchstart', '.panel', swipehandler);
-        Attach.on('mousedown', '.panel', swipehandler);
+        Attach.on('touchstart', '.panel', swipehandler, { passive: false });
+        Attach.on('mousedown', '.panel', swipehandler, { passive: false });
 
         Attach.on('change', '.tweakr', tweak);
 
-        Attach.on('mousedown', '.slider', sliderhandler);
-        Attach.on('touchstart', '.slider', sliderhandler);
+        Attach.on('mousedown', '.slider', sliderhandler, { passive: false });
+        Attach.on('touchstart', '.slider', sliderhandler, { passive: false });
 
         Attach.on('click', '.swatch', swatchhandler);
 
