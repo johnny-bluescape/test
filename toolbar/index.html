@@ -16,7 +16,7 @@
                                  ---`-'  /    \  / |  ,     .-./         
                                          `-'----'   `--`---'             
                                                                          
-Johnny Hunter
+@JohnnyHunter
 
 -->
 <!doctype html>
@@ -661,6 +661,8 @@ Johnny Hunter
 
             p.classList.remove('moving');
 
+            var scrolling = false;
+
             function move(e){
                 var ev = e.touches ? e.touches[0] : e;
                 var x = ev.pageX;
@@ -669,16 +671,31 @@ Johnny Hunter
                 nx = x - sx;
                 ny = y - sy;
 
+                if ( scrolling ){
+                    e.preventDefault();
+                    e.stopPropagation();
+                    return;
+                }
+
                 if ( !moved && (Math.abs(nx) > 3 || Math.abs(ny) > 3) ){
                     moved = true;
                     p.classList.add('moving');
                     
                 } else if ( !moved ){
                     return;
+                } else if ( Math.abs(ny) - 5 > Math.abs(nx) ){
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    scrolling = true;
+
+                    return;
                 }
 
-                e.preventDefault();
-                e.stopPropagation();
+                if ( moved ){
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
                 
 
                 nx += ox;
