@@ -672,8 +672,8 @@
                 ny = y - sy;
 
                 if ( scrolling ){
-                    e.preventDefault();
-                    e.stopPropagation();
+                    //e.preventDefault();
+                    //e.stopPropagation();
                     return;
                 }
 
@@ -684,8 +684,8 @@
                 } else if ( !moved ){
                     return;
                 } else if ( Math.abs(ny) - 5 > Math.abs(nx) ){
-                    e.preventDefault();
-                    e.stopPropagation();
+                    //e.preventDefault();
+                    //e.stopPropagation();
 
                     scrolling = true;
 
