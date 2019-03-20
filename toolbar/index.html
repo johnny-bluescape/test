@@ -728,7 +728,9 @@
                 window.removeEventListener('mousemove', move);
                 window.removeEventListener('mouseup', end);
 
-                if ( !moved ){
+                if ( scrolling){
+                    return;
+                } else if ( !moved  ){
                     console.log('clicked');
 
                     tar.click();
