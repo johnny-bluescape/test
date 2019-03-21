@@ -16,7 +16,7 @@
                                  ---`-'  /    \  / |  ,     .-./         
                                          `-'----'   `--`---'             
                                                                          
-@JohnnyHunter
+@johnny.hunter
 
 -->
 <!doctype html>
@@ -47,6 +47,9 @@
             --iconcurrent:#fff;
             --color:#fff;
             --incolor:#000;
+            --ui:27, 26, 28;
+            --shadow:rgba(var(--ui), .16);
+            --shadow2:rgba(var(--ui), .4);
         }
 
         .light {
@@ -57,6 +60,7 @@
             --iconcurrent:#000;
             --color:#000;
             --incolor:#fff;
+            --ui:222,222,222;
         }
 
         * {margin:0;padding:0;-webkit-overflow-scrolling: touch;-ms-overflow-style: -ms-autohiding-scrollbar;outline:none;}
@@ -78,17 +82,17 @@
             .tool {width:60px;height:60px;margin-bottom:12px;position:relative;transition:all 150ms ease-in-out;pointer-events:all;}
                 .tool:last-child {margin-bottom:0;}
 
-                .toolbtn {width:60px;height:60px;background:var(--tool);transition:all 150ms ease-in-out;border-radius:50%;box-shadow:0 2px 20px rgba(0,0,0,.16);cursor:pointer;position:relative;z-index:1337;}
+                .toolbtn {width:60px;height:60px;background:var(--tool);transition:all 150ms ease-in-out;border-radius:50%;box-shadow:0 2px 20px var(--shadow1);cursor:pointer;position:relative;z-index:1337;}
                     .toolbtn:hover {background:#1e1f25;}
                     .toolbtn:active {background:#1a1b20;}
 
-                .tool.current .toolbtn {background:var(--toolselect);box-shadow:0 2px 20px rgba(0,0,0,.4);}
+                .tool.current .toolbtn {background:var(--toolselect);box-shadow:0 2px 20px var(--shadow2);}
 
                 .toolbtn svg {width:32px;height:32px;display:block;position:absolute;z-index:1337;top:50%;left:50%;transform:translate(-50%, -50%);}
                     .toolbtn svg * {fill:var(--icon);}
                     .current .toolbtn svg * {fill:var(--iconcurrent);}
 
-                .options {height:40px;background:var(--tool);border-radius:0 20px 20px 0;width:40px;position:absolute;top:calc(50% - 20px);left:20px;overflow:hidden;opacity:0;pointer-events:none;transition:all 150ms ease-in-out;}
+                .options {height:40px;background:var(--tool);border-radius:0 20px 20px 0;width:40px;position:absolute;top:calc(50% - 20px);left:20px;overflow:hidden;opacity:0;pointer-events:none;transition:all 150ms ease-in-out;box-shadow:0 2px 20px var(--shadow2);}
                     .current .options {background:var(--toolselect);opacity:1;pointer-events:all;}
 
                 .toggled .options {width:348px;}
@@ -99,7 +103,7 @@
                         .control .option {float:left;}
 
 
-                .panel {position:fixed;background:var(--toolselect);border-radius:20px;box-shadow:0 2px 20px rgba(0,0,0,.4);transition:all 150ms ease-in-out;overflow:hidden;user-select:none;z-index:1338;transform:translateY(6px);touch-action: manipulation;}
+                .panel {position:fixed;background:var(--toolselect);border-radius:20px;box-shadow:0 2px 20px var(--shadow2);transition:all 150ms ease-in-out;overflow:hidden;user-select:none;z-index:1338;transform:translateY(6px);touch-action: manipulation;}
 
                     .slide {width:100%;height:316px;position:absolute;top:0;left:0;transition:all 150ms ease-in-out;}
                         .slide:nth-child(2) {left:-100%;}
@@ -131,6 +135,7 @@
                     .minimized .fakehandle .open {display:block;}
 
         #toolbar.minimized {pointer-events:none;}
+        .ui2 #toolbar.minimized, .ui3 #toolbar.minimized {width:48px;height:48px;overflow:hidden;}
             #toolbar.minimized .tools {pointer-events:none;}
             #toolbar.minimized .tool {transform:translateX(-12px);opacity:0;pointer-events:none;}
 
@@ -178,7 +183,7 @@
 
         .ui3 .handle {bottom:1px;top: auto;left: auto;right:0px;box-shadow:none;}
 
-        .ui3 .options {position:relative;left:0;width:0;background:transparent;border-radius: 0;}
+        .ui3 .options {position:relative;left:0;width:0;background:transparent;border-radius: 0;box-shadow:none;}
         .ui3 .controls {padding:0;}
 
         .ui3 .toggled .options {width:auto;}
@@ -188,7 +193,7 @@
 
         .option .fill {width:28px;height:28px;margin-top:6px;border-radius:50%;box-shadow:inset 0 0 0 1px hsla(0, 0%, 100%, 0.175);position:absolute;background:black;}
 
-        .slider {width:48px;height:200px;position:relative;box-shadow:inset 0 0 0 1px rgba(255,255,255,.1);border-radius:24px;touch-action: manipulation;}
+        .slider {width:48px;height:200px;position:relative;box-shadow:inset 0 0 0 1px rgba(255,255,255,.1);border-radius:24px;touch-action: manipulation;background:#212122;}
             .slider .knob {width:32px;height:32px;background:white;border-radius:0;position:absolute;top:20px;left:50%;transform:translate(-50%, 0);border-radius:50%;}
 
         .swatches {padding:12px;height:48px;}
@@ -207,6 +212,17 @@
         .swatches .swatch:active {transform:scale(1.05);}
 
         .ui1half {}
+
+        .type_tool canvas, .type_tool {cursor:text !important;}
+
+        .textarea {cursor: default;user-select:none;padding:12px;resize:none;border-radius:4px;position:absolute;min-width:120px;height:28px;z-index:99;background:transparent;border:none;color:white;font-size:24px;}
+            .textarea:hover {    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);}
+            .textarea.current {box-shadow:0 0 0 2px #00CEFF;user-select:text;cursor:text;}
+            
+
+
+        canvas {pointer-events:none;}
+        .brush_tool canvas {pointer-events:all;}
     </style>
 </head>
 <body>
@@ -224,8 +240,10 @@
                 </div>
             </div>
             <div class=tool>
-                <div class=toolbtn>
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 13h2v-2H3v2zm4 8h2v-2H7v2zM3 9h2V7H3v2zm10-6h-2v2h2V3zM3 17h2v-2H3v2zM9 3H7v2h2V3zM5 3H3v2h2V3zm6 18h2v-2h-2v2zm8-8h2v-2h-2v2zm0-4h2V7h-2v2zm0 8h2v-2h-2v2zm-4 4h2v-2h-2v2zm0-16h2V3h-2v2zm4 0h2V3h-2v2zm0 16h2v-2h-2v2zM3 21h2v-2H3v2zm4-4h10V7H7v10zm2-8h6v6H9V9z"/></svg>
+                <div class=toolbtn id=select_tool data-tool=select>
+                    <svg xmlns="http://www.w3.org/2000/svg" style="width:30px;" viewBox="0 0 24 24">
+                        <path style="transform: rotate(-20deg);transform-origin: center;" d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/>
+                    </svg>
                 </div>
                 <div class=options>
                     
@@ -240,7 +258,7 @@
                 </div>
             </div>
             <div class=tool>
-                <div class=toolbtn>
+                <div class=toolbtn data-tool=type>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5 17v2h14v-2H5zm4.5-4.2h5l.9 2.2h2.1L12.75 4h-1.5L6.5 15h2.1l.9-2.2zM12 5.98L13.87 11h-3.74L12 5.98z"/></svg>
                 </div>
                 <div class=options>
@@ -261,7 +279,7 @@
                 </div>
             </div>
             <div class="tool current">
-                <div class=toolbtn>
+                <div class=toolbtn data-tool=brush>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7 14c-1.66 0-3 1.34-3 3 0 1.31-1.16 2-2 2 .92 1.22 2.49 2 4 2 2.21 0 4-1.79 4-4 0-1.66-1.34-3-3-3zm13.71-9.37l-1.34-1.34c-.39-.39-1.02-.39-1.41 0L9 12.25 11.75 15l8.96-8.96c.39-.39.39-1.02 0-1.41z"/></svg>
                 </div>
                 <div class=options style="max-width: 208px;">
@@ -303,7 +321,10 @@
     </div>
 
     <div id=panels style="display:none;">
-        <div class=panel id=brushsize_panel style="padding:8px;border-radius:32px;margin-left:14px;transform:translateY(4px);">
+        <div class=panel id=shape_panel>
+            square circle star
+        </div>
+        <div class=panel id=brushsize_panel style="padding:4px;border-radius:32px;margin-left:18px;transform:translateY(4px);">
             <div class=slider data-y=136>
                 <div class=knob style="top: 136px; transform: translateX(-50%) scale(0.3);"></div>
             </div>
@@ -457,6 +478,20 @@
             p.dataset.x = (l+w);
         }
 
+        function tools(e){
+            var tool = this.dataset.tool;
+
+            if ( !tool ){
+                return;
+            }
+
+            tool += '_tool';
+
+            document.body.className = document.body.className.replace(/\w*_tool/g, '');
+
+            document.body.classList.add(tool);
+        }
+
         function tooltoggle(e){
             this.classList.toggle('toggled');
 
@@ -464,6 +499,8 @@
         }
 
         function toolhandler(e){
+            tools.call(this, e);
+
             var t = this.getparent('tool')
             if ( t.classList.contains('current')){
                 tooltoggle.call(t, e);
@@ -619,7 +656,7 @@
 
             //var off = c.offsetTop;
 
-            if (  y < c.offsetHeight + 8 ){
+            if (  y < c.offsetHeight + 24 ){
                 c.style.top = y + 56 + 'px';
             } else {
                 c.style.top = (y - (c.offsetHeight + 12 )) + 'px';
@@ -706,7 +743,7 @@
                 if ( nx > w ){
                     nx =  (w/2) + ((nx) / (Math.abs(nx/w)+1) );
                 } else if ( nx < 0 ){
-                    nx =  ((nx) / (Math.abs(nx/w)+1) );
+                    nx =  ((nx) / (Math.abs(nx/(w/4))+1) );
                 }
 
                 for(var i=0;i<ss.length;i++){
@@ -897,6 +934,130 @@
             closepanel();
         }
 
+        function typetool(e){
+            var  p = e.target.getparent('textarea');
+            var b = e.target.getparent('tools');
+            if ( p || b ){
+                return;
+            }
+            e = e.touches ? e.touches[0] : e;
+            var t = document.createElement('textarea');
+
+            t.className = 'textarea current';
+
+            var x = e.pageX;
+            var y = e.pageY;
+
+            t.style.top = y - 24 + 'px';
+            t.style.left = x + 'px';
+
+            t.addEventListener('input', autoexpand);
+
+            t.onblur = function(){
+                t.classList.remove('current');
+                t.readOnly = true;
+            }
+
+            document.body.appendChild(t);
+
+            t.focus();
+
+            document.getElementById('select_tool').click();
+        }
+
+        function autoexpand(e){
+            var v = this.value;
+
+            var d = document.createElement('div');
+            d.innerText = v;
+            d.style.display = 'inline';
+            d.style.whiteSpace = 'nowrap';
+            d.style.fontSize = '24px';
+
+            document.body.appendChild(d);
+
+            var w = d.offsetWidth;
+            var h = d.offsetHeight;
+
+            this.style.width = w + 8 + 'px';
+
+            this.style.height = 0;
+            var s = this.scrollHeight;
+
+            this.style.height = s - 16 - 8 + 'px';
+
+            d.parentNode.removeChild(d);
+        }
+
+        function texthandler(e){
+
+            var ev = e.touches ? e.touches[0] : e;
+            if( ev.which == 3 ){
+                return;
+            }
+            var _h = this;
+            var sx = ev.pageX;
+            var sy = ev.pageY;
+
+            var t = this;
+
+            var ox = Number(t.dataset.x) || 0;
+            var oy = Number(t.dataset.y) || 0;
+
+            var moved = false;
+
+            function move(e){
+                var ev = e.touches ? e.touches[0] : e;
+                var x = ev.pageX;
+                var y = ev.pageY;
+
+                var nx = x - sx;
+                var ny = y - sy;
+
+                if ( t.readOnly === false ){
+                    return;
+                }
+
+                if ( !moved && (Math.abs(nx) > 3 || Math.abs(ny) > 3) ){
+                    moved = true;
+                    e.preventDefault();
+                    e.stopPropagation();
+                } else if ( !moved ){
+                    return;
+                }
+
+                nx += ox;
+                ny += oy;
+
+                t.style.transform = 'translate(' + nx + 'px, ' + ny + 'px)';
+
+                t.dataset.x = nx;
+                t.dataset.y = ny;
+            }
+
+            function end(e){
+                window.removeEventListener('touchmove', move);
+                window.removeEventListener('touchend', end);
+
+                window.removeEventListener('mousemove', move);
+                window.removeEventListener('mouseup', end);
+
+                if ( !moved ){
+                    console.log('clicked');
+
+                    t.classList.add('current');
+                    t.readOnly = false;
+                    t.focus();
+                }
+            }
+
+            window.addEventListener('touchmove', move);
+            window.addEventListener('touchend', end);
+
+            window.addEventListener('mousemove', move);
+            window.addEventListener('mouseup', end);
+        }
+
         Attach.on('touchstart', '.handle', handlehandler);
         Attach.on('mousedown', '.handle', handlehandler);
 
@@ -915,6 +1076,16 @@
         Attach.on('touchstart', '.slider', sliderhandler);
 
         Attach.on('click', '.swatch', swatchhandler);
+
+        Attach.on('click', '.type_tool', typetool);
+
+        //Attach.on('click', '.textarea', texthandler);
+
+        Attach.on('mousedown', '.textarea', texthandler);
+        Attach.on('touchstart', '.textarea', texthandler);
+
+
+        
 
         canvas();
 
