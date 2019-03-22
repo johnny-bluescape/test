@@ -6,8 +6,8 @@ function rectanglemove(e){
       return;
     }
 
-    var old = document.getElementsByClassName('rectangle focused');
-    old.removeclass('focused')
+    // var old = document.getElementsByClassName('rectangle focused');
+    // old.removeclass('focused')
 
     this.classList.add('focused');
 
@@ -66,49 +66,103 @@ function rectanglemove(e){
     
     console.log('fff');
 
+    var evt = e.touches ? e.touches[0] : e;
+
     var rect = this.getparent('rectangle');
 
-    var sx = 0;//rect.offsetLeft;
-    var sy = -50;//rect.offsetTop;
-    var scrolly = 0;
-    console.log(e.target);
+    var w = rect.offsetWidth;
+    var h = rect.offsetHeight;
 
-    var meow = rect;
+    var cx = 0;
+    var cy = 0;
 
-    while(meow){
-      sx += meow.offsetLeft;
-      sy += meow.offsetTop;
-      scrolly += meow.scrollTop;
+    var sx = evt.pageX;
+    var sy = evt.pageY;
 
-      meow = meow.offsetParent;
+    var ot = rect.offsetTop;
+    var ol = rect.offsetLeft;
+
+    var re = w + ol;
+    var be = h + ot;
+
+    var handle = 1;
+
+    var hs = rect.getElementsByClassName('resizehandle');
+
+    for(var i=0;i<hs.length;i++){
+        var a = hs[i];
+
+        if ( a === this ){
+            handle = i + 1;
+            break;
+        }
     }
 
-    //sx -= 100;
-    sy += 52;//navbar height, lazy
-
     function move(e){
-      e.preventDefault();
+        e.preventDefault();
 
-      var evt = e.touches ? e.touches[0] : e;
+        var evt = e.touches ? e.touches[0] : e;
 
-      var x = evt.pageX;
-      var y = evt.pageY;
-      var nx = x - sx;
-      var ny = y - sy;
+        var x = evt.pageX;
+        var y = evt.pageY;
+        var nx = x - sx;
+        var ny = y - sy;
 
-      var w = Math.abs(nx);
-      var h = Math.abs(ny);
+        var nw = w + nx;
+        var nh = h + ny;
+
+        var tx = 0;//nx < 0 ? sx : 0;
+        var ty = 0;//ny < 0 ? sy : 0;
+
+        if ( x < ol ) {
+            nw = ol - x;
+            tx = -nw;
+        }
+
+        if ( y < ot ) {
+            nh = ot - y;
+            ty = -nh;
+        }
+
+        if ( handle === 1 || handle === 2 ){
+            if ( ny < 0 ){
+                nh = h - ny;
+                ty = ny;
+            } else {
+                nh = h + sy - y;
+                ty = Math.abs(ny);
+            }
+
+            if ( y > be ){
+                nh = y - be;
+                ty = ty - nh;
+            }
+        }
+        
+        if ( handle === 1 || handle === 3 ){
+            if ( nx < 0 ){
+                nw = w + sx - x;
+            } else {
+                nw = w - nx;
+                tx = nx;
+            }
+
+            if ( x > re ){
+                nw = x - re;
+                tx = tx - nw;
+            }
+        }
 
 
-      var tx = nx < 0 ? nx : 0;
-      var ty = ny < 0 ? ny : 0;
 
-      rect.style.width = w + 'px';
-      rect.style.height = h + 'px';
-      rect.style.transform = 'translate(' + tx + 'px, ' + ty + 'px)';
+        //console.log(tx,ty, w, h, nx, ny, h, sx, sy);
 
-      var cy = y < sy ? y : sy;
-      var cx = x < sx ? x : sx;
+        rect.style.width = nw + 'px';
+        rect.style.height = nh + 'px';
+        rect.style.transform = 'translate(' + tx + 'px, ' + ty + 'px)';
+
+        cx = tx;
+        cy = ty;
 
     }
 
@@ -119,8 +173,14 @@ function rectanglemove(e){
       window.removeEventListener('touchmove', move);
       window.removeEventListener('touchend', end);
 
-      //rect.classList.remove('drawing');
-      //rect.classList.add('focused');
+      rect.style.transform = 'translate(0,0)';
+
+      rect.style.top = rect.offsetTop + cy + 'px';
+      rect.style.left = rect.offsetLeft + cx + 'px';
+
+      console.log(rect.offsetLeft, rect.offsetTop);
+
+
     }
 
     window.addEventListener('mousemove', move);
@@ -128,8 +188,6 @@ function rectanglemove(e){
 
     window.addEventListener('touchmove', move);
     window.addEventListener('touchend', end);
-
-    return 'holdup';
   }
 
   function circlex(e){
@@ -140,9 +198,10 @@ function rectanglemove(e){
     rectanglex.call(this, e, false, true);
   }
 
-  function fack(e){
-    var p = this.getparent('panelcanvas');
-    if ( !p ){
+  function ffocus(e){
+    var p = this.getparent('panel');
+    var t = this.getparent('toolbar');
+    if ( p || t ){
       return;
     }
     var r = document.getElementsByClassName('rectangle focused');
@@ -150,8 +209,6 @@ function rectanglemove(e){
       r[0].classList.remove('focused');
     }
     this.classList.add('focused');
-
-    //ave
   }
 
   function rectanglex(e, round, line){

@@ -1144,6 +1144,8 @@
         Attach.on('mousedown', '.rectangle', rectanglemove);
         Attach.on('touchstart', '.rectangle', rectanglemove);
 
+        Attach.on('click', '.rectangle', ffocus);
+
         canvas();
 
         window.onresize = resize2;
