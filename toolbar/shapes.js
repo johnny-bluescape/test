@@ -232,7 +232,7 @@ function rectanglemove(e){
     rect.style.borderStyle = 'solid';
     rect.style.backgroundClip = 'padding-box';
     rect.style.boxSizing = 'border-box';
-    rect.style.zIndex = 99999999;
+    rect.style.zIndex = 1337;
 
     var ln = 'Rectangle'
 

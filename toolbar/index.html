@@ -217,7 +217,7 @@
 
         .type_tool canvas, .type_tool {cursor:text !important;}
 
-        .textarea {cursor: default;user-select:none;padding:12px;resize:none;border-radius:4px;position:absolute;min-width:120px;height:28px;z-index:99;background:transparent;border:none;color:white;font-size:24px;}
+        .textarea {cursor: default;user-select:none;padding:12px;resize:none;border-radius:4px;position:absolute;min-width:120px;height:28px;z-index:1337;background:transparent;border:none;color:white;font-size:24px;}
             .textarea:hover {    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);}
             .textarea.current {box-shadow:0 0 0 2px var(--select);user-select:text;cursor:text;}
             
@@ -997,6 +997,7 @@
             t.style.top = y - 24 + 'px';
             t.style.left = x + 'px';
             t.style.width = '120px';
+            t.style.zIndex = 1337;
 
             t.addEventListener('input', autoexpand);
 
@@ -1005,9 +1006,9 @@
                 t.readOnly = true;
             }
 
-            w.appendChild(t)
+            //w.appendChild(t)
 
-            document.body.appendChild(w);
+            document.body.appendChild(t);
 
             t.focus();
 
