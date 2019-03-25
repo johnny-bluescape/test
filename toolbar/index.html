@@ -1150,6 +1150,15 @@
 
         window.onresize = resize2;
 
+        document.body.addEventListener('mouseup', function(e){
+            var t = e.target;
+
+            if ( t == document.body || t.id == 'canvas2' ){
+                var f = document.getElementsByClassName('focused');
+                f.removeclass('focused');
+            }
+        });
+
     </script>
 </body>
 </html>

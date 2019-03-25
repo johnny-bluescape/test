@@ -372,6 +372,7 @@ function rectanglemove(e){
     }
 
     function end(e){
+
       window.removeEventListener('mousemove', move);
       window.removeEventListener('mouseup', end);
 
@@ -388,6 +389,7 @@ function rectanglemove(e){
         //document.body.classList.add('showcontextpanel2')
       } else {
         rect.click();
+        rect.classList.add('focused');
 
         document.getElementById('select_tool').click();
       }
