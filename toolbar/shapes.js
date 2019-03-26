@@ -2,14 +2,16 @@ function rectanglemove(e){
     e.preventDefault();
     e.stopPropagation();
 
-    if ( document.documentElement.id == 'rectanglex' || document.documentElement.id == 'circlex'  || document.documentElement.id == 'linex' ){
-      return;
-    }
+    // if ( document.documentElement.id == 'rectanglex' || document.documentElement.id == 'circlex'  || document.documentElement.id == 'linex' ){
+    //   return;
+    // }
 
-    // var old = document.getElementsByClassName('rectangle focused');
-    // old.removeclass('focused')
+    blurelm.call(this, e);
 
-    this.classList.add('focused');
+    // var old = document.getElementsByClassName('rectangle current');
+    // old.removeclass('current')
+
+    this.classList.add('current');
 
     // if ( this.classList.contains('paperdiv') ){
     //   this.classList.add('selecteditem');
@@ -50,7 +52,7 @@ function rectanglemove(e){
       window.removeEventListener('touchend', end);
 
       //rect.classList.remove('drawing');
-      //rect.classList.add('focused');
+      //rect.classList.add('current');
     }
 
     window.addEventListener('touchmove', move);
@@ -204,11 +206,11 @@ function rectanglemove(e){
     if ( p || t ){
       return;
     }
-    var r = document.getElementsByClassName('rectangle focused');
+    var r = document.getElementsByClassName('rectangle current');
     while(r[0]){
-      r[0].classList.remove('focused');
+      r[0].classList.remove('current');
     }
-    this.classList.add('focused');
+    this.classList.add('current');
   }
 
   function rectanglex(e, round, line){
@@ -238,10 +240,10 @@ function rectanglemove(e){
     var _this = document.getElementById('canvas2');
     var paper = document.body;//document.getElementsByClassName('paper')[0];
 
-    var ff = document.getElementsByClassName('focused');
+    var ff = document.getElementsByClassName('current');
 
     while(ff[0]){
-      ff[0].classList.remove('focused');
+      ff[0].classList.remove('current');
     }
 
     // document.body.classList.remove('showcontextpanel2');
@@ -279,7 +281,7 @@ function rectanglemove(e){
     border = 0;//border && border.parentNode.getElementsByClassName('togglewrap on')[0] ? border.value || 0 : 0;
 
     var rect = document.createElement('div');
-    rect.className = 'rectangle drawing focused';
+    rect.className = 'rectangle drawing current';
     rect.style.position = 'absolute';
     rect.style.top = sy + scrolly - ot + 'px';
     rect.style.left = sx - ol + 'px';
@@ -291,7 +293,7 @@ function rectanglemove(e){
     rect.style.boxSizing = 'border-box';
     rect.style.zIndex = 1337;
 
-    var ln = 'Rectangle'
+    var ln = 'Rectangle';
 
     if ( round ){
       rect.style.borderRadius = '50%';
@@ -319,13 +321,18 @@ function rectanglemove(e){
       rect.appendChild(d);
     }
 
-    var f = document.getElementsByClassName('rectangle focused');
+    var f = document.getElementsByClassName('rectangle current');
     while(f[0]){
-      f[0].classList.remove('focused');
+      f[0].classList.remove('current');
 
       //document.body.classList.remove('showcontextpanel2');
     }
     //this.appendChild(rect);
+
+    var ops = document.getElementById('shape_context').cloneNode(true);
+    ops.removeAttribute('id');
+
+    rect.appendChild(ops);
 
     function move(e){
       e.preventDefault();
@@ -380,16 +387,16 @@ function rectanglemove(e){
       window.removeEventListener('touchend', end);
 
       rect.classList.remove('drawing');
-      //rect.classList.add('focused');
+      //rect.classList.add('current');
 
       if ( !moved && target.className == 'rectangle' ){
-        target.classList.add('focused');
+        target.classList.add('current');
 
         //resetcontextpanel();
         //document.body.classList.add('showcontextpanel2')
       } else {
         rect.click();
-        rect.classList.add('focused');
+        rect.classList.add('current');
 
         document.getElementById('select_tool').click();
       }

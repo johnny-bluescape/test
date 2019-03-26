@@ -51,6 +51,7 @@
             --ui:27, 26, 28;
             --shadow:rgba(var(--ui), .16);
             --shadow2:rgba(var(--ui), .4);
+            --panel: rgb(var(--ui));
             --select: #00CEFF;
         }
 
@@ -217,9 +218,10 @@
 
         .type_tool canvas, .type_tool {cursor:text !important;}
 
-        .textarea {cursor: default;user-select:none;padding:12px;resize:none;border-radius:4px;position:absolute;min-width:120px;height:28px;z-index:1337;background:transparent;border:none;color:white;font-size:24px;}
-            .textarea:hover {    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);}
-            .textarea.current {box-shadow:0 0 0 2px var(--select);user-select:text;cursor:text;}
+        .textwrap {position:absolute;}
+        .textarea {cursor: default;user-select:none;pointer-events:none;padding:12px;resize:none;border-radius:4px;position:relative;min-width:120px;height:28px;z-index:1337;background:transparent;border:none;color:white;font-size:24px;}
+            .textwrap:not(.current):hover .textarea {box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);}
+            .current .textarea {box-shadow:0 0 0 2px var(--select);user-select:text;cursor:text;pointer-events:all;}
             
 
 
@@ -228,11 +230,11 @@
 
         .rectangle {transition:box-shadow 150ms ease-in-out;}
           .rectangle:hover, .rectangle.drawing {box-shadow: 0 0 0 2px var(--select);}
-            .rectangle.focused {box-shadow: 0 0 0 2px var(--select);z-index:7;}
+            .rectangle.current {box-shadow: 0 0 0 2px var(--select);z-index:7;}
 
             .resizehandle {border-radius:50%;position:absolute;background:var(--select);box-shadow:0 0 0 1px var(--select);width:8px;height:8px;display:none;transition:box-shadow 125ms ease-in-out;}
               .resizehandle:hover, .resizehandle.active {box-shadow:0 0 0 1px var(--select), inset 0 0 0 4px #fff;}
-              .focused .resizehandle {display:block;}
+              .current .resizehandle {display:block;}
 
             .rectangle .resizehandle:nth-child(1) {top:-4px;left:-4px;cursor:nwse-resize;}
             .rectangle .resizehandle:nth-child(2) {top:-4px;right:-4px;cursor:nesw-resize;}
@@ -243,6 +245,16 @@
             .ellipse .resizehandle:nth-child(2) {top:50%;margin-top:-4px;right:-5px;cursor:ew-resize;}
             .ellipse .resizehandle:nth-child(3) {bottom:-5px;left:50%;margin-left:-4px;cursor:ns-resize;}
             .ellipse .resizehandle:nth-child(4) {top:50%;margin-top:-4px;left:-5px;cursor:ew-resize;}
+
+        .contextpanel {opacity:0;pointer-events:none;transition:all 150ms ease-in-out;background:var(--panel);border-radius:6px;box-shadow:0 3px 20px var(--shadow);height:48px;position:absolute;top:-64px;left:50%;transform:translate(-50%, 4px);}
+            .current:not(.drawing) .contextpanel, .current:not(.moving) .contextpanel {opacity:1;pointer-events:all;transform:translate(-50%, 0);}
+            
+            .contextpanel .option {cursor:pointer;min-width:48px;height:48px;padding:0 16px;box-sizing:border-box;display:inline-flex;float:left;align-content:center;align-items:center;justify-content:center;justify-items:center;}
+    
+            .contextpanel .option svg {width:20px;height:20px;}
+                .contextpanel .option svg * {fill:white;}
+
+            .contextpanel .option .fill {margin:0;}
     </style>
 </head>
 <body class="rectanglex">
@@ -371,6 +383,11 @@
                 <div class=swatch></div><div class=swatch></div><div class=swatch></div><div class=swatch></div><div class=swatch></div><div class=swatch></div><div class=swatch></div><div class=swatch></div><div class=swatch></div>
             </div>
         </div>
+        <div class=panel id=textcolor_panel data-id=text style="margin-left: -80px;">
+            <div class=swatches>
+                <div class=swatch></div><div class=swatch></div><div class=swatch></div><div class=swatch></div><div class=swatch></div><div class=swatch></div><div class=swatch></div><div class=swatch></div><div class=swatch></div>
+            </div>
+        </div>
         <div class=panel id=font_panel style="opacity:0;transform:translateY(8px);height:364px;width:356px;">
             <div class=slide>
                 <div class=list>
@@ -427,6 +444,26 @@
             <div class=page>
                 <div class=dot onclick="dots.call(this,event,0)"></div>
                 <div class="dot current" onclick="dots.call(this,event,1)"></div>
+            </div>
+        </div>
+
+        <div id=shape_context class=contextpanel style="width:240px;">
+            <div class=option>shape</div>
+            <div class=option>color</div>
+            <div class=option>border</div>
+            <div class=option>radius</div>
+            <div class=option>more</div>
+        </div>
+
+        <div id=text_context class=contextpanel style="min-width:640px;">
+            <div class=option>Helvetica</div>
+            <div class=option>Size</div>
+            <div class=option>Style</div>
+            <div class=option id=textcolor>
+                <div class="fill textfill" id="textfill" style="background:white;"></div>
+            </div>
+            <div class=option class=morebtn>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
             </div>
         </div>
     </div>
@@ -971,7 +1008,13 @@
 
             window[id + 'color'] = c;
 
+            console.log(id);
+
+            console.log(c);
+
             document.getElementById(id + 'fill').style.background = c;
+
+            document.querySelector('.current .' + id + 'fill').style.background = c;
 
             closepanel();
         }
@@ -987,28 +1030,32 @@
             var w = document.createElement('div');
             var t = document.createElement('textarea');
 
-            t.className = 'textarea current';
+            t.className = 'textarea';
 
-            w.className = 'textwrap';
+            w.className = 'textwrap current';
 
             var x = e.pageX;
             var y = e.pageY;
 
-            t.style.top = y - 24 + 'px';
-            t.style.left = x + 'px';
+            w.style.top = y - 24 + 'px';
+            w.style.left = x + 'px';
             t.style.width = '120px';
-            t.style.zIndex = 1337;
+            w.style.zIndex = 1337;
 
             t.addEventListener('input', autoexpand);
 
-            t.onblur = function(){
-                t.classList.remove('current');
-                t.readOnly = true;
-            }
+            // t.onblur = function(){
+            //     t.getparent('textwrap').classList.remove('current');
+            //     t.readOnly = true;
+            // }
 
-            //w.appendChild(t)
+            var ops = document.getElementById('text_context').cloneNode(true);
+            ops.removeAttribute('id');
 
-            document.body.appendChild(t);
+            w.appendChild(t);
+            w.appendChild(ops);
+
+            document.body.appendChild(w);
 
             t.focus();
 
@@ -1039,16 +1086,30 @@
             d.parentNode.removeChild(d);
         }
 
+        function blurelm(e){
+            var a = document.activeElement;//.blur();
+            var c = document.getElementsByClassName('current');
+            console.log(c[0]);
+            if ( c[0] && (c[0] == a || this.getparent('current')) ){
+                return;
+            }
+            a.blur();
+            c.removeclass('current');
+        }
+
         function texthandler(e){
             var ev = e.touches ? e.touches[0] : e;
             if( ev.which == 3 ){
                 return;
             }
-            var _h = this;
+
+            blurelm.call(this, e);
+
             var sx = ev.pageX;
             var sy = ev.pageY;
 
             var t = this;
+            var ta = this.getElementsByClassName('textarea')[0];
 
             var ox = Number(t.dataset.x) || 0;
             var oy = Number(t.dataset.y) || 0;
@@ -1063,7 +1124,7 @@
                 var nx = x - sx;
                 var ny = y - sy;
 
-                if ( t.readOnly === false ){
+                if ( document.activeElement === ta ){ //if ( ta.readOnly === false ){
                     return;
                 }
 
@@ -1095,8 +1156,8 @@
                     console.log('clicked');
 
                     t.classList.add('current');
-                    t.readOnly = false;
-                    t.focus();
+                    ta.readOnly = false;
+                    ta.focus();
                 }
             }
 
@@ -1107,12 +1168,19 @@
             window.addEventListener('mouseup', end);
         }
 
+        function stopprop(e){
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
         Attach.on('touchstart', '.handle', handlehandler);
         Attach.on('mousedown', '.handle', handlehandler);
 
         Attach.on('click', '.toolbtn', toolhandler);
 
         Attach.on('click', '.control', panelhandler);
+
+        Attach.on('click', '.contextpanel .option', panelhandler);
 
         Attach.on('click', '.item', listhandler);
 
@@ -1130,8 +1198,8 @@
 
         //Attach.on('click', '.textarea', texthandler);
 
-        Attach.on('mousedown', '.textarea', texthandler);
-        Attach.on('touchstart', '.textarea', texthandler);
+        Attach.on('mousedown', '.textwrap', texthandler);
+        Attach.on('touchstart', '.textwrap', texthandler);
 
         Attach.on('mousedown', '.rectangle_tool', rectanglex);
         Attach.on('touchstart', '.rectangle_tool', rectanglex);
@@ -1146,16 +1214,30 @@
 
         Attach.on('click', '.rectangle', ffocus);
 
+        //Attach.on('mousedown', '.contextpanel', stopprop, true);
+
         canvas();
 
         window.onresize = resize2;
+
+        window.addEventListener('mousedown', function(e){
+            if ( e.target != document.body ){
+                return;
+            }
+            var ev = e.touches ? e.touches[0] : e;
+            if( ev.which == 3 ){
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
+            }
+        }, true);
 
         document.body.addEventListener('mouseup', function(e){
             var t = e.target;
 
             if ( t == document.body || t.id == 'canvas2' ){
-                var f = document.getElementsByClassName('focused');
-                f.removeclass('focused');
+                var f = document.getElementsByClassName('current');
+                f.removeclass('current');
             }
         });
 
