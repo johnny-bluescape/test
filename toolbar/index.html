@@ -390,6 +390,11 @@
                 <div class=swatch></div><div class=swatch></div><div class=swatch></div><div class=swatch></div><div class=swatch></div><div class=swatch></div><div class=swatch></div><div class=swatch></div><div class=swatch></div>
             </div>
         </div>
+        <div class=panel id=shape2color_panel data-id=shape2 style="margin-left: -80px;">
+            <div class=swatches>
+                <div class=swatch></div><div class=swatch></div><div class=swatch></div><div class=swatch></div><div class=swatch></div><div class=swatch></div><div class=swatch></div><div class=swatch></div><div class=swatch></div>
+            </div>
+        </div>
         <div class=panel id=font_panel style="opacity:0;transform:translateY(8px);height:364px;width:356px;">
             <div class=slide>
                 <div class=list>
@@ -449,12 +454,16 @@
             </div>
         </div>
 
-        <div id=shape_context class=contextpanel style="width:240px;">
+        <div id=shape_context class=contextpanel style="width:364px;">
             <div class=option>shape</div>
-            <div class=option>color</div>
+            <div class=option id=shape2color>
+                <div class="fill shape2fill" id="shape2fill" style="background:red;"></div>
+            </div>
             <div class=option>border</div>
             <div class=option>radius</div>
-            <div class=option>more</div>
+            <div class=option class=morebtn>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+            </div>
         </div>
 
         <div id=text_context class=contextpanel style="min-width:640px;">
@@ -1020,12 +1029,14 @@
             if ( qs ){
                 qs.style.background = c;
 
-
                 var tw = qs.getparent('textwrap');
+                var rc = qs.getparent('rectangle');
 
                 if ( tw ){
                     var ta = tw.getElementsByClassName('textarea')[0];
                     ta.style.color = c;
+                } else if (rc){
+                    rc.style.backgroundColor = c;
                 }
             }
 
@@ -1055,7 +1066,7 @@
 
             w.style.top = y - 24 + 'px';
             w.style.left = x + 'px';
-            t.style.width = '120px';
+            t.style.width = '48px';
             w.style.zIndex = 1337;
 
             t.addEventListener('input', autoexpand);
@@ -1236,17 +1247,14 @@
 
         window.onresize = resize2;
 
-        // window.addEventListener('mousedown', function(e){
-        //     if ( e.target != document.body ){
-        //         return;
-        //     }
-        //     var ev = e.touches ? e.touches[0] : e;
-        //     if( ev.which == 3 ){
-        //         e.preventDefault();
-        //         e.stopPropagation();
-        //         return false;
-        //     }
-        // }, true);
+        window.addEventListener('mousedown', function(e){
+            var ev = e.touches ? e.touches[0] : e;
+            if( ev.which == 3 ){
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
+            }
+        }, true);
 
         document.body.addEventListener('mouseup', function(e){
             var t = e.target;
