@@ -91,14 +91,14 @@
                     .toolbtn:hover {background:#1e1f25;}
                     .toolbtn:active {background:#1a1b20;}
 
-                .tool.current .toolbtn {background:var(--toolselect);box-shadow:0 2px 20px var(--shadow2);}
+                .tool.active .toolbtn {background:var(--toolselect);box-shadow:0 2px 20px var(--shadow2);}
 
                 .toolbtn svg {width:32px;height:32px;display:block;position:absolute;z-index:1337;top:50%;left:50%;transform:translate(-50%, -50%);}
                     .toolbtn svg * {fill:var(--icon);}
-                    .current .toolbtn svg * {fill:var(--iconcurrent);}
+                    .active .toolbtn svg * {fill:var(--iconcurrent);}
 
                 .options {height:40px;background:var(--tool);border-radius:0 20px 20px 0;width:40px;position:absolute;top:calc(50% - 20px);left:20px;overflow:hidden;opacity:0;pointer-events:none;transition:all 150ms ease-in-out;box-shadow:0 2px 20px var(--shadow2);}
-                    .current .options {background:var(--toolselect);opacity:1;pointer-events:all;}
+                    .active .options {background:var(--toolselect);opacity:1;pointer-events:all;}
 
                 .toggled .options {width:348px;}
 
@@ -221,7 +221,7 @@
         .type_tool canvas, .type_tool {cursor:text !important;}
 
         .textwrap {position:absolute;}
-        .textarea {cursor: default;user-select:none;pointer-events:none;padding:12px;resize:none;border-radius:4px;position:relative;min-width:120px;height:28px;z-index:1337;background:transparent;border:none;color:white;font-size:24px;}
+        .textarea {cursor: default;user-select:none;pointer-events:none;padding:12px;resize:none;border-radius:4px;position:relative;min-width:48px;height:28px;z-index:1337;background:transparent;border:none;color:white;font-size:24px;}
             .textwrap:not(.current):hover .textarea {box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);}
             .current .textarea {box-shadow:0 0 0 2px var(--select);user-select:text;cursor:text;pointer-events:all;}
             
@@ -259,7 +259,7 @@
             .contextpanel .option .fill {margin:0;}
     </style>
 </head>
-<body class="rectanglex">
+<body class="rectanglex brush_tool">
     <div id=toolbar>
         <div class=handle>
             <div class=fakehandle>
@@ -319,7 +319,7 @@
                     </div>
                 </div>
             </div>
-            <div class="tool current">
+            <div class="tool active">
                 <div class=toolbtn data-tool=brush>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7 14c-1.66 0-3 1.34-3 3 0 1.31-1.16 2-2 2 .92 1.22 2.49 2 4 2 2.21 0 4-1.79 4-4 0-1.66-1.34-3-3-3zm13.71-9.37l-1.34-1.34c-.39-.39-1.02-.39-1.41 0L9 12.25 11.75 15l8.96-8.96c.39-.39.39-1.02 0-1.41z"/></svg>
                 </div>
@@ -581,7 +581,7 @@
             tools.call(this, e);
 
             var t = this.getparent('tool')
-            if ( t.classList.contains('current')){
+            if ( t.classList.contains('active')){
                 tooltoggle.call(t, e);
                 return;
             }
@@ -591,12 +591,12 @@
             }
 
             var tb = t.getparent('toolbar');
-            var c = tb.getElementsByClassName('tool current');
+            var c = tb.getElementsByClassName('tool active');
 
             c.removeclass('toggled');
-            c.removeclass('current');
+            c.removeclass('active');
 
-            t.classList.add('current');
+            t.classList.add('active');
 
             closepanel();
         }
