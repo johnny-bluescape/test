@@ -57,14 +57,19 @@ function resize2(e){
     height 	= canvas.parentElement.offsetHeight,
     ctx = canvas.getContext('2d');
 
-    context = canvas.getContext('2d');
+
     var scale = window.devicePixelRatio || 1;
-    context.scale(scale,scale);
 
     var imgdata = ctx.getImageData(0,0,canvas.width,canvas.height);
 
-    canvas.height 	= height;
-    canvas.width 	= width;
+    var backingStoreRatio = ctx.webkitBackingStorePixelRatio || ctx.mozBackingStorePixelRatio || ctx.msBackingStorePixelRatio || ctx.oBackingStorePixelRatio || ctx.backingStorePixelRatio || 1;
+
+    var ratio = scale / backingStoreRatio;
+
+    ctx.scale(scale,scale);
+
+    canvas.height 	= height * ratio;
+    canvas.width 	= width * ratio;
 
     canvas.style.height = height + 'px';
     canvas.style.width = width + 'px';
@@ -72,7 +77,9 @@ function resize2(e){
 
     console.log(width,height);
 
-    ctx.putImageData( imgdata, 0, 0);
+    ctx.putImageData(imgdata, 0, 0);
+
+    ctx.scale(scale,scale);
 }
 
 function sketchHandler(e){
@@ -80,9 +87,9 @@ function sketchHandler(e){
     // if ( document.getElementById('rectanglex') || document.getElementById('circlex') || document.getElementById('selectx') || !document.getElementById('drawx')){
     //     return;
     // }
-
-    e.stopPropagation();
     e.preventDefault();
+    e.stopPropagation();
+    
     var evt = e.touches ? e.touches[0] : e;
     var canvas = document.getElementById('canvas2');
 
@@ -117,6 +124,18 @@ function sketchHandler(e){
                 window.addEventListener("MSPointerMove", sketchHandler); // Fires for touch, pen, and mouse
                 window.addEventListener("MSPointerUp", sketchHandler); // Fires for touch, pen, and mouse
             }
+
+            var scale = window.devicePixelRatio || 1;
+
+            // var imgdata = ctx.getImageData(0,0,canvas.width,canvas.height);
+
+            // var backingStoreRatio = context.webkitBackingStorePixelRatio || context.mozBackingStorePixelRatio || context.msBackingStorePixelRatio || context.oBackingStorePixelRatio || context.backingStorePixelRatio || 1;
+
+            // var ratio = scale / backingStoreRatio;
+
+            // var ctx = canvas.getContext('2d');
+
+            // ctx.scale(scale,scale);
 
             break;
         case 'mousemove' : case 'touchmove' : case 'MSPointerMove' :
