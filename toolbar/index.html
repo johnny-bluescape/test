@@ -70,7 +70,9 @@
         html, body {height:100%;}
         html {font-family:Barlow, sans-serif;background:var(--canvas);color:var(--color);}
 
-        ::-webkit-scrollbar {width: 0;}
+        body {cursor:pointer;}
+
+        ::-webkit-scrollbar {width:0;height:0;}
         ::-webkit-scrollbar-thumb {}
 
         input {border:none;border-bottom:2px solid var(--color);line-height:36px;font-size:18px;background:transparent;color:var(--color);padding:0 8px;font-weight:600;box-sizing:border-box;border-radius:0;}
@@ -1014,7 +1016,19 @@
 
             document.getElementById(id + 'fill').style.background = c;
 
-            document.querySelector('.current .' + id + 'fill').style.background = c;
+            var qs = document.querySelector('.current .' + id + 'fill');
+            if ( qs ){
+                qs.style.background = c;
+
+
+                var tw = qs.getparent('textwrap');
+
+                if ( tw ){
+                    var ta = tw.getElementsByClassName('textarea')[0];
+                    ta.style.color = c;
+                }
+            }
+
 
             closepanel();
         }
@@ -1023,9 +1037,11 @@
             var  p = e.target.getparent('textarea');
             var b = e.target.getparent('toolbar');
             var pp = e.target.getparent('panel');
+
             if ( p || b || pp ){
                 return;
             }
+
             e = e.touches ? e.touches[0] : e;
             var w = document.createElement('div');
             var t = document.createElement('textarea');
@@ -1220,17 +1236,17 @@
 
         window.onresize = resize2;
 
-        window.addEventListener('mousedown', function(e){
-            if ( e.target != document.body ){
-                return;
-            }
-            var ev = e.touches ? e.touches[0] : e;
-            if( ev.which == 3 ){
-                e.preventDefault();
-                e.stopPropagation();
-                return false;
-            }
-        }, true);
+        // window.addEventListener('mousedown', function(e){
+        //     if ( e.target != document.body ){
+        //         return;
+        //     }
+        //     var ev = e.touches ? e.touches[0] : e;
+        //     if( ev.which == 3 ){
+        //         e.preventDefault();
+        //         e.stopPropagation();
+        //         return false;
+        //     }
+        // }, true);
 
         document.body.addEventListener('mouseup', function(e){
             var t = e.target;
