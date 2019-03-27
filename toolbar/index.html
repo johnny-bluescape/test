@@ -196,7 +196,8 @@
         .size {width:28px;height:28px;margin-top:6px;border-radius:50%;box-shadow:inset 0 0 0 1px hsla(0, 0%, 100%, 0.5);position:relative;}
             .size .actual {position:absolute;top:50%;left:50%;width:8px;height:8px;background:white;border-radius:50%;transform:translate(-50%, -50%);}
 
-        .option .fill {width:28px;height:28px;margin-top:6px;border-radius:50%;box-shadow:inset 0 0 0 1px hsla(0, 0%, 100%, 0.175);position:absolute;background:black;}
+        .option .fill {cursor:pointer;width:28px;height:28px;margin-top:6px;border-radius:50%;box-shadow:inset 0 0 0 1px hsla(0, 0%, 100%, 0.175);position:absolute;background:black;}
+        .option .border {cursor:pointer;width:28px;height:28px;border-radius:50%;border:4px solid rgba(255, 255, 255, 0.15);box-sizing:border-box;}
 
         .slider {width:48px;height:200px;position:relative;box-shadow:inset 0 0 0 1px rgba(255,255,255,.1);border-radius:24px;touch-action: manipulation;background:#212122;}
             .slider .knob {width:32px;height:32px;background:white;border-radius:0;position:absolute;top:20px;left:50%;transform:translate(-50%, 0);border-radius:50%;}
@@ -250,15 +251,18 @@
             .ellipse .resizehandle:nth-child(3) {bottom:-5px;left:50%;margin-left:-4px;cursor:ns-resize;}
             .ellipse .resizehandle:nth-child(4) {top:50%;margin-top:-4px;left:-5px;cursor:ew-resize;}
 
-        .contextpanel {opacity:0;pointer-events:none;transition:all 150ms ease-in-out;background:var(--panel);border-radius:6px;box-shadow:0 3px 20px var(--shadow);height:48px;position:absolute;top:-64px;left:50%;transform:translate(-50%, 4px);}
-            .current:not(.drawing) .contextpanel, .current:not(.moving) .contextpanel {opacity:1;pointer-events:all;transform:translate(-50%, 0);}
+        .contextpanel {opacity:0;pointer-events:none;transition:opacity 150ms ease-in-out, transform 150ms ease-in-out;background:var(--panel);border-radius:6px;box-shadow:0 3px 20px var(--shadow);height:48px;position:absolute;top:-64px;left:50%;transform:translate(0, 4px);z-index:9999999999999;}
+            .current:not(.drawing) .contextpanel, .current:not(.moving) .contextpanel, .contextpanel.visible {opacity:1;pointer-events:all;transform:translate(0, 0);}
             
-            .contextpanel .option {cursor:pointer;min-width:48px;height:48px;padding:0 16px;box-sizing:border-box;display:inline-flex;float:left;align-content:center;align-items:center;justify-content:center;justify-items:center;}
+
+            .contextpanel .option {cursor:pointer;min-width:48px;height:48px;box-sizing:border-box;display:inline-flex;float:left;align-content:center;align-items:center;justify-content:center;justify-items:center;}
     
-            .contextpanel .option svg {width:20px;height:20px;}
-                .contextpanel .option svg * {fill:white;}
+            .contextpanel .option svg {width:24px;height:24px;}
+                .contextpanel .option svg * {fill:rgba(255, 255, 255, 0.85);}
 
             .contextpanel .option .fill {margin:0;}
+
+            .recticon {width:24px;height:24px;border:3px solid rgba(255,255,255,.5);box-sizing:border-box;}
     </style>
 </head>
 <body class="rectanglex brush_tool">
@@ -456,13 +460,22 @@
             </div>
         </div>
 
-        <div id=shape_context class=contextpanel style="width:364px;">
-            <div class=option>shape</div>
+        <div id=shape_context class=contextpanel style="width:240px;">
+            <!-- <div class=option>
+                <div class=recticon></div>
+            </div> -->
             <div class=option id=shape2color>
-                <div class="fill shape2fill" id="shape2fill" style="background:red;"></div>
+                <div class="fill shape2fill" id="shape2fill" style="background:rgb(255, 59, 48);"></div>
             </div>
-            <div class=option>border</div>
-            <div class=option>radius</div>
+            <div class=option>
+                <div class="border shapeborder" id="shapeborder" style="border-color:;"></div>
+            </div>
+            <div class="option shapeup">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8-8 8z"/></svg>
+            </div>
+            <div class="option shapeback">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 12l-1.41-1.41L13 16.17V4h-2v12.17l-5.58-5.59L4 12l8 8 8-8z"/></svg>
+            </div>
             <div class=option class=morebtn>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
             </div>
@@ -542,6 +555,8 @@
                 .suboption {width:48px;height:100%;float:left;opacity:0;}
         </style>
     </div>
+
+    <div id=layers></div>
 
     <script>
         FONTSIZE = 24;
@@ -1025,7 +1040,7 @@
 
             console.log(c);
 
-            document.getElementById(id + 'fill').style.background = c;
+            
 
             var qs = document.querySelector('.current .' + id + 'fill');
             if ( qs ){
@@ -1040,6 +1055,17 @@
                 } else if (rc){
                     rc.style.backgroundColor = c;
                 }
+            }
+
+            if ( id == 'shape2' ){
+                var ugh = document.getElementsByClassName('contextpanel visible')[0];
+                var cid = ugh.id;
+                var sh = document.getElementById(cid + 'rect');
+                sh.style.background = c;
+
+                ugh.getElementsByClassName('shape2fill')[0].style.background = c;
+            } else {
+                document.getElementById(id + 'fill').style.background = c;
             }
 
 
@@ -1124,6 +1150,9 @@
             }
             a.blur();
             c.removeclass('current');
+
+            var p = document.getElementsByClassName('contextpanel visible');
+            p.removeclass('visible');
         }
 
         function texthandler(e){
@@ -1202,6 +1231,58 @@
             e.stopPropagation();
         }
 
+        function shapez(e){
+            var b = this.classList.contains('shapeback');
+            var r = document.getElementsByClassName('rectangle current')[0];
+            var o = r.nextElementSibling;
+
+            if ( b ){
+                o = r.previousElementSibling;
+                if ( o ){
+                    r.parentNode.insertBefore(r, o);
+                }
+            } else if ( o ) {
+                r.parentNode.insertBefore(r, o.nextElementSibling);
+            }
+        }
+
+        function setcontextpanel(x){
+            contextfollow.call(this);
+            var cid = this.dataset.context;
+
+            var c = document.getElementById(cid);
+
+            c.offsetLeft;
+
+            c.classList.add('visible');
+        }
+
+        function contextfollow(){
+            var x = this.offsetLeft;
+            var y = this.offsetTop;
+            var w = this.offsetWidth;
+            var h = this.offsetHeight;
+
+            var cid = this.dataset.context;
+
+            var c = document.getElementById(cid);
+            var cw = c.offsetWidth;
+            var ch = c.offsetHeight;
+
+            c.style.left = x + (w/2) - ( cw/2 ) + 'px';
+
+            if ( y < 72 ){
+                y = y + h + 16;
+            } else {
+                y -= 64;
+            }
+
+            c.style.top = y + 'px';
+
+            c.classList.remove('visible')
+
+        }
+
         Attach.on('touchstart', '.handle', handlehandler);
         Attach.on('mousedown', '.handle', handlehandler);
 
@@ -1243,6 +1324,9 @@
 
         Attach.on('click', '.rectangle', ffocus);
 
+        Attach.on('click', '.shapeup', shapez);
+        Attach.on('click', '.shapeback', shapez);
+
         //Attach.on('mousedown', '.contextpanel', stopprop, true);
 
         canvas();
@@ -1264,7 +1348,12 @@
             if ( t == document.body || t.id == 'canvas2' ){
                 var f = document.getElementsByClassName('current');
                 f.removeclass('current');
+
+                var p = document.getElementsByClassName('contextpanel visible');
+                p.removeclass('visible');
             }
+
+
         });
 
     </script>

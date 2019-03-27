@@ -42,6 +42,7 @@ function rectanglemove(e){
       rec.style.top = y + 'px';
       rec.style.left = x + 'px';
 
+      contextfollow.call(rec);
     }
 
     function end(e){
@@ -166,6 +167,7 @@ function rectanglemove(e){
         cx = tx;
         cy = ty;
 
+        contextfollow.call(rect);
     }
 
     function end(e){
@@ -211,6 +213,9 @@ function rectanglemove(e){
       r[0].classList.remove('current');
     }
     this.classList.add('current');
+
+    var cid = this.dataset.context;
+    document.getElementById(cid).classList.add('visible');
   }
 
   function rectanglex(e, round, line){
@@ -225,7 +230,7 @@ function rectanglemove(e){
         return;
     }
 
-
+    blurelm.call(this, e);
 
     e.preventDefault();
     e.stopPropagation();
@@ -238,7 +243,7 @@ function rectanglemove(e){
     var sx = evt.pageX;
     var sy = evt.pageY;
     var _this = document.getElementById('canvas2');
-    var paper = document.body;//document.getElementsByClassName('paper')[0];
+    var paper = document.getElementById('layers') || document.body;//document.getElementsByClassName('paper')[0];
 
     var ff = document.getElementsByClassName('current');
 
@@ -330,9 +335,16 @@ function rectanglemove(e){
     //this.appendChild(rect);
 
     var ops = document.getElementById('shape_context').cloneNode(true);
-    ops.removeAttribute('id');
+    //ops.removeAttribute('id');
 
-    rect.appendChild(ops);
+    var cid = 's' + Date.now() + '-' + Math.floor(Math.random()*1000);
+
+    ops.id = cid;
+    rect.dataset.context = cid;
+    
+    rect.id = cid + 'rect';
+
+    document.body.appendChild(ops);
 
     function move(e){
       e.preventDefault();
@@ -390,7 +402,11 @@ function rectanglemove(e){
       //rect.classList.add('current');
 
       if ( !moved && target.className == 'rectangle' ){
-        target.classList.add('current');
+        // target.classList.add('current');
+
+        // var cid = target.dataset.context;
+
+        // document.getElementById(cid).classList.add('visible');
 
         //resetcontextpanel();
         //document.body.classList.add('showcontextpanel2')
@@ -399,6 +415,8 @@ function rectanglemove(e){
         rect.classList.add('current');
 
         document.getElementById('select_tool').click();
+
+        setcontextpanel.call(rect, ops);
       }
     }
 
@@ -408,5 +426,4 @@ function rectanglemove(e){
     window.addEventListener('touchmove', move);
     window.addEventListener('touchend', end);
 
-    return 'holdup';
   }
