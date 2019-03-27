@@ -44,17 +44,13 @@ Array.prototype.random = function () {
 };
 
 Object.prototype.offset = function() {
-    var top = 0, left = 0;
-    var element = this;
-    do {
-        top += element.offsetTop  || 0;
-        left += element.offsetLeft || 0;
-        element = element.offsetParent;
-    } while(element);
+    var coords = this.getBoundingClientRect();
+    var top  = window.pageYOffset || document.documentElement.scrollTop;
+    var left = window.pageXOffset || document.documentElement.scrollLeft;
 
     return {
-        y: top,
-        x: left
+        x: left + coords.x,
+        y: top + coords.y
     };
 };
 

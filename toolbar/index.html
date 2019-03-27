@@ -75,6 +75,8 @@
 
         body {cursor:pointer;}
 
+        body.rectangle_tool {cursor:crosshair;}
+
         ::-webkit-scrollbar {width:0;height:0;}
         ::-webkit-scrollbar-thumb {}
 
@@ -254,11 +256,11 @@
             .ellipse .resizehandle:nth-child(3) {bottom:-5px;left:50%;margin-left:-4px;cursor:ns-resize;}
             .ellipse .resizehandle:nth-child(4) {top:50%;margin-top:-4px;left:-5px;cursor:ew-resize;}
 
-        .contextpanel {overflow:hidden;opacity:0;pointer-events:none;transition:opacity 150ms ease-in-out, transform 150ms ease-in-out;background:var(--panel);border-radius:6px;box-shadow:0 3px 20px var(--shadow);height:48px;position:absolute;top:-64px;left:50%;transform:translate(0, 4px);z-index:9999999999999;}
+        .contextpanel {overflow:hidden;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity 150ms ease-in-out, transform 150ms ease-in-out;background:var(--panel);border-radius:6px;box-shadow:0 3px 20px var(--shadow);height:48px;position:absolute;top:-64px;left:50%;transform:translate(0, 4px);z-index:9999999999999;}
             .current:not(.drawing) .contextpanel, .current:not(.moving) .contextpanel, .contextpanel.visible {opacity:1;pointer-events:all;transform:translate(0, 0);}
             
 
-            .contextpanel .option {cursor:pointer;min-width:48px;height:48px;box-sizing:border-box;display:inline-flex;float:left;align-content:center;align-items:center;justify-content:center;justify-items:center;}
+            .contextpanel .option {cursor:pointer;min-width:48px;height:48px;box-sizing:border-box;display:inline-flex;vertical-align:top;align-content:center;align-items:center;justify-content:center;justify-items:center;}
     
             .contextpanel .option svg {width:24px;height:24px;}
                 .contextpanel .option svg * {fill:rgba(255, 255, 255, 0.85);}
@@ -277,6 +279,12 @@
                 .mitem {cursor:pointer;min-height:48px;padding:8px 16px;display:flex;align-content:center;align-items:center;box-sizing:border-box;font-size:18px;}
                 .mitem:hover {background-color:var(--hover);}
                 .mitem:active {background-color:var(--active);}
+
+
+        .flyout {padding:0 16px;font-size:18px;line-height:23px;}
+            .flyout .label {display:inline-block;vertical-align:middle;height:24px;}
+            .flyout .icon {display:inline-block;vertical-align:middle;height:24px;margin:0 -4px 0 4px;}
+                .flyout .icon svg {display:block;}
     
     </style>
 </head>
@@ -475,35 +483,40 @@
             </div>
         </div>
 
-        <div id=shape_context class=contextpanel style="width:240px;">
+        <div id=shape_context class=contextpanel>
             <!-- <div class=option>
                 <div class=recticon></div>
             </div> -->
             <div class=option id=shape2color>
                 <div class="fill shape2fill" id="shape2fill" style="background:rgb(255, 59, 48);"></div>
-            </div>
-            <div class=option>
+            </div><div class=option>
                 <div class="border shapeborder" id="shapeborder" style="border-color:;"></div>
-            </div>
-            <div class="option shapeup">
+            </div><div class="option shapeup">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8-8 8z"/></svg>
-            </div>
-            <div class="option shapeback">
+            </div><div class="option shapeback">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 12l-1.41-1.41L13 16.17V4h-2v12.17l-5.58-5.59L4 12l8 8 8-8z"/></svg>
-            </div>
-            <div class="option morebtn">
+            </div><div class="option morebtn">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
             </div>
         </div>
 
-        <div id=text_context class=contextpanel style="min-width:640px;">
-            <div class=option>Helvetica</div>
-            <div class=option>Size</div>
-            <div class=option>Style</div>
-            <div class=option id=textcolor>
-                <div class="fill textfill" id="textfill" style="background:white;"></div>
-            </div>
-            <div class=option class=morebtn>
+        <div id=text_context class=contextpanel style="transform:translateX(-50%);">
+            <div class=option>
+                <div class=flyout>
+                    <div class=label>Helvetica</div>
+                </div>
+            </div><div class=option>
+                <div class=flyout>
+                    <div class=label>24</div><div class=icon>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path d="M7,10l5-5l5,5H7z"/>
+                            <path d="M7,14l5,5l5-5H7z"/>
+                        </svg>
+                    </div>
+                </div>
+            </div><div class=option id=textcolor>
+                <div class="fill textfill" id="textfill" style="background:white;border-radius:6px;"></div>
+            </div><div class="option morebtn">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
             </div>
         </div>
@@ -1077,6 +1090,10 @@
                 }
             }
 
+            if ( id == 'shape' ){
+                document.getElementById('shape2fill').style.background = c;
+            }
+
             if ( id == 'shape2' ){
                 var ugh = document.getElementsByClassName('contextpanel visible')[0];
                 var cid = ugh.id;
@@ -1084,6 +1101,10 @@
                 sh.style.background = c;
 
                 ugh.getElementsByClassName('shape2fill')[0].style.background = c;
+
+                shapecolor = c;
+
+                document.getElementById('shapefill').style.backgroundColor = c;
             }
 
             document.getElementById(id + 'fill').style.background = c;

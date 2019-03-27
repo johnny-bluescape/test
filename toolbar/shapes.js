@@ -281,7 +281,8 @@ function rectanglemove(e){
     }
 
     var color = document.getElementsByClassName('fillswatch')[0];
-    color =  typeof window.shapecolor == 'string' ? window.shapecolor : 'rgb(255, 59, 48)';//color.parentElement.getElementsByClassName('togglewrap')[0].classList.contains('on') ? window.getComputedStyle(color).backgroundColor : 'transparent';
+    var ac = document.getElementById('shapefill');
+    color =  typeof window.shapecolor == 'string' ? window.shapecolor : window.getComputedStyle(ac).backgroundColor;//'rgb(255, 59, 48)';//color.parentElement.getElementsByClassName('togglewrap')[0].classList.contains('on') ? window.getComputedStyle(color).backgroundColor : 'transparent';
 
     var bordercolor = document.getElementsByClassName('borderswatch')[0];
     bordercolor = 'white';//bordercolor.parentElement.getElementsByClassName('togglewrap')[0].classList.contains('on') ? window.getComputedStyle(bordercolor).backgroundColor : 'transparent';
@@ -352,11 +353,7 @@ function rectanglemove(e){
 
     function move(e){
       e.preventDefault();
-      if ( !moved ){
-        moved = true;
-        paper.appendChild(rect);
-        //addlayer({}, ln);
-      }
+
 
       var shift = e.shiftKey;
 
@@ -366,6 +363,15 @@ function rectanglemove(e){
       var y = evt.pageY;
       var nx = x - sx;
       var ny = y - sy;
+
+      if ( !moved ){
+        if ( Math.abs(nx) > 4 && Math.abs(y) > 4 ){
+          moved = true;
+          paper.appendChild(rect);
+          //addlayer({}, ln);
+        }
+        return;
+      }
 
       var w = Math.abs(nx);
       var h = Math.abs(ny);
@@ -405,7 +411,13 @@ function rectanglemove(e){
       rect.classList.remove('drawing');
       //rect.classList.add('current');
 
+      if ( !moved ){
+        rect.remove();
+        return;
+      }
+
       if ( !moved && target.className == 'rectangle' ){
+        
         // target.classList.add('current');
 
         // var cid = target.dataset.context;
