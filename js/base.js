@@ -43,6 +43,21 @@ Array.prototype.random = function () {
     return this[Math.floor(Math.random() * this.length)]
 };
 
+Object.prototype.offset = function() {
+    var top = 0, left = 0;
+    var element = this;
+    do {
+        top += element.offsetTop  || 0;
+        left += element.offsetLeft || 0;
+        element = element.offsetParent;
+    } while(element);
+
+    return {
+        y: top,
+        x: left
+    };
+};
+
 function toDecimal(num, fixed) {
     var re = new RegExp('^-?\\d+(?:\.\\d{0,' + (fixed || -1) + '})?');
     return num.toString().match(re)[0];

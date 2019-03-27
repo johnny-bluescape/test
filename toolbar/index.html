@@ -53,6 +53,9 @@
             --shadow2:rgba(var(--ui), .4);
             --panel: rgb(var(--ui));
             --select: #00CEFF;
+
+            --hover:rgba(255, 255, 255, 0.025);
+            --active:rgba(255, 255, 255, 0.05);
         }
 
         .light {
@@ -168,7 +171,7 @@
         .ui2 .tool {width:48px;height:48px;margin:0;display:flex;}
             .ui2 .toolbtn {width:calc(100% - 8px);margin:4px auto;height:calc(100% - 8px);background:transparent;box-shadow:none;}
 
-                .ui2 .tool.current .toolbtn {background:#0262FD;}
+                .ui2 .tool.active .toolbtn {background:#0262FD;}
                 
             .ui2 .handle {bottom:8px;top: auto;left: 0;}
 
@@ -183,7 +186,7 @@
             .ui3 .tool {float:left;min-width:48px;height:40px;margin:4px 0 0;width:auto;border-radius:4px;}
             .ui3 .toolbtn {width:48px;float:left;margin:4px auto;height:calc(100% - 8px);background:transparent !important;box-shadow:none !important;}
 
-        .ui3 .tool.current {background:#09090A;}
+        .ui3 .tool.active {background:#09090A;}
             
 
         .ui3 .handle {bottom:1px;top: auto;left: auto;right:0px;box-shadow:none;}
@@ -262,10 +265,19 @@
 
             .contextpanel .option .fill {margin:0;}
 
-            .contextpanel .option:hover {background-color:rgba(255, 255, 255, 0.025);}
-            .contextpanel .option:active {background-color:rgba(255, 255, 255, 0.05);}
+            .contextpanel .option:hover {background-color:var(--hover);}
+            .contextpanel .option:active {background-color:var(--active);}
 
             .recticon {width:24px;height:24px;border:3px solid rgba(255,255,255,.5);box-sizing:border-box;}
+
+
+            .overflowmenu {position:fixed;opacity:0;background: var(--toolselect);border-radius:6px;padding:4px 0;box-shadow: 0 2px 20px var(--shadow2);transition: all 150ms ease-in-out;overflow: hidden;user-select: none;z-index: 999999999999991;transform: translateY(6px);touch-action: manipulation;}
+                .overflowmenu.visible {transform:translateY(0);opacity:1;}
+                
+                .mitem {cursor:pointer;min-height:48px;padding:8px 16px;display:flex;align-content:center;align-items:center;box-sizing:border-box;font-size:18px;}
+                .mitem:hover {background-color:var(--hover);}
+                .mitem:active {background-color:var(--active);}
+    
     </style>
 </head>
 <body class="rectanglex brush_tool">
@@ -479,7 +491,7 @@
             <div class="option shapeback">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 12l-1.41-1.41L13 16.17V4h-2v12.17l-5.58-5.59L4 12l8 8 8-8z"/></svg>
             </div>
-            <div class=option class=morebtn>
+            <div class="option morebtn">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
             </div>
         </div>
@@ -494,6 +506,13 @@
             <div class=option class=morebtn>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
             </div>
+        </div>
+
+        <div id=moremenu>
+            <div class=mitem>Copy</div>
+            <div class=mitem>Delete</div>
+            <div class=mitem>Comment</div>
+            <div class=mitem>Pin</div>
         </div>
     </div>
 
@@ -1290,6 +1309,50 @@
             c.classList.remove('visible');
         }
 
+        function closemenu(e){
+            e.preventDefault();
+            e.stopPropagation();
+            document.body.removeEventListener('click', closemenu);
+
+            var o = document.getElementsByClassName('morebtn opened');
+            o.removeclass('opened');
+
+            var m = document.getElementsByClassName('overflowmenu');
+            m.remove();
+        }
+
+        function moremenu(e){
+            var o = this.classList.contains('opened');
+            if ( o ){
+                return;
+            }
+            var x = this.offset().x;
+            var y = this.offset().y;
+            var w = this.offsetWidth;
+            var h = this.offsetHeight;
+
+            this.classList.add('opened');
+
+            var m = document.getElementById('moremenu');
+            m = m.cloneNode(true);
+
+            m.removeAttribute('id');
+
+            m.className = 'overflowmenu';
+
+            m.style.top = y + 'px';
+            m.style.left = x + w + 16 + 'px';
+            
+            document.body.addEventListener('click', closemenu);
+
+            document.body.appendChild(m);
+
+            m.offsetLeft;
+
+            m.classList.add('visible');
+
+        }
+
         Attach.on('touchstart', '.handle', handlehandler);
         Attach.on('mousedown', '.handle', handlehandler);
 
@@ -1333,6 +1396,8 @@
 
         Attach.on('click', '.shapeup', shapez);
         Attach.on('click', '.shapeback', shapez);
+
+        Attach.on('click', '.morebtn', moremenu);
 
         //Attach.on('mousedown', '.contextpanel', stopprop, true);
 
