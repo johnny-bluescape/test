@@ -251,7 +251,7 @@
             .ellipse .resizehandle:nth-child(3) {bottom:-5px;left:50%;margin-left:-4px;cursor:ns-resize;}
             .ellipse .resizehandle:nth-child(4) {top:50%;margin-top:-4px;left:-5px;cursor:ew-resize;}
 
-        .contextpanel {opacity:0;pointer-events:none;transition:opacity 150ms ease-in-out, transform 150ms ease-in-out;background:var(--panel);border-radius:6px;box-shadow:0 3px 20px var(--shadow);height:48px;position:absolute;top:-64px;left:50%;transform:translate(0, 4px);z-index:9999999999999;}
+        .contextpanel {overflow:hidden;opacity:0;pointer-events:none;transition:opacity 150ms ease-in-out, transform 150ms ease-in-out;background:var(--panel);border-radius:6px;box-shadow:0 3px 20px var(--shadow);height:48px;position:absolute;top:-64px;left:50%;transform:translate(0, 4px);z-index:9999999999999;}
             .current:not(.drawing) .contextpanel, .current:not(.moving) .contextpanel, .contextpanel.visible {opacity:1;pointer-events:all;transform:translate(0, 0);}
             
 
@@ -261,6 +261,9 @@
                 .contextpanel .option svg * {fill:rgba(255, 255, 255, 0.85);}
 
             .contextpanel .option .fill {margin:0;}
+
+            .contextpanel .option:hover {background-color:rgba(255, 255, 255, 0.025);}
+            .contextpanel .option:active {background-color:rgba(255, 255, 255, 0.05);}
 
             .recticon {width:24px;height:24px;border:3px solid rgba(255,255,255,.5);box-sizing:border-box;}
     </style>
@@ -396,7 +399,7 @@
                 <div class=swatch></div><div class=swatch></div><div class=swatch></div><div class=swatch></div><div class=swatch></div><div class=swatch></div><div class=swatch></div><div class=swatch></div><div class=swatch></div>
             </div>
         </div>
-        <div class=panel id=shape2color_panel data-id=shape2 style="margin-left: -80px;">
+        <div class=panel id=shape2color_panel data-id=shape2 style="margin-left: -80px;width:456px;">
             <div class=swatches>
                 <div class=swatch></div><div class=swatch></div><div class=swatch></div><div class=swatch></div><div class=swatch></div><div class=swatch></div><div class=swatch></div><div class=swatch></div><div class=swatch></div>
             </div>
@@ -1040,8 +1043,6 @@
 
             console.log(c);
 
-            
-
             var qs = document.querySelector('.current .' + id + 'fill');
             if ( qs ){
                 qs.style.background = c;
@@ -1064,10 +1065,9 @@
                 sh.style.background = c;
 
                 ugh.getElementsByClassName('shape2fill')[0].style.background = c;
-            } else {
-                document.getElementById(id + 'fill').style.background = c;
             }
 
+            document.getElementById(id + 'fill').style.background = c;
 
             closepanel();
         }
@@ -1269,7 +1269,15 @@
             var cw = c.offsetWidth;
             var ch = c.offsetHeight;
 
-            c.style.left = x + (w/2) - ( cw/2 ) + 'px';
+            x = x + (w/2) - ( cw/2 );
+
+            if ( x < 16){
+                x = 16
+            } else if ( x + cw > window.innerWidth - 16 ){
+                x = window.innerWidth - 16 - cw;
+            }
+
+            c.style.left = x + 'px';
 
             if ( y < 72 ){
                 y = y + h + 16;
@@ -1279,8 +1287,7 @@
 
             c.style.top = y + 'px';
 
-            c.classList.remove('visible')
-
+            c.classList.remove('visible');
         }
 
         Attach.on('touchstart', '.handle', handlehandler);
@@ -1352,8 +1359,6 @@
                 var p = document.getElementsByClassName('contextpanel visible');
                 p.removeclass('visible');
             }
-
-
         });
 
     </script>

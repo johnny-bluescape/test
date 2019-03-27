@@ -54,6 +54,8 @@ function rectanglemove(e){
 
       //rect.classList.remove('drawing');
       //rect.classList.add('current');
+
+      setcontextpanel.call(rec);
     }
 
     window.addEventListener('touchmove', move);
@@ -183,7 +185,9 @@ function rectanglemove(e){
       rect.style.left = rect.offsetLeft + cx + 'px';
 
       console.log(rect.offsetLeft, rect.offsetTop);
+      console.log('ughsuehfku')
 
+      setcontextpanel.call(rect);
 
     }
 
@@ -415,9 +419,9 @@ function rectanglemove(e){
         rect.classList.add('current');
 
         document.getElementById('select_tool').click();
-
-        setcontextpanel.call(rect, ops);
       }
+
+      setcontextpanel.call(rect, ops);
     }
 
     window.addEventListener('mousemove', move);
