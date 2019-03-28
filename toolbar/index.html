@@ -166,7 +166,7 @@
             #toolbar.minimized .tool:nth-child(7) {transform:translate(-12px, 0);}
 
 
-        #tweaks {position:fixed;top:0;right:0;bottom:0;padding:8px;overflow-y:auto;width:200px;box-sizing:border-box;background:white;z-index:1336;color:black;}
+        #tweaks {position:fixed;top:0;right:0;bottom:0;padding:8px;overflow-y:auto;width:200px;box-sizing:border-box;background:#f4f4f4;z-index:1336;color:black;}
             #tweaks h4 {padding: 8px 8px 12px;font-weight: 600;}
 
         .ui2 .tools {background:var(--toolselect);box-shadow:0 3px 40px rgba(0,0,0,.4);padding:4px 0 48px;border-radius:8px;}
@@ -1232,6 +1232,9 @@
             if( ev.which == 3 ){
                 return;
             }
+
+            e.preventDefault();
+            e.stopPropagation();
 
             blurelm.call(this, e);
 
