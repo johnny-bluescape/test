@@ -50,7 +50,9 @@ Object.prototype.offset = function() {
 
     return {
         x: left + coords.x,
-        y: top + coords.y
+        y: top + coords.y,
+        w: coords.width,
+        h: coords.height
     };
 };
 

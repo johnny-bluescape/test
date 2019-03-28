@@ -75,7 +75,7 @@
 
         body {cursor:pointer;}
 
-        body.rectangle_tool {cursor:crosshair;}
+        body.rectangle_tool, body.select_tool {cursor:crosshair;}
 
         ::-webkit-scrollbar {width:0;height:0;}
         ::-webkit-scrollbar-thumb {}
@@ -92,7 +92,7 @@
             .tool {width:60px;height:60px;margin-bottom:12px;position:relative;transition:all 150ms ease-in-out;pointer-events:all;}
                 .tool:last-child {margin-bottom:0;}
 
-                .toolbtn {width:60px;height:60px;background:var(--tool);transition:all 150ms ease-in-out;border-radius:50%;box-shadow:0 2px 20px var(--shadow1);cursor:pointer;position:relative;z-index:1337;}
+                .toolbtn {width:60px;height:60px;background:var(--tool);transition:all 150ms ease-in-out;border-radius:50%;box-shadow:0 2px 20px var(--shadow);cursor:pointer;position:relative;z-index:1337;}
                     .toolbtn:hover {background:#1e1f25;}
                     .toolbtn:active {background:#1a1b20;}
 
@@ -167,7 +167,7 @@
 
 
         #tweaks {position:fixed;top:0;right:0;bottom:0;padding:8px;overflow-y:auto;width:200px;box-sizing:border-box;background:white;z-index:1336;color:black;}
-            
+            #tweaks h4 {padding: 8px 8px 12px;font-weight: 600;}
 
         .ui2 .tools {background:var(--toolselect);box-shadow:0 3px 40px rgba(0,0,0,.4);padding:4px 0 48px;border-radius:8px;}
         .ui2 .tool {width:48px;height:48px;margin:0;display:flex;}
@@ -285,10 +285,22 @@
             .flyout .label {display:inline-block;vertical-align:middle;height:24px;}
             .flyout .icon {display:inline-block;vertical-align:middle;height:24px;margin:0 -4px 0 4px;}
                 .flyout .icon svg {display:block;}
+
+
+        .toggle {width:40px;height:24px;border-radius:30px;background:grey;position:relative;background:rgba(0,0,0,.05);box-shadow:inset 0 0 0 1px rgba(0, 0, 0, 0.02);cursor:pointer;transition:background 150ms ease-in-out;display: inline-block;margin-right:8px;vertical-align: middle;}
+            .toggle:after {content:'';position:absolute;top:4px;left:4px;width:16px;height:16px;background:white;display:block;box-shadow:0 2px 4px rgba(0,0,0,.15);border-radius:50%;transition:transform 150ms ease-in-out;}
+
+        :checked ~ .toggle {background:rgb(76, 217, 100);box-shadow:inset 0 0 0 1px rgba(0, 0, 0, 0.0);}
+        :checked ~ .toggle:after {transform:translateX(100%);}
+
+        input.tweakr {display:none;}
+
+        .tweak {cursor:pointer;}
+            .tweak label {display:block;padding:8px;cursor:pointer;}
     
     </style>
 </head>
-<body class="rectanglex brush_tool">
+<body class="rectanglex brush_tool ">
     <div id=toolbar>
         <div class=handle>
             <div class=fakehandle>
@@ -501,7 +513,7 @@
         </div>
 
         <div id=text_context class=contextpanel style="transform:translateX(-50%);">
-            <div class=option>
+            <div class=option id=font>
                 <div class=flyout>
                     <div class=label>Helvetica</div>
                 </div>
@@ -515,7 +527,7 @@
                     </div>
                 </div>
             </div><div class=option id=textcolor>
-                <div class="fill textfill" id="textfill" style="background:white;border-radius:6px;"></div>
+                <div class="fill textfill" id="textfill" style="background:white;border-radius:4px;"></div>
             </div><div class="option morebtn">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
             </div>
@@ -534,17 +546,18 @@
     <div id=tweaks>
         <h4>Tweaks</h4>
         <div class=tweak>
-            <label><input type=checkbox value=light class=tweakr /> Light</label>
+            <label><input type=checkbox value=light class=tweakr /><div class=toggle></div> Light</label>
         </div>
         <div class=tweak>
-            <label><input type=checkbox value=ui1half class=tweakr /> UI C</label>
-        </div>
-        <div class=tweak>
-            <label><input type=checkbox value=ui2 class=tweakr /> UI 2</label>
+            <label><input type=checkbox value=ui2 id=ui2t class=tweakr onchange="document.getElementById('ui3t').checked=false;" /><div class=toggle></div> UI 2</label>
         </div>
 
         <div class=tweak>
-            <label><input type=checkbox value=ui3 class=tweakr /> UI 3</label>
+            <label><input type=checkbox value=ui3 id=ui3t class=tweakr onchange="document.getElementById('ui2t').checked=false;" /><div class=toggle></div> UI 3</label>
+        </div>
+
+        <div class=tweak>
+            <label><input type=checkbox value=advanced class=tweakr /><div class=toggle></div> Advanced Panel</label>
         </div>
     </div>
 
@@ -978,6 +991,11 @@
         function tweak(e){
             var v = this.value;
             console.log(v);
+            if ( v == 'ui3' ){
+                document.documentElement.classList.remove('ui2');
+            } else if ( v == 'ui2' ){
+                document.documentElement.classList.remove('ui3');
+            }
             document.documentElement.classList.toggle(v);
         }
 
@@ -1185,12 +1203,24 @@
             var a = document.activeElement;//.blur();
             var c = document.getElementsByClassName('current');
             console.log(c[0]);
-            if ( c[0] && (c[0] == a || this.getparent('current')) ){
+            if ( !c[0] || c[0] && (c[0] == a || this.getparent('current')) ){
                 return;
             }
+            console.log(a);
             a.blur();
+
+            var ta = c[0].getElementsByClassName('textarea')[0];
+
+            if ( ta ){
+                ta.blur();
+                ta.readOnly = true;
+            }
             c.removeclass('current');
 
+            hidecontext();
+        }
+
+        function hidecontext(){
             var p = document.getElementsByClassName('contextpanel visible');
             p.removeclass('visible');
         }
@@ -1413,12 +1443,14 @@
         Attach.on('mousedown', '.rectangle', rectanglemove);
         Attach.on('touchstart', '.rectangle', rectanglemove);
 
-        Attach.on('click', '.rectangle', ffocus);
+        //Attach.on('click', '.rectangle', ffocus);
 
         Attach.on('click', '.shapeup', shapez);
         Attach.on('click', '.shapeback', shapez);
 
         Attach.on('click', '.morebtn', moremenu);
+
+        Attach.on('mousedown', '.select_tool', marquee);
 
         //Attach.on('mousedown', '.contextpanel', stopprop, true);
 
@@ -1439,11 +1471,13 @@
             var t = e.target;
 
             if ( t == document.body || t.id == 'canvas2' ){
-                var f = document.getElementsByClassName('current');
-                f.removeclass('current');
+                // var f = document.getElementsByClassName('current');
+                // f.removeclass('current');
 
-                var p = document.getElementsByClassName('contextpanel visible');
-                p.removeclass('visible');
+                blurelm.call(this,e);
+
+                // var p = document.getElementsByClassName('contextpanel visible');
+                // p.removeclass('visible');
             }
         });
 

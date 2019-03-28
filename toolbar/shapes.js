@@ -29,6 +29,7 @@ function rectanglemove(e){
     console.log(ox, oy);
 
     function move(e){
+      hidecontext();
       var evt = e.touches ? e.touches[0] : e;
 
       var x = evt.pageX;
@@ -43,6 +44,23 @@ function rectanglemove(e){
       rec.style.left = x + 'px';
 
       contextfollow.call(rec);
+
+      var recs = document.getElementsByClassName('rectangle current');
+
+      for(var i=0;i<recs.length;i++){
+        var r = recs[i];
+        if ( r == rec ){
+          continue;
+        }
+
+        r.dataset.left = nx;
+        r.dataset.top = ny;
+
+        r.style.transform = 'translate(' + nx + 'px,' + ny + 'px)';
+
+      }
+
+
     }
 
     function end(e){
@@ -56,6 +74,23 @@ function rectanglemove(e){
       //rect.classList.add('current');
 
       setcontextpanel.call(rec);
+
+      var recs = document.getElementsByClassName('rectangle current');
+
+      for(var i=0;i<recs.length;i++){
+        var r = recs[i];
+        if ( r == rec ){
+          continue;
+        }
+        var ol = r.offset().x;
+        var ot = r.offset().y;
+
+        r.style.left = ol + 'px';
+        r.style.top = ot +  'px';
+
+        r.style.transform = 'translate(0,0)';
+
+      }
     }
 
     window.addEventListener('touchmove', move);
@@ -84,8 +119,11 @@ function rectanglemove(e){
     var sx = evt.pageX;
     var sy = evt.pageY;
 
-    var ot = rect.offsetTop;
-    var ol = rect.offsetLeft;
+    // var ot = rect.offsetTop;
+    // var ol = rect.offsetLeft;
+
+    var ol = rect.offset().x;
+    var ot = rect.offset().y;
 
     var re = w + ol;
     var be = h + ot;
@@ -263,22 +301,14 @@ function rectanglemove(e){
 
     var moved = 0;
 
-    var scrolly = 0;
-    var ot = 0;//paper.offsetTop;
-    var ol = 0;//paper.offsetLeft;
+    var scrolly = 0;//window.pageYOffset;
     console.log(e.target);
 
-    var meow = paper;
+    
+    var ol = paper.offset().x;
+    var ot = paper.offset().y;
 
-    while(meow){
-      scrolly += meow.scrollTop;
-
-      ot += meow.offsetTop;
-      ol += meow.offsetLeft;
-
-
-      meow = meow.offsetParent;
-    }
+    console.log(paper.offset());
 
     var color = document.getElementsByClassName('fillswatch')[0];
     var ac = document.getElementById('shapefill');
@@ -369,6 +399,8 @@ function rectanglemove(e){
           moved = true;
           paper.appendChild(rect);
           //addlayer({}, ln);
+
+          hidecontext();
         }
         return;
       }
@@ -427,7 +459,7 @@ function rectanglemove(e){
         //resetcontextpanel();
         //document.body.classList.add('showcontextpanel2')
       } else {
-        rect.click();
+        //rect.click();
         rect.classList.add('current');
 
         document.getElementById('select_tool').click();
@@ -443,3 +475,108 @@ function rectanglemove(e){
     window.addEventListener('touchend', end);
 
   }
+
+  function marquee(e){
+    if ( e.which != 1 ){
+        return;
+    }
+    var sx = e.pageX;
+    var sy = e.pageY;
+
+    var sh = window.scrollTop || document.body.scrollTop || document.scrollTop;
+
+    var just = this;
+    var marq = document.createElement('div');
+
+    marq.style.border = '1px solid #1473e6';
+    marq.style.position = 'absolute';
+    marq.style.top = sy +'px';
+    marq.style.left = sx + 'px';
+    marq.style.zIndex = 1337;
+    marq.style.background = 'rgba(20, 115, 230,.15)';
+
+    //document.body.appendChild(marq);
+    var moved = false;
+
+    window.onmousemove =  function(e){
+        e.preventDefault();
+        if ( !moved ){
+          moved = true;
+          document.body.appendChild(marq);
+        }
+
+        var x = e.pageX;
+        var y = e.pageY;
+        var nx = x - sx;
+        var ny = y - sy;
+
+        var w = Math.abs(nx);
+        var h = Math.abs(ny);
+
+        marq.style.width = w + 'px';
+        marq.style.height = h + 'px';
+
+        var tx = nx < 0 ? nx : 0;
+        var ty = ny < 0 ? ny : 0;
+
+        marq.style.transform = 'translate(' + tx + 'px, ' + ty + 'px)';
+
+        hidecontext();
+
+        var coords = marq.getBoundingClientRect();
+        var ml = coords.left;
+        //var mr = coords.right;
+        //var mb = coords.bottom;
+        var mt = coords.top;
+        var mh = coords.height;
+        var mw = coords.width;
+
+        var elms = just.getElementsByClassName('rectangle');//'image'
+
+
+        for(var i=0;i<elms.length;i++){
+            var elm = elms[i];
+            // var ol = elm.offsetLeft + elm.parentNode.offsetLeft + elm.parentNode.parentNode.offsetLeft  + Number(elm.dataset.x);
+            // var ot = elm.parentNode.offsetTop + Number(elm.dataset.y) + 52;
+            var bounds = elm.getBoundingClientRect();
+            var ol = bounds.left;
+            var ot = bounds.top;
+            //var ob = bounds.bottom;
+            //var or = bounds.right;
+            // var ew = elm.offsetWidth;
+            // var eh = elm.offsetHeight;
+            var oh = bounds.height;
+            var ow = bounds.width;
+
+                var x1 = ml;
+                var x2 = ml + mw;
+                var y1 = mt;
+                var y2 = mt + mh;
+
+                var ox1 = ol;
+                var ox2 = ol + ow;
+                var oy1 = ot;
+                var oy2 = ot + oh;
+
+
+
+
+            if ( (y2 < oy1 ) || (y1 > oy2) || (x2 < ox1) || (x1 > ox2) ){
+              elm.classList.remove('current')
+            } else {
+              elm.classList.add('current')
+            }
+
+        }
+
+
+    }
+    window.onmouseup = function(e){
+        window.onmousemove = null;
+        window.onmouseup = null;
+
+        if ( moved ){
+          marq.parentNode.removeChild(marq);
+        }
+    }
+};
