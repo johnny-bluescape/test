@@ -113,6 +113,8 @@ function rectanglemove(e){
     var w = rect.offsetWidth;
     var h = rect.offsetHeight;
 
+    console.log(w,h);
+
     var cx = 0;
     var cy = 0;
 
@@ -141,6 +143,22 @@ function rectanglemove(e){
         }
     }
 
+    var a1 = (sx - ol);
+    var b1 = (sx - (ol + w));
+
+    var offx = Math.abs(a1) < Math.abs(b1) ? a1 : b1;
+
+    console.log(a1,b1, offx)
+
+
+    var a2 = (sy - ot);
+    var b2 = (sy - (ot + h));
+    var offy = Math.abs(a2) < Math.abs(b2) ? a2 : b2;
+
+    //var offx = sx - Math.min(Math.max(sx, ol), ol + w);
+    //var offy = sy - Math.min(Math.max(sy, ot), ot + h);
+
+
     function move(e){
         e.preventDefault();
 
@@ -157,13 +175,16 @@ function rectanglemove(e){
         var tx = 0;//nx < 0 ? sx : 0;
         var ty = 0;//ny < 0 ? sy : 0;
 
-        if ( x < ol ) {
-            nw = ol - x;
+        var xa = x - offx;
+        var ya = y - offy;
+
+        if ( xa < ol ) {
+            nw = ol - xa;
             tx = -nw;
         }
 
-        if ( y < ot ) {
-            nh = ot - y;
+        if ( ya < ot ) {
+            nh = ot - ya;
             ty = -nh;
         }
 
@@ -176,8 +197,8 @@ function rectanglemove(e){
                 ty = Math.abs(ny);
             }
 
-            if ( y > be ){
-                nh = y - be;
+            if ( ya > be ){
+                nh = ya - be;
                 ty = ty - nh;
             }
         }
@@ -190,15 +211,13 @@ function rectanglemove(e){
                 tx = nx;
             }
 
-            if ( x > re ){
-                nw = x - re;
+            if ( xa > re ){
+                nw = xa - re;
                 tx = tx - nw;
             }
         }
 
-
-
-        //console.log(tx,ty, w, h, nx, ny, h, sx, sy);
+        console.log(tx,ty, nw, nh, nx, ny);
 
         rect.style.width = nw + 'px';
         rect.style.height = nh + 'px';
