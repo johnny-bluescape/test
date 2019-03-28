@@ -290,10 +290,22 @@
 
 
         .toggle {width:40px;height:24px;border-radius:30px;background:grey;position:relative;background:rgba(0,0,0,.05);box-shadow:inset 0 0 0 1px rgba(0, 0, 0, 0.02);cursor:pointer;transition:background 150ms ease-in-out;display: inline-block;margin-right:8px;vertical-align: middle;}
-            .toggle:after {content:'';position:absolute;top:4px;left:4px;width:16px;height:16px;background:white;display:block;box-shadow:0 2px 4px rgba(0,0,0,.15);border-radius:50%;transition:transform 150ms ease-in-out;}
+            .toggle::after {content:'';position:absolute;top:4px;left:4px;width:16px;height:16px;background:white;display:block;box-shadow:0 2px 4px rgba(0,0,0,.15);border-radius:50%;transition:transform 150ms ease-in-out;}
+            label:hover .toggle {background: rgba(0, 0, 0, 0.08);}
+            label:active .toggle {background: rgba(0, 0, 0, 0.12);}
 
-        :checked ~ .toggle {background:rgb(76, 217, 100);box-shadow:inset 0 0 0 1px rgba(0, 0, 0, 0.0);}
+            label:hover .toggle::after {box-shadow:0 2px 5px rgba(0,0,0,.18);}
+            label:active .toggle::after {}
+
+
+        :checked ~ .toggle {background:hsl(130, 65%, 57%);box-shadow:inset 0 0 0 1px rgba(0, 0, 0, 0.0);}
         :checked ~ .toggle:after {transform:translateX(100%);}
+
+            label:hover :checked ~ .toggle {background:hsl(130, 65%, 51%);}
+            label:active :checked ~ .toggle {background:hsl(130, 65%, 48%);}
+
+
+            label {user-select:none;}
 
         input.tweakr {display:none;}
 
