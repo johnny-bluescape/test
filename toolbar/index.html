@@ -236,7 +236,9 @@
         canvas {pointer-events:none;}
         .brush_tool canvas {pointer-events:all;}
 
-        .rectangle {transition:box-shadow 150ms ease-in-out;}
+        .rectangle {transition:box-shadow 150ms ease-in-out;cursor:pointer;cursor:grab;}
+            .rectangle:active {cursor:grabbing;}
+
           .rectangle:hover, .rectangle.drawing {box-shadow: 0 0 0 2px var(--select);}
             .rectangle.current {box-shadow: 0 0 0 2px var(--select);z-index:7;}
 

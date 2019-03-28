@@ -395,7 +395,7 @@ function rectanglemove(e){
       var ny = y - sy;
 
       if ( !moved ){
-        if ( Math.abs(nx) > 4 && Math.abs(y) > 4 ){
+        if ( Math.abs(nx) > 4 && Math.abs(ny) > 4 ){
           moved = true;
           paper.appendChild(rect);
           //addlayer({}, ln);
@@ -445,10 +445,18 @@ function rectanglemove(e){
 
       if ( !moved ){
         rect.remove();
-        return;
-      }
 
-      if ( !moved && target.className == 'rectangle' ){
+        if ( target.className == 'rectangle' ){
+          target.classList.add('current');
+
+          //target.click();
+
+          setcontextpanel.call(target);
+        }
+
+
+        return;
+      
         
         // target.classList.add('current');
 
@@ -480,6 +488,7 @@ function rectanglemove(e){
     if ( e.which != 1 ){
         return;
     }
+    e = e.touches ? e.touches[0] : e;
     var sx = e.pageX;
     var sy = e.pageY;
 
@@ -498,17 +507,24 @@ function rectanglemove(e){
     //document.body.appendChild(marq);
     var moved = false;
 
-    window.onmousemove =  function(e){
+    function move(e){
         e.preventDefault();
-        if ( !moved ){
-          moved = true;
-          document.body.appendChild(marq);
-        }
+
+        e = e.touches ? e.touches[0] : e;
 
         var x = e.pageX;
         var y = e.pageY;
         var nx = x - sx;
         var ny = y - sy;
+
+        if ( !moved ){
+          if ( Math.abs(nx) < 4 && Math.abs(ny) < 4 ){
+            return;
+          }
+          moved = true;
+          document.body.appendChild(marq);
+          hidecontext();
+        }
 
         var w = Math.abs(nx);
         var h = Math.abs(ny);
@@ -521,7 +537,6 @@ function rectanglemove(e){
 
         marq.style.transform = 'translate(' + tx + 'px, ' + ty + 'px)';
 
-        hidecontext();
 
         var coords = marq.getBoundingClientRect();
         var ml = coords.left;
@@ -571,12 +586,21 @@ function rectanglemove(e){
 
 
     }
-    window.onmouseup = function(e){
-        window.onmousemove = null;
-        window.onmouseup = null;
+    function end(e){
+      window.removeEventListener('mousemove', move);
+      window.removeEventListener('mouseup', end);
+
+      window.removeEventListener('touchmove', move);
+      window.removeEventListener('touchend', end);
 
         if ( moved ){
           marq.parentNode.removeChild(marq);
         }
     }
-};
+    
+    window.addEventListener('touchmove', move);
+    window.addEventListener('touchend', end);
+
+    window.addEventListener('mouseup', end);
+    window.addEventListener('mousemove', move);
+}
