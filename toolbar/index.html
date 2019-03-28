@@ -1345,10 +1345,11 @@
         }
 
         function contextfollow(){
-            var x = this.offsetLeft;
-            var y = this.offsetTop;
-            var w = this.offsetWidth;
-            var h = this.offsetHeight;
+            var off = this.offset();
+            var x = off.x;
+            var y = off.y;
+            var w = off.w;
+            var h = off.h;
 
             var cid = this.dataset.context;
 
