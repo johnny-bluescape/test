@@ -369,7 +369,7 @@
                         </div>
                         <div class=control>
                             <div class=label>Color</div>
-                            <div class=option>Blue</div>
+                            <div class=option id=textfill2>Blue</div>
                         </div>
                     </div>
                 </div>
@@ -526,7 +526,7 @@
             </div>
         </div>
 
-        <div id=text_context class=contextpanel style="transform:translateX(-50%);">
+        <div id=text_context class=contextpanel>
             <div class=option id=font>
                 <div class=flyout>
                     <div class=label>Helvetica</div>
@@ -542,6 +542,10 @@
                 </div>
             </div><div class=option id=textcolor>
                 <div class="fill textfill" id="textfill" style="background:white;border-radius:4px;"></div>
+            </div><div class="option shapeup">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8-8 8z"/></svg>
+            </div><div class="option shapeback">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 12l-1.41-1.41L13 16.17V4h-2v12.17l-5.58-5.59L4 12l8 8 8-8z"/></svg>
             </div><div class="option morebtn">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
             </div>
@@ -1139,6 +1143,19 @@
                 document.getElementById('shapefill').style.backgroundColor = c;
             }
 
+            if ( id == 'text' ){
+                var ugh = document.getElementsByClassName('contextpanel visible')[0];
+                var cid = ugh.id;
+                var sh = document.getElementById(cid + 'rect');
+                sh.getElementsByClassName('textarea')[0].style.color = c;
+
+                ugh.getElementsByClassName('textfill')[0].style.background = c;
+
+                textcolor = c;
+
+                document.getElementById('textfill2').style.backgroundColor = c;
+            }
+
             document.getElementById(id + 'fill').style.background = c;
 
             closepanel();
@@ -1159,7 +1176,7 @@
 
             t.className = 'textarea';
 
-            w.className = 'textwrap current';
+            w.className = 'textwrap current layeritem';
 
             var x = e.pageX;
             var y = e.pageY;
@@ -1169,6 +1186,19 @@
             t.style.width = '48px';
             w.style.zIndex = 1337;
 
+            var ops = document.getElementById('text_context').cloneNode(true);
+            //ops.removeAttribute('id');
+
+            var cid = 's' + Date.now() + '-' + Math.floor(Math.random()*1000);
+
+            ops.id = cid;
+            w.dataset.context = cid;
+            
+            w.id = cid + 'rect';
+
+            document.body.appendChild(ops);
+
+
             t.addEventListener('input', autoexpand);
 
             // t.onblur = function(){
@@ -1176,17 +1206,19 @@
             //     t.readOnly = true;
             // }
 
-            var ops = document.getElementById('text_context').cloneNode(true);
-            ops.removeAttribute('id');
+            // var ops = document.getElementById('text_context').cloneNode(true);
+            // ops.removeAttribute('id');
 
             w.appendChild(t);
-            w.appendChild(ops);
+            // w.appendChild(ops);
 
-            document.body.appendChild(w);
+            document.getElementById('layers').appendChild(w);
 
             t.focus();
 
             document.getElementById('select_tool').click();
+
+            setcontextpanel.call(w);
         }
 
         function autoexpand(e){
@@ -1211,6 +1243,8 @@
             this.style.height = s - 16 - 8 + 'px';
 
             d.parentNode.removeChild(d);
+
+            setcontextpanel.call(this.getparent('textwrap'));
         }
 
         function blurelm(e){
@@ -1240,13 +1274,13 @@
         }
 
         function texthandler(e){
+            e.stopPropagation();
             var ev = e.touches ? e.touches[0] : e;
             if( ev.which == 3 ){
                 return;
             }
 
-            e.preventDefault();
-            e.stopPropagation();
+            var ta = this.getElementsByClassName('textarea')[0];
 
             blurelm.call(this, e);
 
@@ -1254,12 +1288,15 @@
             var sy = ev.pageY;
 
             var t = this;
-            var ta = this.getElementsByClassName('textarea')[0];
+
 
             var ox = Number(t.dataset.x) || 0;
             var oy = Number(t.dataset.y) || 0;
 
             var moved = false;
+
+            var nx = 0;
+            var ny = 0;
 
             function move(e){
                 var ev = e.touches ? e.touches[0] : e;
@@ -1277,6 +1314,8 @@
                     moved = true;
                     e.preventDefault();
                     e.stopPropagation();
+
+                    hidecontext();
                 } else if ( !moved ){
                     return;
                 }
@@ -1297,12 +1336,29 @@
                 window.removeEventListener('mousemove', move);
                 window.removeEventListener('mouseup', end);
 
+                var off = t.offset();
+                var ol = off.x;
+                var ot = off.y;
+
+                t.style.transform = 'translate(0px, 0px)';
+
+                t.dataset.x = 0;
+                t.dataset.y = 0;
+                
+                t.style.left = ol + nx + 'px';
+                t.style.top = ot + ny + 'px';
+
                 if ( !moved ){
                     console.log('clicked');
 
-                    t.classList.add('current');
-                    ta.readOnly = false;
-                    ta.focus();
+                    if ( !t.classList.contains('current')){
+
+                        t.classList.add('current');
+                        ta.readOnly = false;
+                        ta.focus();
+                    }
+
+                    setcontextpanel.call(t);
                 }
             }
 
@@ -1320,7 +1376,7 @@
 
         function shapez(e){
             var b = this.classList.contains('shapeback');
-            var r = document.getElementsByClassName('rectangle current')[0];
+            var r = document.getElementsByClassName('layeritem current')[0];
             var o = r.nextElementSibling;
 
             if ( b ){
@@ -1365,7 +1421,7 @@
                 x = window.innerWidth - 16 - cw;
             }
 
-            c.style.left = x + 'px';
+            c.style.left = Math.round(x) + 'px';
 
             if ( y < 72 ){
                 y = y + h + 16;
@@ -1373,7 +1429,7 @@
                 y -= 64;
             }
 
-            c.style.top = y + 'px';
+            c.style.top = Math.round(y) + 'px';
 
             c.classList.remove('visible');
         }

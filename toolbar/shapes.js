@@ -45,7 +45,7 @@ function rectanglemove(e){
 
       contextfollow.call(rec);
 
-      var recs = document.getElementsByClassName('rectangle current');
+      var recs = document.getElementsByClassName('layeritem current');
 
       for(var i=0;i<recs.length;i++){
         var r = recs[i];
@@ -57,10 +57,7 @@ function rectanglemove(e){
         r.dataset.top = ny;
 
         r.style.transform = 'translate(' + nx + 'px,' + ny + 'px)';
-
       }
-
-
     }
 
     function end(e){
@@ -75,12 +72,12 @@ function rectanglemove(e){
 
       setcontextpanel.call(rec);
 
-      var recs = document.getElementsByClassName('rectangle current');
+      var recs = document.getElementsByClassName('layeritem current');
 
       for(var i=0;i<recs.length;i++){
         var r = recs[i];
         if ( r == rec ){
-          continue;
+          //continue;
         }
         var ol = r.offset().x;
         var ot = r.offset().y;
@@ -340,7 +337,7 @@ function rectanglemove(e){
     border = 0;//border && border.parentNode.getElementsByClassName('togglewrap on')[0] ? border.value || 0 : 0;
 
     var rect = document.createElement('div');
-    rect.className = 'rectangle drawing current';
+    rect.className = 'rectangle drawing current layeritem';
     rect.style.position = 'absolute';
     rect.style.top = sy + scrolly - ot + 'px';
     rect.style.left = sx - ol + 'px';
@@ -402,7 +399,6 @@ function rectanglemove(e){
 
     function move(e){
       e.preventDefault();
-
 
       var shift = e.shiftKey;
 
@@ -565,7 +561,7 @@ function rectanglemove(e){
         var mh = coords.height;
         var mw = coords.width;
 
-        var elms = just.getElementsByClassName('rectangle');//'image'
+        var elms = just.getElementsByClassName('layeritem');//'image'
 
 
         for(var i=0;i<elms.length;i++){
@@ -592,18 +588,12 @@ function rectanglemove(e){
                 var oy1 = ot;
                 var oy2 = ot + oh;
 
-
-
-
             if ( (y2 < oy1 ) || (y1 > oy2) || (x2 < ox1) || (x1 > ox2) ){
               elm.classList.remove('current')
             } else {
               elm.classList.add('current')
             }
-
         }
-
-
     }
     function end(e){
       window.removeEventListener('mousemove', move);
