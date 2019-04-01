@@ -311,6 +311,9 @@
 
         .tweak {cursor:pointer;}
             .tweak label {display:block;padding:8px;cursor:pointer;}
+
+        .toolbar4, .ui4 #toolbar {display:none;}
+        .ui4 .toolbar4 {display:block;}
     
     </style>
 </head>
@@ -553,7 +556,7 @@
 
         <div id=moremenu>
             <div class=mitem>Copy</div>
-            <div class=mitem>Delete</div>
+            <div class="mitem delete">Delete</div>
             <div class=mitem>Comment</div>
             <div class=mitem>Pin</div>
         </div>
@@ -575,13 +578,17 @@
         </div>
 
         <div class=tweak>
+            <label><input type=checkbox value=ui4 id=ui4t class=tweakr onchange="" /><div class=toggle></div> UI 4</label>
+        </div>
+
+        <div class=tweak>
             <label><input type=checkbox value=advanced class=tweakr /><div class=toggle></div> Advanced Panel</label>
         </div>
     </div>
 
 
 
-    <div class="toolbar minimized">
+    <div class="toolbar minimized toolbar4">
         <div class="handle fob">
             <div class=fakehandle>
                 <svg class=close xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6 11h12v2H6z"/></svg>
@@ -658,6 +665,11 @@
 
             tool += '_tool';
 
+            if ( document.body.classList.contains(tool) ){
+
+                return;
+            }
+
             document.body.className = document.body.className.replace(/\w*_tool/g, '');
 
             document.body.classList.add(tool);
@@ -672,7 +684,7 @@
         function toolhandler(e){
             tools.call(this, e);
 
-            var t = this.getparent('tool')
+            var t = this.getparent('tool');
             if ( t.classList.contains('active')){
                 tooltoggle.call(t, e);
                 return;
@@ -1162,7 +1174,9 @@
         }
 
         function typetool(e){
-            var  p = e.target.getparent('textarea');
+            blurall();
+
+            var p = e.target.getparent('textarea');
             var b = e.target.getparent('toolbar');
             var pp = e.target.getparent('panel');
 
@@ -1218,6 +1232,8 @@
 
             document.getElementById('select_tool').click();
 
+            t.parentElement.classList.add('current');
+
             setcontextpanel.call(w);
         }
 
@@ -1247,7 +1263,16 @@
             setcontextpanel.call(this.getparent('textwrap'));
         }
 
+        function blurall(e){
+            var c = document.getElementsByClassName('layeritem current');
+            c.removeclass('current');
+
+            c = document.getElementsByClassName('contextpanel visible');
+            c.removeclass('visible');
+        }
+
         function blurelm(e){
+            console.log('BLUR')
             var a = document.activeElement;//.blur();
             var c = document.getElementsByClassName('current');
             console.log(c[0]);
@@ -1279,6 +1304,8 @@
             if( ev.which == 3 ){
                 return;
             }
+
+
 
             var ta = this.getElementsByClassName('textarea')[0];
 
@@ -1330,6 +1357,9 @@
             }
 
             function end(e){
+                e.preventDefault();
+                e.stopPropagation();
+
                 window.removeEventListener('touchmove', move);
                 window.removeEventListener('touchend', end);
 
@@ -1435,6 +1465,10 @@
         }
 
         function closemenu(e){
+            if ( e.target && e.target.classList.contains('delete') ){
+                return;
+            }
+
             e.preventDefault();
             e.stopPropagation();
             document.body.removeEventListener('click', closemenu);
@@ -1476,6 +1510,22 @@
 
             m.classList.add('visible');
 
+        }
+
+        function deletecurrent(e){
+            console.log('delete');
+            e.preventDefault();
+            e.stopPropagation();
+            var d = document.getElementsByClassName('layeritem current');
+
+            while(d[0]){
+                var a = d[0];
+                var cid = a.dataset.context;
+                a.remove();
+                var b = document.getElementById(cid);
+                b.remove();
+            }
+            document.body.click();
         }
 
         Attach.on('touchstart', '.handle', handlehandler);
@@ -1521,6 +1571,8 @@
 
         Attach.on('click', '.shapeup', shapez);
         Attach.on('click', '.shapeback', shapez);
+
+        Attach.on('click', '.delete', deletecurrent);
 
         Attach.on('click', '.morebtn', moremenu);
 

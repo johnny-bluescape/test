@@ -6,6 +6,12 @@ function rectanglemove(e){
     //   return;
     // }
 
+    var cc = document.body.classList;
+
+    if ( cc.contains('type_tool') ){
+      return;
+    }
+
     blurelm.call(this, e);
 
     // var old = document.getElementsByClassName('rectangle current');
@@ -288,10 +294,10 @@ function rectanglemove(e){
         return;
     }
 
-    blurelm.call(this, e);
-
     e.preventDefault();
     e.stopPropagation();
+
+    blurelm.call(this, e);
 
     var shift = e.shiftKey;
 

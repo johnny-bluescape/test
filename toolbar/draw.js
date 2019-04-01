@@ -13,13 +13,26 @@ function canvas(){
     //canvas.title 	= 'Did You Know You Can Draw Here?';
     canvas.style.cursor = 'crosshair';
 
-    canvas.addEventListener( 'mousedown', sketchHandler, false );
-    canvas.addEventListener( 'touchstart', sketchHandler, false );
-    canvas.addEventListener( 'touchmove', sketchHandler, false );
-    canvas.addEventListener( 'touchend', sketchHandler, false );
+    var useCapture = false;
+    var supportsPassiveOption = false;
+    try {
+        var opts = Object.defineProperty({}, 'passive', {
+            get: function() {
+                supportsPassiveOption = true;
+            }
+        });
+        window.addEventListener('test', null, opts);
+    } catch (e) {}
+
+    var passive = supportsPassiveOption ? { passive : false } : useCapture;
+
+    canvas.addEventListener( 'mousedown', sketchHandler, passive );
+    canvas.addEventListener( 'touchstart', sketchHandler, passive );
+    canvas.addEventListener( 'touchmove', sketchHandler, passive );
+    canvas.addEventListener( 'touchend', sketchHandler, passive);
 
     if ( window.navigator.msPointerEnabled ) {
-        canvas.addEventListener("MSPointerDown", sketchHandler, false); // Fires for touch, pen, and mouse
+        canvas.addEventListener("MSPointerDown", sketchHandler, passive); // Fires for touch, pen, and mouse
     }
 
     //canvas.addEventListener('mousewheel', canvasscroll);
