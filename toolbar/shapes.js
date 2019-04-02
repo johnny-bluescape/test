@@ -2,7 +2,7 @@ function rectanglemove(e){
 
   console.log('mnove')
     //e.preventDefault();
-    //e.stopPropagation();
+    e.stopPropagation();
 
     // if ( document.documentElement.id == 'rectanglex' || document.documentElement.id == 'circlex'  || document.documentElement.id == 'linex' ){
     //   return;
@@ -36,6 +36,8 @@ function rectanglemove(e){
 
     console.log(ox, oy);
 
+    var moved = false;
+
     function move(e){
       hidecontext();
       var evt = e.touches ? e.touches[0] : e;
@@ -50,6 +52,10 @@ function rectanglemove(e){
 
       rec.style.top = y + 'px';
       rec.style.left = x + 'px';
+
+      if ( !moved && Math.abs(nx) > 4 || Math.abs(ny) > 4 ){
+        moved = true;
+      }
 
       contextfollow.call(rec);
 
@@ -95,6 +101,10 @@ function rectanglemove(e){
 
         r.style.transform = 'translate(0,0)';
 
+      }
+
+      if ( !moved ){
+        rect.click();
       }
     }
 
