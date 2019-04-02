@@ -314,6 +314,13 @@
 
         .toolbar4, .ui4 #toolbar {display:none;}
         .ui4 .toolbar4 {display:block;}
+
+
+        #advancedpanel {max-width: 320px;padding-bottom: 12px;opacity:0;pointer-events:none;position:fixed;top:50%;right:224px;transform:translateY(-50%);transition:opacity 150ms ease-in-out;}
+            .advanced #advancedpanel {opacity:1;pointer-events:all;}
+
+            #advancedpanel .pan {display:none;}
+            .brush_tool #advancedpanel .brushpanel, .type_tool #advancedpanel .typepanel {display:block;}
     
     </style>
 </head>
@@ -327,13 +334,8 @@
         </div>
         <div class=tools>
             <div class=tool>
-                <div class=toolbtn>
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M15.95 10.78c.03-.25.05-.51.05-.78s-.02-.53-.06-.78l1.69-1.32c.15-.12.19-.34.1-.51l-1.6-2.77c-.1-.18-.31-.24-.49-.18l-1.99.8c-.42-.32-.86-.58-1.35-.78L12 2.34c-.03-.2-.2-.34-.4-.34H8.4c-.2 0-.36.14-.39.34l-.3 2.12c-.49.2-.94.47-1.35.78l-1.99-.8c-.18-.07-.39 0-.49.18l-1.6 2.77c-.1.18-.06.39.1.51l1.69 1.32c-.04.25-.07.52-.07.78s.02.53.06.78L2.37 12.1c-.15.12-.19.34-.1.51l1.6 2.77c.1.18.31.24.49.18l1.99-.8c.42.32.86.58 1.35.78l.3 2.12c.04.2.2.34.4.34h3.2c.2 0 .37-.14.39-.34l.3-2.12c.49-.2.94-.47 1.35-.78l1.99.8c.18.07.39 0 .49-.18l1.6-2.77c.1-.18.06-.39-.1-.51l-1.67-1.32zM10 13c-1.65 0-3-1.35-3-3s1.35-3 3-3 3 1.35 3 3-1.35 3-3 3z"/></svg>
-                </div>
-            </div>
-            <div class=tool>
                 <div class=toolbtn id=select_tool data-tool=select>
-                    <svg xmlns="http://www.w3.org/2000/svg" style="width:30px;" viewBox="0 0 24 24">
+                    <svg xmlns="http://www.w3.org/2000/svg" style="width:28px;" viewBox="0 0 24 24">
                         <path style="transform: rotate(-20deg);transform-origin: center;" d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/>
                     </svg>
                 </div>
@@ -379,7 +381,7 @@
             </div>
             <div class="tool active">
                 <div class=toolbtn data-tool=brush>
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7 14c-1.66 0-3 1.34-3 3 0 1.31-1.16 2-2 2 .92 1.22 2.49 2 4 2 2.21 0 4-1.79 4-4 0-1.66-1.34-3-3-3zm13.71-9.37l-1.34-1.34c-.39-.39-1.02-.39-1.41 0L9 12.25 11.75 15l8.96-8.96c.39-.39.39-1.02 0-1.41z"/></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" style="width:28px;" viewBox="0 0 24 24"><path d="M7 14c-1.66 0-3 1.34-3 3 0 1.31-1.16 2-2 2 .92 1.22 2.49 2 4 2 2.21 0 4-1.79 4-4 0-1.66-1.34-3-3-3zm13.71-9.37l-1.34-1.34c-.39-.39-1.02-.39-1.41 0L9 12.25 11.75 15l8.96-8.96c.39-.39.39-1.02 0-1.41z"/></svg>
                 </div>
                 <div class=options style="max-width: 208px;">
                     <div class=controls>
@@ -414,6 +416,68 @@
                 </div>
                 <div class=options>
                     
+                </div>
+            </div>
+            <div class=tool>
+                <div class=toolbtn>
+                    <svg xmlns="http://www.w3.org/2000/svg" style="width:28px;" viewBox="0 0 20 20"><path d="M15.95 10.78c.03-.25.05-.51.05-.78s-.02-.53-.06-.78l1.69-1.32c.15-.12.19-.34.1-.51l-1.6-2.77c-.1-.18-.31-.24-.49-.18l-1.99.8c-.42-.32-.86-.58-1.35-.78L12 2.34c-.03-.2-.2-.34-.4-.34H8.4c-.2 0-.36.14-.39.34l-.3 2.12c-.49.2-.94.47-1.35.78l-1.99-.8c-.18-.07-.39 0-.49.18l-1.6 2.77c-.1.18-.06.39.1.51l1.69 1.32c-.04.25-.07.52-.07.78s.02.53.06.78L2.37 12.1c-.15.12-.19.34-.1.51l1.6 2.77c.1.18.31.24.49.18l1.99-.8c.42.32.86.58 1.35.78l.3 2.12c.04.2.2.34.4.34h3.2c.2 0 .37-.14.39-.34l.3-2.12c.49-.2.94-.47 1.35-.78l1.99.8c.18.07.39 0 .49-.18l1.6-2.77c.1-.18.06-.39-.1-.51l-1.67-1.32zM10 13c-1.65 0-3-1.35-3-3s1.35-3 3-3 3 1.35 3 3-1.35 3-3 3z"/></svg>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id=advancedpanel class="panel draggable">
+        <div class="pan brushpanel">
+            <div class=row>
+                <div class=input>
+                    <input type=text value="BLue" />
+                    <div class=label>Color</div>
+                </div>
+            </div>
+            <div class=row>
+                <div class=input>
+                    <input type=text value="Open Sans" />
+                    <div class=label>Size</div>
+                </div>
+            </div>
+        </div>
+        <div class="pan typepanel">
+            <div class=row>
+                <div class=input>
+                    <input type=text value="Open Sans" />
+                    <div class=label>Font</div>
+                </div>
+            </div>
+            <div class=row>
+                <div class=input>
+                    <input type=text value=Bold />
+                    <div class=label>Style</div>
+                </div>
+                <div class=input style="width:50%;">
+                    <input type=number value=24 />
+                    <div class=label>Size</div>
+                </div>
+            </div>
+            <div class=row style="margin-top: 8px;">
+                <div class=input>
+                    <div class=buttons>
+                        <button class=selected>Left</button><button>Center</button><button>Right</button>
+                    </div>
+                    <div class=label>Alignment</div>
+                </div>
+            </div>
+            <div class=row>
+                <div class=input>
+                    <input type=number value=0 />
+                    <div class=label>Kern</div>
+                </div>
+                <div class=input>
+                    <input type=number value=40 />
+                    <div class=label>Line</div>
+                </div>
+                <div class=input>
+                    <input type=number value=0 />
+                    <div class=label>Break</div>
                 </div>
             </div>
         </div>
@@ -715,6 +779,76 @@
                 p.style.opacity = 0;
                 p.style.transform = 'translateY(8px)';
             }
+        }
+
+        function draggable(e){
+            e.preventDefault();
+            e.stopPropagation();
+
+            var ev = e.touches ? e.touches[0] : e;
+            if( ev.which == 3 ){
+                return;
+            }
+            var t = this;
+            var sx = ev.pageX;
+            var sy = ev.pageY;
+
+            var offset = this.offset();
+
+            var ox = offset.x;
+            var oy = offset.y;
+
+            var nx = ox;
+            var ny = oy;
+
+            var moved = false;
+
+            t.style.left = t.style.top = 0;
+            t.style.right = t.style.bottom = 'auto';
+
+            t.style.transform = 'translate(' + ox + 'px, ' + oy + 'px)';
+
+            function move(e){
+                var ev = e.touches ? e.touches[0] : e;
+                var x = ev.pageX;
+                var y = ev.pageY;
+
+                nx = x - sx;
+                ny = y - sy;
+
+                if ( !moved && (Math.abs(nx) > 3 || Math.abs(ny) > 3) ){
+                    moved = true;
+                } else if ( !moved ){
+                    return;
+                }
+
+                nx += ox;
+                ny += oy;
+
+                t.style.transform = 'translate(' + nx + 'px, ' + ny + 'px)';
+            }
+
+            function end(e){
+                window.removeEventListener('touchmove', move);
+                window.removeEventListener('touchend', end);
+
+                window.removeEventListener('mousemove', move);
+                window.removeEventListener('mouseup', end);
+
+                if ( !moved ){
+                }
+
+                t.style.transform = 'translate(0, 0)';
+
+                t.style.left = nx + 'px';
+                t.style.top = ny + 'px';
+            }
+
+            window.addEventListener('touchmove', move);
+            window.addEventListener('touchend', end);
+
+            window.addEventListener('mousemove', move);
+            window.addEventListener('mouseup', end);
         }
 
         function handlehandler(e){
@@ -1559,6 +1693,9 @@
 
         Attach.on('mousedown', '.rectangle_tool', rectanglex);
         Attach.on('touchstart', '.rectangle_tool', rectanglex);
+
+        Attach.on('mousedown', '.draggable', draggable);
+        Attach.on('touchstart', '.draggable', draggable);
 
        
         Attach.on('mousedown', '.resizehandle', rectangleresize);

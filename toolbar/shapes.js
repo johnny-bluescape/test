@@ -104,7 +104,7 @@ function rectanglemove(e){
       }
 
       if ( !moved ){
-        rect.click();
+        rec.click();
       }
     }
 
