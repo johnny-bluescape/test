@@ -13,6 +13,8 @@ function canvas(){
     //canvas.title 	= 'Did You Know You Can Draw Here?';
     canvas.style.cursor = 'crosshair';
 
+    canvas.LINES = {};
+
     var useCapture = false;
     var supportsPassiveOption = false;
     try {
@@ -28,12 +30,12 @@ function canvas(){
 
     canvas.addEventListener( 'mousedown', sketchHandler, passive );
     canvas.addEventListener( 'touchstart', sketchHandler, passive );
-    canvas.addEventListener( 'touchmove', sketchHandler, passive );
-    canvas.addEventListener( 'touchend', sketchHandler, passive);
+    // canvas.addEventListener( 'touchmove', sketchHandler, passive );
+    // canvas.addEventListener( 'touchend', sketchHandler, passive);
 
-    if ( window.navigator.msPointerEnabled ) {
-        canvas.addEventListener("MSPointerDown", sketchHandler, passive); // Fires for touch, pen, and mouse
-    }
+    // if ( window.navigator.msPointerEnabled ) {
+    //     canvas.addEventListener("MSPointerDown", sketchHandler, passive); // Fires for touch, pen, and mouse
+    // }
 
     //canvas.addEventListener('mousewheel', canvasscroll);
 
@@ -96,6 +98,82 @@ function resize2(e){
 }
 
 function sketchHandler(e){
+    e.preventDefault();
+    e.stopPropagation();
+    
+    var evt = e.touches ? e.touches[0] : e;
+    var canvas = document.getElementById('canvas2');
+
+    console.log(evt);
+    
+    var id = e.identifier;
+
+    console.log(id + ' TOUCH  ID');
+
+    if ( e.which == 3 ){
+        return;
+    }
+
+    var offset = canvas.offset();
+    var ol = offset.x;
+    var ot = offset.y;
+    var scroll = offset.scroll;
+
+    var sx = evt.pageX - ol;
+    var sy = evt.pageY - ot;
+
+    canvas.redo = null;
+
+    var lx = evt.pageX - ol;
+    var ly = evt.pageY - ot;
+
+    var lines = canvas.LINES;
+
+    lines[id] = {lx: lx, ly: ly};
+
+    function move(e){
+        var evt = e.touches ? e.touches[0] : e;
+        var ctx = canvas.getContext('2d');
+
+        var id2 = e.identifier;
+
+        var nx = evt.pageX - ol;
+        var ny = evt.pageY - ot;
+
+        with(ctx) {
+            beginPath();
+            moveTo(lines[id2].lx, lines[id2].ly);
+            lineTo(nx, ny);
+            lineWidth = brushsize;//20;
+            lineCap = 'round';
+            lineJoin = 'round';
+            strokeStyle = brushcolor;//'rgba(0,0,0,1)';
+            stroke();
+        }
+
+        lines[id2].lx = nx;
+        lines[id2].ly = ny;
+    }
+
+    function end(e){
+        window.removeEventListener( 'touchmove', move );
+        window.removeEventListener( 'touchend', end );
+
+        window.removeEventListener( 'mousemove', move );
+        window.removeEventListener( 'mouseup', end );
+
+        var imgdata = canvas.getContext('2d').getImageData(0,0,canvas.width,canvas.height);
+        canvashistory.push(imgdata);
+    }
+
+    window.addEventListener( 'mousemove', move );
+    window.addEventListener( 'mouseup', end );
+
+    window.addEventListener( 'touchmove', move );
+    window.addEventListener( 'touchend', end );
+}
+
+function sketchHandler2(e){
 
     // if ( document.getElementById('rectanglex') || document.getElementById('circlex') || document.getElementById('selectx') || !document.getElementById('drawx')){
     //     return;
@@ -106,7 +184,14 @@ function sketchHandler(e){
     var evt = e.touches ? e.touches[0] : e;
     var canvas = document.getElementById('canvas2');
 
-    if ( e.which  !== 1 && e.which !== 0 ){
+    console.log(evt);
+    
+
+    var id = e.identifier;
+
+    console.log(id + ' TOUCH  ID');
+
+    if ( e.which == 3 ){
         return;
     }
 

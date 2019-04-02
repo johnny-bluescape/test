@@ -508,14 +508,14 @@ function rectanglemove(e){
   }
 
   function marquee(e){
-    if ( e.which != 1 ){
+    if ( e.which == 3 ){
         return;
     }
     e = e.touches ? e.touches[0] : e;
     var sx = e.pageX;
     var sy = e.pageY;
 
-    var sh = window.scrollTop || document.body.scrollTop || document.scrollTop;
+    //var sh = window.scrollTop || document.body.scrollTop || document.scrollTop;
 
     var just = this;
     var marq = document.createElement('div');
