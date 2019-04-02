@@ -865,12 +865,20 @@
 
             var t = this.getparent('toolbar');
 
-            var ox = Number(t.dataset.x) || 0;
-            var oy = Number(t.dataset.y) || 0;
+            var off = t.offset();
+
+            var ox = off.x;
+            var oy = off.y;
 
             var moved = false;
 
             closepanel();
+
+            t.style.transform = 'translate(' + ox + 'px, ' + oy + 'px)';
+
+            t.style.left = 0;
+            t.style.top = 0;
+            t.style.marginTop = 0;
 
             function move(e){
                 var ev = e.touches ? e.touches[0] : e;
@@ -888,6 +896,18 @@
 
                 nx += ox;
                 ny += oy;
+
+                if ( nx < 60 ){
+                    nx = 60;
+                } else if ( nx > window.innerWidth - 16 - off.w ){
+                    nx = window.innerWidth - 16 - off.w;
+                }
+
+                if ( ny < 16 ){
+                    ny = 16;
+                } else if ( ny > window.innerHeight - 16 - off.h){
+                    ny = window.innerHeight - 16 - off.h;
+                }
 
                 t.style.transform = 'translate(' + nx + 'px, ' + ny + 'px)';
 
