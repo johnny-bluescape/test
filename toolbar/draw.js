@@ -133,26 +133,53 @@ function sketchHandler(e){
 
     function move(e){
         var evt = e.touches ? e.touches[0] : e;
+        var touches = e.touches;
         var ctx = canvas.getContext('2d');
 
-        var id2 = evt.identifier;
+        console.log(touches);
 
-        var nx = evt.pageX - ol;
-        var ny = evt.pageY - ot;
-
-        with(ctx) {
-            beginPath();
-            moveTo(lines[id2].lx, lines[id2].ly);
-            lineTo(nx, ny);
-            lineWidth = brushsize;//20;
-            lineCap = 'round';
-            lineJoin = 'round';
-            strokeStyle = brushcolor;//'rgba(0,0,0,1)';
-            stroke();
+        if ( !touches ){
+            touches = [1];
         }
 
-        lines[id2].lx = nx;
-        lines[id2].ly = ny;
+
+        for(var i=0;i<touches.length;i++){
+
+            var t = touches[i];
+
+            var id2 = t.identifier;
+
+            var nx = t.pageX - ol;
+            var ny = t.pageY - ot;
+
+            console.log(nx,ny)
+
+            with(ctx) {
+                beginPath();
+                moveTo(lines[id2].lx, lines[id2].ly);
+                lineTo(nx, ny);
+                lineWidth = brushsize;//20;
+                lineCap = 'round';
+                lineJoin = 'round';
+                strokeStyle = brushcolor;//'rgba(0,0,0,1)';
+                stroke();
+            }
+
+            lines[id2].lx = nx;
+            lines[id2].ly = ny;
+        }
+    }
+
+    function moveto(i, changeX, changeY) {
+        ctxt.beginPath();
+        ctxt.moveTo(lines[i].lx, lines[i].y);
+        ctxt.lineTo(x, y);
+        ctxt.stroke();
+        ctxt.closePath();
+        return {
+            x: lines[i].x + changeX,
+            y: lines[i].y + changeY
+        };
     }
 
     function end(e){
