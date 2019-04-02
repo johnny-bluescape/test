@@ -28,7 +28,7 @@ function canvas(){
 
     var passive = supportsPassiveOption ? { passive : false } : useCapture;
 
-    canvas.addEventListener( 'mousedown', sketchHandler, passive );
+    canvas.addEventListener( 'mousedown', sketchHandlerM, passive );
     canvas.addEventListener( 'touchstart', sketchHandler, passive );
     // canvas.addEventListener( 'touchmove', sketchHandler, passive );
     // canvas.addEventListener( 'touchend', sketchHandler, passive);
@@ -104,11 +104,9 @@ function sketchHandler(e){
     var evt = e.touches ? e.touches[0] : e;
     var canvas = document.getElementById('canvas2');
 
-    console.log(evt);
-    
-    var id = evt.identifier;
+    console.log(e.touches);
 
-    console.log(id + ' TOUCH  ID');
+    console.log(evt);
 
     if ( e.which == 3 ){
         return;
@@ -117,19 +115,29 @@ function sketchHandler(e){
     var offset = canvas.offset();
     var ol = offset.x;
     var ot = offset.y;
-    var scroll = offset.scroll;
-
-    var sx = evt.pageX - ol;
-    var sy = evt.pageY - ot;
 
     canvas.redo = null;
 
-    var lx = evt.pageX - ol;
-    var ly = evt.pageY - ot;
-
     var lines = canvas.LINES;
 
-    lines[id] = {lx: lx, ly: ly};
+    var touches = e.touches;
+
+    for(var i=0;i<touches.length;i++){
+
+        var t = touches[i];
+        var sx = t.pageX - ol;
+        var sy = t.pageY - ot;
+
+    
+        var lx = t.pageX - ol;
+        var ly = t.pageY - ot;
+
+        var id = t.identifier;
+
+        console.log(id + ' TOUCH  ID');
+
+        lines[id] = {lx: lx, ly: ly};
+    }
 
     function move(e){
         var evt = e.touches ? e.touches[0] : e;
@@ -137,11 +145,6 @@ function sketchHandler(e){
         var ctx = canvas.getContext('2d');
 
         console.log(touches);
-
-        if ( !touches ){
-            touches = [1];
-        }
-
 
         for(var i=0;i<touches.length;i++){
 
@@ -152,7 +155,9 @@ function sketchHandler(e){
             var nx = t.pageX - ol;
             var ny = t.pageY - ot;
 
-            console.log(nx,ny)
+            console.log(nx,ny);
+
+            console.log(t, id2, lines)
 
             with(ctx) {
                 beginPath();
@@ -186,6 +191,72 @@ function sketchHandler(e){
         window.removeEventListener( 'touchmove', move );
         window.removeEventListener( 'touchend', end );
 
+        var imgdata = canvas.getContext('2d').getImageData(0,0,canvas.width,canvas.height);
+        canvashistory.push(imgdata);
+    }
+
+    window.addEventListener( 'touchmove', move );
+    window.addEventListener( 'touchend', end );
+}
+
+function sketchHandlerM(e){
+    e.preventDefault();
+    e.stopPropagation();
+    
+    var evt = e;
+    var canvas = document.getElementById('canvas2');
+
+    console.log(evt);
+    
+    var id = evt.identifier;
+
+    if ( e.which == 3 ){
+        return;
+    }
+
+    var offset = canvas.offset();
+    var ol = offset.x;
+    var ot = offset.y;
+
+    var sx = evt.pageX - ol;
+    var sy = evt.pageY - ot;
+
+    canvas.redo = null;
+
+    var lx = evt.pageX - ol;
+    var ly = evt.pageY - ot;
+
+    var lines = canvas.LINES;
+
+    lines[id] = {lx: lx, ly: ly};
+
+    function move(e){
+        var evt = e.touches ? e.touches[0] : e;
+        var ctx = canvas.getContext('2d');
+
+        var id2 = evt.identifier;
+
+        var nx = evt.pageX - ol;
+        var ny = evt.pageY - ot;
+
+        with(ctx) {
+            beginPath();
+            moveTo(lines[id2].lx, lines[id2].ly);
+            lineTo(nx, ny);
+            lineWidth = brushsize;//20;
+            lineCap = 'round';
+            lineJoin = 'round';
+            strokeStyle = brushcolor;//'rgba(0,0,0,1)';
+            stroke();
+        }
+
+        lines[id2].lx = nx;
+        lines[id2].ly = ny;
+    }
+
+
+    function end(e){
+
         window.removeEventListener( 'mousemove', move );
         window.removeEventListener( 'mouseup', end );
 
@@ -195,113 +266,6 @@ function sketchHandler(e){
 
     window.addEventListener( 'mousemove', move );
     window.addEventListener( 'mouseup', end );
-
-    window.addEventListener( 'touchmove', move );
-    window.addEventListener( 'touchend', end );
-}
-
-function sketchHandler2(e){
-
-    // if ( document.getElementById('rectanglex') || document.getElementById('circlex') || document.getElementById('selectx') || !document.getElementById('drawx')){
-    //     return;
-    // }
-    e.preventDefault();
-    e.stopPropagation();
-    
-    var evt = e.touches ? e.touches[0] : e;
-    var canvas = document.getElementById('canvas2');
-
-    console.log(evt);
-    
-
-    var id = e.identifier;
-
-    console.log(id + ' TOUCH  ID');
-
-    if ( e.which == 3 ){
-        return;
-    }
-
-    var ol = 0;//canvas.parentElement.offsetLeft;
-    var ot = 0;//canvas.parentElement.offsetTop;
-
-
-    var scroll = 0;
-    var currentElement = canvas;
-
-    do {
-        ol += currentElement.offsetLeft;
-        ot += currentElement.offsetTop;
-        scroll += currentElement.scrollTop;
-    }
-    while(currentElement = currentElement.offsetParent)
-
-    switch( e.type ) {
-        case 'mousedown' : case 'touchstart' : case 'MSPointerDown' :
-            canvas.dataset.x = evt.pageX - ol;
-            canvas.dataset.y = evt.pageY - ot;
-
-            canvas.redo = null;
-
-            window.addEventListener( 'mousemove', sketchHandler );
-            window.addEventListener( 'mouseup', sketchHandler );
-            if ( window.navigator.msPointerEnabled ) {
-                window.addEventListener("MSPointerMove", sketchHandler); // Fires for touch, pen, and mouse
-                window.addEventListener("MSPointerUp", sketchHandler); // Fires for touch, pen, and mouse
-            }
-
-            var scale = window.devicePixelRatio || 1;
-
-            // var imgdata = ctx.getImageData(0,0,canvas.width,canvas.height);
-
-            // var backingStoreRatio = context.webkitBackingStorePixelRatio || context.mozBackingStorePixelRatio || context.msBackingStorePixelRatio || context.oBackingStorePixelRatio || context.backingStorePixelRatio || 1;
-
-            // var ratio = scale / backingStoreRatio;
-
-            // var ctx = canvas.getContext('2d');
-
-            // ctx.scale(scale,scale);
-
-            break;
-        case 'mousemove' : case 'touchmove' : case 'MSPointerMove' :
-            var ctx = canvas.getContext('2d');
-
-            with(ctx) {
-                beginPath();
-                moveTo(Number(canvas.dataset.x), Number(canvas.dataset.y));
-                lineTo(evt.pageX - ol , evt.pageY  - ot);
-                lineWidth = brushsize;//20;
-                lineCap = 'round';
-                lineJoin = 'round';
-                strokeStyle = brushcolor;//'rgba(0,0,0,1)';
-                stroke();
-            }
-
-                canvas.dataset.x = evt.pageX - ol;
-                canvas.dataset.y = evt.pageY - ot;
-
-    console.log(canvas.dataset.x, canvas.dataset.y);
-
-            break;
-        case 'mouseup' : case 'touchend' : case 'MSPointerUp' :
-            var ran = Math.floor(Math.random()*9);
-            var array = ['Whoa!','Oh Pretty!','Meow.','Sweet!','Amazing!','Insane!','Radical!','OMG!'];
-            window.removeEventListener( 'mousemove', sketchHandler );
-            window.removeEventListener( 'mouseup', sketchHandler );
-            if (window.navigator.msPointerEnabled) {
-                window.removeEventListener("MSPointerMove", sketchHandler); // Fires for touch, pen, and mouse
-                window.removeEventListener("MSPointerUp", sketchHandler); // Fires for touch, pen, and mouse
-            }
-            var imgdata = canvas.getContext('2d').getImageData(0,0,canvas.width,canvas.height);
-            canvashistory.push(imgdata);
-
-            canvas.title = array[ran];
-
-            break;
-        default :
-            return false;
-
-    }
 }
 
 function undo(x){
