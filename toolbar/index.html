@@ -29,6 +29,7 @@
     <title>TEST</title>
     <link rel="icon" type="image/png" href="./favicon.png" />
     <script src="../js/gator.js"></script>
+    <script src="../js/hammer.js"></script>
     <script src="../js/base.js"></script>
     <script src="./draw.js"></script>
     <script src="./shapes.js"></script>
@@ -89,6 +90,10 @@
         .buttons button {margin-right:20px;}
 
         #toolbar {position:fixed;top:50%;left:64px;margin-top:-252px;user-select:none;z-index:999999999999990;pointer-events:none;}
+
+            .tools {transition:transform 150ms ease-in-out;}
+            #toolbar.swap .tools {transform: translateX(calc(-100% - 60px));}
+
             .tool {width:60px;height:60px;margin-bottom:12px;position:relative;transition:all 150ms ease-in-out;pointer-events:all;}
                 .tool:last-child {margin-bottom:0;}
 
@@ -321,6 +326,28 @@
 
             #advancedpanel .pan {display:none;}
             .brush_tool #advancedpanel .brushpanel, .type_tool #advancedpanel .typepanel {display:block;}
+
+
+        #keyboard {position:fixed;max-width:772px;width:100%;top:50%;left:50%;z-index:9999999999999999;background:#181819;padding:8px 8px 0px;border-radius:6px;box-shadow: 0 2px 20px var(--shadow2);opacity:0;pointer-events:none;transition:opacity 150ms ease-in-out;}
+            #keyboard.show {opacity:1;transform:translateY(0);pointer-events:all;}
+        #keyboard .row {display:flex;padding: 0 0 8px;margin:0;}
+            #keyboard .key {display:flex;width:60px;height:60px;align-items:center;justify-content:center;font-size:20px;font-weight:600;background:#262627;margin-right:8px;cursor:pointer;}
+
+                #keyboard .key:last-child {margin:0;}
+               
+                #keyboard .key.shift {width:92px;background:#303031;}
+
+                #keyboard .key.space {width:704px;background:#303031;}
+
+                #keyboard .key.return {width:76px;background:#303031;}
+                #keyboard .key.del {width:92px;background:#303031;}
+                #keyboard .key.num {background:#303031;}
+
+                #keyboard .key:hover {background:#303031;}
+                #keyboard .key:active {background:#434348;}
+
+        #keyboard.uppercase .key {text-transform:uppercase;}
+            #keyboard.uppercase .shift {background:#434348;}
     
     </style>
 </head>
@@ -344,7 +371,7 @@
                 </div>
             </div>
             <div class=tool>
-                <div class=toolbtn data-tool=rectangle>
+                <div class=toolbtn data-tool=rectangle id=shape_tool2>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 4H6c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H6V6h12v12z"/></svg>
                 </div>
                 <div class=options>
@@ -650,6 +677,21 @@
         </div>
     </div>
 
+    <div id=keyboard class=draggable>
+        <div class=row>
+            <div class=key>q</div><div class=key>w</div><div class=key>e</div><div class=key>r</div><div class=key>t</div><div class=key>y</div><div class=key>u</div><div class=key>i</div><div class=key>o</div><div class=key>p</div><div class="key del">Del</div>
+        </div>
+        <div class=row>
+            <div class=key style="margin-left: 16px;">a</div><div class=key>s</div><div class=key>d</div><div class=key>f</div><div class=key>g</div><div class=key>h</div><div class=key>j</div><div class=key>k</div><div class=key>l</div><div class=key>'</div><div class="key return">Return</div>
+        </div>
+        <div class=row>
+            <div class="key shift">Shift</div><div class=key>z</div><div class=key>x</div><div class=key>c</div><div class=key>v</div><div class=key>b</div><div class=key>n</div><div class=key>m</div><div class=key>,</div><div class=key>.</div><div class=key>?</div>
+        </div>
+        <div class=row>
+            <div class="key num">&123</div><div class="key space">Space</div>
+        </div>
+    </div>
+
 
 
     <div class="toolbar minimized toolbar4">
@@ -816,14 +858,14 @@
                 nx = x - sx;
                 ny = y - sy;
 
+                nx += ox;
+                ny += oy;
+
                 if ( !moved && (Math.abs(nx) > 3 || Math.abs(ny) > 3) ){
                     moved = true;
                 } else if ( !moved ){
                     return;
                 }
-
-                nx += ox;
-                ny += oy;
 
                 t.style.transform = 'translate(' + nx + 'px, ' + ny + 'px)';
             }
@@ -836,7 +878,10 @@
                 window.removeEventListener('mouseup', end);
 
                 if ( !moved ){
+
                 }
+
+                console.log(nx,ny);
 
                 t.style.transform = 'translate(0, 0)';
 
@@ -859,6 +904,7 @@
             if( ev.which == 3 ){
                 return;
             }
+
             var _h = this;
             var sx = ev.pageX;
             var sy = ev.pageY;
@@ -880,6 +926,20 @@
             t.style.top = 0;
             t.style.marginTop = 0;
 
+            var ww = window.innerWidth;
+            var wh = window.innerHeight;
+
+            var w = off.w;
+            var h = off.h;
+
+            var gap = 16;
+
+            var tx1 = gap + 44;
+            var tx2 = ww - gap - w;
+
+            var ty1 = gap;
+            var ty2 = wh - gap - h;
+
             function move(e){
                 var ev = e.touches ? e.touches[0] : e;
                 var x = ev.pageX;
@@ -897,16 +957,22 @@
                 nx += ox;
                 ny += oy;
 
-                if ( nx < 60 ){
-                    nx = 60;
-                } else if ( nx > window.innerWidth - 16 - off.w ){
-                    nx = window.innerWidth - 16 - off.w;
+                if ( nx < tx1 ){
+                    nx = tx1;
+                } else if ( nx > tx2 ){
+                    nx = tx2;
                 }
 
-                if ( ny < 16 ){
-                    ny = 16;
-                } else if ( ny > window.innerHeight - 16 - off.h){
-                    ny = window.innerHeight - 16 - off.h;
+                if ( ny < ty1 ){
+                    ny = ty1;
+                } else if ( ny > ty2 ){
+                    ny = ty2;
+                }
+
+                if ( nx > ww * .75 ){
+                    t.classList.add('swap');
+                } else {
+                    t.classList.remove('swap');
                 }
 
                 t.style.transform = 'translate(' + nx + 'px, ' + ny + 'px)';
@@ -1392,6 +1458,43 @@
             t.parentElement.classList.add('current');
 
             setcontextpanel.call(w);
+
+            showkeyboard.call(w, e);
+        }
+
+        function showkeyboard(e){
+            var off = this.offset();
+            var x = off.x;
+            var y = off.y;
+            var h = off.h;
+            var w = off.w;
+
+            var k = document.getElementById('keyboard');
+
+            var nx = x + (w/2) - ( k.offsetWidth/2);
+
+            var ny = y + h + 24;
+
+            if ( nx < 16 ){
+                nx = 16;
+            } else if ( nx > window.innerWidth - k.offsetWidth - 16 ){
+                nx = window.innerWidth - k.offsetWidth - 16;
+            }
+
+            if ( ny > window.innerHeight  - k.offsetHeight - 16 ){
+                ny = y - k.offsetHeight - 16;
+            }
+
+            k.style.top = ny + 'px';
+            k.style.left = nx + 'px';
+            k.style.transform = 'translateX(0)';
+
+            k.classList.add('show');
+        }
+
+        function hidekeyboard(){
+            var k = document.getElementById('keyboard');
+            k.classList.remove('show');
         }
 
         function autoexpand(e){
@@ -1426,6 +1529,8 @@
 
             c = document.getElementsByClassName('contextpanel visible');
             c.removeclass('visible');
+
+            hidekeyboard();
         }
 
         function blurelm(e){
@@ -1448,6 +1553,7 @@
             c.removeclass('current');
 
             hidecontext();
+            hidekeyboard();
         }
 
         function hidecontext(){
@@ -1541,6 +1647,8 @@
                         t.classList.add('current');
                         ta.readOnly = false;
                         ta.focus();
+
+                        showkeyboard.call(t);
                     }
 
                     setcontextpanel.call(t);
@@ -1683,6 +1791,41 @@
             document.body.click();
         }
 
+        function shift(e){
+            var k = this.getparent('keyboard');
+            k.classList.toggle('uppercase');
+        }
+
+        function key(e){
+            var v = this.innerText;
+            var a = document.activeElement;
+
+            if ( !a ){
+                return;
+            }
+
+            switch(v.toLowerCase()){
+                case 'space':
+                    v = ' ';
+                    break;
+                case 'del': 
+                    a.value = a.value.slice(0, -1);
+                    return;
+                case 'shift' :
+                    return;
+                case 'return' :
+                    v = '\r\n';
+                    break;
+                case '&123' :
+                    return;
+                default:
+            }
+
+            a.value += v;
+
+            autoexpand.call(a, e)
+        }
+
         Attach.on('touchstart', '.handle', handlehandler);
         Attach.on('mousedown', '.handle', handlehandler);
 
@@ -1736,6 +1879,10 @@
         Attach.on('mousedown', '.select_tool', marquee);
         Attach.on('touchstart', '.select_tool', marquee);
 
+        Attach.on('click' , '.shift', shift);
+
+        Attach.on('click' , '.key', key);
+
         //Attach.on('mousedown', '.contextpanel', stopprop, true);
 
         canvas();
@@ -1764,6 +1911,12 @@
                 // p.removeclass('visible');
             }
         });
+
+
+        // var hammertime = new Hammer(document.body, {});
+        // hammertime.on('pan', function(ev) {
+        //     console.log(ev);
+        // });
 
     </script>
 </body>
