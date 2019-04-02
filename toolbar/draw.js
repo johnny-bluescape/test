@@ -106,7 +106,7 @@ function sketchHandler(e){
 
     console.log(evt);
     
-    var id = e.identifier;
+    var id = evt.identifier;
 
     console.log(id + ' TOUCH  ID');
 
@@ -135,7 +135,7 @@ function sketchHandler(e){
         var evt = e.touches ? e.touches[0] : e;
         var ctx = canvas.getContext('2d');
 
-        var id2 = e.identifier;
+        var id2 = evt.identifier;
 
         var nx = evt.pageX - ol;
         var ny = evt.pageY - ot;
