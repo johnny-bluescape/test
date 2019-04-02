@@ -71,7 +71,7 @@
 
         * {margin:0;padding:0;-webkit-overflow-scrolling: touch;-ms-overflow-style: -ms-autohiding-scrollbar;outline:none;}
         html, body {height:100%;}
-        html {font-family:Barlow, sans-serif;background:var(--canvas);color:var(--color);}
+        html {font-family:Barlow, sans-serif;background:var(--canvas);color:var(--color);cursor:pointer;}
 
         body {cursor:pointer;}
 
@@ -1174,6 +1174,8 @@
         }
 
         function typetool(e){
+
+            console.log('TYPETOOL');
             blurall();
 
             var p = e.target.getparent('textarea');
@@ -1185,6 +1187,7 @@
             }
 
             e = e.touches ? e.touches[0] : e;
+
             var w = document.createElement('div');
             var t = document.createElement('textarea');
 
@@ -1305,8 +1308,6 @@
                 return;
             }
 
-
-
             var ta = this.getElementsByClassName('textarea')[0];
 
             blurelm.call(this, e);
@@ -1339,7 +1340,7 @@
 
                 if ( !moved && (Math.abs(nx) > 3 || Math.abs(ny) > 3) ){
                     moved = true;
-                    e.preventDefault();
+                    //e.preventDefault();
                     e.stopPropagation();
 
                     hidecontext();
@@ -1560,7 +1561,6 @@
         Attach.on('touchstart', '.rectangle_tool', rectanglex);
 
        
-
         Attach.on('mousedown', '.resizehandle', rectangleresize);
         Attach.on('touchstart', '.resizehandle', rectangleresize);
         
@@ -1577,6 +1577,7 @@
         Attach.on('click', '.morebtn', moremenu);
 
         Attach.on('mousedown', '.select_tool', marquee);
+        Attach.on('touchstart', '.select_tool', marquee);
 
         //Attach.on('mousedown', '.contextpanel', stopprop, true);
 

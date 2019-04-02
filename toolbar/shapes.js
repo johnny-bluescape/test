@@ -1,6 +1,8 @@
 function rectanglemove(e){
-    e.preventDefault();
-    e.stopPropagation();
+
+  console.log('mnove')
+    //e.preventDefault();
+    //e.stopPropagation();
 
     // if ( document.documentElement.id == 'rectanglex' || document.documentElement.id == 'circlex'  || document.documentElement.id == 'linex' ){
     //   return;
@@ -404,7 +406,7 @@ function rectanglemove(e){
     document.body.appendChild(ops);
 
     function move(e){
-      e.preventDefault();
+      //e.preventDefault();
 
       var shift = e.shiftKey;
 
