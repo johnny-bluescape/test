@@ -294,6 +294,58 @@ function rectanglemove(e){
     document.getElementById(cid).classList.add('visible');
   }
 
+  function insertrect(){
+    var color = document.getElementsByClassName('fillswatch')[0];
+    var ac = document.getElementById('shapefill');
+    color =  typeof window.shapecolor == 'string' ? window.shapecolor : window.getComputedStyle(ac).backgroundColor;//'rgb(255, 59, 48)';//color.parentElement.getElementsByClassName('togglewrap')[0].classList.contains('on') ? window.getComputedStyle(color).backgroundColor : 'transparent';
+
+    var rect = document.createElement('div');
+    rect.className = 'rectangle current layeritem';
+    rect.style.position = 'absolute';
+    rect.style.top = (window.innerHeight / 2) - 60 + 'px';
+    rect.style.left = (window.innerWidth / 2) - 60 - 200 + 'px';
+    rect.style.backgroundColor = color;
+    rect.style.backgroundClip = 'padding-box';
+    rect.style.boxSizing = 'border-box';
+    rect.style.zIndex = 1337;
+
+    rect.style.width = '120px';
+    rect.style.height = '120px';
+
+    for(var i=0;i<4;i++){
+      var d = document.createElement('div');
+      d.className = 'resizehandle';
+
+      rect.appendChild(d);
+    }
+
+    var f = document.getElementsByClassName('rectangle current');
+    while(f[0]){
+      f[0].classList.remove('current');
+
+      //document.body.classList.remove('showcontextpanel2');
+    }
+    //this.appendChild(rect);
+
+    var ops = document.getElementById('shape_context').cloneNode(true);
+    //ops.removeAttribute('id');
+
+    var cid = 's' + Date.now() + '-' + Math.floor(Math.random()*1000);
+
+    ops.id = cid;
+    rect.dataset.context = cid;
+    
+    rect.id = cid + 'rect';
+
+    document.body.appendChild(ops);
+    document.getElementById('layers').appendChild(rect);
+
+    document.getElementById('select_tool').click();
+
+
+    setcontextpanel.call(rect);
+  }
+
   function rectanglex(e, round, line){
     console.log('xxxx')
 

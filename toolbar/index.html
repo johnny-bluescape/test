@@ -391,7 +391,7 @@
                 </div>
             </div>
             <div class=tool>
-                <div class=toolbtn data-tool=type>
+                <div class=toolbtn data-tool=type id=type_tool2>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5 17v2h14v-2H5zm4.5-4.2h5l.9 2.2h2.1L12.75 4h-1.5L6.5 15h2.1l.9-2.2zM12 5.98L13.87 11h-3.74L12 5.98z"/></svg>
                 </div>
                 <div class=options>
@@ -1469,7 +1469,9 @@
 
             setcontextpanel.call(w);
 
-            showkeyboard.call(w, e);
+            //if ( e.touches ){
+                showkeyboard.call(w, e);
+            //}
         }
 
         function showkeyboard(e){
@@ -1521,7 +1523,7 @@
             var w = d.offsetWidth;
             var h = d.offsetHeight;
 
-            this.style.width = w + 8 + 'px';
+            this.style.width = w + 9 + 'px';
 
             this.style.height = 0;
             var s = this.scrollHeight;
@@ -1586,7 +1588,6 @@
             var sy = ev.pageY;
 
             var t = this;
-
 
             var ox = Number(t.dataset.x) || 0;
             var oy = Number(t.dataset.y) || 0;
@@ -1658,7 +1659,10 @@
                         ta.readOnly = false;
                         ta.focus();
 
-                        showkeyboard.call(t);
+                        if ( e.touches ){
+
+                            showkeyboard.call(t);
+                        }
                     }
 
                     setcontextpanel.call(t);
@@ -1807,8 +1811,6 @@
         }
 
         function key(e){
-
-            console.log('efefe')
             var v = this.innerText;
             var a = document.getElementsByClassName('textwrap current')[0];
 
@@ -1835,6 +1837,26 @@
             a.focus();
 
             autoexpand.call(a, e);
+        }
+
+        function shape_tool2(e){
+            console.log('shape_tool2')
+            if ( !document.documentElement.classList.contains('insert') ){
+                return;
+            }
+            blurelm.call(this);
+            insertrect();
+
+        }
+
+        function type_tool2(e){
+            console.log('type_tool2')
+            if ( !document.documentElement.classList.contains('insert') ){
+                return;
+            }
+            blurelm.call(this);
+
+            //somethings
         }
 
         Attach.on('touchstart', '.handle', handlehandler);
@@ -1893,6 +1915,9 @@
         Attach.on('click' , '.shift', shift);
 
         Attach.on('click' , '.key', key);
+
+        Attach.on('click', '#shape_tool2', shape_tool2);
+        Attach.on('click', '#type_tool2', type_tool2);
 
 
         //document.addEventListener('mousewheel', mousescroll, { passive:false });
