@@ -353,6 +353,11 @@
         #keyboard .row:first-child .key:last-child {border-radius: 0 6px 0 0;}
         #keyboard .row:last-child .key:first-child {border-radius: 0 0 0 6px;}
         #keyboard .row:last-child .key:last-child {border-radius: 0 0 6px 0;}
+
+        .minishape {width:48px;height:48px;display:inline-flex;align-items:center;justify-content:center;cursor: pointer;}
+
+        .minishape .square {width:24px;height:24px;border-radius: 2px;border:2px solid white;box-sizing:border-box;}
+        .minishape .circle {width:24px;height:24px;border-radius:50%;border:2px solid white;box-sizing:border-box;}
     
     </style>
 </head>
@@ -516,8 +521,8 @@
     </div>
 
     <div id=panels style="display:none;">
-        <div class=panel id=shape_panel>
-            square circle star
+        <div class="panel shapes_panel" id=shapes_panel style="border-radius: 8px;padding: 2px 4px;">
+            <div class="minishape" data-type=rectanglex><div class="square"></div></div><div class="minishape" data-type=circlex><div class="circle"></div></div>
         </div>
         <div class=panel id=fontsize_panel style="padding:4px;border-radius:32px;margin-left:18px;transform:translateY(4px);">
             <div class=slider data-y=136>
@@ -622,6 +627,15 @@
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 12l-1.41-1.41L13 16.17V4h-2v12.17l-5.58-5.59L4 12l8 8 8-8z"/></svg>
             </div><div class="option morebtn">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+            </div>
+        </div>
+
+        <div class="panel" id=border_panel>
+            <div class=slider>
+                slider
+            </div>
+            <div class="swatches">
+                <div class="swatch"></div><div class="swatch"></div><div class="swatch"></div><div class="swatch"></div><div class="swatch"></div><div class="swatch"></div><div class="swatch"></div><div class="swatch"></div><div class="swatch"></div>
             </div>
         </div>
 
@@ -1183,7 +1197,7 @@
                 } else if ( !moved  ){
                     console.log('clicked');
 
-                    tar.click();
+                    //tar.click();
                 } else {
 
                     var oc = p.getElementsByClassName('dot current');
@@ -1343,6 +1357,8 @@
         }
 
         function swatchhandler(e){
+
+            console.log('ugh')
             var c = window.getComputedStyle(this,null).backgroundColor;
 
             var id = this.getparent('panel').dataset.id;
@@ -1731,7 +1747,13 @@
             c.style.left = Math.round(x) + 'px';
 
             if ( y < 72 ){
-                y = y + h + 16;
+
+                console.log(y+h)
+                if ( y+h > window.innerHeight - 72 ){
+                    y += 16;
+                } else {
+                    y = y + h + 16;
+                }
             } else {
                 y -= 64;
             }
@@ -1840,14 +1862,31 @@
         }
 
         function shape_tool2(e){
-            console.log('shape_tool2')
-            if ( !document.documentElement.classList.contains('insert') ){
+            var o = document.getElementsByClassName('shapes_panel panel2');
+
+            if ( o[0] ){
+                o.remove();
                 return;
             }
-            blurelm.call(this);
-            insertrect();
+            
+            var s = document.getElementById('shapes_panel').cloneNode(true);
 
+            s.removeAttribute('id');
+
+            s.classList.add('panel2');
+
+            var off = this.offset();
+            var x = off.x + 72;
+            var y = off.y - 2;
+
+            s.style.top = y + 'px';
+            s.style.left = x  + 'px';
+
+            document.body.appendChild(s);
+            s.offsetLeft;
+            s.style.opacity = 1;
         }
+
 
         function type_tool2(e){
             console.log('type_tool2')
@@ -1857,6 +1896,24 @@
             blurelm.call(this);
 
             //somethings
+        }
+
+        function minishape(e){
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('ms');
+            var t = this.dataset.type;
+
+            document.body.classList.remove('rectanglex', 'circlex');
+            document.body.classList.add(t);
+
+            console.log('shape_tool2');
+            if ( document.documentElement.classList.contains('insert') ){
+                blurelm.call(this);
+                insertrect();
+            }
+
+            closepanel();
         }
 
         Attach.on('touchstart', '.handle', handlehandler);
@@ -1918,6 +1975,8 @@
 
         Attach.on('click', '#shape_tool2', shape_tool2);
         Attach.on('click', '#type_tool2', type_tool2);
+
+        Attach.on('click', '.minishape', minishape);
 
 
         //document.addEventListener('mousewheel', mousescroll, { passive:false });

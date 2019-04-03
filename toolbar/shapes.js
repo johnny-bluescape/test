@@ -312,6 +312,10 @@ function rectanglemove(e){
     rect.style.width = '120px';
     rect.style.height = '120px';
 
+    if ( document.body.classList.contains('circlex') ){
+      rect.style.borderRadius = '50%';
+    }
+
     for(var i=0;i<4;i++){
       var d = document.createElement('div');
       d.className = 'resizehandle';
@@ -419,18 +423,18 @@ function rectanglemove(e){
     rect.style.boxSizing = 'border-box';
     rect.style.zIndex = 1337;
 
-    var ln = 'Rectangle';
+    if ( document.body.classList.contains('circlex') ){
+      rect.style.borderRadius = '50%';
+    }
 
     if ( round ){
       rect.style.borderRadius = '50%';
-      ln = 'Ellipse';
       rect.className += ' ellipse';
     }
 
     for(var i=0;i<4;i++){
       var d = document.createElement('div');
       d.className = 'resizehandle';
-
 
       if (border){
         if (i === 0) {
