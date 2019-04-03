@@ -1890,7 +1890,12 @@
 
         canvas();
 
-        window.onresize = resize2;
+        window.onresize = resize;
+
+        function resize(){
+            screenrez();
+            resize2();
+        }
 
         window.addEventListener('mousedown', function(e){
             var ev = e.touches ? e.touches[0] : e;
@@ -1914,6 +1919,32 @@
                 // p.removeclass('visible');
             }
         });
+
+        function screenrez(){
+            var r = document.getElementsByClassName('rez');
+            var d = document.createElement('div');
+            d.appendChild(document.createTextNode('Screen: ' + screen.width + ' x ' + screen.height + '\r\n Window: ' + window.innerWidth + ' x ' + window.innerHeight));
+            
+
+            d.className = 'rez';
+
+            d.style.position = 'absolute';
+            d.style.bottom = '8px';
+            d.style.right = '8px';
+            d.style.zIndex = 1337;
+            d.style.background = 'rgba(0,0,0,.1)';
+            d.style.color = '#333';
+            d.style.borderRadius = '6px';
+            d.style.whiteSpace = 'pre-line';
+            d.style.padding = '4px 8px';
+            d.style.fontSize = '14px';
+
+            r.remove();
+
+            document.body.appendChild(d);
+        }
+
+        screenrez();
 
 
         // var hammertime = new Hammer(document.body, {});
@@ -1940,7 +1971,7 @@
         //     opt.e.stopPropagation();
         // })
 
-        alert(screen.width + ' x ' + screen.height);
+        
     </script>
 </body>
 </html>
