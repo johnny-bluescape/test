@@ -518,7 +518,7 @@ function rectanglemove(e){
   }
 
   function marquee(e){
-    if ( e.which == 3 ){
+    if ( e.which == 3|| e.target != document.body ){
         return;
     }
     e = e.touches ? e.touches[0] : e;

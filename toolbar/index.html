@@ -328,10 +328,10 @@
             .brush_tool #advancedpanel .brushpanel, .type_tool #advancedpanel .typepanel {display:block;}
 
 
-        #keyboard {position:fixed;max-width:772px;width:100%;top:50%;left:50%;z-index:9999999999999999;background:#181819;padding:8px 8px 0px;border-radius:6px;box-shadow: 0 2px 20px var(--shadow2);opacity:0;pointer-events:none;transition:opacity 150ms ease-in-out;}
+        #keyboard {position:fixed;max-width:772px;width:100%;top:50%;left:50%;z-index:9999999999999999;background:#181819;padding:8px 8px 0px;border-radius:12px;box-shadow: 0 2px 20px var(--shadow2);opacity:0;pointer-events:none;transition:opacity 150ms ease-in-out;}
             #keyboard.show {opacity:1;transform:translateY(0);pointer-events:all;}
         #keyboard .row {display:flex;padding: 0 0 8px;margin:0;}
-            #keyboard .key {display:flex;width:60px;height:60px;align-items:center;justify-content:center;font-size:20px;font-weight:600;background:#262627;margin-right:8px;cursor:pointer;}
+            #keyboard .key {display:flex;width:60px;height:60px;align-items:center;justify-content:center;font-size:24px;font-weight:600;background:#262627;margin-right:8px;cursor:pointer;}
 
                 #keyboard .key:last-child {margin:0;}
                
@@ -348,6 +348,11 @@
 
         #keyboard.uppercase .key {text-transform:uppercase;}
             #keyboard.uppercase .shift {background:#434348;}
+
+        #keyboard .row:first-child .key:first-child {border-radius: 6px 0 0 0;}
+        #keyboard .row:first-child .key:last-child {border-radius: 0 6px 0 0;}
+        #keyboard .row:last-child .key:first-child {border-radius: 0 0 0 6px;}
+        #keyboard .row:last-child .key:last-child {border-radius: 0 0 6px 0;}
     
     </style>
 </head>
@@ -675,6 +680,10 @@
         <div class=tweak>
             <label><input type=checkbox value=advanced class=tweakr /><div class=toggle></div> Advanced Panel</label>
         </div>
+
+        <div class=tweak>
+            <label><input type=checkbox value=insert class=tweakr /><div class=toggle></div> Insert</label>
+        </div>
     </div>
 
     <div id=keyboard class=draggable>
@@ -824,13 +833,11 @@
         }
 
         function draggable(e){
-            e.preventDefault();
-            e.stopPropagation();
-
             var ev = e.touches ? e.touches[0] : e;
             if( ev.which == 3 ){
                 return;
             }
+            var tar = e.target;
             var t = this;
             var sx = ev.pageX;
             var sy = ev.pageY;
@@ -867,7 +874,10 @@
                     return;
                 }
 
-                t.style.transform = 'translate(' + nx + 'px, ' + ny + 'px)';
+                e.preventDefault();
+                e.stopPropagation();
+
+                t.style.transform = 'translate(' + Math.round(nx) + 'px, ' + Math.round(ny) + 'px)';
             }
 
             function end(e){
@@ -878,22 +888,22 @@
                 window.removeEventListener('mouseup', end);
 
                 if ( !moved ){
-
+                    //tar.click();
                 }
 
                 console.log(nx,ny);
 
                 t.style.transform = 'translate(0, 0)';
 
-                t.style.left = nx + 'px';
-                t.style.top = ny + 'px';
+                t.style.left = Math.round(nx) + 'px';
+                t.style.top = Math.round(ny) + 'px';
             }
 
-            window.addEventListener('touchmove', move);
-            window.addEventListener('touchend', end);
+            window.addEventListener('touchmove', move, {passive:false});
+            window.addEventListener('touchend', end, {passive:false});
 
-            window.addEventListener('mousemove', move);
-            window.addEventListener('mouseup', end);
+            window.addEventListener('mousemove', move, {passive:false});
+            window.addEventListener('mouseup', end), {passive:false};
         }
 
         function handlehandler(e){
@@ -1797,12 +1807,12 @@
         }
 
         function key(e){
-            var v = this.innerText;
-            var a = document.activeElement;
 
-            if ( !a ){
-                return;
-            }
+            console.log('efefe')
+            var v = this.innerText;
+            var a = document.getElementsByClassName('textwrap current')[0];
+
+            a = a.getElementsByClassName('textarea')[0];
 
             switch(v.toLowerCase()){
                 case 'space':
@@ -1822,8 +1832,9 @@
             }
 
             a.value += v;
+            a.focus();
 
-            autoexpand.call(a, e)
+            autoexpand.call(a, e);
         }
 
         Attach.on('touchstart', '.handle', handlehandler);
