@@ -1883,6 +1883,9 @@
 
         Attach.on('click' , '.key', key);
 
+
+        //document.addEventListener('mousewheel', mousescroll, { passive:false });
+
         //Attach.on('mousedown', '.contextpanel', stopprop, true);
 
         canvas();
@@ -1918,6 +1921,26 @@
         //     console.log(ev);
         // });
 
+    </script>
+    <script src="./fabric.js"></script>
+
+    <script>
+        //var canvas = document.getElementById('canvas2');
+
+        //var canvas2 = new fabric.Canvas('canvas2');
+
+        // canvas2.on('mouse:wheel', function(opt) {
+        //     var delta = opt.e.deltaY;
+        //     var zoom = canvas2.getZoom();
+        //     zoom = zoom + delta/200;
+        //     if (zoom > 20) zoom = 20;
+        //     if (zoom < 0.01) zoom = 0.01;
+        //     canvas2.setZoom(zoom);
+        //     opt.e.preventDefault();
+        //     opt.e.stopPropagation();
+        // })
+
+        alert(screen.width + ' x ' + screen.height);
     </script>
 </body>
 </html>
