@@ -1,6 +1,6 @@
 function rectanglemove(e){
 
-  console.log('mnove')
+    console.log('mnove')
     //e.preventDefault();
     e.stopPropagation();
 
@@ -71,6 +71,12 @@ function rectanglemove(e){
         r.dataset.top = ny;
 
         r.style.transform = 'translate(' + nx + 'px,' + ny + 'px)';
+      }
+
+      if ( y < 36 ){
+        rec.classList.add('neartop');
+      } else {
+        rec.classList.remove('neartop');
       }
     }
 
@@ -432,6 +438,20 @@ function rectanglemove(e){
       rect.className += ' ellipse';
     }
 
+    if ( document.body.classList.contains('canvas_tool') ){
+      rect.style.background = 'transparent';
+      border = 2;
+      rect.style.borderWidth = border + 'px';
+      rect.style.borderColor = 'rgba(255,255,255,.2)';//'#7754A1';
+      rect.style.borderRadius = '8px';
+
+      rect.className += ' canvasboard';
+
+      var label = document.createElement('div');
+      label.className = 'canvaslabel';
+      label.appendChild(document.createTextNode('Canvas Label'));
+    }
+
     for(var i=0;i<4;i++){
       var d = document.createElement('div');
       d.className = 'resizehandle';
@@ -449,6 +469,10 @@ function rectanglemove(e){
       }
 
       rect.appendChild(d);
+    }
+
+    if ( label ){
+      rect.appendChild(label);
     }
 
     var f = document.getElementsByClassName('rectangle current');

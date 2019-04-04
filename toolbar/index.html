@@ -365,7 +365,16 @@
         .minishape .square, .minishape .circle {width:22px;height:22px;border-radius:2px;border:2px solid var(--icon);box-sizing:border-box;}
             .minishape .circle {border-radius:50%;}
 
+            #brush_context {opacity:0;pointer-events:none;top:auto !important;}
             .brush_tool #brush_context {opacity:1;pointer-events:all;bottom:24px;left:24px;top:auto !important;transform:translateY(0);}
+            
+        
+        .canvaslabel {position: absolute;top:-32px;left:-2px;padding:4px 8px;background:#4E4D4D;color:white;border-radius:6px;white-space:nowrap;font-size:14px;font-weight:500;transition:all 150ms ease-in-out;}
+            .current .canvaslabel {background:#433453;}
+
+            .neartop .canvaslabel {top:4px;left:4px;}
+
+            .canvasboard.current {border-color:#7754A1 !important;box-shadow:none;}
     </style>
 </head>
 <body class="rectanglex brush_tool ">
@@ -455,7 +464,7 @@
                 </div>
             </div>
             <div class=tool>
-                <div class=toolbtn>
+                <div class=toolbtn id=canvas_tool data-tool=canvas>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
                 </div>
                 <div class=options>
@@ -1983,6 +1992,9 @@
 
         Attach.on('mousedown', '.rectangle_tool', rectanglex);
         Attach.on('touchstart', '.rectangle_tool', rectanglex);
+
+        Attach.on('mousedown', '.canvas_tool', rectanglex);
+        Attach.on('touchstart', '.canvas_tool', rectanglex);
 
         Attach.on('mousedown', '.draggable', draggable);
         Attach.on('touchstart', '.draggable', draggable);
