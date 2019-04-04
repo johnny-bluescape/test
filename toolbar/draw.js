@@ -228,6 +228,7 @@ function sketchHandlerM(e){
 
     bc.style.opacity = 0;
     bc.style.pointerEvents = 'none';
+    bc.style.transform = 'translateY(6px)';
 
     function move(e){
         var evt = e.touches ? e.touches[0] : e;
@@ -269,10 +270,11 @@ function sketchHandlerM(e){
 
         var bc = document.getElementById('brush_context');
 
-        bc.style.left = x - bc.offsetWidth - 64 + 'px';
-        bc.style.bottom = window.innerHeight - y - (bc.offsetHeight/2)  + 'px';
+        bc.style.left = x - (bc.offsetWidth/2) + 'px';
+        bc.style.bottom = window.innerHeight - y - (bc.offsetHeight/2) - 64  + 'px';
         bc.style.opacity = 1;
         bc.style.pointerEvents = 'all';
+        bc.style.transform = 'translateY(0)';
     }
 
     window.addEventListener( 'mousemove', move );

@@ -62,7 +62,7 @@
         }
 
         .light {
-            --canvas:#f8f8f8;
+            --canvas:#f2f2f2;
             --tool: #fafafa;
             --toolhover: #fdfdfd;
             --toolpress: #fff;
@@ -269,7 +269,7 @@
             .ellipse .resizehandle:nth-child(3) {bottom:-5px;left:50%;margin-left:-4px;cursor:ns-resize;}
             .ellipse .resizehandle:nth-child(4) {top:50%;margin-top:-4px;left:-5px;cursor:ew-resize;}
 
-        .contextpanel {overflow:hidden;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity 150ms ease-in-out, transform 150ms ease-in-out;background:var(--panel);border-radius:6px;box-shadow:0 3px 20px var(--shadow);height:48px;position:absolute;top:-64px;left:50%;transform:translate(0, 4px);z-index:9999999999999;}
+        .contextpanel {overflow:hidden;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity 150ms ease-in-out, transform 150ms ease-in-out;background:var(--panel);border-radius:6px;box-shadow:0 3px 20px var(--shadow);min-height:48px;position:absolute;top:-64px;left:50%;transform:translate(0, 4px);z-index:9999999999999;}
             .current:not(.drawing) .contextpanel, .current:not(.moving) .contextpanel, .contextpanel.visible {opacity:1;pointer-events:all;transform:translate(0, 0);}
             
 
@@ -365,7 +365,7 @@
         .minishape .square, .minishape .circle {width:22px;height:22px;border-radius:2px;border:2px solid var(--icon);box-sizing:border-box;}
             .minishape .circle {border-radius:50%;}
 
-            .brush_tool #brush_context {opacity:1;pointer-events:all;bottom:24px;left:24px;top:auto;transform:translateY(0);}
+            .brush_tool #brush_context {opacity:1;pointer-events:all;bottom:24px;left:24px;top:auto !important;transform:translateY(0);}
     </style>
 </head>
 <body class="rectanglex brush_tool ">
@@ -636,8 +636,8 @@
             </div> -->
             <div class=option id=shape2color>
                 <div class="fill shape2fill" id="shape2fill" style="background:rgb(255, 59, 48);"></div>
-            </div><div class=option>
-                <div class="border shapeborder" id="shapeborder" style=""></div>
+            </div><div class="option shapeborder">
+                <div class="border" id="shapeborder"></div>
             </div><div class="option shapeup">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8-8 8z"/></svg>
             </div><div class="option shapeback">
@@ -645,12 +645,14 @@
             </div><div class="option morebtn">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
             </div>
+        
+            <div class="content"></div>
         </div>
 
         <div class="panel" id=border_panel>
-            <div class=slider>
+            <!-- <div class="slider horizontal">
                 slider
-            </div>
+            </div> -->
             <div class="swatches">
                 <div class="swatch"></div><div class="swatch"></div><div class="swatch"></div><div class="swatch"></div><div class="swatch"></div><div class="swatch"></div><div class="swatch"></div><div class="swatch"></div><div class="swatch"></div>
             </div>
@@ -1936,6 +1938,21 @@
             closepanel();
         }
 
+        function bordercontext(e){
+            console.log('bordercontext')
+            var p = this.getparent('contextpanel');
+            var c = p .getElementsByClassName('content')[0];
+
+            var b = document.getElementById('border_panel').cloneNode(true);
+
+            b.removeAttribute('id');
+
+            b.classList.remove('panel');
+
+            c.appendChild(b);
+
+        }
+
         Attach.on('touchstart', '.handle', handlehandler);
         Attach.on('mousedown', '.handle', handlehandler);
 
@@ -1997,6 +2014,8 @@
         Attach.on('click', '#type_tool2', type_tool2);
 
         Attach.on('click', '.minishape', minishape);
+
+        Attach.on('click', '.shapeborder', bordercontext);
 
 
         //document.addEventListener('mousewheel', mousescroll, { passive:false });
