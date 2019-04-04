@@ -2,7 +2,7 @@ window.brushsize = 10;
 window.brushcolor = 'rgba(0,0,0,1)';
 window.canvashistory = [];
 
-function canvas(){
+function canvassetup(){
     var canvas 	= document.getElementById('canvas2'),
     //ctx 	= canvas.getContext('2d'),
     width  	= canvas.parentElement.offsetWidth,
