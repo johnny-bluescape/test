@@ -61,13 +61,15 @@
 
         .light {
             --canvas:#f8f8f8;
-            --tool: #ddd;
-            --toolselect: #ccc;
+            --tool: #fafafa;
+            --toolselect: #fff;
             --icon:#666;
             --iconcurrent:#000;
             --color:#000;
             --incolor:#fff;
-            --ui:222,222,222;
+
+            --shadow:rgba(var(--ui), .08);
+            --shadow2:rgba(var(--ui), .15);
         }
 
         * {margin:0;padding:0;-webkit-overflow-scrolling: touch;-ms-overflow-style: -ms-autohiding-scrollbar;outline:none;}
@@ -142,9 +144,9 @@
                     .dot.current::after {background:white;}
 
             .handle {pointer-events: all !important;width:48px;height:48px;position:absolute;left:-48px;top:calc(50% - 24px);border-radius:50%;cursor:pointer;}
-                .fakehandle {position:absolute;top:50%;left:50%;transform:translate(-50%, -50%);width:28px;height:28px;background:var(--toolselect);border-radius:50%;box-shadow:0 2px 20px rgba(0,0,0,.4);}
+                .fakehandle {position:absolute;top:50%;left:50%;transform:translate(-50%, -50%);width:28px;height:28px;background:var(--toolselect);border-radius:50%;box-shadow:0 2px 20px var(--shadow2);}
                     .fakehandle svg {width:16px;height:28px;display:block;margin:0 auto;}
-                        .fakehandle svg * {fill:white;}
+                        .fakehandle svg * {fill:var(--icon);}
                     .fakehandle .open {display:none;}
                     .minimized .fakehandle .close {display:none;}
                     .minimized .fakehandle .open {display:block;}
@@ -356,9 +358,8 @@
 
         .minishape {width:48px;height:48px;display:inline-flex;align-items:center;justify-content:center;cursor: pointer;}
 
-        .minishape .square {width:24px;height:24px;border-radius: 2px;border:2px solid white;box-sizing:border-box;}
-        .minishape .circle {width:24px;height:24px;border-radius:50%;border:2px solid white;box-sizing:border-box;}
-    
+        .minishape .square, .minishape .circle {width:22px;height:22px;border-radius:2px;border:2px solid white;box-sizing:border-box;}
+            .minishape .circle {border-radius:50%;}
     </style>
 </head>
 <body class="rectanglex brush_tool ">
@@ -620,7 +621,7 @@
             <div class=option id=shape2color>
                 <div class="fill shape2fill" id="shape2fill" style="background:rgb(255, 59, 48);"></div>
             </div><div class=option>
-                <div class="border shapeborder" id="shapeborder" style="border-color:;"></div>
+                <div class="border shapeborder" id="shapeborder" style=""></div>
             </div><div class="option shapeup">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8-8 8z"/></svg>
             </div><div class="option shapeback">
@@ -1751,6 +1752,8 @@
                 console.log(y+h)
                 if ( y+h > window.innerHeight - 72 ){
                     y += 16;
+
+                    y = Math.max(y, 16);
                 } else {
                     y = y + h + 16;
                 }
