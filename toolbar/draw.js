@@ -175,24 +175,18 @@ function sketchHandler(e){
         }
     }
 
-    function moveto(i, changeX, changeY) {
-        ctxt.beginPath();
-        ctxt.moveTo(lines[i].lx, lines[i].y);
-        ctxt.lineTo(x, y);
-        ctxt.stroke();
-        ctxt.closePath();
-        return {
-            x: lines[i].x + changeX,
-            y: lines[i].y + changeY
-        };
-    }
-
     function end(e){
         window.removeEventListener( 'touchmove', move );
         window.removeEventListener( 'touchend', end );
 
         var imgdata = canvas.getContext('2d').getImageData(0,0,canvas.width,canvas.height);
         canvashistory.push(imgdata);
+    
+        console.log(e);
+
+        var bc = document.getElementById('brush_context');
+
+
     }
 
     window.addEventListener( 'touchmove', move );
@@ -230,6 +224,11 @@ function sketchHandlerM(e){
 
     lines[id] = {lx: lx, ly: ly};
 
+    var bc = document.getElementById('brush_context');
+
+    bc.style.opacity = 0;
+    bc.style.pointerEvents = 'none';
+
     function move(e){
         var evt = e.touches ? e.touches[0] : e;
         var ctx = canvas.getContext('2d');
@@ -262,6 +261,18 @@ function sketchHandlerM(e){
 
         var imgdata = canvas.getContext('2d').getImageData(0,0,canvas.width,canvas.height);
         canvashistory.push(imgdata);
+
+        console.log(e);
+
+        var x = e.pageX;
+        var y = e.pageY;
+
+        var bc = document.getElementById('brush_context');
+
+        bc.style.left = x - bc.offsetWidth - 64 + 'px';
+        bc.style.bottom = window.innerHeight - y - (bc.offsetHeight/2)  + 'px';
+        bc.style.opacity = 1;
+        bc.style.pointerEvents = 'all';
     }
 
     window.addEventListener( 'mousemove', move );

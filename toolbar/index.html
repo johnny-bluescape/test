@@ -44,6 +44,8 @@
         :root {
             --canvas:#323440;
             --tool: #282931;
+            --toolhover: #1e1f25;
+            --toolpress: #1B1B1C;
             --toolselect: #1B1B1C;
             --icon:#bbb;
             --iconcurrent:#fff;
@@ -62,8 +64,10 @@
         .light {
             --canvas:#f8f8f8;
             --tool: #fafafa;
+            --toolhover: #fdfdfd;
+            --toolpress: #fff;
             --toolselect: #fff;
-            --icon:#666;
+            --icon:#777;
             --iconcurrent:#000;
             --color:#000;
             --incolor:#fff;
@@ -100,8 +104,8 @@
                 .tool:last-child {margin-bottom:0;}
 
                 .toolbtn {width:60px;height:60px;background:var(--tool);transition:all 150ms ease-in-out;border-radius:50%;box-shadow:0 2px 20px var(--shadow);cursor:pointer;position:relative;z-index:1337;}
-                    .toolbtn:hover {background:#1e1f25;}
-                    .toolbtn:active {background:#1a1b20;}
+                    .toolbtn:hover {background:var(--toolhover);}
+                    .toolbtn:active {background:var(--toolselect);}
 
                 .tool.active .toolbtn {background:var(--toolselect);box-shadow:0 2px 20px var(--shadow2);}
 
@@ -358,8 +362,10 @@
 
         .minishape {width:48px;height:48px;display:inline-flex;align-items:center;justify-content:center;cursor: pointer;}
 
-        .minishape .square, .minishape .circle {width:22px;height:22px;border-radius:2px;border:2px solid white;box-sizing:border-box;}
+        .minishape .square, .minishape .circle {width:22px;height:22px;border-radius:2px;border:2px solid var(--icon);box-sizing:border-box;}
             .minishape .circle {border-radius:50%;}
+
+            .brush_tool #brush_context {opacity:1;pointer-events:all;bottom:24px;left:24px;top:auto;transform:translateY(0);}
     </style>
 </head>
 <body class="rectanglex brush_tool ">
@@ -518,6 +524,16 @@
                     <div class=label>Break</div>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <div id=brush_context class=contextpanel>
+        <div class="option" id="brushsize">
+            <div class="size" style="margin:0;">
+                <div class="actual" id="brushactual"></div>
+            </div>
+        </div><div class="option" id=brushcolor>
+            <div class="fill" id="brushfill"></div>
         </div>
     </div>
 
@@ -1428,8 +1444,9 @@
             var p = e.target.getparent('textarea');
             var b = e.target.getparent('toolbar');
             var pp = e.target.getparent('panel');
+            var tw = e.target.getparent('tweaks');
 
-            if ( p || b || pp ){
+            if ( p || b || pp || tw ){
                 return;
             }
 
