@@ -106,10 +106,10 @@
             .tools {transition:transform 150ms ease-in-out;}
             #toolbar.swap .tools {transform: translateX(calc(-100% - 60px));}
 
-            .tool {width:var(--toolbtn);height:var(--toolbtn);margin-bottom:var(--toolgap);margin-right:var(--toolgap);position:relative;transition:all 150ms ease-in-out;pointer-events:all;}
+            .tool {width:var(--toolbtn);height:var(--toolbtn);margin-bottom:var(--toolgap);position:relative;transition:all 150ms ease-in-out;pointer-events:all;}
                 .tool:last-child {margin-bottom:0;}
 
-                .horizontal .tool {float:left;}
+                .horizontal .tool {float:left;margin-right:var(--toolgap);margin-bottom:0;}
 
                 .toolbtn {width:100%;height:100%;background:var(--tool);transition:all 150ms ease-in-out;border-radius:var(--toolradius);box-shadow:0 2px 20px var(--shadow);cursor:pointer;position:relative;z-index:1337;}
                     .toolbtn:hover {background:var(--toolhover);}
@@ -801,12 +801,20 @@
             </div>
 
             <div class=tweak>
-                <div class=label><span>Toolbar Color</span><div class=value>52</div></div>
+                <div class=label><span>Toolbar Color</span><div class=value></div></div>
                 <input type=color onchange="toolbarcolor.call(this,event)" value="#282931" />
             </div>
             <div class=tweak>
-                <div class=label><span>Canvas Color</span><div class=value>52</div></div>
+                <div class=label><span>Workspace Color</span><div class=value></div></div>
                 <input type=color onchange="canvascolor.call(this,event)" value="#323440" />
+            </div>
+            <div class=tweak>
+                <div class=label><span>Selection Color</span><div class=value></div></div>
+                <input type=color onchange="selectioncolor.call(this,event)" value="#00CEFF" />
+            </div>
+            <div class=tweak>
+                <div class=label><span>Icon Color</span><div class=value></div></div>
+                <input type=color onchange="iconcolor.call(this,event)" value="#bbbbbb" />
             </div>
         </div>
     </div>
@@ -883,11 +891,33 @@
             var o = document.head.getElementsByClassName(n);
             o.remove();
 
-           var v = this.value;
+            var v = this.value;
+            var rgb = hex2rgb(v);
+            console.log(rgb);
+            var hsl = rgb2hsl(rgb);
+            console.log(hsl)
+
+            var p = this.getparent('tweak');
+            var av = p.getElementsByClassName('value')[0];
+            av.empty();
+            av.appendChild(document.createTextNode(v));
+
+            var hover = 'hsl(' + hsl[0] + ',' + hsl[1] + '%,' + (Number(hsl[2]) - 5) + '%)';
+            var press = 'hsl(' + hsl[0] + ',' + hsl[1] + '%,' + (Number(hsl[2]) - 10) + '%)';
 
             var s = document.createElement('style');
             s.className = n;
-            s.innerText = ':root{';
+
+            var css = ':root{ --tool: ' + v + ';';//
+            
+            css += '--toolhover: ' + hover + ';';
+            css += '--toolpress: ' + press + ';--toolselect: ' + press + ';--panel: ' + press + ';';
+            // css += '--ui: ' + rgb[0] + ',' + rgb[1] + ',' + rgb[2];
+            css += '}';
+
+            s.appendChild(document.createTextNode(css));
+
+            document.head.appendChild(s);
 
             console.log(v);
 
@@ -907,16 +937,76 @@
             // --select: #00CEFF;
         }
 
+        function iconcolor(e){
+            var n = 'tweaked_icons';
+            var o = document.head.getElementsByClassName(n);
+            o.remove();
+
+            var v = this.value;
+            var rgb = hex2rgb(v);
+            console.log(rgb);
+            var hsl = rgb2hsl(rgb);
+            console.log(hsl)
+
+            var p = this.getparent('tweak');
+            var av = p.getElementsByClassName('value')[0];
+            av.empty();
+            av.appendChild(document.createTextNode(v));
+
+            var current = 'hsl(' + hsl[0] + ',' + hsl[1] + '%,' + (Number(hsl[2]) + 20) + '%)';
+
+            var s = document.createElement('style');
+            s.className = n;
+
+            var css = ':root{ --icon: ' + v + ';';
+            css += '--iconcurrent: ' + current + ';';
+            css += '}';
+
+            s.appendChild(document.createTextNode(css));
+
+            document.head.appendChild(s);
+        }
+
         function canvascolor(e){
             var n = 'tweaked_canvas';
             var o = document.head.getElementsByClassName(n);
             o.remove();
 
-           var v = this.value;
+            var v = this.value;
+
+            var p = this.getparent('tweak');
+            var av = p.getElementsByClassName('value')[0];
+            av.empty();
+            av.appendChild(document.createTextNode(v));
 
             var s = document.createElement('style');
             s.className = n;
-            s.innerText = ':root{--canvas: ' + v + ';}';
+            
+            var css = ':root{--canvas: ' + v + ';}';
+
+            s.appendChild(document.createTextNode(css));
+
+            document.head.appendChild(s);
+        }
+
+        function selectioncolor(e){
+            var n = 'tweaked_select';
+            var o = document.head.getElementsByClassName(n);
+            o.remove();
+
+            var v = this.value;
+
+            var p = this.getparent('tweak');
+            var av = p.getElementsByClassName('value')[0];
+            av.empty();
+            av.appendChild(document.createTextNode(v));
+
+            var s = document.createElement('style');
+            s.className = n;
+            
+            var css = ':root{--select: ' + v + ';}';
+
+            s.appendChild(document.createTextNode(css));
 
             document.head.appendChild(s);
         }
@@ -930,7 +1020,7 @@
 
             var s = document.createElement('style');
             s.className = n;
-            s.innerText = ':root{';
+            var css = ':root{';
 
             for(var i=0;i<t.length;i++){
                 var a = t[i];
@@ -944,7 +1034,7 @@
                     x = '%';
                 }
 
-                s.innerText += '--' + d +  ':' + v + x + ';';
+                css += '--' + d +  ':' + v + x + ';';
 
                 if ( this === a ){
                     l.empty();
@@ -952,11 +1042,98 @@
                 }
             }
 
-            s.innerText += '}';
+            css += '}';
+
+            s.appendChild(document.createTextNode(css));
             
             document.head.appendChild(s);
 
             console.log(v);
+        }
+
+        function luminanace(r, g, b) {
+            var a = [r, g, b].map(function (v) {
+                v /= 255;
+                return v <= 0.03928 ? v / 12.92 : Math.pow( (v + 0.055) / 1.055, 2.4 );
+            });
+            return a[0] * 0.2126 + a[1] * 0.7152 + a[2] * 0.0722;
+        }
+
+        function contrast(rgb1, rgb2) {
+            return (luminanace(rgb1[0], rgb1[1], rgb1[2]) + 0.05) / (luminanace(rgb2[0], rgb2[1], rgb2[2]) + 0.05);
+        }
+
+        function hex2rgb(hex){
+            if (/^#/.test(hex)){
+                hex = hex.slice(1);
+            }
+            if (hex.length !== 3 && hex.length !== 6 ){
+                throw new Error("Invaild hex String");
+            }
+            
+            var digit = hex.split("");
+            
+            if (digit.length === 3){
+                digit = [ digit[0], digit[0], digit[1], digit[1], digit[2], digit[2] ];
+            }
+            var r = parseInt( [digit[0], digit[1] ].join(""), 16 );
+            var g = parseInt( [digit[2], digit[3] ].join(""), 16 );
+            var b = parseInt( [digit[4], digit[5] ].join(""), 16 );
+
+            return [r,g,b];
+        }
+
+        function hsl2rgb(h, s, l){
+            h = h / 359;
+            s = s / 100;
+            l = l / 100;
+
+            var r, g, b;
+
+            if(s == 0){
+                r = g = b = l; // achromatic
+            } else {
+                var hue2rgb = function hue2rgb(p, q, t){
+                    if(t < 0) t += 1;
+                    if(t > 1) t -= 1;
+                    if(t < 1/6) return p + (q - p) * 6 * t;
+                    if(t < 1/2) return q;
+                    if(t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+                    return p;
+                }
+
+                var q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+                var p = 2 * l - q;
+                r = hue2rgb(p, q, h + 1/3);
+                g = hue2rgb(p, q, h);
+                b = hue2rgb(p, q, h - 1/3);
+            }
+
+            return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
+        }
+
+        function rgb2hsl(rgb){
+            var r = rgb[0];
+            var g = rgb[1];
+            var b = rgb[2];
+            r /= 255, g /= 255, b /= 255;
+            var max = Math.max(r, g, b), min = Math.min(r, g, b);
+            var h, s, l = (max + min) / 2;
+
+            if(max == min){
+                h = s = 0; // achromatic
+            }else{
+                var d = max - min;
+                s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+                switch(max){
+                    case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+                    case g: h = (b - r) / d + 2; break;
+                    case b: h = (r - g) / d + 4; break;
+                }
+                h /= 6;
+            }
+
+            return [Math.round(h * 360), Math.round(s * 100), Math.round(l * 100)];
         }
 
         function dots(e, x){
