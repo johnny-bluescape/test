@@ -85,6 +85,7 @@
         * {margin:0;padding:0;-webkit-overflow-scrolling: touch;-ms-overflow-style: -ms-autohiding-scrollbar;outline:none;}
         html, body {height:100%;}
         html {font-family:Barlow, sans-serif;background:var(--canvas);color:var(--color);cursor:pointer;}
+        input, textarea, button {font-family:Barlow, sans-serif;color:var(--color);}
 
         body {cursor:pointer;}
 
@@ -121,7 +122,7 @@
                     .toolbtn svg * {fill:var(--icon);}
                     .active .toolbtn svg * {fill:var(--iconcurrent);}
 
-                .options {height:40px;background:var(--tool);border-radius:0 20px 20px 0;width:40px;position:absolute;top:calc(50% - 20px);left:20px;overflow:hidden;opacity:0;pointer-events:none;transition:all 150ms ease-in-out;box-shadow:0 2px 20px var(--shadow2);}
+                .options {height:40px;background:var(--tool);border-radius:0 20px 20px 0;width:calc(var(--toolbtn) - 20px);position:absolute;top:calc(50% - 20px);left:20px;overflow:hidden;opacity:0;pointer-events:none;transition:all 150ms ease-in-out;box-shadow:0 2px 20px var(--shadow2);}
                     .active .options {background:var(--toolselect);opacity:1;pointer-events:all;}
 
                 .toggled .options {width:348px;}
@@ -162,6 +163,8 @@
                     .fakehandle .open {display:none;}
                     .minimized .fakehandle .close {display:none;}
                     .minimized .fakehandle .open {display:block;}
+
+                .ui2 .fakehandle {box-shadow:none;}
 
         #toolbar.minimized {pointer-events:none;}
         .ui2 #toolbar.minimized, .ui3 #toolbar.minimized {width:48px;height:48px;overflow:hidden;border-radius:8px;}
@@ -757,16 +760,16 @@
             <label><input type=checkbox value=light class=tweakr /><div class=toggle></div> Light</label>
         </div>
         <div class=tweak>
-            <label><input type=checkbox value=ui2 id=ui2t class=tweakr onchange="document.getElementById('ui3t').checked=false;" /><div class=toggle></div> UI 2</label>
+            <label><input type=checkbox value=ui2 id=ui2t class=tweakr onchange="document.getElementById('ui3t').checked=false;" /><div class=toggle></div> Vertical Bar</label>
         </div>
 
         <div class=tweak>
-            <label><input type=checkbox value=ui3 id=ui3t class=tweakr onchange="document.getElementById('ui2t').checked=false;" /><div class=toggle></div> UI 3</label>
+            <label><input type=checkbox value=ui3 id=ui3t class=tweakr onchange="document.getElementById('ui2t').checked=false;" /><div class=toggle></div> Horz Bar</label>
         </div>
 
-        <div class=tweak>
+        <!-- <div class=tweak>
             <label><input type=checkbox value=ui4 id=ui4t class=tweakr onchange="" /><div class=toggle></div> UI 4</label>
-        </div>
+        </div> -->
 
         <div class=tweak>
             <label><input type=checkbox value=advanced class=tweakr /><div class=toggle></div> Advanced Panel</label>
@@ -2435,7 +2438,7 @@
 
             d.className = 'rez';
 
-            d.style.position = 'absolute';
+            d.style.position = 'fixed';
             d.style.bottom = '8px';
             d.style.right = '8px';
             d.style.zIndex = 1337;
