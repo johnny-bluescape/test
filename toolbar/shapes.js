@@ -587,6 +587,13 @@ function rectanglemove(e){
       }
 
       setcontextpanel.call(rect, ops);
+
+      var con = document.getElementsByClassName('contextpanel visible')[0];
+      var col = con.getElementsByClassName('shape2fill')[0];
+
+      var bg = window.getComputedStyle(rect).backgroundColor;
+
+      col.style.background = bg;
     }
 
     window.addEventListener('mousemove', move);

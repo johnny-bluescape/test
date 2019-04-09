@@ -699,7 +699,7 @@
                 <div class=recticon></div>
             </div> -->
             <div class=option id=shape2color>
-                <div class="fill shape2fill" id="shape2fill" style="background:rgb(255, 59, 48);"></div>
+                <div class="fill shape2fill" style="background:rgb(255, 59, 48);"></div>
             </div><div class="option shapeborder">
                 <div class="border" id="shapeborder"></div>
             </div><div class="option shapeup">
@@ -956,7 +956,7 @@
 
             //var b  = luminanace(rgb[0], rgb[1], rgb[2]);
             //console.log(b, 'LUMS');
-            if ( hsl[2] < 15 ){
+            if ( hsl[2] < 50 ){
                 l = -20;
             }
 
@@ -1804,7 +1804,10 @@
                 document.getElementById('textfill2').style.backgroundColor = c;
             }
 
-            document.getElementById(id + 'fill').style.background = c;
+            var pan = document.getElementById(id + 'fill');
+            if ( pan ){
+                pan.style.background = c;
+            }
 
             closepanel();
         }
