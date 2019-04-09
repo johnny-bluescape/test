@@ -185,7 +185,7 @@ function sketchHandler(e){
         console.log(e);
 
         var bc = document.getElementById('brush_context');
-
+        
 
     }
 

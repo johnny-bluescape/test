@@ -57,6 +57,10 @@
             --panel: rgb(var(--ui));
             --select: #00CEFF;
 
+            --toolbtn: 60px;
+            --toolbtnicon: 32px;
+            --toolgap: 12px;
+
             --hover:rgba(255, 255, 255, 0.025);
             --active:rgba(255, 255, 255, 0.05);
         }
@@ -100,16 +104,16 @@
             .tools {transition:transform 150ms ease-in-out;}
             #toolbar.swap .tools {transform: translateX(calc(-100% - 60px));}
 
-            .tool {width:60px;height:60px;margin-bottom:12px;position:relative;transition:all 150ms ease-in-out;pointer-events:all;}
+            .tool {width:var(--toolbtn);height:var(--toolbtn);margin-bottom:var(--toolgap);position:relative;transition:all 150ms ease-in-out;pointer-events:all;}
                 .tool:last-child {margin-bottom:0;}
 
-                .toolbtn {width:60px;height:60px;background:var(--tool);transition:all 150ms ease-in-out;border-radius:50%;box-shadow:0 2px 20px var(--shadow);cursor:pointer;position:relative;z-index:1337;}
+                .toolbtn {width:100%;height:100%;background:var(--tool);transition:all 150ms ease-in-out;border-radius:50%;box-shadow:0 2px 20px var(--shadow);cursor:pointer;position:relative;z-index:1337;}
                     .toolbtn:hover {background:var(--toolhover);}
                     .toolbtn:active {background:var(--toolselect);}
 
                 .tool.active .toolbtn {background:var(--toolselect);box-shadow:0 2px 20px var(--shadow2);}
 
-                .toolbtn svg {width:32px;height:32px;display:block;position:absolute;z-index:1337;top:50%;left:50%;transform:translate(-50%, -50%);}
+                .toolbtn svg {max-width:60%;width:var(--toolbtnicon);height:var(--toolbtnicon);display:block;position:absolute;z-index:1337;top:50%;left:50%;transform:translate(-50%, -50%);}
                     .toolbtn svg * {fill:var(--icon);}
                     .active .toolbtn svg * {fill:var(--iconcurrent);}
 
@@ -181,7 +185,7 @@
             #tweaks h4 {padding: 8px 8px 12px;font-weight: 600;}
 
         .ui2 .tools {background:var(--toolselect);box-shadow:0 3px 40px rgba(0,0,0,.4);padding:4px 0 48px;border-radius:8px;}
-        .ui2 .tool {width:48px;height:48px;margin:0;display:flex;}
+        .ui2 .tool {display:flex;}
             .ui2 .toolbtn {width:calc(100% - 8px);margin:4px auto;height:calc(100% - 8px);background:transparent;box-shadow:none;}
 
                 .ui2 .tool.active .toolbtn {background:#0262FD;}
@@ -323,6 +327,15 @@
         .tweak {cursor:pointer;}
             .tweak label {display:block;padding:8px;cursor:pointer;}
 
+
+        .tweaked {padding: 16px 8px;}
+            .tweaked .tweak {margin-bottom:12px;}
+
+        .tweak .label {font-size:12px;display:flex;margin-bottom:4px;}
+        .tweak span {width: 100%;}
+        .tweak .value {font-size:12px;opacity:.54;text-align:right;}
+        .tweak input[type=range] {padding:0 4px;width: 100%;height: 24px;border-radius:30px;background:grey;position:relative;background:rgba(0,0,0,.05);box-shadow:inset 0 0 0 1px rgba(0, 0, 0, 0.02);cursor:pointer;transition:background 150ms ease-in-out;display: inline-block;margin-right:8px;vertical-align: middle;}
+
         .toolbar4, .ui4 #toolbar {display:none;}
         .ui4 .toolbar4 {display:block;}
 
@@ -375,6 +388,37 @@
             .neartop .canvaslabel {top:4px;left:4px;}
 
             .canvasboard.current {border-color:#7754A1 !important;box-shadow:none;}
+
+
+            input[type=range] {
+            -webkit-appearance: none; /* Hides the slider so that custom slider can be made */
+            width: 280px; /* Specific width is required for Firefox. */
+            background: transparent; /* Otherwise white in Chrome */
+            border:none;
+            cursor:pointer;
+        }
+
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+        }
+
+        input[type=range]:focus {
+            outline: none; /* Removes the blue border. You should probably do some kind of focus styling for accessibility reasons though. */
+            box-shadow:none;
+        }
+
+        input[type=range]::-webkit-slider-thumb {width: 16px;height: 16px;background: white;display: block;box-shadow: 0 2px 4px rgba(0,0,0,.15);border-radius: 50%;transition: all 150ms ease-in-out;}
+        input[type=range]:hover::-webkit-slider-thumb {box-shadow:0 2px 2px rgba(0,0,0,.2);}
+        input[type=range]:active::-webkit-slider-thumb {box-shadow:0 2px 2px rgba(0,0,0,.3);cursor:-webkit-grabbing;}
+        input[type=range]:focus::-webkit-slider-thumb {}
+            input[type=range]:hover:focus::-webkit-slider-thumb {}
+
+
+
+        input[type=range]::-webkit-slider-runnable-track {}
+        input[type=range]:focus::-webkit-slider-runnable-track {}
+
+
     </style>
 </head>
 <body class="rectanglex brush_tool ">
@@ -465,7 +509,8 @@
             </div>
             <div class=tool>
                 <div class=toolbtn id=canvas_tool data-tool=canvas>
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
+                        <!-- <svg xmlns="http://www.w3.org/2000/svg" style="width:24px;" viewBox="0 0 22 22"><path d="M25-378H41v16H25Zm2,2v12H39v-12Zm-5-5h2v2H22Zm0,20h2v2H22Zm20,0h2v2H42Zm0-20h2v2H42Z" transform="translate(-22 381)" fill="#fff" fill-rule="evenodd"/></svg> -->
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
                 </div>
                 <div class=options>
                     
@@ -726,6 +771,18 @@
         <div class=tweak>
             <label><input type=checkbox value=insert class=tweakr /><div class=toggle></div> Insert</label>
         </div>
+
+
+        <div class=tweaked>
+            <div class=tweak>
+                <div class=label><span>Toolbar Button Size</span><div class=value>48</div></div>
+                <input type=range class=tooltweak min=16 max=76 value=60 step=4 data-id=toolbtn oninput="tweakedtools.call(this, event)" />
+            </div>
+            <div class=tweak>
+                <div class=label><span>Toolbar Button Gap</span><div class=value>12</div></div>
+                <input type=range class=tooltweak min=0 max=32 value=12 step=2 data-id=toolgap oninput="tweakedtools.call(this, event)" />
+            </div>
+        </div>
     </div>
 
     <div id=keyboard class=draggable>
@@ -791,6 +848,37 @@
     <script>
         FONTSIZE = 24;
         FONTCOLOR = 'white';
+
+        function tweakedtools(e){
+            var v = this.value;
+            var n = 'tweaked_css';
+            var o = document.head.getElementsByClassName(n);
+            o.remove();
+
+            var t = document.getElementsByClassName('tooltweak');
+
+            var s = document.createElement('style');
+            s.className = n;
+            s.innerText = ':root{';
+
+            for(var i=0;i<t.length;i++){
+                var a = t[i];
+                var p = a.getparent('tweak');
+                var l = p.getElementsByClassName('value')[0];
+                s.innerText += '--' + a.dataset.id +  ':' + a.value + 'px;';
+
+                if ( this === a ){
+                    l.empty();
+                    l.appendChild(document.createTextNode(v));
+                }
+            }
+
+            s.innerText += '}';
+            
+            document.head.appendChild(s);
+
+            console.log(v);
+        }
 
         function dots(e, x){
             var p = this.getparent('panel');
@@ -1424,9 +1512,9 @@
 
                 ugh.getElementsByClassName('shape2fill')[0].style.background = c;
 
-                shapecolor = c;
+                //shapecolor = c;
 
-                document.getElementById('shapefill').style.backgroundColor = c;
+                //document.getElementById('shapefill').style.backgroundColor = c;
             }
 
             if ( id == 'text' ){
@@ -1611,6 +1699,12 @@
 
             hidecontext();
             hidekeyboard();
+
+            var bc = document.getElementById('brush_context');
+
+            bc.style.opacity = 0;
+            bc.style.pointerEvents = 'none';
+            bc.style.transform = 'translateY(6px)';
         }
 
         function hidecontext(){
