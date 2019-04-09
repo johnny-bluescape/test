@@ -60,6 +60,7 @@
             --toolbtn: 60px;
             --toolbtnicon: 32px;
             --toolgap: 12px;
+            --toolradius: 50%;
 
             --hover:rgba(255, 255, 255, 0.025);
             --active:rgba(255, 255, 255, 0.05);
@@ -107,7 +108,7 @@
             .tool {width:var(--toolbtn);height:var(--toolbtn);margin-bottom:var(--toolgap);position:relative;transition:all 150ms ease-in-out;pointer-events:all;}
                 .tool:last-child {margin-bottom:0;}
 
-                .toolbtn {width:100%;height:100%;background:var(--tool);transition:all 150ms ease-in-out;border-radius:50%;box-shadow:0 2px 20px var(--shadow);cursor:pointer;position:relative;z-index:1337;}
+                .toolbtn {width:100%;height:100%;background:var(--tool);transition:all 150ms ease-in-out;border-radius:var(--toolradius);box-shadow:0 2px 20px var(--shadow);cursor:pointer;position:relative;z-index:1337;}
                     .toolbtn:hover {background:var(--toolhover);}
                     .toolbtn:active {background:var(--toolselect);}
 
@@ -160,7 +161,7 @@
                     .minimized .fakehandle .open {display:block;}
 
         #toolbar.minimized {pointer-events:none;}
-        .ui2 #toolbar.minimized, .ui3 #toolbar.minimized {width:48px;height:48px;overflow:hidden;}
+        .ui2 #toolbar.minimized, .ui3 #toolbar.minimized {width:48px;height:48px;overflow:hidden;border-radius:8px;}
             #toolbar.minimized .tools {pointer-events:none;}
             #toolbar.minimized .tool {transform:translateX(-12px);opacity:0;pointer-events:none;}
 
@@ -188,11 +189,11 @@
         .ui2 .tool {display:flex;}
             .ui2 .toolbtn {width:calc(100% - 8px);margin:4px auto;height:calc(100% - 8px);background:transparent;box-shadow:none;}
 
-                .ui2 .tool.active .toolbtn {background:#0262FD;}
+                .ui2 .tool.active .toolbtn {background:#0f0f10;}
                 
-            .ui2 .handle {bottom:8px;top: auto;left: 0;}
+            .ui2 .handle {bottom:0;top: auto;left: 0;}
 
-            .ui2 .options {left:56px;border-radius:6px;width:48px;height: auto;}
+            .ui2 .options {left:calc(var(--toolbtn) + 8px);border-radius:6px;width:48px;height: auto;}
                 .ui2 .controls {padding:0;float:none;margin:0;}
                 .ui2 .controls * {float:none;}
                 .ui2 .options .label {display:none;}
@@ -775,12 +776,16 @@
 
         <div class=tweaked>
             <div class=tweak>
-                <div class=label><span>Toolbar Button Size</span><div class=value>48</div></div>
+                <div class=label><span>Toolbar Button Size</span><div class=value>60</div></div>
                 <input type=range class=tooltweak min=16 max=76 value=60 step=4 data-id=toolbtn oninput="tweakedtools.call(this, event)" />
             </div>
             <div class=tweak>
                 <div class=label><span>Toolbar Button Gap</span><div class=value>12</div></div>
                 <input type=range class=tooltweak min=0 max=32 value=12 step=2 data-id=toolgap oninput="tweakedtools.call(this, event)" />
+            </div>
+            <div class=tweak>
+                <div class=label><span>Toolbar Button Radius</span><div class=value>50</div></div>
+                <input type=range class=tooltweak min=0 max=50 value=50 step=2 data-id=toolradius oninput="tweakedtools.call(this, event)" />
             </div>
         </div>
     </div>
@@ -850,7 +855,6 @@
         FONTCOLOR = 'white';
 
         function tweakedtools(e){
-            var v = this.value;
             var n = 'tweaked_css';
             var o = document.head.getElementsByClassName(n);
             o.remove();
@@ -865,7 +869,15 @@
                 var a = t[i];
                 var p = a.getparent('tweak');
                 var l = p.getElementsByClassName('value')[0];
-                s.innerText += '--' + a.dataset.id +  ':' + a.value + 'px;';
+                var d = a.dataset.id;
+                var v = a.value;
+
+                var x = 'px';
+                if ( d == 'toolradius'){
+                    x = '%';
+                }
+
+                s.innerText += '--' + d +  ':' + v + x + ';';
 
                 if ( this === a ){
                     l.empty();
@@ -1056,9 +1068,19 @@
             var ox = off.x;
             var oy = off.y;
 
+            var hoff= this.offset();
+            var tox = hoff.x;
+            var toy = hoff.y;
+
             var moved = false;
 
             closepanel();
+
+            var diffx = ox - tox;
+
+            if ( tox < ox ){
+                //ox = tox;
+            }
 
             t.style.transform = 'translate(' + ox + 'px, ' + oy + 'px)';
 
@@ -1074,7 +1096,8 @@
 
             var gap = 16;
 
-            var tx1 = gap + 44;
+
+            var tx1 = gap + diffx;// + 44;
             var tx2 = ww - gap - w;
 
             var ty1 = gap;
@@ -1109,7 +1132,7 @@
                     ny = ty2;
                 }
 
-                if ( nx > ww * .75 ){
+                if ( nx > ww * .75 && !(document.documentElement.classList.contains('ui2') || document.documentElement.classList.contains('ui3')) ){
                     t.classList.add('swap');
                 } else {
                     t.classList.remove('swap');
@@ -1199,7 +1222,7 @@
 
             //var off = c.offsetTop;
 
-            if (  y < c.offsetHeight + 24 ){
+            if ( y < c.offsetHeight + 24 ){
                 c.style.top = y + 56 + 'px';
             } else {
                 c.style.top = (y - (c.offsetHeight + 12 )) + 'px';
