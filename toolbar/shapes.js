@@ -593,6 +593,13 @@ function rectanglemove(e){
 
       var bg = window.getComputedStyle(rect).backgroundColor;
 
+      if ( bg == 'rgba(0, 0, 0, 0)' || bg == 'transparent' ){
+        bg = 'linear-gradient(135deg, transparent 48%, #3c3b3d 48%, #3c3b3d 52%, transparent 52%)';
+        col.style.boxShadow = 'inset 0 0 0 2px #3c3b3d';
+      } else {
+        col.style.boxShadow = 'inset 0 0 0 1px hsla(0, 0%, 100%, 0.175)';
+      }
+
       col.style.background = bg;
     }
 
