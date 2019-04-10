@@ -71,6 +71,8 @@
 
             --dotgrid: 48px;
             --dotsize: 2px;
+            --dotcolor: rgba(255, 255, 255, 0.08);
+            --gridcolor: rgba(255, 255, 255, 0.025);
         }
 
         .light {
@@ -86,6 +88,9 @@
 
             --shadow:rgba(var(--ui), .08);
             --shadow2:rgba(var(--ui), .15);
+
+            --dotcolor: rgba(0, 0, 0, 0.1);
+            --gridcolor: rgba(0, 0, 0, 0.025);
         }
 
         * {margin:0;padding:0;-webkit-overflow-scrolling: touch;-ms-overflow-style: -ms-autohiding-scrollbar;outline:none;}
@@ -194,7 +199,7 @@
             #toolbar.minimized .tool:nth-child(7) {transform:translate(-12px, 0);}
 
 
-        #tweaks {position:fixed;top:0;right:0;bottom:0;padding:8px;overflow-y:auto;width:200px;box-sizing:border-box;background:#f4f4f4;z-index:1336;color:black;}
+        #tweaks {position:fixed;top:0;right:0;bottom:0;padding:8px;overflow-y:auto;width:200px;box-sizing:border-box;background:#f4f4f4;z-index:1336;color:#333;}
             #tweaks h4 {padding: 8px 8px 12px;font-weight: 600;}
 
         .ui2 .tools {background:var(--toolselect);box-shadow:0 3px 40px rgba(0,0,0,.4);padding:4px 0 48px;border-radius:8px;}
@@ -338,7 +343,7 @@
         input.tweakr {display:none;}
 
         .tweak {cursor:pointer;}
-            .tweak label {display:block;padding:8px;cursor:pointer;}
+            .tweak label {display:block;padding:8px;cursor:pointer;font-size: 14px;}
 
 
         .tweaked {padding: 16px 8px;}
@@ -437,8 +442,8 @@
         .lock.unlock .locked {display:block;}
 
 
-        .grid body {background-size: var(--dotgrid) var(--dotgrid);background-image: linear-gradient(to right, rgba(255, 255, 255, 0.025) 1px, transparent 1px), linear-gradient(to bottom, rgba(255, 255, 255, 0.025) 1px, transparent 1px);}
-        .dotgrid body {background: linear-gradient(90deg, var(--canvas) calc(var(--dotgrid) - var(--dotsize)), transparent 1%) center, linear-gradient(var(--canvas) calc(var(--dotgrid) - var(--dotsize)), transparent 1%) center, rgba(255, 255, 255, 0.08);background-size: var(--dotgrid) var(--dotgrid);}
+        .grid body {background-size: var(--dotgrid) var(--dotgrid);background-image: linear-gradient(to right, var(--gridcolor) 1px, transparent 1px), linear-gradient(to bottom, var(--gridcolor) 1px, transparent 1px);}
+        .dotgrid body {background: linear-gradient(90deg, var(--canvas) calc(var(--dotgrid) - var(--dotsize)), transparent 1%) center, linear-gradient(var(--canvas) calc(var(--dotgrid) - var(--dotsize)), transparent 1%) center, var(--dotcolor);background-size: var(--dotgrid) var(--dotgrid);}
 
     </style>
 </head>
@@ -861,8 +866,8 @@
                 <label style="padding:0;"><input type=checkbox class=tweakr value="horiz" onchange="document.body.classList.toggle('horizontal');" /><div class=toggle></div> </label>
             </div>
             <div class=tweak>
-                <div class=label><span>Toolbar Color</span><div class=value></div></div>
-                <input type=color onchange="toolbarcolor.call(this,event)" value="#282931" />
+                <div class=label><span>Toolbar Color</span><div class="value"></div></div>
+                <input type=color id=toolbarhex onchange="toolbarcolor.call(this,event)" value="#282931" />
             </div>
             <div class=tweak>
                 <div class=label><span>Workspace Color</span><div class=value></div></div>
@@ -878,7 +883,7 @@
             </div>
             <div class=tweak>
                 <div class=label><span>Icon Color</span><div class=value></div></div>
-                <input type=color onchange="iconcolor.call(this,event)" value="#BBBBBB" />
+                <input type=color id=iconcolor onchange="iconcolor.call(this,event)" value="#BBBBBB" />
             </div>
 
         </div>
@@ -985,6 +990,8 @@
             document.head.appendChild(s);
 
             console.log(v);
+
+            iconcolor.call(document.getElementById('iconcolor'), e);
         }
 
         function iconcolor(e){
@@ -1004,10 +1011,30 @@
             av.appendChild(document.createTextNode(v));
 
             var l = 20;
-
+            var b = brightness(rgb);
             //var b  = luminanace(rgb[0], rgb[1], rgb[2]);
-            //console.log(b, 'LUMS');
-            if ( hsl[2] < 50 ){
+            console.log(b, 'LUMS');
+
+            var thex = document.getElementById('toolbarhex').value;
+            var trgb = hex2rgb(thex);
+
+            var rast = contrast(rgb, trgb);
+
+            var arast = contrast(hsl2rgb([hsl[0],hsl[1],hsl[2] + l]), trgb);
+
+            console.log(rast, arast);
+
+            if ( rast < 1 ){
+                rast = 1/rast;
+            }
+
+            if ( arast < 1 ){
+                arast = 1/arast;
+            }
+
+            console.log(rast, arast);
+            
+            if ( arast < rast ){ 
                 l = -20;
             }
 
@@ -1153,16 +1180,20 @@
             console.log(v);
         }
 
-        function luminanace(r, g, b) {
-            var a = [r, g, b].map(function (v) {
+        function luminanace(rgb) {
+            var a = rgb.map(function (v) {
                 v /= 255;
                 return v <= 0.03928 ? v / 12.92 : Math.pow( (v + 0.055) / 1.055, 2.4 );
             });
             return a[0] * 0.2126 + a[1] * 0.7152 + a[2] * 0.0722;
         }
 
+        function brightness(rgb){
+            return ((rgb[0] * 299) + (rgb[1] * 587) + (rgb[2] * 114)) / 1000;
+        }
+
         function contrast(rgb1, rgb2) {
-            return (luminanace(rgb1[0], rgb1[1], rgb1[2]) + 0.05) / (luminanace(rgb2[0], rgb2[1], rgb2[2]) + 0.05);
+            return (luminanace(rgb1) + 0.05) / (luminanace(rgb2) + 0.05);
         }
 
         function hex2rgb(hex){
@@ -1185,10 +1216,10 @@
             return [r,g,b];
         }
 
-        function hsl2rgb(h, s, l){
-            h = h / 359;
-            s = s / 100;
-            l = l / 100;
+        function hsl2rgb(hsl){
+            var h = hsl[0] / 359;
+            var s = hsl[1] / 100;
+            var l = hsl[2] / 100;
 
             var r, g, b;
 
