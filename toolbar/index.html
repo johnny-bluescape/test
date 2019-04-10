@@ -58,7 +58,7 @@
             --select: #00CEFF;
 
             --toolbtn: 60px;
-            --toolbtnicon: 32px;
+            /* --toolbtnicon: 32px; */
             --toolgap: 12px;
             --toolradius: 50%;
             --toolicons: 52%;
@@ -124,7 +124,7 @@
 
                 .tool.active .toolbtn {background:var(--toolselect);box-shadow:0 2px 20px var(--shadow2);}
 
-                .toolbtn svg {max-width:var(--toolicons);width:var(--toolbtnicon);height:var(--toolbtnicon);display:block;position:absolute;z-index:1337;top:50%;left:50%;transform:translate(-50%, -50%);}
+                .toolbtn svg {max-width:var(--toolicons);display:block;position:absolute;z-index:1337;top:50%;left:50%;transform:translate(-50%, -50%);}
                     .toolbtn svg * {fill:var(--icon);}
                     .active .toolbtn svg * {fill:var(--iconcurrent);}
 
@@ -456,7 +456,10 @@
                     <!-- <svg xmlns="http://www.w3.org/2000/svg" style="width:28px;" viewBox="0 0 24 24">
                         <path style="transform: rotate(-20deg);transform-origin: center;" d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/>
                     </svg> -->
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path style="transform: rotate(-20deg);transform-origin: center;" d="M12 7.27l4.28 10.43-3.47-1.53-.81-.36-.81.36-3.47 1.53L12 7.27M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71L12 2z"/></svg>
+                    <!-- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path style="transform: rotate(-20deg);transform-origin: center;" d="M12 7.27l4.28 10.43-3.47-1.53-.81-.36-.81.36-3.47 1.53L12 7.27M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71L12 2z"/></svg> -->
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36">
+                        <path d="M28.1,16.6c0-0.5-0.3-0.9-0.8-1.1L9.8,9c-0.5-0.2-1-0.1-1.3,0.3C8.2,9.6,8,10.1,8.2,10.6l6.4,17.5c0.2,0.5,0.6,0.8,1.1,0.8	c0,0,0,0,0.1,0c0.5,0,0.9-0.3,1.1-0.7l2.8-5.8l5.5,5.6c0.2,0.2,0.6,0.4,0.9,0.4c0.3,0,0.6-0.1,0.9-0.4c0.5-0.5,0.5-1.3,0-1.8	l-5.5-5.6l5.9-2.9C27.8,17.5,28.1,17.1,28.1,16.6z M19,19.1c-0.2,0.1-0.4,0.1-0.5,0.3c-0.1,0.1-0.2,0.3-0.3,0.5L16,24.5l-4.5-12.2	l12.2,4.5L19,19.1z"/>
+                    </svg>
                 </div>
                 <div class=options>
                     
@@ -464,7 +467,10 @@
             </div>
             <div class=tool>
                 <div class=toolbtn data-tool=rectangle id=shape_tool2>
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 4H6c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H6V6h12v12z"/></svg>
+                    <!-- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 4H6c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H6V6h12v12z"/></svg> -->
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36">
+                        <path d="M7,8v22h22V8H7z M26,27H10V11h16V27z"/>
+                    </svg>
                 </div>
                 <div class=options>
                     <div class=controls>
@@ -479,7 +485,10 @@
             </div>
             <div class=tool>
                 <div class=toolbtn data-tool=type id=type_tool2>
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5 17v2h14v-2H5zm4.5-4.2h5l.9 2.2h2.1L12.75 4h-1.5L6.5 15h2.1l.9-2.2zM12 5.98L13.87 11h-3.74L12 5.98z"/></svg>
+                    <!-- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5 17v2h14v-2H5zm4.5-4.2h5l.9 2.2h2.1L12.75 4h-1.5L6.5 15h2.1l.9-2.2zM12 5.98L13.87 11h-3.74L12 5.98z"/></svg> -->
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" >
+                        <polygon points="29,10 7,10 7,13 16.5,13 16.5,27.5 19.5,27.5 19.5,13 29,13 "/>
+                    </svg>
                 </div>
                 <div class=options>
                     <div class=controls>
@@ -502,7 +511,10 @@
                 <div class=toolbtn data-tool=brush>
                     <!-- <svg xmlns="http://www.w3.org/2000/svg" style="width:28px;" viewBox="0 0 24 24"><path d="M7 14c-1.66 0-3 1.34-3 3 0 1.31-1.16 2-2 2 .92 1.22 2.49 2 4 2 2.21 0 4-1.79 4-4 0-1.66-1.34-3-3-3zm13.71-9.37l-1.34-1.34c-.39-.39-1.02-.39-1.41 0L9 12.25 11.75 15l8.96-8.96c.39-.39.39-1.02 0-1.41z"/></svg> -->
                     <!-- <svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24"><path d="M14.06 9.02l.92.92L5.92 19H5v-.92l9.06-9.06M17.66 3c-.25 0-.51.1-.7.29l-1.83 1.83 3.75 3.75 1.83-1.83c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.2-.2-.45-.29-.71-.29zm-3.6 3.19L3 17.25V21h3.75L17.81 9.94l-3.75-3.75z"/></svg> -->
-                    <svg xmlns="http://www.w3.org/2000/svg"  style="width:28px;" viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+                    <!-- <svg xmlns="http://www.w3.org/2000/svg"  style="width:28px;" viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg> -->
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36">
+                        <path d="M13.9,33c-0.4,0-0.9-0.2-1.2-0.6c-0.5-0.7-0.4-1.6,0.3-2.1c0.7-0.5,1.1-1.5,1.4-2.7c-3.1-1.4-5-4-5.5-7.2		c-0.7-5.1,3-8.6,6-11.5c1.7-1.6,3.4-3.2,3.4-4.4C18.3,3.6,19,3,19.8,3c0.8,0,1.5,0.7,1.4,1.6C21.1,7,19.1,8.9,16.9,11		c-2.8,2.6-5.6,5.4-5.1,8.9c0.3,2.3,1.8,3.7,3.1,4.5c0.5-3.3,1-7.1,4.3-8.3c2.6-1,5.3-0.1,6.9,2.2c1.7,2.6,1.5,5.9-0.5,8.1		c-1.8,1.9-5.1,2.7-8.3,2.1c-0.4,1.7-1.1,3.2-2.4,4.2C14.5,32.9,14.2,33,13.9,33z M17.8,25.5c2.3,0.4,4.6,0,5.6-1.1		c1.2-1.3,1-3.2,0.2-4.4c-0.4-0.6-1.4-1.8-3.3-1.1c-1.6,0.6-2,2.8-2.4,6C17.8,25.1,17.8,25.3,17.8,25.5z"/>
+                    </svg>
                 </div>
                 <div class=options style="max-width: 208px;">
                     <div class=controls>
@@ -525,7 +537,10 @@
             </div>
             <div class=tool>
                 <div class=toolbtn>
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+                    <!-- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg> -->
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36">
+                        <polygon points="29,16.5 19.5,16.5 19.5,7 16.5,7 16.5,16.5 7,16.5 7,19.5 16.5,19.5 16.5,29 19.5,29 19.5,19.5 29,19.5 "/>
+                    </svg>
                 </div>
                 <div class=options>
                     
@@ -534,7 +549,15 @@
             <div class=tool>
                 <div class=toolbtn id=canvas_tool data-tool=canvas>
                         <!-- <svg xmlns="http://www.w3.org/2000/svg" style="width:24px;" viewBox="0 0 22 22"><path d="M25-378H41v16H25Zm2,2v12H39v-12Zm-5-5h2v2H22Zm0,20h2v2H22Zm20,0h2v2H42Zm0-20h2v2H42Z" transform="translate(-22 381)" fill="#fff" fill-rule="evenodd"/></svg> -->
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
+                        <!-- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg> -->
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36">
+                            <g transform="translate(-59 -557)">
+                                <polygon points="68,570.5 65,570.5 65,563 72.5,563 72.5,566 68,566"/>
+                                <polygon points="89,570.5 86,570.5 86,566 81.5,566 81.5,563 89,563"/>
+                                <polygon points="72.5,587 65,587 65,579.5 68,579.5 68,584 72.5,584"/>
+                                <polygon points="89,587 81.5,587 81.5,584 86,584 86,579.5 89,579.5"/>
+                            </g>
+                        </svg>
                 </div>
                 <div class=options>
                     
@@ -542,7 +565,10 @@
             </div>
             <div class=tool>
                 <div class=toolbtn>
-                    <svg xmlns="http://www.w3.org/2000/svg" style="width:28px;" viewBox="0 0 20 20"><path d="M15.95 10.78c.03-.25.05-.51.05-.78s-.02-.53-.06-.78l1.69-1.32c.15-.12.19-.34.1-.51l-1.6-2.77c-.1-.18-.31-.24-.49-.18l-1.99.8c-.42-.32-.86-.58-1.35-.78L12 2.34c-.03-.2-.2-.34-.4-.34H8.4c-.2 0-.36.14-.39.34l-.3 2.12c-.49.2-.94.47-1.35.78l-1.99-.8c-.18-.07-.39 0-.49.18l-1.6 2.77c-.1.18-.06.39.1.51l1.69 1.32c-.04.25-.07.52-.07.78s.02.53.06.78L2.37 12.1c-.15.12-.19.34-.1.51l1.6 2.77c.1.18.31.24.49.18l1.99-.8c.42.32.86.58 1.35.78l.3 2.12c.04.2.2.34.4.34h3.2c.2 0 .37-.14.39-.34l.3-2.12c.49-.2.94-.47 1.35-.78l1.99.8c.18.07.39 0 .49-.18l1.6-2.77c.1-.18.06-.39-.1-.51l-1.67-1.32zM10 13c-1.65 0-3-1.35-3-3s1.35-3 3-3 3 1.35 3 3-1.35 3-3 3z"/></svg>
+                    <!-- <svg xmlns="http://www.w3.org/2000/svg" style="width:28px;" viewBox="0 0 20 20"><path d="M15.95 10.78c.03-.25.05-.51.05-.78s-.02-.53-.06-.78l1.69-1.32c.15-.12.19-.34.1-.51l-1.6-2.77c-.1-.18-.31-.24-.49-.18l-1.99.8c-.42-.32-.86-.58-1.35-.78L12 2.34c-.03-.2-.2-.34-.4-.34H8.4c-.2 0-.36.14-.39.34l-.3 2.12c-.49.2-.94.47-1.35.78l-1.99-.8c-.18-.07-.39 0-.49.18l-1.6 2.77c-.1.18-.06.39.1.51l1.69 1.32c-.04.25-.07.52-.07.78s.02.53.06.78L2.37 12.1c-.15.12-.19.34-.1.51l1.6 2.77c.1.18.31.24.49.18l1.99-.8c.42.32.86.58 1.35.78l.3 2.12c.04.2.2.34.4.34h3.2c.2 0 .37-.14.39-.34l.3-2.12c.49-.2.94-.47 1.35-.78l1.99.8c.18.07.39 0 .49-.18l1.6-2.77c.1-.18.06-.39-.1-.51l-1.67-1.32zM10 13c-1.65 0-3-1.35-3-3s1.35-3 3-3 3 1.35 3 3-1.35 3-3 3z"/></svg> -->
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36">
+                        <path d="M8,28V8h20l-6.4,6.4h-7.2v7.2L8,28z"/>
+                    </svg>
                 </div>
             </div>
         </div>
