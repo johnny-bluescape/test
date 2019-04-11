@@ -96,7 +96,7 @@
 
         .darkgrid {
             --dotcolor: rgba(0, 0, 0, 0.15);
-            --gridcolor: rgba(0, 0, 0, 0.03);
+            --gridcolor: rgba(0, 0, 0, 0.04);
         }
 
         * {margin:0;padding:0;-webkit-overflow-scrolling: touch;-ms-overflow-style: -ms-autohiding-scrollbar;outline:none;}
@@ -181,7 +181,7 @@
                     .minimized .fakehandle .close {display:none;}
                     .minimized .fakehandle .open {display:block;}
 
-                .ui2 .fakehandle {box-shadow:none;}
+                .ui2 .fakehandle, .ui3 .fakehandle {box-shadow:none;}
 
         #toolbar.minimized {pointer-events:none;}
         .ui2 #toolbar.minimized, .ui3 #toolbar.minimized {width:48px;height:48px;overflow:hidden;border-radius:8px;}
@@ -821,7 +821,7 @@
         </div>
 
         <div class=tweak>
-            <label><input type=checkbox value=ui3 id=ui3t class=tweakr onchange="document.getElementById('ui2t').checked=false;" /><div class=toggle></div> Horz Bar</label>
+            <label><input type=checkbox value=ui3 id=ui3t class=tweakr onchange="document.getElementById('ui2t').checked=false;" /><div class=toggle></div> Horizontal Bar</label>
         </div>
 
         <!-- <div class=tweak>
@@ -892,7 +892,7 @@
                 <input type=color onchange="handlecolor.call(this,event)" value="#00CEFF" />
             </div>
             <div class=tweak>
-                <div class=label><span>Icon Color</span><div class=value></div></div>
+                <div class=label><span>Icon Color - <span id=iconcontrast></span></span><div class=value></div></div>
                 <input type=color id=iconcolor onchange="iconcolor.call(this,event)" value="#BBBBBB" />
             </div>
 
@@ -1047,6 +1047,8 @@
             if ( arast < rast ){ 
                 l = -20;
             }
+
+            document.getElementById('iconcontrast').innerText = Math.round(rast * 100) / 100;
 
             var current = 'hsl(' + hsl[0] + ',' + hsl[1] + '%,' + (Number(hsl[2]) + l) + '%)';
 
