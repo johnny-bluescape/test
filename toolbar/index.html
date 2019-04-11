@@ -68,6 +68,7 @@
 
             --handlegap: -4px;
             --handlecolor: var(--select);
+            --handlesize: 8px;
 
             --dotgrid: 48px;
             --dotsize: 2px;
@@ -91,6 +92,11 @@
 
             --dotcolor: rgba(0, 0, 0, 0.1);
             --gridcolor: rgba(0, 0, 0, 0.025);
+        }
+
+        .darkgrid {
+            --dotcolor: rgba(0, 0, 0, 0.15);
+            --gridcolor: rgba(0, 0, 0, 0.03);
         }
 
         * {margin:0;padding:0;-webkit-overflow-scrolling: touch;-ms-overflow-style: -ms-autohiding-scrollbar;outline:none;}
@@ -275,8 +281,8 @@
           .rectangle:hover, .rectangle.drawing {box-shadow: 0 0 0 2px var(--select);}
             .rectangle.current {box-shadow: 0 0 0 2px var(--select);z-index:7;}
 
-            .resizehandle {border-radius:50%;position:absolute;background:var(--handlecolor);box-shadow:0 0 0 1px var(--handlecolor);width:8px;height:8px;display:none;transition:box-shadow 125ms ease-in-out;}
-              .resizehandle:hover, .resizehandle.active {box-shadow:0 0 0 1px var(--handlecolor), inset 0 0 0 4px #fff;}
+            .resizehandle {border-radius:50%;position:absolute;background:var(--handlecolor);box-shadow:0 0 0 1px var(--handlecolor);width:var(--handlesize);height:var(--handlesize);display:none;transition:box-shadow 125ms ease-in-out;}
+              .resizehandle:hover, .resizehandle.active {box-shadow:0 0 0 1px var(--handlecolor), inset 0 0 0 12px #fff;}
               .current .resizehandle {display:block;}
 
             .resizehandle::after {content:'';position:absolute;width:48px;height:48px;top:50%;left:50%;transform:translate(-50%, -50%);}
@@ -832,11 +838,11 @@
 
 
         <div class=tweak>
-            <label><input type=checkbox value=grid class=tweakr /><div class=toggle></div> Grid</label>
+            <label><input type=checkbox value=grid class=tweakr id=bggrid onchange="document.getElementById('bgdots').checked=false;" /><div class=toggle></div> Grid</label>
         </div>
 
         <div class=tweak>
-            <label><input type=checkbox value=dotgrid class=tweakr /><div class=toggle></div> Dot Grid</label>
+            <label><input type=checkbox value=dotgrid class=tweakr id=bgdots onchange="document.getElementById('bggrid').checked=false;" /><div class=toggle></div> Dot Grid</label>
         </div>
 
 
@@ -859,7 +865,11 @@
             </div>
             <div class=tweak>
                 <div class=label><span>Handle Spacing</span><div class=value>-4</div></div>
-                <input type=range class=tooltweak min=-16 max=16 value=-4 step=2 data-id=handlegap oninput="tweakedtools.call(this, event)" />
+                <input type=range class=tooltweak min=-24 max=24 value=-4 step=2 data-id=handlegap oninput="tweakedtools.call(this, event)" />
+            </div>
+            <div class=tweak>
+                <div class=label><span>Handle Size</span><div class=value>8</div></div>
+                <input type=range class=tooltweak min=4 max=24 value=8 step=2 data-id=handlesize oninput="tweakedtools.call(this, event)" />
             </div>
             <div class=tweak>
                 <div class=label><span>Horizontal Toolbar</span><div class=value></div></div>
@@ -1072,6 +1082,27 @@
             s.appendChild(document.createTextNode(css));
 
             document.head.appendChild(s);
+
+            var rgb = hex2rgb(v);
+
+            var con = contrast(rgb, [255,255,255]);
+            var con2 = contrast(rgb, [0,0,0]);
+
+            if ( con < 1 ){
+                con = 1/con;
+            }
+
+            if ( con2 < 1 ){
+                con2 = 1/con2;
+            }
+
+            console.log(con,con2)
+
+            if ( con < con2 ){
+                document.body.classList.add('darkgrid');
+            } else {
+                document.body.classList.remove('darkgrid');
+            }
         }
 
         function selectioncolor(e){
@@ -1789,6 +1820,10 @@
                 document.documentElement.classList.remove('ui2');
             } else if ( v == 'ui2' ){
                 document.documentElement.classList.remove('ui3');
+            } else if ( v == 'dotgrid' ){
+                document.documentElement.classList.remove('grid');
+            } else if ( v == 'grid' ){
+                document.documentElement.classList.remove('dotgrid');
             }
             document.documentElement.classList.toggle(v);
         }
