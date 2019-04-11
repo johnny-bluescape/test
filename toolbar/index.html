@@ -74,6 +74,8 @@
             --dotsize: 2px;
             --dotcolor: rgba(255, 255, 255, 0.08);
             --gridcolor: rgba(255, 255, 255, 0.025);
+
+            --panelicons: var(--icon); /* rgba(255, 255, 255, 0.85) */
         }
 
         .light {
@@ -86,6 +88,8 @@
             --iconcurrent:#000;
             --color:#000;
             --incolor:#fff;
+
+            --panel: #fafafa;
 
             --shadow:rgba(var(--ui), .08);
             --shadow2:rgba(var(--ui), .15);
@@ -241,7 +245,7 @@
             .size .actual {position:absolute;top:50%;left:50%;width:8px;height:8px;background:white;border-radius:50%;transform:translate(-50%, -50%);}
 
         .option .fill {cursor:pointer;width:28px;height:28px;margin-top:6px;border-radius:50%;box-shadow:inset 0 0 0 1px hsla(0, 0%, 100%, 0.175);position:absolute;background:black;}
-        .option .border {cursor:pointer;width:28px;height:28px;border-radius:50%;border:4px solid rgba(255, 255, 255, 0.15);box-sizing:border-box;}
+        .option .border {cursor:pointer;width:28px;height:28px;border-radius:50%;border:4px solid rgba(155, 155, 155, 0.15);box-sizing:border-box;}
 
         .slider {width:48px;height:200px;position:relative;box-shadow:inset 0 0 0 1px rgba(255,255,255,.1);border-radius:24px;touch-action: manipulation;background:#212122;}
             .slider .knob {width:32px;height:32px;background:white;border-radius:0;position:absolute;top:20px;left:50%;transform:translate(-50%, 0);border-radius:50%;}
@@ -304,7 +308,7 @@
             .contextpanel .option {cursor:pointer;min-width:48px;height:48px;box-sizing:border-box;display:inline-flex;vertical-align:top;align-content:center;align-items:center;justify-content:center;justify-items:center;}
     
             .contextpanel .option svg {width:24px;height:24px;}
-                .contextpanel .option svg * {fill:rgba(255, 255, 255, 0.85);}
+                .contextpanel .option svg * {fill:var(--panelicons);}
 
             .contextpanel .option .fill {margin:0;}
 
@@ -836,7 +840,6 @@
             <label><input type=checkbox value=insert class=tweakr /><div class=toggle></div> Insert</label>
         </div>
 
-
         <div class=tweak>
             <label><input type=checkbox value=grid class=tweakr id=bggrid onchange="document.getElementById('bgdots').checked=false;" /><div class=toggle></div> Grid</label>
         </div>
@@ -844,7 +847,6 @@
         <div class=tweak>
             <label><input type=checkbox value=dotgrid class=tweakr id=bgdots onchange="document.getElementById('bggrid').checked=false;" /><div class=toggle></div> Dot Grid</label>
         </div>
-
 
         <div class=tweaked>
             <div class=tweak>
