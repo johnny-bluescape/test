@@ -363,8 +363,9 @@ function rectanglemove(e){
 
     var tb = e.target.getparent('toolbar');
     var pan = e.target.getparent('panel');
+    var tw = e.target.getparent('tweaks');
 
-    if ( tb || pan ){
+    if ( tb || pan || tw ){
         return;
     }
 

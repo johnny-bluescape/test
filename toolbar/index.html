@@ -76,6 +76,8 @@
             --gridcolor: rgba(255, 255, 255, 0.025);
 
             --panelicons: var(--icon); /* rgba(255, 255, 255, 0.85) */
+
+            --toolselect2: #0f0f10;
         }
 
         .light {
@@ -96,6 +98,8 @@
 
             --dotcolor: rgba(0, 0, 0, 0.1);
             --gridcolor: rgba(0, 0, 0, 0.025);
+
+            --toolselect2: #ddd;
         }
 
         .darkgrid {
@@ -130,6 +134,7 @@
 
             .tool {width:var(--toolbtn);height:var(--toolbtn);margin-bottom:var(--toolgap);position:relative;transition:all 150ms ease-in-out;pointer-events:all;}
                 .tool:last-child {margin-bottom:0;}
+                .horizontal .tool:last-child {margin-right:0;}
 
                 .horizontal .tool {float:left;margin-right:var(--toolgap);margin-bottom:0;}
 
@@ -213,14 +218,22 @@
             #tweaks h4 {padding: 8px 8px 12px;font-weight: 600;}
 
         .ui2 .tools {background:var(--toolselect);box-shadow:0 3px 40px rgba(0,0,0,.4);padding:4px 0 48px;border-radius:8px;}
+            .ui2 .tools::after {content:'';display:block;clear:both;}
+
+            .ui2 .horizontal  .tools, .horiz.ui2 .tools {padding:0;}
+            .ui2 .horizontal .handle {display:none;}
+
         .ui2 .tool {display:flex;}
             .ui2 .toolbtn {width:calc(100% - 8px);margin:4px auto;height:calc(100% - 8px);background:transparent;box-shadow:none;}
 
-                .ui2 .tool.active .toolbtn {background:#0f0f10;}
+                .ui2 .tool.active .toolbtn {background:var(--toolselect2);}
                 
             .ui2 .handle {bottom:0;top: auto;left: 0;}
 
             .ui2 .options {left:calc(var(--toolbtn) + 8px);border-radius:6px;width:48px;height: auto;}
+
+            .ui2 .horizontal .options {left:50%;margin-left:-24px;top:auto;bottom:calc(var(--toolbtn) + 12px);}
+
                 .ui2 .controls {padding:0;float:none;margin:0;}
                 .ui2 .controls * {float:none;}
                 .ui2 .options .label {display:none;}
@@ -231,7 +244,7 @@
             .ui3 .tool {float:left;min-width:48px;height:40px;margin:4px 0 0;width:auto;border-radius:4px;}
             .ui3 .toolbtn {width:48px;float:left;margin:4px auto;height:calc(100% - 8px);background:transparent !important;box-shadow:none !important;}
 
-        .ui3 .tool.active {background:#09090A;}
+        .ui3 .tool.active {background:#0f0f10;}
             
 
         .ui3 .handle {bottom:1px;top: auto;left: auto;right:0px;box-shadow:none;}
@@ -897,6 +910,10 @@
                 <div class=label><span>Icon Color - <span id=iconcontrast></span></span><div class=value></div></div>
                 <input type=color id=iconcolor onchange="iconcolor.call(this,event)" value="#BBBBBB" />
             </div>
+            <div class=tweak>
+                <div class=label><span>Tool Selection Color </span><div class=value></div></div>
+                <input type=color onchange="toolselectioncolor.call(this,event)" value="#1b1b1c" />
+            </div>
 
         </div>
     </div>
@@ -1125,6 +1142,28 @@
             s.className = n;
             
             var css = ':root{--select: ' + v + ';}';
+
+            s.appendChild(document.createTextNode(css));
+
+            document.head.appendChild(s);
+        }
+
+        function toolselectioncolor(e){
+            var n = 'tweaked_toolselect';
+            var o = document.head.getElementsByClassName(n);
+            o.remove();
+
+            var v = this.value;
+
+            var p = this.getparent('tweak');
+            var av = p.getElementsByClassName('value')[0];
+            av.empty();
+            av.appendChild(document.createTextNode(v));
+
+            var s = document.createElement('style');
+            s.className = n;
+            
+            var css = ':root{--toolselect2: ' + v + ';}';
 
             s.appendChild(document.createTextNode(css));
 
