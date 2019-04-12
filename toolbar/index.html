@@ -1506,8 +1506,7 @@
         }
 
         function handlehandler(e){
-            e.preventDefault();
-            e.stopPropagation();
+            
 
             var ev = e.touches ? e.touches[0] : e;
             if( ev.which == 3 ){
@@ -1573,6 +1572,9 @@
                 } else if ( !moved ){
                     return;
                 }
+
+                e.preventDefault();
+            e.stopPropagation();
 
                 nx += ox;
                 ny += oy;
@@ -2690,11 +2692,11 @@
 
             console.log(e.deltaY);
 
-            var delta = e.deltaY;
+            var delta = 1;
 
-            // if ( e.delta < 0 ){
-            //     delta = -1;
-            // }
+            if ( e.delta < 0 ){
+                delta = -1;
+            }
 
             dotgrid2 += delta;
 
