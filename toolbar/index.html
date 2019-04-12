@@ -72,7 +72,7 @@
 
             --dotgrid: 48px;
             --dotsize: 2px;
-            --dotcolor: rgba(255, 255, 255, 0.08);
+            --dotcolor: rgba(255, 255, 255, 0.1);
             --gridcolor: rgba(255, 255, 255, 0.025);
 
             --panelicons: var(--icon); /* rgba(255, 255, 255, 0.85) */
@@ -465,7 +465,7 @@
         .lock.unlock .locked {display:block;}
 
 
-        .grid body {background-size: var(--dotgrid) var(--dotgrid);background-image: linear-gradient(to right, var(--gridcolor) 1px, transparent 1px), linear-gradient(to bottom, var(--gridcolor) 1px, transparent 1px);}
+        .grid body {background-size: var(--dotgrid) var(--dotgrid);background-image: linear-gradient(to right, var(--gridcolor) 1px, transparent 1px), linear-gradient(to bottom, var(--gridcolor) 1px, transparent 1px);background-position: center;}
         .dotgrid body {background: linear-gradient(90deg, var(--canvas) calc(var(--dotgrid) - var(--dotsize)), transparent 1%) center, linear-gradient(var(--canvas) calc(var(--dotgrid) - var(--dotsize)), transparent 1%) center, var(--dotcolor);background-size: var(--dotgrid) var(--dotgrid);}
 
     </style>
@@ -2683,6 +2683,40 @@
         }
 
         screenrez();
+
+        var dotgrid2 = 40;
+        function dotspacing(e){
+            //e.preventDefault();
+
+            console.log(e.deltaY);
+
+            var delta = e.deltaY;
+
+            // if ( e.delta < 0 ){
+            //     delta = -1;
+            // }
+
+            dotgrid2 += delta;
+
+            dotgrid2 = Math.max(dotgrid2, 0.1);
+            
+
+            var n = 'tweaked_dotgrid';
+            var o = document.head.getElementsByClassName(n);
+            o.remove();
+
+            var s = document.createElement('style');
+            s.className = n;
+
+            var css = ':root{ --dotgrid: ' + dotgrid2 + 'px; --grid: ' + dotgrid2 + 'px;}'
+
+            s.appendChild(document.createTextNode(css));
+
+            document.head.appendChild(s);
+
+        }
+
+        window.addEventListener('mousewheel', dotspacing, {passive:false});
 
 
         // var hammertime = new Hammer(document.body, {});
