@@ -496,6 +496,9 @@ function rectanglemove(e){
 
     document.body.appendChild(ops);
 
+    var tx = 0;
+    var ty = 0;
+
     function move(e){
       //e.preventDefault();
 
@@ -522,8 +525,8 @@ function rectanglemove(e){
       var w = Math.abs(nx);
       var h = Math.abs(ny);
 
-      var tx = nx < 0 ? nx : 0;
-      var ty = ny < 0 ? ny : 0;
+      tx = nx < 0 ? nx : 0;
+      ty = ny < 0 ? ny : 0;
 
       if ( line ){
         if ( w > h ){
@@ -586,6 +589,12 @@ function rectanglemove(e){
 
         document.getElementById('select_tool').click();
       }
+
+      rect.style.transform = 'translate(0,0)';
+
+      rect.style.top = rect.offsetTop + ty + 'px';
+      rect.style.left = rect.offsetLeft + tx + 'px';
+
 
       setcontextpanel.call(rect, ops);
 
