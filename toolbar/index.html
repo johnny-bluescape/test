@@ -107,10 +107,10 @@
             --gridcolor: rgba(0, 0, 0, 0.04);
         }
 
-        * {margin:0;padding:0;-webkit-overflow-scrolling: touch;-ms-overflow-style: -ms-autohiding-scrollbar;outline:none;-webkit-tap-highlight-color: transparent;}
+        * {margin:0;padding:0;-webkit-overflow-scrolling: touch;-ms-overflow-style: -ms-autohiding-scrollbar;outline:none;-webkit-tap-highlight-color: transparent;-webkit-touch-callout: none;}
         html, body {height:100%;}
-        html {font-family:Barlow, sans-serif;background:var(--canvas);color:var(--color);cursor:pointer;}
-        input, textarea, button {font-family:Barlow, sans-serif;color:var(--color);}
+        html {background:var(--canvas);cursor:pointer;}
+        html, input, textarea, button {font-family:Barlow, sans-serif;color:var(--color);}
 
         body {cursor:pointer;}
 
@@ -2694,7 +2694,7 @@
 
             var delta = 1;
 
-            if ( e.delta < 0 ){
+            if ( e.deltaY < 0 ){
                 delta = -1;
             }
 
