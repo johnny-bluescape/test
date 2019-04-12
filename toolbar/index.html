@@ -107,7 +107,7 @@
             --gridcolor: rgba(0, 0, 0, 0.04);
         }
 
-        * {margin:0;padding:0;-webkit-overflow-scrolling: touch;-ms-overflow-style: -ms-autohiding-scrollbar;outline:none;}
+        * {margin:0;padding:0;-webkit-overflow-scrolling: touch;-ms-overflow-style: -ms-autohiding-scrollbar;outline:none;-webkit-tap-highlight-color: transparent;}
         html, body {height:100%;}
         html {font-family:Barlow, sans-serif;background:var(--canvas);color:var(--color);cursor:pointer;}
         input, textarea, button {font-family:Barlow, sans-serif;color:var(--color);}
@@ -1615,11 +1615,11 @@
                 }
             }
 
-            window.addEventListener('touchmove', move);
-            window.addEventListener('touchend', end);
+            window.addEventListener('touchmove', move, {passive: false});
+            window.addEventListener('touchend', end, {passive: false});
 
-            window.addEventListener('mousemove', move);
-            window.addEventListener('mouseup', end);
+            window.addEventListener('mousemove', move, {passive: false});
+            window.addEventListener('mouseup', end, {passive: false});
         }
 
         function toggletoolbar(e){
