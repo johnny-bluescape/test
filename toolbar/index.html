@@ -83,6 +83,8 @@
             --panelicons: var(--icon); /* rgba(255, 255, 255, 0.85) */
 
             --toolselect2: #0f0f10;
+
+            --null: rgb(66,66,66);
         }
 
         .light {
@@ -329,10 +331,16 @@
         .contextpanel {overflow:hidden;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity 150ms ease-in-out, transform 150ms ease-in-out;background:var(--panel);border-radius:var(--toolbarradius);box-shadow:0 3px 20px var(--shadow);min-height:48px;position:absolute;top:-64px;left:50%;transform:translate(0, 4px);z-index:9999999999999;}
             .current:not(.drawing) .contextpanel, .current:not(.moving) .contextpanel, .contextpanel.visible {opacity:1;pointer-events:all;transform:translate(0, 0);}
             
-            .contextpanel.visible.sublevel {opacity:0;pointer-events:none;transform:translate(-8px, 0);}
+            /* .contextpanel.visible.sublevel {opacity:0;pointer-events:none;transform:translate(-8px, 0);} */
 
 
             .contextpanel .option {cursor:pointer;min-width:48px;height:48px;box-sizing:border-box;display:inline-flex;vertical-align:top;align-content:center;align-items:center;justify-content:center;justify-items:center;}
+
+            .contextpanel .option:first-child {transition:all 150ms ease-in-out;}
+                .sublevel.contextpanel .option:first-child {margin-left:-240px;}
+
+                .morebtn svg {transition:all 150ms ease-in-out;}
+                .sublevel .morebtn svg {transform:rotate(180deg);}
     
             .contextpanel .option svg {width:24px;height:24px;}
                 .contextpanel .option svg * {fill:var(--panelicons);}
@@ -499,6 +507,52 @@
                                 calc(var(--dotgrid) * 9) var(--dotgrid), 
                                 var(--dotgrid) var(--dotgrid);
             }
+
+
+        .bgmenu {width:336px;padding:12px;background:var(--panel);box-shadow:0 3px 20px var(--shadow2);border-radius:var(--toolbarradius);}
+            .menutitle {font-weight: 600;padding:2px 8px;}
+
+        .colors {display: flex;flex-wrap: wrap;margin-top:12px;} 
+            .colors .color {width:48px;height:48px;display:flex;align-items:center;justify-content:center;cursor:pointer;}
+                .color .chip {width:28px;height:28px;border-radius:50%;position:relative;box-shadow:inset 0 0 0 1px rgba(255, 255, 255, 0.1);}
+
+                .color .chip::after, .menubtn > div::after {content:'';width:calc(100% + 8px);height:calc(100% + 8px);border:2px solid white;box-sizing:border-box;border-radius:50%;top:-4px;left:-4px;opacity:0;display:block;position:absolute;transition:opacity 150ms ease-in-out;}
+
+                .color:hover .chip::after, .menubtn:hover > div::after {opacity:.5;}
+                .color:active .chip::after, .color.current .chip::after, .menubtn:active > div::after, .menubtn.current > div::after {opacity:1;}
+
+                .color:nth-child(1) .chip {background-color:#D50201;}
+                .color:nth-child(2) .chip {background-color:#C51262;}
+                .color:nth-child(3) .chip {background-color:#AB00FF;}
+                .color:nth-child(4) .chip {background-color:#6300EA;}
+                .color:nth-child(5) .chip {background-color:#314EFE;}
+                .color:nth-child(6) .chip {background-color:#2B61FF;}
+                .color:nth-child(7) .chip {background-color:#0091EA;}
+                .color:nth-child(8) .chip {background-color:#00B8D4;}
+                .color:nth-child(9) .chip {background-color:#00BFA5;}
+                .color:nth-child(10) .chip {background-color:#00C853;}
+                .color:nth-child(11) .chip {background-color:#63DD18;}
+                .color:nth-child(12) .chip {background-color:#ADEA03;}
+                .color:nth-child(13) .chip {background-color:#FFCC02;}
+                .color:nth-child(14) .chip {background-color:#FF9502;}
+                .color:nth-child(15) .chip {background-color:#FFFFFF;}
+                .color:nth-child(16) .chip {background-color:#767676;}
+                .color:nth-child(17) .chip {background-color:#1a191b;}
+                .color:nth-child(18) .chip {background-color:#000000;}
+
+
+            .menurow {display:flex;flex-wrap:wrap;margin-top:12px;}
+                .menubtn {width:48px;height:48px;display:flex;align-items:center;justify-content:center;cursor:pointer;}
+
+                .nullcolor {width:28px;height:28px;border-radius:50%;box-sizing:border-box;position:relative;
+                    box-shadow:inset 0 0 0 3px  var(--null);
+                    background: linear-gradient(to right, var(--null) 3px, transparent 3px);
+                    background-position: 12.5px; /* width / 2 - line /2 */
+                    transform: rotate(45deg);
+                }
+
+
+            .rainbowcolor {position:relative;width:28px;height:28px;border-radius:50%;box-sizing:border-box;background:white;background-image: linear-gradient(217deg, rgba(255,0,0,1), rgba(255,0,0,0) 70.71%), linear-gradient(127deg, rgba(0,255,0,1), rgba(0,255,0,0) 70.71%), linear-gradient(336deg, rgba(0,0,255,1), rgba(0,0,255,0) 70.71%);}
 
     </style>
 </head>
@@ -798,7 +852,7 @@
             <!-- <div class=option>
                 <div class=recticon></div>
             </div> -->
-            <div class=option id=shape2color>
+            <div class="option fillcolor" data-menu=bgmenu> <!-- id=shape2color -->
                 <div class="fill shape2fill" style="background:rgb(255, 59, 48);"></div>
             </div><div class="option shapeborder">
                 <div class="border" id="shapeborder"></div>
@@ -840,8 +894,8 @@
                         </svg>
                     </div>
                 </div>
-            </div><div class=option id=textcolor>
-                <div class="fill textfill" id="textfill" style="background:white;border-radius:4px;"></div>
+            </div><div class="option textcolor" data-menu=textcolormenu>
+                <div class="fill textfill" id="textfill" style="background:white;"></div>
             </div><div class="option shapeup">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8-8 8z"/></svg>
             </div><div class="option shapeback">
@@ -857,6 +911,86 @@
             <div class="mitem delete">Delete</div>
             <div class=mitem>Comment</div>
             <div class=mitem>Pin</div>
+        </div>
+
+        <div id=bgmenu>
+            <div class=menutitle>Background Color</div>
+            <!-- <div class=menutabs>
+                Transparent   Current    color select
+            </div> -->
+            
+        </div>
+
+        <div id=textcolormenu>
+            <div class=menutitle>Text Color</div>
+ 
+        </div>
+
+        <div id=colorswatches>
+            <div class=colors>
+                <div class=color>
+                    <div class=chip></div>
+                </div>
+                <div class=color>
+                    <div class=chip></div>
+                </div>
+                <div class=color>
+                    <div class=chip></div>
+                </div>
+                <div class=color>
+                    <div class=chip></div>
+                </div>
+                <div class=color>
+                    <div class=chip></div>
+                </div>
+                <div class=color>
+                    <div class=chip></div>
+                </div>
+                <div class=color>
+                    <div class=chip></div>
+                </div>
+                <div class=color>
+                    <div class=chip></div>
+                </div>
+                <div class=color>
+                    <div class=chip></div>
+                </div>
+                <div class=color>
+                    <div class=chip></div>
+                </div>
+                <div class=color>
+                    <div class=chip></div>
+                </div>
+                <div class=color>
+                    <div class=chip></div>
+                </div>
+                <div class=color>
+                    <div class=chip></div>
+                </div>
+                <div class=color>
+                    <div class=chip></div>
+                </div>
+                <div class=color>
+                    <div class=chip></div>
+                </div>
+                <div class=color>
+                    <div class=chip></div>
+                </div>
+                <div class=color>
+                    <div class=chip></div>
+                </div>
+                <div class=color>
+                    <div class=chip></div>
+                </div>
+            </div>
+            <div class=menurow>
+                <div class="menubtn transparentcolor color">
+                    <div class=nullcolor></div>
+                </div>
+                <div class="menubtn selectcolor">
+                    <div class=rainbowcolor></div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -913,8 +1047,8 @@
                 <input type=range class=tooltweak min=0 max=50 value=50 step=2 data-id=toolradius oninput="tweakedtools.call(this, event)" />
             </div>
             <div class=tweak>
-                <div class=label><span>Tool Panel Radius</span><div class=value>8</div></div>
-                <input type=range class=tooltweak min=0 max=32 value=8 step=2 data-id=toolbarradius oninput="tweakedtools.call(this, event)" />
+                <div class=label><span>Tool Panel Radius</span><div class=value>12</div></div>
+                <input type=range class=tooltweak min=0 max=32 value=12 step=2 data-id=toolbarradius oninput="tweakedtools.call(this, event)" />
             </div>
             <div class=tweak>
                 <div class=label><span>Toolbar Icon Scale</span><div class=value>52</div></div>
@@ -2428,22 +2562,33 @@
         }
 
         function closemenu(e){
-            if ( e.target && e.target.classList.contains('delete') ){
+            e = e || {};
+            var t = e.target || document.body;
+            if ( t.classList.contains('delete') || t.getparent('bgmenu') ){
                 return;
             }
 
-            e.preventDefault();
-            e.stopPropagation();
+            if ( e.target){
+                e.preventDefault();
+                e.stopPropagation();
+            }
+
             document.body.removeEventListener('click', closemenu);
 
-            var o = document.getElementsByClassName('morebtn opened');
+            var o = document.getElementsByClassName('option opened');
             o.removeclass('opened');
 
             var m = document.getElementsByClassName('menuwrap');
             m.remove();
 
             var o = document.getElementsByClassName('contextpanel sublevel');
+
+            var o1 = o[0].getElementsByClassName('option')[0];
+            
             o.removeclass('sublevel');
+
+            o1.style.marginLeft = 0;
+
         }
 
         function backbtn(e){
@@ -2453,6 +2598,74 @@
             b.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>';
 
             return b;
+        }
+
+        function colormenu(e){
+            var o = this.classList.contains('opened');
+            if ( o ){
+                return;
+            }
+
+            var shell = this.dataset.menu;
+
+            var c = this.getparent('contextpanel');
+            var coff = c.offset();
+            var x = coff.x;
+            var y = coff.y;
+            var w = coff.w;
+            var h = coff.h;
+
+            this.classList.add('opened');
+
+            var p = document.createElement('div');
+            var m = document.getElementById(shell);
+
+            var s = document.getElementById('colorswatches').cloneNode(true);
+            s.removeAttribute('id');
+
+            p.className = 'menuwrap';
+            
+            m = m.cloneNode(true);
+
+            m.removeAttribute('id');
+
+            m.className = 'bgmenu';
+            
+            //m.appendChild(backbtn());
+            m.appendChild(s);
+
+            p.appendChild(m);
+            
+            document.body.addEventListener('click', closemenu);
+
+            document.body.appendChild(p);
+
+            var o = c.getElementsByClassName('option');
+
+            var l = o.length - 1;
+            o = o[0];
+
+            var ox = -(c.offsetWidth - 48);
+            o.style.marginLeft = ox + 'px';
+
+            //p.offsetLeft;
+
+            p.style.top = y + 'px';
+            p.style.left = x + (w/2) - (p.offsetWidth / 2) + 'px';
+            p.style.left = x + 48 + 12 + 'px';
+            p.style.left = x + w + 12 + 'px';
+
+            p.style.transform = 'translateX(0px)';
+
+            p.offsetLeft;
+
+            c.classList.add('sublevel')
+
+            p.classList.add('visible');
+            
+            p.offsetLeft;
+
+            p.style.transform = 'translateX(' + ox + 'px)';
         }
 
         function moremenu(e){
@@ -2481,7 +2694,7 @@
 
             m.className = 'overflowmenu';
             
-            m.appendChild(backbtn());
+            //m.appendChild(backbtn());
 
             p.appendChild(m);
             
@@ -2489,14 +2702,32 @@
 
             document.body.appendChild(p);
 
+            var o = c.getElementsByClassName('option');
+
+            var l = o.length - 1;
+            o = o[0];
+
+            var ox = -(c.offsetWidth - 48);
+            o.style.marginLeft = ox + 'px';
+
             //p.offsetLeft;
 
             p.style.top = y + 'px';
             p.style.left = x + (w/2) - (p.offsetWidth / 2) + 'px';
+            p.style.left = x + 48 + 12 + 'px';
+            p.style.left = x + w + 12 + 'px';
+
+            p.style.transform = 'translateX(0px)';
+
+            p.offsetLeft;
 
             c.classList.add('sublevel')
 
             p.classList.add('visible');
+            
+            p.offsetLeft;
+
+            p.style.transform = 'translateX(' + ox + 'px)';
 
         }
 
@@ -2620,6 +2851,38 @@
 
         }
 
+        function colorswatch(e){
+            console.log('COLOR');
+            var m = this.getparent('menuwrap');
+            var o = m.getElementsByClassName('color current');
+
+            o.removeclass('current');
+
+            this.classList.add('current');
+
+            var c = this.getElementsByClassName('chip')[0] || this;
+            var a = window.getComputedStyle(c).backgroundColor;
+
+            console.log(a);
+
+            var l = document.getElementsByClassName('layeritem current')[0];
+            var id = l.dataset.context;
+
+            if ( l.classList.contains('rectangle')) {
+
+                l.style.backgroundColor = a;
+            } else if ( l.classList.contains('textwrap')){
+                l.getElementsByClassName('textarea')[0].style.color = a;
+            }
+
+            var p = document.getElementById(id);
+            var f = p.getElementsByClassName('fill')[0];
+
+            f.style.background = a;
+
+            //closemenu();
+        }
+
         Attach.on('touchstart', '.handle', handlehandler);
         Attach.on('mousedown', '.handle', handlehandler);
 
@@ -2675,6 +2938,8 @@
         Attach.on('click', '.delete', deletecurrent);
 
         Attach.on('click', '.morebtn', moremenu);
+        Attach.on('click', '.fillcolor', colormenu);
+        Attach.on('click', '.textcolor', colormenu)
 
         Attach.on('mousedown', '.select_tool', marquee);
         Attach.on('touchstart', '.select_tool', marquee);
@@ -2689,6 +2954,8 @@
         Attach.on('click', '.minishape', minishape);
 
         Attach.on('click', '.shapeborder', bordercontext);
+
+        Attach.on('click', '.color', colorswatch)
 
 
         //document.addEventListener('mousewheel', mousescroll, { passive:false });
@@ -2745,6 +3012,7 @@
             d.style.whiteSpace = 'pre-line';
             d.style.padding = '4px 8px';
             d.style.fontSize = '14px';
+            d.style.pointerEvents = 'none';
 
             r.remove();
 
