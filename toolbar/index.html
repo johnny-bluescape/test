@@ -99,8 +99,11 @@
             --shadow:rgba(var(--ui), .08);
             --shadow2:rgba(var(--ui), .15);
 
-            --dotcolor: rgba(0, 0, 0, 0.1);
+            --dotcolor: rgba(0, 0, 0, 0.15);
             --gridcolor: rgba(0, 0, 0, 0.025);
+
+            --dotcolor2: rgba(0, 0, 0, 0.35);
+            --gridcolor2: rgba(0, 0, 0, 0.05);
 
             --toolselect2: #ddd;
         }
@@ -472,7 +475,20 @@
             .highlight.grid body {background-image: linear-gradient(to right, var(--gridcolor) 1px, transparent 1px), linear-gradient(to bottom, var(--gridcolor2) 1px, transparent 1px),linear-gradient(to right, var(--gridcolor2) 1px, transparent 1px), linear-gradient(to bottom, var(--gridcolor) 1px, transparent 1px);background-size:var(--dotgrid) var(--dotgrid), 1px calc(var(--dotgrid) * 9), calc(var(--dotgrid) * 9) 1px;}
         /* .dotgrid body {background: linear-gradient(90deg, var(--canvas) calc(var(--dotgrid) - var(--dotsize)), transparent 1%) center, linear-gradient(var(--canvas) calc(var(--dotgrid) - var(--dotsize)), transparent 1%) center, var(--dotcolor);background-size: var(--dotgrid) var(--dotgrid);} */
         .dotgrid body { background-image: radial-gradient(var(--dotcolor) var(--dotsize), transparent 0);background-size: var(--dotgrid) var(--dotgrid);background-position:center;}
-            .highlight.dotgrid body {background-image: radial-gradient(var(--dotcolor) var(--dotsize), transparent 0), radial-gradient(var(--dotcolor2) var(--dotsize), transparent 0);background-size: var(--dotgrid) var(--dotgrid), calc(var(--dotgrid) * 9) calc(var(--dotgrid) * 9);}
+            .highlight.dotgrid body {background-image: radial-gradient(circle, var(--dotcolor) var(--dotsize), transparent 0), radial-gradient(circle, var(--dotcolor2) var(--dotsize), transparent 0);background-size: var(--dotgrid) var(--dotgrid), calc(var(--dotgrid) * 9) calc(var(--dotgrid) * 9);}
+
+
+            .highlight.dotgrid body {
+            background-image:   radial-gradient(circle, var(--dotcolor2) var(--dotsize), transparent 0), 
+                                radial-gradient(circle, var(--canvas) var(--dotsize), transparent 0), 
+                                radial-gradient(circle, var(--canvas) var(--dotsize), transparent 0), 
+                                radial-gradient(circle, var(--dotcolor) var(--dotsize), transparent 0);    
+            
+            background-size:    calc(var(--dotgrid) * 9) calc(var(--dotgrid) * 9), 
+                                var(--dotgrid) calc(var(--dotgrid) * 9), 
+                                calc(var(--dotgrid) * 9) var(--dotgrid), 
+                                var(--dotgrid) var(--dotgrid);
+            }
 
     </style>
 </head>
