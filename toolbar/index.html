@@ -71,9 +71,12 @@
             --handlesize: 8px;
 
             --dotgrid: 48px;
-            --dotsize: 2px;
+            --dotsize: 1px;
             --dotcolor: rgba(255, 255, 255, 0.1);
             --gridcolor: rgba(255, 255, 255, 0.025);
+
+            --dotcolor2: rgba(255, 255, 255, 0.35);
+            --gridcolor2: rgba(255, 255, 255, 0.05);
 
             --panelicons: var(--icon); /* rgba(255, 255, 255, 0.85) */
 
@@ -466,7 +469,10 @@
 
 
         .grid body {background-size: var(--dotgrid) var(--dotgrid);background-image: linear-gradient(to right, var(--gridcolor) 1px, transparent 1px), linear-gradient(to bottom, var(--gridcolor) 1px, transparent 1px);background-position: center;}
-        .dotgrid body {background: linear-gradient(90deg, var(--canvas) calc(var(--dotgrid) - var(--dotsize)), transparent 1%) center, linear-gradient(var(--canvas) calc(var(--dotgrid) - var(--dotsize)), transparent 1%) center, var(--dotcolor);background-size: var(--dotgrid) var(--dotgrid);}
+            .highlight.grid body {background-image: linear-gradient(to right, var(--gridcolor) 1px, transparent 1px), linear-gradient(to bottom, var(--gridcolor2) 1px, transparent 1px),linear-gradient(to right, var(--gridcolor2) 1px, transparent 1px), linear-gradient(to bottom, var(--gridcolor) 1px, transparent 1px);background-size:var(--dotgrid) var(--dotgrid), 1px calc(var(--dotgrid) * 9), calc(var(--dotgrid) * 9) 1px;}
+        /* .dotgrid body {background: linear-gradient(90deg, var(--canvas) calc(var(--dotgrid) - var(--dotsize)), transparent 1%) center, linear-gradient(var(--canvas) calc(var(--dotgrid) - var(--dotsize)), transparent 1%) center, var(--dotcolor);background-size: var(--dotgrid) var(--dotgrid);} */
+        .dotgrid body { background-image: radial-gradient(var(--dotcolor) var(--dotsize), transparent 0);background-size: var(--dotgrid) var(--dotgrid);background-position:center;}
+            .highlight.dotgrid body {background-image: radial-gradient(var(--dotcolor) var(--dotsize), transparent 0), radial-gradient(var(--dotcolor2) var(--dotsize), transparent 0);background-size: var(--dotgrid) var(--dotgrid), calc(var(--dotgrid) * 9) calc(var(--dotgrid) * 9);}
 
     </style>
 </head>
@@ -859,6 +865,10 @@
 
         <div class=tweak>
             <label><input type=checkbox value=dotgrid class=tweakr id=bgdots onchange="document.getElementById('bggrid').checked=false;" /><div class=toggle></div> Dot Grid</label>
+        </div>
+
+        <div class=tweak>
+            <label><input type=checkbox value=highlight class=tweakr /><div class=toggle></div> Grid Markers</label>
         </div>
 
         <div class=tweaked>
