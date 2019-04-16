@@ -2564,15 +2564,17 @@
         function closemenu(e){
             e = e || {};
             var t = e.target || document.body;
-            if ( t.classList.contains('delete') || t.getparent('bgmenu') ){
+            if ( t.classList.contains('delete') || t.getparent('bgmenu') || (t.getparent('option') && (e.type == 'mousedown' || e.type == 'touchstart')  ) ){
                 return;
             }
 
-            if ( e.target){
+            if ( e.target && e.type == 'click' ){
                 e.preventDefault();
                 e.stopPropagation();
             }
 
+            document.body.removeEventListener('mousedown', closemenu);
+            document.body.removeEventListener('touchstart', closemenu);
             document.body.removeEventListener('click', closemenu);
 
             var o = document.getElementsByClassName('option opened');
@@ -2636,6 +2638,8 @@
 
             p.appendChild(m);
             
+            document.body.addEventListener('mousedown', closemenu);
+            document.body.addEventListener('touchstart', closemenu);
             document.body.addEventListener('click', closemenu);
 
             document.body.appendChild(p);
@@ -2698,6 +2702,8 @@
 
             p.appendChild(m);
             
+            document.body.addEventListener('mousedown', closemenu);
+            document.body.addEventListener('touchstart', closemenu);
             document.body.addEventListener('click', closemenu);
 
             document.body.appendChild(p);
@@ -3004,14 +3010,14 @@
 
             d.style.position = 'fixed';
             d.style.bottom = '8px';
-            d.style.right = '8px';
+            d.style.right = '208px';
             d.style.zIndex = 1337;
-            d.style.background = 'rgba(0,0,0,.1)';
-            d.style.color = '#333';
-            d.style.borderRadius = 'var(--toolbarradius)';
+            d.style.background = 'rgba(255,255,255,.1)';
+            d.style.color = '#fff';
+            d.style.borderRadius = '4px';//'var(--toolbarradius)';
             d.style.whiteSpace = 'pre-line';
             d.style.padding = '4px 8px';
-            d.style.fontSize = '14px';
+            d.style.fontSize = '12px';
             d.style.pointerEvents = 'none';
 
             r.remove();
