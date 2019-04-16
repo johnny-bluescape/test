@@ -175,7 +175,7 @@
                         .slide:nth-child(2) {left:-100%;}
 
                 .list {height:300px;overflow-y:auto;padding:8px 0;margin:0 8px;border-bottom:1px solid rgba(255, 255, 255, 0.08);}
-                    .item {line-height:48px;font-size:24px;padding:0 16px;border-radius:12px;font-weight:bold;user-select:none;cursor:pointer;transition:all 150ms ease-in-out;}
+                    .item {line-height:48px;font-size:18px;padding:0 16px;border-radius:12px;font-weight:500;user-select:none;cursor:pointer;transition:all 150ms ease-in-out;}
                         .item:hover {background:rgba(255, 255, 255, 0.06);}
                         .item:active {background:rgba(255, 255, 255, 0.1);}
                     .item.current {background:var(--color);color:var(--incolor);}
@@ -306,7 +306,7 @@
         canvas {pointer-events:none;}
         .brush_tool canvas {pointer-events:all;}
 
-        .rectangle {transition:box-shadow 150ms ease-in-out;cursor:pointer;cursor:grab;}
+        .rectangle {transition:box-shadow 150ms ease-in-out;cursor:pointer;cursor:grab;border-color:transparent;}
             .rectangle:active {cursor:grabbing;}
 
           .rectangle:hover, .rectangle.drawing {box-shadow: 0 0 0 2px var(--select);}
@@ -509,7 +509,7 @@
             }
 
 
-        .bgmenu {width:336px;padding:12px;background:var(--panel);box-shadow:0 3px 20px var(--shadow2);border-radius:var(--toolbarradius);}
+        .contextmenu {width:336px;padding:12px;background:var(--panel);box-shadow:0 3px 20px var(--shadow2);border-radius:var(--toolbarradius);}
             .menutitle {font-weight: 600;padding:2px 8px;}
 
         .colors {display: flex;flex-wrap: wrap;margin-top:12px;} 
@@ -553,6 +553,25 @@
 
 
             .rainbowcolor {position:relative;width:28px;height:28px;border-radius:50%;box-sizing:border-box;background:white;background-image: linear-gradient(217deg, rgba(255,0,0,1), rgba(255,0,0,0) 70.71%), linear-gradient(127deg, rgba(0,255,0,1), rgba(0,255,0,0) 70.71%), linear-gradient(336deg, rgba(0,0,255,1), rgba(0,0,255,0) 70.71%);}
+
+            
+            .stepper {}
+                .stepper .step {width:100%;height:48px;display:flex;align-items:center;justify-content:center;}
+                    .step svg {width:24px;height:24px;}
+                        .step svg * {fill:var(--icons);}
+
+                .stepvalue {position: absolute;top: 50%;width: 100%;text-align: center;height:24px;pointer-events:none;margin-top:-12px;font-size:18px;font-weight:500;}
+
+            
+            .select {height:100%;overflow-y:auto;scroll-snap-type: y mandatory;}
+                .selectitem {height:48px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:18px;font-weight:500;opacity:.5;scroll-snap-align: center;cursor:pointer;}
+                    .selectitem.current {opacity: 1;}
+
+                    .selectitem:first-child {padding-top:72px;}
+                    .selectitem:last-child {padding-bottom:72px;}
+
+
+                body .range {width:100% !important;display:block;height:48px;}
 
     </style>
 </head>
@@ -792,14 +811,14 @@
         <div class=panel id=font_panel style="opacity:0;transform:translateY(8px);height:364px;width:356px;">
             <div class=slide>
                 <div class=list>
-                    <div class="item current">Font 1</div>
-                    <div class=item>Font 2</div>
-                    <div class=item>Font 3</div>
-                    <div class=item>Font 4</div>
-                    <div class=item>Font 5</div>
-                    <div class=item>Font 6</div>
-                    <div class=item>Font 7</div>
-                    <div class=item>Font 8</div>
+                    <div class="item current">Helvetica</div>
+                    <div class=item>San Francisco</div>
+                    <div class=item>Futura</div>
+                    <div class=item>Segoe</div>
+                    <div class=item>Avant Garde</div>
+                    <div class=item>DIN</div>
+                    <div class=item>Avenir</div>
+                    <div class=item>Frutiger</div>
                 </div>
             </div>
             <div class=slide>
@@ -854,7 +873,7 @@
             </div> -->
             <div class="option fillcolor" data-menu=bgmenu> <!-- id=shape2color -->
                 <div class="fill shape2fill" style="background:rgb(255, 59, 48);"></div>
-            </div><div class="option shapeborder">
+            </div><div class="option shapeborder" data-menu=bordermenu>
                 <div class="border" id="shapeborder"></div>
             </div><div class="option shapeup">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8-8 8z"/></svg>
@@ -885,7 +904,7 @@
                 <div class=flyout>
                     <div class=label>Helvetica</div>
                 </div>
-            </div><div class=option>
+            </div><div class="option stepped">
                 <div class=flyout>
                     <div class=label>24</div><div class=icon>
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -921,9 +940,34 @@
             
         </div>
 
+        <div id=bordermenu>
+            <div class=menutitle>Border Width</div>
+
+            <div class=menurow>
+                <input type=range class="range borderwidth" min=0 max=24 value=0 />
+            </div>
+
+            <div class=menutitle>Border Color</div>
+    
+        </div>
+
         <div id=textcolormenu>
             <div class=menutitle>Text Color</div>
  
+        </div>
+
+        <div id=stepper_temp>
+            <div class="step stepup">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M4.1,16L12,8l7.9,7.9H4.1z"/>
+                </svg>                    
+            </div>
+            <div class="stepdown step">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M20.1,8L12.2,16L4.2,8H20.1z"/>
+                </svg>
+            </div>
+            <div class=stepvalue>00</div>
         </div>
 
         <div id=colorswatches>
@@ -2322,9 +2366,10 @@
             d.innerText = v;
             d.style.display = 'inline';
             d.style.whiteSpace = 'nowrap';
-            d.style.fontSize = '24px';
+            d.style.fontSize = window.getComputedStyle(this).fontSize;
 
             document.body.appendChild(d);
+            
 
             var w = d.offsetWidth;
             var h = d.offsetHeight;
@@ -2354,7 +2399,7 @@
         function blurelm(e){
             console.log('BLUR')
             var a = document.activeElement;//.blur();
-            var c = document.getElementsByClassName('current');
+            var c = document.getElementsByClassName('layeritem current');
             console.log(c[0]);
             if ( !c[0] || c[0] && (c[0] == a || this.getparent('current')) ){
                 return;
@@ -2564,7 +2609,7 @@
         function closemenu(e){
             e = e || {};
             var t = e.target || document.body;
-            if ( t.classList.contains('delete') || t.getparent('bgmenu') || (t.getparent('option') && (e.type == 'mousedown' || e.type == 'touchstart')  ) ){
+            if ( t.classList.contains('delete') || t.getparent('contextmenu') || (t.getparent('option') && (e.type == 'mousedown' || e.type == 'touchstart')  ) ){
                 return;
             }
 
@@ -2631,7 +2676,8 @@
 
             m.removeAttribute('id');
 
-            m.className = 'bgmenu';
+            m.className = 'contextmenu ' + shell;
+            
             
             //m.appendChild(backbtn());
             m.appendChild(s);
@@ -2859,7 +2905,7 @@
 
         function colorswatch(e){
             console.log('COLOR');
-            var m = this.getparent('menuwrap');
+            var m = this.getparent('contextmenu');
             var o = m.getElementsByClassName('color current');
 
             o.removeclass('current');
@@ -2874,19 +2920,187 @@
             var l = document.getElementsByClassName('layeritem current')[0];
             var id = l.dataset.context;
 
-            if ( l.classList.contains('rectangle')) {
+            var fill = true;
 
-                l.style.backgroundColor = a;
+            if ( l.classList.contains('rectangle')) {
+                if ( m.classList.contains('bordermenu')){
+                    l.style.borderColor = a;
+                    fill= false;
+                } else {
+                    l.style.backgroundColor = a;
+                }
             } else if ( l.classList.contains('textwrap')){
                 l.getElementsByClassName('textarea')[0].style.color = a;
             }
 
             var p = document.getElementById(id);
-            var f = p.getElementsByClassName('fill')[0];
 
-            f.style.background = a;
+            if ( fill ){
+                var f = p.getElementsByClassName('fill')[0];
+
+                f.style.background = a;
+                f.style.boxShadow = 'none';
+            } else {
+                var f = p.getElementsByClassName('border')[0];
+
+                f.style.background = 'transparent';
+                f.style.boxShadow = 'none';
+                f.style.border = '4px solid ' + a;
+            }
+
+            if ( a === 'transparent' || a === 'rgba(0, 0, 0, 0)' || a === 'rgba(0,0,0,0)' ){
+                f.style.background = 'linear-gradient(to right, var(--null) 3px, transparent 3px) 12.5px';
+                if ( fill ){
+                    f.style.boxShadow = 'inset 0 0 0 3px var(--null)';
+                } else {
+                    f.style.border = '3px solid var(--null)';
+                    f.style.backgroundPosition = '9.5px';
+                }
+                f.style.transform = 'rotate(45deg)';
+            }
 
             //closemenu();
+        }
+
+        function closestepper(e){
+            e.preventDefault();
+            e.stopPropagation();
+
+           document.body.removeEventListener('click', closestepper);
+
+
+            var t = e.target;
+
+            if ( t && t.classList.contains('selectitem')){
+                var y = t.offsetTop;
+                var p = t.getparent('select');
+
+                //t.classList.add('current');
+
+                p.scrollTop = y - 72;
+
+                console.log(y);
+
+
+            }
+
+            var s = document.getElementsByClassName('stepper');
+            setTimeout(function(){s.remove();}, 0);
+        }
+
+        function stepper(e){
+            var o = this.offset();
+            var x = o.x;
+            var y = o.y;
+            var w = o.w;
+            var h = o.h;
+
+            var v = this.dataset.value || 24;
+
+            var d = document.createElement('div');
+            // var s = document.getElementById('stepper_temp');
+            // s = s.cloneNode(true);
+
+            // s.removeAttribute('id');
+
+            d.className = 'stepper';
+
+            d.style.position = 'fixed';
+            d.style.left = x + 'px';
+            d.style.top = y - (188/2 - 24) + 'px';
+            d.style.background = 'var(--panel)';
+            d.style.height = 188 + 'px';
+            d.style.width = w + 'px';
+            d.style.zIndex = 99999999999999999999;
+            d.style.borderRadius = 'var(--toolbarradius)';
+
+
+            var nums = document.createElement('div');
+            nums.className = 'select';
+            var num = 6;
+            var x = null;
+            for(var i=0;i<40;i++){
+                var a = document.createElement('div');
+                num += 2;
+                a.className = 'selectitem';
+                a.dataset.value = num;
+                a.appendChild(document.createTextNode(num));
+
+                if ( num == v ){
+                    a.className += ' current';
+                    x = a;
+                }
+
+                nums.appendChild(a);
+            }
+
+            nums.onscroll = selectscroll;
+
+            //d.appendChild(s);
+
+            d.appendChild(nums);
+
+            document.body.appendChild(d);
+
+            document.body.addEventListener('click', closestepper);
+
+            nums.scrollTop = x.offsetTop - (nums.offsetHeight / 2 - 24);
+        }
+
+        function selectscroll(e){
+            console.log(this, this.scrollTop);
+
+            var s = this.scrollTop + 48 + 24;
+
+            var c = this.getElementsByClassName('selectitem');
+            var o = this.getElementsByClassName('selectitem current');
+            o.removeclass('current');
+
+            var n = null;
+
+            for(var i=0;i<c.length;i++){
+                var a = c[i];
+                var y = a.offsetTop;
+
+                if ( y <= s ){
+                    n = a;
+                } else {
+                    break;
+                }
+
+            }
+
+            n.classList.add('current');
+
+            var con = document.getElementsByClassName('contextpanel visible')[0];
+            var step = con.getElementsByClassName('stepped')[0];
+            var lab = step.getElementsByClassName('label')[0];
+
+            lab.innerText = step.dataset.value = n.dataset.value;
+
+            var li = document.getElementsByClassName('layeritem current')[0];
+            var ta = li.getElementsByClassName('textarea')[0];
+
+            ta.style.fontSize = n.dataset.value + 'px';
+
+            autoexpand.call(ta, e);
+
+
+            console.log(s, n);
+        }
+
+        function borderwidth(e){
+            var v = this.value;
+
+            var c = document.getElementsByClassName('layeritem current')[0];
+            var handles = c.getElementsByClassName('resizehandle');
+
+            handles[0].style.margin = -v + 'px 0 0 -' + v + 'px' ;
+            handles[1].style.margin = -v + 'px -' + v + 'px 0 0';
+            handles[2].style.margin = '0 0 -' + v + 'px  -' + v + 'px';
+            handles[3].style.margin = '0 -' + v + 'px -' + v + 'px 0';
+
+            c.style.borderWidth = v + 'px';
         }
 
         Attach.on('touchstart', '.handle', handlehandler);
@@ -2900,6 +3114,8 @@
         Attach.on('click', '.control', panelhandler);
 
         Attach.on('click', '.contextpanel .option', panelhandler);
+
+        Attach.on('click', '.stepped', stepper);
 
         Attach.on('click', '.item', listhandler);
 
@@ -2944,8 +3160,10 @@
         Attach.on('click', '.delete', deletecurrent);
 
         Attach.on('click', '.morebtn', moremenu);
+
         Attach.on('click', '.fillcolor', colormenu);
-        Attach.on('click', '.textcolor', colormenu)
+        Attach.on('click', '.textcolor', colormenu);
+        Attach.on('click', '.shapeborder', colormenu);
 
         Attach.on('mousedown', '.select_tool', marquee);
         Attach.on('touchstart', '.select_tool', marquee);
@@ -2959,9 +3177,12 @@
 
         Attach.on('click', '.minishape', minishape);
 
-        Attach.on('click', '.shapeborder', bordercontext);
+        //Attach.on('click', '.shapeborder', bordercontext);
 
-        Attach.on('click', '.color', colorswatch)
+        Attach.on('click', '.color', colorswatch);
+
+        Attach.on('input', '.borderwidth', borderwidth);
+
 
 
         //document.addEventListener('mousewheel', mousescroll, { passive:false });
@@ -3027,7 +3248,7 @@
 
         screenrez();
 
-        var dotgrid2 = 40;
+        var dotgrid2 = 48;
         function dotspacing(e){
             //e.preventDefault();
 

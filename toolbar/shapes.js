@@ -412,7 +412,7 @@ function rectanglemove(e){
     color =  typeof window.shapecolor == 'string' ? window.shapecolor : window.getComputedStyle(ac).backgroundColor;//'rgb(255, 59, 48)';//color.parentElement.getElementsByClassName('togglewrap')[0].classList.contains('on') ? window.getComputedStyle(color).backgroundColor : 'transparent';
 
     var bordercolor = document.getElementsByClassName('borderswatch')[0];
-    bordercolor = 'white';//bordercolor.parentElement.getElementsByClassName('togglewrap')[0].classList.contains('on') ? window.getComputedStyle(bordercolor).backgroundColor : 'transparent';
+    bordercolor = 'transparent';//bordercolor.parentElement.getElementsByClassName('togglewrap')[0].classList.contains('on') ? window.getComputedStyle(bordercolor).backgroundColor : 'transparent';
 
     var border = document.getElementsByClassName('borderwidth')[0];
     border = 0;//border && border.parentNode.getElementsByClassName('togglewrap on')[0] ? border.value || 0 : 0;
@@ -604,10 +604,14 @@ function rectanglemove(e){
       var bg = window.getComputedStyle(rect).backgroundColor;
 
       if ( bg == 'rgba(0, 0, 0, 0)' || bg == 'transparent' ){
-        bg = 'linear-gradient(135deg, transparent 48%, #3c3b3d 48%, #3c3b3d 52%, transparent 52%)';
-        col.style.boxShadow = 'inset 0 0 0 2px #3c3b3d';
+        // bg = 'linear-gradient(135deg, transparent 48%, #3c3b3d 48%, #3c3b3d 52%, transparent 52%)';
+        bg = 'linear-gradient(to right, var(--null) 3px, transparent 3px) 12.5px';
+
+        col.style.boxShadow = 'inset 0 0 0 3px var(--null)';
+        col.style.transform = 'rotate(45deg)';
       } else {
         col.style.boxShadow = 'inset 0 0 0 1px hsla(0, 0%, 100%, 0.175)';
+        col.style.transform = 'rotate(0deg)';
       }
 
       col.style.background = bg;
