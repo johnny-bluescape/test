@@ -2808,6 +2808,29 @@
 
                 bw.dataset.x = lx;
 
+                var bc = window.getComputedStyle(rec).borderColor;
+
+                var chips = p.getElementsByClassName('chip');
+                for(var i=0;i<chips.length;i++){
+                    var cc = chips[i];
+                    if ( bc == window.getComputedStyle(cc).backgroundColor ){
+                        cc.parentElement.classList.add('current');
+                        break;
+                    }
+                }
+
+            } else {
+                var rec = document.getElementsByClassName('layeritem current')[0];
+                var bc = window.getComputedStyle(rec).backgroundColor;
+                var chips = p.getElementsByClassName('chip');
+
+                for(var i=0;i<chips.length;i++){
+                    var cc = chips[i];
+                    if ( bc == window.getComputedStyle(cc).backgroundColor ){
+                        cc.parentElement.classList.add('current');
+                        break;
+                    }
+                }
             }
 
             var o = c.getElementsByClassName('option');
