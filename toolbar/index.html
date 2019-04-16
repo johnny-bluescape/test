@@ -57,6 +57,8 @@
             --panel: rgb(var(--ui));
             --select: #00CEFF;
 
+            --secondarytext: rgba(255,255,255,.54);
+
             --toolbtn: 60px;
             /* --toolbtnicon: 32px; */
             --toolgap: 12px;
@@ -270,8 +272,14 @@
         .option .fill {cursor:pointer;width:28px;height:28px;margin-top:6px;border-radius:50%;box-shadow:inset 0 0 0 1px hsla(0, 0%, 100%, 0.175);position:absolute;background:black;}
         .option .border {cursor:pointer;width:28px;height:28px;border-radius:50%;border:4px solid rgba(155, 155, 155, 0.15);box-sizing:border-box;}
 
-        .slider {width:48px;height:200px;position:relative;box-shadow:inset 0 0 0 1px rgba(255,255,255,.1);border-radius:24px;touch-action: manipulation;background:#212122;}
-            .slider .knob {width:32px;height:32px;background:white;border-radius:0;position:absolute;top:20px;left:50%;transform:translate(-50%, 0);border-radius:50%;}
+        .slider {width:48px;height:200px;position:relative;box-shadow:inset 0 0 0 1px rgba(255,255,255,.1);border-radius:24px;touch-action: manipulation;background:#212122;cursor:pointer;}
+
+            .hslider {width:100%;height:48px;background:transparent;box-shadow:none;margin:4px 0 24px;}
+                .hslider .track {background:rgba(0,0,0,.33);box-shadow:none;background-blend-mode:darken;z-index:1;position:absolute;top:50%;left:0;right:0;border-radius:18px;height:36px;transform:translateY(-50%);}
+
+            .slider .knob {width:32px;height:32px;background:white;border-radius:0;position:absolute;top:20px;left:50%;z-index:2;transform:translate(-50%, 0);border-radius:50%;}
+
+                .hslider .knob {width:28px;height:28px;top:50%;left:12px;transform:translate(0, -50%);}
 
         .swatches {padding:12px;height:48px;}
         .swatches .swatch {width:48px;height:48px;display:inline-block;cursor:pointer;transition:all 150ms ease-in-out;position:relative;}
@@ -510,7 +518,7 @@
 
 
         .contextmenu {width:336px;padding:12px;background:var(--panel);box-shadow:0 3px 20px var(--shadow2);border-radius:var(--toolbarradius);}
-            .menutitle {font-weight: 600;padding:2px 8px;}
+            .menutitle {font-weight: 600;padding:2px 8px;margin-bottom:4px;}
 
         .colors {display: flex;flex-wrap: wrap;margin-top:12px;} 
             .colors .color {width:48px;height:48px;display:flex;align-items:center;justify-content:center;cursor:pointer;}
@@ -572,6 +580,10 @@
 
 
                 body .range {width:100% !important;display:block;height:48px;}
+
+
+        .menurowtitle {font-size:12px;text-transform:uppercase;color:var(--secondarytext);font-weight:500;letter-spacing:0.5px;}
+                .slidervalue {float:right;font-size:12px;font-weight:500;}
 
     </style>
 </head>
@@ -941,13 +953,19 @@
         </div>
 
         <div id=bordermenu>
-            <div class=menutitle>Border Width</div>
+            <div class=menutitle>Border Style</div>
 
-            <div class=menurow>
-                <input type=range class="range borderwidth" min=0 max=24 value=0 />
+            <div class=menurow style="justify-content: space-between;padding:4px 8px 0;">
+                <div class=menurowtitle>Border Thickness</div>
+                <div class=slidervalue></div>
+                <!-- <input type=range class="range borderwidth" min=0 max=24 value=0 /> -->
+                <div class="slider hslider" data-x=5 data-y=2 data-min=0 data-max=24 data-value=0 data-callback=borderwidth>
+                    <div class=track></div>
+                    <div class=knob style="left: 4px; transform: translateY(-50%) scale(0.142857);"></div>
+                </div>
             </div>
 
-            <div class=menutitle>Border Color</div>
+            <div class=menurowtitle style="padding:0 8px;">Border Color</div>
     
         </div>
 
@@ -2115,6 +2133,23 @@
 
             var k = this.getElementsByClassName('knob')[0];
 
+            var dx = this.classList.contains('hslider') ? true : false;
+
+            var size = dx ? 32 : 40;
+
+            var w = this.offsetWidth;
+            var h = this.offsetHeight;
+
+            var t = dx ? w - size : h - size;
+
+
+            var max = Number(this.dataset.max) || 0;
+            var min = Number(this.dataset.min) || 0;
+
+            var callback = this.dataset.callback;
+
+            var minknob = dx ? 4 : 8;
+
             function move(e){
                 var ev = e.touches ? e.touches[0] : e;
                 var x = ev.pageX;
@@ -2130,26 +2165,78 @@
                 nx += ox;
                 ny += oy;
 
-                ny = Math.max(8, Math.min(ny, 160));
+                var d = dx ? nx : ny;
 
-                var z = ((160 - ny) + 24) / 160;
+                d = Math.min(Math.max(minknob, d), t);
 
-                var az = 36 * z;
+                var z = (d - minknob) / (t - minknob);
+
+                if ( !dx ){
+                    z = 1-z;
+                }
+
+
+                // d = Math.max(8, Math.min(d, t));
+
+                // var z = ((t - d) + 8) / t;
+
+                // console.log(z, 'z');
+
+                // if ( dx ){
+                //     z = 1-z;
+                // }
+
+                // z = ((28 * z) + 8) / 36;
+
+                var size2 = dx ? 28 : 32;
+
+                var stx = dx ? 4 : 8;
+
+                var scale = (((size2-stx) * z) + stx) / size2;
+
+                var az = 36 * scale;
                 
                 brushsize = az;
 
                 console.log(az)
 
-                k.style.top = ny + 'px';
-                k.style.transform = 'translateX(-50%) scale(' + z + ')';
+                if ( dx ){
+                    k.style.left = d + 'px';
+                    //z = 1 - z;
+                    k.style.transform = 'translateY(-50%) scale(' + scale + ')';
+                } else {
+                    k.style.top = d + 'px';
+                    k.style.transform = 'translateX(-50%) scale(' + scale + ')';
+                }
 
-                var ba = document.getElementById('brushactual');
-                var ba2 = document.getElementsByClassName('brushactual2')[0];
+                if ( !dx ){
+                    var ba = document.getElementById('brushactual');
+                    var ba2 = document.getElementsByClassName('brushactual2')[0];
 
-                ba.style.width = ba.style.height = ba2.style.width = ba2.style.height = ba.parentElement.offsetHeight * z + 'px';
+                    ba.style.width = ba.style.height = ba2.style.width = ba2.style.height = ba.parentElement.offsetHeight * scale + 'px';
+                }
 
                 s.dataset.x = nx;
                 s.dataset.y = ny;
+
+                // if ( range ){
+                //     var vv = ((max - min) * z) + min;
+                //     range.value = Math.round(vv);
+                // }
+
+                var vv = Math.round(((max - min) * z) + min);
+
+
+                s.dataset.value = vv;
+
+                var sv = s.parentElement.getElementsByClassName('slidervalue')[0];
+                if (sv ){
+                    sv.innerText = vv;
+                }
+
+                if ( callback ){
+                    window[callback].call(s, e);
+                }
             }
 
             function end(e){
@@ -2162,11 +2249,14 @@
                 if ( !moved ){
                     console.log('clicked');
                 } else {
-                     var temp = document.getElementById('brushsize_panel');
-                     temp.empty();
-                     var cc = s.cloneNode(true);
 
-                     temp.appendChild(cc);
+                    if ( !dx ){
+                        var temp = document.getElementById('brushsize_panel');
+                        temp.empty();
+                        var cc = s.cloneNode(true);
+
+                        temp.appendChild(cc);
+                    }
                 }
 
                 closepanel();
@@ -2630,6 +2720,10 @@
 
             var o = document.getElementsByClassName('contextpanel sublevel');
 
+            if ( !o[0]){
+                return;
+            }
+
             var o1 = o[0].getElementsByClassName('option')[0];
             
             o.removeclass('sublevel');
@@ -2689,6 +2783,32 @@
             document.body.addEventListener('click', closemenu);
 
             document.body.appendChild(p);
+
+            if ( shell == 'bordermenu' ){
+                var bw = p.getElementsByClassName('hslider')[0];
+                var kn = bw.getElementsByClassName('knob')[0];
+                var sv = bw.parentElement.getElementsByClassName('slidervalue')[0];
+                var rec = document.getElementsByClassName('layeritem current')[0];
+                //bw.value = rec.dataset.border || 0;
+
+                var ma = Number(bw.dataset.max);
+                var mi = Number(bw.dataset.min);
+
+                var br = Number(rec.dataset.border) || 0;
+
+                sv.innerText = br;
+
+                var z = (br / ma);
+                var scale = ((24 * z) + 4) / 28;
+
+                var lx = Math.max((bw.offsetWidth - 32) * z, 4);
+
+                kn.style.left = lx + 'px';
+                kn.style.transform = 'translateY(-50%) scale(' + scale +')';
+
+                bw.dataset.x = lx;
+
+            }
 
             var o = c.getElementsByClassName('option');
 
@@ -3090,7 +3210,7 @@
         }
 
         function borderwidth(e){
-            var v = this.value;
+            var v = Number(this.dataset.value);
 
             var c = document.getElementsByClassName('layeritem current')[0];
             var handles = c.getElementsByClassName('resizehandle');
@@ -3101,6 +3221,8 @@
             handles[3].style.margin = '0 -' + v + 'px -' + v + 'px 0';
 
             c.style.borderWidth = v + 'px';
+
+            c.dataset.border = v;
         }
 
         Attach.on('touchstart', '.handle', handlehandler);
@@ -3181,7 +3303,6 @@
 
         Attach.on('click', '.color', colorswatch);
 
-        Attach.on('input', '.borderwidth', borderwidth);
 
 
 
