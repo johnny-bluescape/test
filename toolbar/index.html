@@ -517,7 +517,7 @@
             }
 
 
-        .contextmenu {width:336px;padding:12px;background:var(--panel);box-shadow:0 3px 20px var(--shadow2);border-radius:var(--toolbarradius);}
+        .contextmenu {max-width:336px;padding:12px;background:var(--panel);box-shadow:0 3px 20px var(--shadow2);border-radius:var(--toolbarradius);}
             .menutitle {font-weight: 600;padding:2px 8px;margin-bottom:4px;}
 
         .colors {display: flex;flex-wrap: wrap;margin-top:12px;} 
@@ -575,8 +575,8 @@
                 .selectitem {height:48px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:18px;font-weight:500;opacity:.5;scroll-snap-align: center;cursor:pointer;}
                     .selectitem.current {opacity: 1;}
 
-                    .selectitem:first-child {padding-top:72px;}
-                    .selectitem:last-child {padding-bottom:72px;}
+                    .stepper .selectitem:first-child {padding-top:72px;}
+                    .stepper .selectitem:last-child {padding-bottom:72px;}
 
 
                 body .range {width:100% !important;display:block;height:48px;}
@@ -584,6 +584,9 @@
 
         .menurowtitle {font-size:12px;text-transform:uppercase;color:var(--secondarytext);font-weight:500;letter-spacing:0.5px;}
                 .slidervalue {float:right;font-size:12px;font-weight:500;}
+
+
+        .fontsize {font-feature-settings: "tnum";}
 
     </style>
 </head>
@@ -643,7 +646,7 @@
                         </div>
                         <div class=control>
                             <div class=label>Size</div>
-                            <div class=option>24</div>
+                            <div class="option stepped">24</div>
                         </div>
                         <div class=control>
                             <div class=label>Color</div>
@@ -912,11 +915,11 @@
         </div>
 
         <div id=text_context class=contextpanel>
-            <div class=option id=font>
+            <div class="option typeface" data-menu=tfmenu>
                 <div class=flyout>
                     <div class=label>Helvetica</div>
                 </div>
-            </div><div class="option stepped">
+            </div><div class="option fontsize" data-menu=fsmenu>
                 <div class=flyout>
                     <div class=label>24</div><div class=icon>
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -931,6 +934,9 @@
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8-8 8z"/></svg>
             </div><div class="option shapeback">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 12l-1.41-1.41L13 16.17V4h-2v12.17l-5.58-5.59L4 12l8 8 8-8z"/></svg>
+            </div><div class="option lock" onclick="this.classList.toggle('unlock');">
+                <svg xmlns="http://www.w3.org/2000/svg" class=locked viewBox="0 0 24 24"><path d="M18,8H17V6A5,5,0,0,0,7,6V8H6a2,2,0,0,0-2,2V20a2,2,0,0,0,2,2H18a2,2,0,0,0,2-2V10A2,2,0,0,0,18,8ZM9,6a3,3,0,0,1,6,0V8H9Zm9,14H6V10H18Z"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" class=unlocked viewBox="0 0 24 24"><path d="M18,8h-1V6c0-2.8-2.2-5-5-5S7,3.2,7,6h2c0-1.7,1.3-3,3-3s3,1.3,3,3v2H6c-1.1,0-2,0.9-2,2v10c0,1.1,0.9,2,2,2h12 c1.1,0,2-0.9,2-2V10C20,8.9,19.1,8,18,8z M18,20H6V10h12V20z"/></svg>
             </div><div class="option morebtn">
                 <!-- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg> -->
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
@@ -950,6 +956,25 @@
                 Transparent   Current    color select
             </div> -->
             
+        </div>
+
+        <div id=fsmenu>
+            <div class=menutitle>Font Size</div>
+            
+        </div>
+
+        <div id=tfmenu>
+            <div class=menutitle>Typeface</div>
+            <div class=list style="margin:0 -4px -12px;border:none;">
+                <div class="item current">Helvetica</div>
+                <div class=item>San Francisco</div>
+                <div class=item>Futura</div>
+                <div class=item>Segoe</div>
+                <div class=item>Avant Garde</div>
+                <div class=item>DIN</div>
+                <div class=item>Avenir</div>
+                <div class=item>Frutiger</div>
+            </div>
         </div>
 
         <div id=bordermenu>
@@ -2083,7 +2108,7 @@
             }
             var p = l.getparent('panel');
 
-            if ( p.classList.contains('moving') ){
+            if ( !p || p.classList.contains('moving') ){
                 return;
             }
 
@@ -2158,8 +2183,10 @@
                 nx = x - sx;
                 ny = y - sy;
 
-                if ( !moved  ){
+                if ( !moved && (Math.abs(nx) > 4 ||  Math.abs(ny) > 4) ){
                     moved = true;
+                } else if (!moved){
+                    return;
                 }
                 
                 nx += ox;
@@ -2216,8 +2243,8 @@
                     ba.style.width = ba.style.height = ba2.style.width = ba2.style.height = ba.parentElement.offsetHeight * scale + 'px';
                 }
 
-                s.dataset.x = nx;
-                s.dataset.y = ny;
+                s.dataset.x = Math.max(Math.min(nx, t), minknob);
+                s.dataset.y = Math.max(Math.min(ny, t), minknob);
 
                 // if ( range ){
                 //     var vv = ((max - min) * z) + min;
@@ -2248,6 +2275,92 @@
 
                 if ( !moved ){
                     console.log('clicked');
+
+                    var ev = e.touches ? e.touches[0] : e;
+                    var x = sx;
+                    var y = sy;
+
+                    var off = s.offset();
+                    var nx = off.x;
+                    var ny = off.y;
+
+
+                    nx = sx - nx - 16;
+                    ny = sy - ny - 16;
+
+                    var d = dx ? nx : ny;
+
+                    d = Math.min(Math.max(minknob, d), t);
+
+                    var z = (d - minknob) / (t - minknob);
+
+                    if ( !dx ){
+                        z = 1-z;
+                    }
+
+
+                    // d = Math.max(8, Math.min(d, t));
+
+                    // var z = ((t - d) + 8) / t;
+
+                    // console.log(z, 'z');
+
+                    // if ( dx ){
+                    //     z = 1-z;
+                    // }
+
+                    // z = ((28 * z) + 8) / 36;
+
+                    var size2 = dx ? 28 : 32;
+
+                    var stx = dx ? 4 : 8;
+
+                    var scale = (((size2-stx) * z) + stx) / size2;
+
+                    var az = 36 * scale;
+                    
+                    brushsize = az;
+
+                    console.log(az)
+
+                    if ( dx ){
+                        k.style.left = d + 'px';
+                        //z = 1 - z;
+                        k.style.transform = 'translateY(-50%) scale(' + scale + ')';
+                    } else {
+                        k.style.top = d + 'px';
+                        k.style.transform = 'translateX(-50%) scale(' + scale + ')';
+                    }
+
+                    if ( !dx ){
+                        var ba = document.getElementById('brushactual');
+                        var ba2 = document.getElementsByClassName('brushactual2')[0];
+
+                        ba.style.width = ba.style.height = ba2.style.width = ba2.style.height = ba.parentElement.offsetHeight * scale + 'px';
+                    }
+
+                    s.dataset.x = nx;
+                    s.dataset.y = ny;
+
+                    // if ( range ){
+                    //     var vv = ((max - min) * z) + min;
+                    //     range.value = Math.round(vv);
+                    // }
+
+                    var vv = Math.round(((max - min) * z) + min);
+
+
+                    s.dataset.value = vv;
+
+                    var sv = s.parentElement.getElementsByClassName('slidervalue')[0];
+                    if (sv ){
+                        sv.innerText = vv;
+                    }
+
+                    if ( callback ){
+                        window[callback].call(s, e);
+                    }
+
                 } else {
 
                     if ( !dx ){
@@ -2473,6 +2586,10 @@
 
             d.parentNode.removeChild(d);
 
+            if ( document.getElementsByClassName('contextpanel visible sublevel')[0] ){
+                return;
+            }
+
             setcontextpanel.call(this.getparent('textwrap'));
         }
 
@@ -2644,6 +2761,7 @@
         }
 
         function setcontextpanel(x){
+
             contextfollow.call(this);
             var cid = this.dataset.context;
 
@@ -2730,6 +2848,10 @@
 
             o1.style.marginLeft = 0;
 
+            o1.offsetLeft;
+
+            setTimeout(function(){setcontextpanel.call(document.getElementsByClassName('layeritem current')[0])}, 151);
+
         }
 
         function backbtn(e){
@@ -2765,16 +2887,18 @@
             s.removeAttribute('id');
 
             p.className = 'menuwrap';
+
             
             m = m.cloneNode(true);
 
             m.removeAttribute('id');
 
             m.className = 'contextmenu ' + shell;
-            
+
+            s.style.width = '336px';
             
             //m.appendChild(backbtn());
-            m.appendChild(s);
+            // m.appendChild(s);
 
             p.appendChild(m);
             
@@ -2785,6 +2909,8 @@
             document.body.appendChild(p);
 
             if ( shell == 'bordermenu' ){
+                m.appendChild(s);
+
                 var bw = p.getElementsByClassName('hslider')[0];
                 var kn = bw.getElementsByClassName('knob')[0];
                 var sv = bw.parentElement.getElementsByClassName('slidervalue')[0];
@@ -2819,7 +2945,9 @@
                     }
                 }
 
-            } else {
+            } else if ( shell == 'bgmenu' ){
+                m.appendChild(s);
+
                 var rec = document.getElementsByClassName('layeritem current')[0];
                 var bc = window.getComputedStyle(rec).backgroundColor;
                 var chips = p.getElementsByClassName('chip');
@@ -2831,6 +2959,24 @@
                         break;
                     }
                 }
+            } else if ( shell == 'textcolormenu' ){
+                m.appendChild(s);
+
+                var rec = document.getElementsByClassName('layeritem current')[0].getElementsByClassName('textarea')[0];
+                var bc = window.getComputedStyle(rec).color;
+                var chips = p.getElementsByClassName('chip');
+
+                for(var i=0;i<chips.length;i++){
+                    var cc = chips[i];
+                    if ( bc == window.getComputedStyle(cc).backgroundColor ){
+                        cc.parentElement.classList.add('current');
+                        break;
+                    }
+                }
+            } else if ( shell == 'fsmenu' ){
+                var step = stepper2.call(this, e);
+                step.classList.add('menud');
+                m.appendChild(step);
             }
 
             var o = c.getElementsByClassName('option');
@@ -2859,6 +3005,11 @@
             p.offsetLeft;
 
             p.style.transform = 'translateX(' + ox + 'px)';
+
+            if ( shell == 'fsmenu'){
+                var sc = step.dataset.scroll;
+                step.getElementsByClassName('select')[0].scrollTop = sc;
+            }
         }
 
         function moremenu(e){
@@ -3162,7 +3313,7 @@
             nums.className = 'select';
             var num = 6;
             var x = null;
-            for(var i=0;i<40;i++){
+            for(var i=0;i<48;i++){
                 var a = document.createElement('div');
                 num += 2;
                 a.className = 'selectitem';
@@ -3190,10 +3341,62 @@
             nums.scrollTop = x.offsetTop - (nums.offsetHeight / 2 - 24);
         }
 
+        function stepclick(e){
+            var y = this.offsetTop;
+            var p = this.getparent('select');
+
+            //t.classList.add('current');
+
+            p.scrollTop = (y - 111);
+        }
+
+        function stepper2(e){
+            var v = this.dataset.value || 24;
+
+            var d = document.createElement('div');
+
+
+            d.className = 'stepper';
+
+            d.style.height = '188px';
+            d.style.width = 'calc(100% + 24px)';
+            d.style.margin = '0 -12px -12px';
+
+            var nums = document.createElement('div');
+            nums.className = 'select';
+            var num = 8;
+            var x = null;
+            var ii = 0;
+            for(var i=0;i<45;i++){
+                var a = document.createElement('div');
+                num += 2;
+                a.className = 'selectitem';
+                a.dataset.value = num;
+                a.onclick = stepclick;
+                a.appendChild(document.createTextNode(num));
+
+                if ( num == v ){
+                    a.className += ' current';
+                    x = a;
+                    ii = i - 1;
+                }                
+
+                nums.appendChild(a);
+            }
+
+            nums.onscroll = selectscroll;
+
+            d.appendChild(nums);
+
+            nums.scrollTop = d.dataset.scroll = (ii * 48) + 39;
+
+            return d;
+        }
+
         function selectscroll(e){
             console.log(this, this.scrollTop);
 
-            var s = this.scrollTop + 48 + 24;
+            var s = this.scrollTop + (this.offsetHeight /2) + 24;
 
             var c = this.getElementsByClassName('selectitem');
             var o = this.getElementsByClassName('selectitem current');
@@ -3216,7 +3419,7 @@
             n.classList.add('current');
 
             var con = document.getElementsByClassName('contextpanel visible')[0];
-            var step = con.getElementsByClassName('stepped')[0];
+            var step = con.getElementsByClassName('stepped')[0] || con.getElementsByClassName('fontsize')[0];
             var lab = step.getElementsByClassName('label')[0];
 
             lab.innerText = step.dataset.value = n.dataset.value;
@@ -3308,7 +3511,7 @@
 
         Attach.on('click', '.fillcolor', colormenu);
         Attach.on('click', '.textcolor', colormenu);
-        Attach.on('click', '.shapeborder', colormenu);
+        Attach.on('click', '.shapeborder, .fontsize, .typeface', colormenu);
 
         Attach.on('mousedown', '.select_tool', marquee);
         Attach.on('touchstart', '.select_tool', marquee);
