@@ -364,6 +364,8 @@
             .menuwrap {position:fixed;opacity:0;transition: all 150ms ease-in-out;user-select:none;z-index:999999999999991;transform: translateX(6px);touch-action: manipulation;}
                 .menuwrap.visible {transform:translateX(0);opacity:1;}
 
+                .menuwrap.subsublevel {margin-left:-8px;opacity:0;pointer-events:none;}
+
             .overflowmenu {overflow:hidden;background: var(--toolselect);border-radius:var(--toolbarradius);padding:4px 0;box-shadow: 0 2px 20px var(--shadow2);}
                 
                 .mitem {cursor:pointer;min-height:48px;padding:8px 16px;display:flex;align-content:center;align-items:center;box-sizing:border-box;font-size:18px;}
@@ -588,6 +590,40 @@
 
         .fontsize {font-feature-settings: "tnum";}
 
+
+
+
+        
+         .colorpicker  {width:200px;border-radius:4px;display:inline-block;background-color:rgb(37, 37, 37);box-shadow:inset 0 0 0 2px rgb(62, 62, 62);position: relative;z-index: 2;}
+         .colorgrid  {width:208px;height:208px;box-shadow:inset 0 0 0 2px rgba(0,0,0,.05);position:relative;
+            background-image:linear-gradient(to top, #000, rgba(204, 154, 129, 0)), linear-gradient(to right, #fff, rgba(204, 154, 129, 0));
+            box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.05);
+
+            border-radius:calc(var(--toolbarradius) - 6px);
+        }
+         .colorpanel  {position:relative;}
+         input.hue  {margin:8px 8px 0;height:24px;width: 136px;margin-left: 56px;}
+         input.alpha  {height:24px;width:136px;margin-left: 56px;}
+         .hue::-webkit-slider-runnable-track  {background: linear-gradient(to right, red 0%, #ff0 17%, lime 33%, cyan 50%, blue 66%, #f0f 83%, red 100%) !important;}
+         .alpha::-webkit-slider-runnable-track  {background-image:  linear-gradient(to left, #20CC89, transparent), url(./imgs/alpha.png) !important;}
+         .colorpicker .handle  {width:8px;height:8px;border:3px solid white;box-shadow:0 0 0 3px #333;position:absolute;top:0;left:0;border-radius:50%;transition:background 125ms ease-in-out;}
+
+         .thecolor  {width:32px;height:32px;position:absolute;top:12px;left:12px;border-radius: 2px;overflow: hidden;box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.05);}
+         .thecolor::after  {content: '';position:absolute;top:0;left:0;right:0;bottom:0;z-index:-2;background:url(./imgs/alpha.png);}
+         .oldcolor  {width:50%;position:absolute;top:0;left:0;bottom:0;background:#20CC89;box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.05);}
+
+        .cube .colorgrid {width:280px;padding-bottom:280px;height:0;}
+
+
+        .colorvalues {}
+          .colorvalues input {width:100%;margin-right:8px;}
+            .colorvalues input.hexinput {width:92px;}
+
+        .cubewrap {position:relative;}
+
+          .cubewrap .handle {position: absolute;top: 0;left: 0;border-radius: 50%;border: 2px solid white;box-shadow: 0 0 0 2px rgba(0,0,0,.05);width: 12px;height: 12px;transition: border-color 125ms ease-in-out;}
+
+          .oldcolor {right:0;left:auto;}
     </style>
 </head>
 <body class="rectanglex brush_tool ">
@@ -1074,11 +1110,45 @@
                 <div class="menubtn transparentcolor color">
                     <div class=nullcolor></div>
                 </div>
-                <div class="menubtn selectcolor">
+                <div class="menubtn selectcolor" data-menu=huecube>
                     <div class=rainbowcolor></div>
                 </div>
             </div>
         </div>
+
+        <div class="colorwrap2 cube " id=huecube>
+            <div class="cubewrap">
+                <div class="colorgrid" style="background-color:hsla(260, 100%, 50%, 1);" data-alpha="1" data-hue="260" data-s="100" data-l="50">
+                    <div tabindex="0" class="handle colorhalo" style="transform: translate(254px, 16px);"></div>
+                </div>
+                <div class="cubeslides">
+                    <div class="rotateslides">
+                    <div class="colorslide regular clip hue" style="width:100%;background: linear-gradient(to right, red 0%, #ff0 17%, lime 33%, cyan 50%, blue 66%, #f0f 83%, red 100%);margin-bottom:8px;border-radius:8px;margin-top:8px;height:40px;">
+                        <input type="range" class="nocolor hue2 hueslide huecubeslide" style="height:48px;margin-top:-4px;" value="260" max="360">
+                    </div>
+                    <div class="colorslide regular clip alpha alphacubeslide" style="width:100%;border-radius:8px;background: linear-gradient(to left, hsla(260, 100%, 50%, 1), hsla(260, 100%, 50%, 0)), url(./imgs/alpha.png);height:40px;">
+                        <input type="range" class="  nocolor alpha2 alphaslide alphacubeslide2" style="height:48px;margin-top:-4px;" value="100" max="100">
+                    </div>
+                    </div>
+                </div>
+                <div style="position:relative;">
+                    <div class="thecolor" style="background-color:hsla(260, 100%, 50%, 1);position:absolute;left:0;width:48px;height:24px;border-radius:3px;top:8px;">
+                        <div class="oldcolor" style="background-color:hsla(260, 100%, 50%, 1);"></div>
+                    </div>
+                    <div class="colorvalues" style="padding: 4px 0 0 56px;">
+                    <input type="text" placeholder="0" value="#ff0045" class="quiet hexinput" style="font-feature-settings: 'tnum';">
+                    
+                    <div style="display:none"><input type="number" placeholder="0" value="260" class="quiet redinput"><input type="number" placeholder="0" value="100" class="quiet greeninput"><input type="number" placeholder="0" value="50" class="quiet blueinput"><input type="number" placeholder="0" value="100" class="quiet alphainput"></div>
+
+                    <div class="addbutton addswatch svgiconcolor " style="position:absolute;top:0;right:0;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" style="padding:7px;">
+                        <path style="fill:var(--icon)" d="M14.5,8H10V3.5A0.5,0.5,0,0,0,9.5,3h-1a0.5,0.5,0,0,0-.5.5V8H3.5a0.5,0.5,0,0,0-.5.5v1a0.5,0.5,0,0,0,.5.5H8v4.5a0.5,0.5,0,0,0,.5.5h1a0.5,0.5,0,0,0,.5-0.5V10h4.5A0.5,0.5,0,0,0,15,9.5v-1A0.5,0.5,0,0,0,14.5,8Z"></path>
+                        </svg>
+                    </div>
+                    </div>
+                </div>
+            </div>
+            </div>
     </div>
 
     <canvas id="canvas2" style="cursor: crosshair; position: absolute; top: 0px; left: 0px; right: 0px; bottom: 0px; width: 100%; height: 100%;z-index:1;"></canvas>
@@ -1781,6 +1851,10 @@
             var sy = ev.pageY;
 
             var t = this.getparent('toolbar');
+
+            if ( !t ){
+                return;
+            }
 
             var off = t.offset();
 
@@ -2817,7 +2891,7 @@
         function closemenu(e){
             e = e || {};
             var t = e.target || document.body;
-            if ( t.classList.contains('delete') || t.getparent('contextmenu') || (t.getparent('option') && (e.type == 'mousedown' || e.type == 'touchstart')  ) ){
+            if ( t.classList.contains('delete') || t.getparent('contextmenu') || t.getparent('tweaks') || (t.getparent('option') && (e.type == 'mousedown' || e.type == 'touchstart')  ) ){
                 return;
             }
 
@@ -2825,6 +2899,19 @@
                 e.preventDefault();
                 e.stopPropagation();
             }
+            
+            var sub = document.getElementsByClassName('subsublevel');
+
+
+            if ( sub[0] ){
+                var am = document.getElementsByClassName('menuwrap visible');
+                am.remove();
+                sub[sub.length-1].classList.add('visible');
+                sub[sub.length-1].classList.remove('subsublevel');
+
+                return;
+            }
+            
 
             document.body.removeEventListener('mousedown', closemenu);
             document.body.removeEventListener('touchstart', closemenu);
@@ -3451,6 +3538,407 @@
             c.dataset.border = v;
         }
 
+        function selectcolor(e){
+
+            var m = this.getparent('menuwrap');
+            var off = m.offset();
+
+            m.classList.add('subsublevel');
+            m.classList.remove('visible');
+
+            var c = document.getElementById('huecube');
+            c = c.cloneNode(true);
+
+            var p = document.createElement('div');
+            p.className = 'menuwrap';
+
+            c.className += ' contextmenu ';
+
+            p.appendChild(c);
+
+            p.style.left = off.x + 'px';
+            p.style.top = off.y  + 'px';
+
+            document.body.appendChild(p);
+
+            p.offsetLeft;
+            p.classList.add('visible');
+        }
+
+        function cubehandler(e){
+            e.preventDefault();
+
+            if ( e.which == 3 ){
+                return;
+            }
+
+            e = e.touches ? e.touches[0] : e;
+
+            var sx = e.pageX;
+            var sy = e.pageY;
+
+            var totalOffsetX = 0;
+            var totalOffsetY = 0;
+            var currentElement = this;
+            var scroll = 0;
+
+
+            do {
+                totalOffsetX += currentElement.offsetLeft;
+                totalOffsetY += currentElement.offsetTop;
+                scroll += currentElement.scrollTop;
+            }
+            while(currentElement = currentElement.offsetParent)
+
+
+            var g = this;
+            var h = this.getElementsByClassName('handle')[0];
+            var c = g.parentElement.getElementsByClassName('thecolor')[0];
+            var a = g.parentElement.getElementsByClassName('alpha')[0];
+            var w = this.offsetWidth + 2;
+            var wrap = this.getparent('cubewrap') || this.getparent('colorpicker');
+            var swatch = document.getElementsByClassName('bgswatch popped')[0];
+
+            //var hx = Number(h.dataset.x) || 0;
+            //var hy = Number(h.dataset.y) || 0;
+
+            var hx = -(totalOffsetX - sx + 9);
+            var hy = sy - totalOffsetY - 9 + scroll;
+
+            h.style.transform = 'translate(' + hx + 'px,' + hy + 'px)';
+            if ( swatch ){
+              swatch.dataset.x = hx;
+              swatch.dataset.y = hy;
+            }
+
+            var ss = Math.round(((hx + 8) / w ) * 100);
+            g.dataset.s = ss;
+
+            var b = Math.round(((g.offsetHeight - Math.min(Math.max(hy+6,0), g.offsetHeight) )/ g.offsetHeight) * 100);
+
+            var l = (2 - ss / 100) * b / 2; // Ligh. range 0-100
+            var s2 = Math.round( b * ss / ( l < 50 ? l * 2 : 200 - l * 2 ));
+            l = Math.round( l );
+
+            g.dataset.s = s2;
+            g.dataset.l = l;
+
+            c.style.backgroundColor =  'hsla(' + g.dataset.hue + ', ' + s2 + '%, ' + l + '%, ' + g.dataset.alpha + ')';
+
+            var hsl = 'hsla(' + g.dataset.hue + ', ' + g.dataset.s + '%, ' + g.dataset.l + '%, 1)';
+
+            a.style.backgroundImage = 'linear-gradient(to left, ' + hsl + ', transparent), url(./imgs/alpha.png)';
+
+            setcubevalues.call(wrap, [g.dataset.hue, g.dataset.s, g.dataset.l, g.dataset.alpha]);
+
+            if ( swatch ){
+              swatch.style.background = 'hsl(' + g.dataset.hue + ', ' + s2 + '%, ' + l + '%)';
+            }
+
+            //setcolorvalues.call(c);
+
+            if ( ss  < 15 && b > 85 ){
+                h.style.borderColor = '#707070';
+            } else  {
+                h.style.borderColor = 'white';
+            }
+
+            h.style.backgroundColor = hsl;
+
+            function move(e){
+                e = e.touches ? e.touches[0] : e;
+                var x = e.pageX;
+                var y = e.pageY;
+
+                //var dx = sx - x;
+                //var dy = sy - y;
+
+                var dx = -(totalOffsetX - x + 9);
+                var dy = y - totalOffsetY - 9 + scroll;
+
+                console.log(dx);
+                console.log(dy);
+
+                dx = Math.min(Math.max( dx, -8), g.offsetWidth - 8);
+                dy = Math.min(Math.max( dy, -8), g.offsetHeight - 8);
+
+                h.style.transform = 'translate(' + dx + 'px,' + dy + 'px)';
+
+                if ( swatch ){
+                  swatch.dataset.x = dx;
+                  swatch.dataset.y = dy;
+                }
+
+                //h.dataset.x = dx;
+                //h.dataset.y = dy;
+
+
+                var s = Math.round(((dx + 8) / w ) * 100);
+                console.log(s + ' SS');
+                //g.dataset.s = s;
+
+                var b2 = Math.round(((g.offsetHeight - Math.min(Math.max(dy+8,0), g.offsetHeight) )/ g.offsetHeight) * 100);
+
+
+                var l2 = (2 - s / 100) * b2 / 2; // Ligh. range 0-100
+                var s3 = Math.round( s * s / ( l2 < 50 ? l2 * 2 : 200 - l2 * 2 ));
+
+                var s3 =  Math.round((b2 * s) / (l2 < 50 ? l2 * 2 : 200 - l2 * 2));
+                l2 = Math.round( l2 );
+
+                if (isNaN(s3)) {
+                    s3 = 0;
+                }
+
+                g.dataset.s = s3;
+                g.dataset.l = l2;
+
+                c.style.backgroundColor =  'hsla(' + g.dataset.hue + ', ' + s3 + '%, ' + l2 + '%, ' + g.dataset.alpha + ')';
+
+                var hsl = 'hsla(' + g.dataset.hue + ', ' + g.dataset.s + '%, ' + g.dataset.l + '%, 1)';
+
+                a.style.backgroundImage = 'linear-gradient(to left, ' + hsl + ', transparent), url(./imgs/alpha.png)';
+
+                //setcolorvalues.call(c);
+                setcubevalues.call(wrap, [g.dataset.hue, g.dataset.s, g.dataset.l, g.dataset.alpha]);
+
+                if ( s < 15 && b2 > 85 ){
+                    h.style.borderColor = '#707070';
+                } else  {
+                    h.style.borderColor = 'white';
+                }
+
+                h.style.backgroundColor = hsl;
+            }
+
+            function end(e){
+                window.removeEventListener('touchmove', move);
+                window.removeEventListener('touchend', end);
+
+                window.removeEventListener('mousemove', move);
+                window.removeEventListener('mouseup', end);
+            }
+
+            window.addEventListener('touchmove', move);
+            window.addEventListener('touchend', end);
+
+            window.addEventListener('mousemove', move);
+            window.addEventListener('mouseup', end);
+        }
+
+        function hexinput(e){
+          var v = this.value;
+          if ( v.length < 6 ){
+            return;
+          }
+          var rgb = hex2rgb(v);
+          if ( !rgb ){
+            return;
+          }
+          var p = this.getparent('colorwrap2') || this.getparent('colorpicker');
+          var rs = p.getElementsByClassName('redslide')[0];
+          var gs = p.getElementsByClassName('greenslide')[0];
+          var bs = p.getElementsByClassName('blueslide')[0];
+
+          if ( !rs ){
+            rs = p.getElementsByClassName('redinput')[0];
+            gs = p.getElementsByClassName('greeninput')[0];
+            bs = p.getElementsByClassName('blueinput')[0];
+
+            var hc = p.getElementsByClassName('huecubeslide')[0];
+            var ch = p.getElementsByClassName('handle colorhalo')[0];
+
+            if ( !rs ){
+              return;
+            }
+
+            rs.value = rgb.r;
+            gs.value = rgb.g;
+            bs.value = rgb.b;
+
+            var hsl = rgb2hsl(rgb.r,rgb.g,rgb.b);
+            hc.value = hsl[0] * 360;
+
+            var x = hsl[1] * 208 - 8;
+            var y = (208 - (hsl[2] * 208)) - 8;
+            ch.style.transform = 'translate(' + x + 'px,' + y + 'px)';
+
+            ch.style.backgroundColor = '#' + v;
+
+            return;
+          }
+
+          rs.value = rgb.r;
+          gs.value = rgb.g;
+          bs.value = rgb.b;
+
+          rgbslide.call(rs, e);
+        }
+
+        function alphainput(e){
+          var v = this.value;
+          var p = this.getparent('colorwrap2');
+          var a = p.getElementsByClassName('alphaslide')[0];
+          a.value = v;
+
+          rgbslide.call(a, e);
+        }
+
+        function setcubevalues(hsla){
+          var ri = this.getElementsByClassName('redinput')[0];
+          var gi = this.getElementsByClassName('greeninput')[0];
+          var bi = this.getElementsByClassName('blueinput')[0];
+          var hi = this.getElementsByClassName('hexinput')[0];
+
+          var sw = document.getElementsByClassName('bgswatch popped')[0];
+
+          var rgb = hsl2rgb(hsla);
+          var hex = rgb2hex(rgb);
+
+
+          ri.value = rgb[0];
+          gi.value = rgb[1];
+          bi.value = rgb[2];
+
+          hi.value = hex;
+
+          var h = hsla[0];
+          var s = hsla[1];
+          var l = hsla[2];
+          var a = hsla[3] || 100;
+
+          if ( a <= 1){
+            a *= 100;
+          }
+
+          if ( sw ){
+            sw.style.backgroundColor = 'rgba(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + ',' + (a/100) +')';
+            console.log(a);
+            hi.value = hex.replace('#', '');
+          }
+
+          var f = document.getElementsByClassName('layeritem current')[0];
+
+          var cx = document.getElementsByClassName('menuwrap subsublevel');
+          cx = cx[cx.length-1];
+
+          var me = cx.getElementsByClassName('contextmenu')[0].className;
+
+          me = me.replace('contextmenu', '').trim();
+
+
+          if ( f  ){
+            if ( me == 'bordermenu' ){
+                var sw = document.getElementsByClassName('contextpanel visible')[0];
+                sw = sw.getElementsByClassName('border')[0];
+
+              f.style.borderColor = sw.style.borderColor = 'hsla(' + h + ', ' + s + '%, ' + l + '%, ' + (a/100) + ')';
+              sw.style.background = 'transparent';
+            } else if ( me == 'bgmenu'){
+                var sw = document.getElementsByClassName('contextpanel visible')[0];
+                sw = sw.getElementsByClassName('fill')[0];
+
+                f.style.backgroundColor = sw.style.backgroundColor = 'hsla(' + h + ', ' + s + '%, ' + l + '%, ' + (a/100) + ')';
+            } else if ( me == 'textcolormenu'){
+                var sw = document.getElementsByClassName('contextpanel visible')[0];
+                sw = sw.getElementsByClassName('textfill')[0];
+                f = f.getElementsByClassName('textarea')[0];
+                f.style.color = sw.style.backgroundColor = 'hsla(' + h + ', ' + s + '%, ' + l + '%, ' + (a/100) + ')';
+
+
+            }
+          }
+        }
+
+        function huecubeslide(e){
+          console.log(this.value);
+          var v = this.value;
+          var p = this.getparent('cubewrap') || this.getparent('colorpicker');
+          var c = p.getElementsByClassName('colorgrid')[0];
+          var h = c.getElementsByClassName('handle')[0];
+          var a = p.getElementsByClassName('alpha')[0];
+          var a2 = p.getElementsByClassName('alpha2')[0];
+          var n = p.getElementsByClassName('thecolor')[0];
+          // var f = document.getElementsByClassName('rectangle focused')[0];
+          var av = a2.value;
+
+          var s = c.dataset.s || 100;
+          var l = c.dataset.l || 50;
+          c.dataset.hue = v;
+          c.style.backgroundColor =  'hsla(' + v + ', 100%, 50%, 1)';
+
+          h.style.backgroundColor = 'hsla(' + v + ', ' + s + '%, ' + l + '%, 1)';
+
+          n.style.backgroundColor = 'hsla(' + v + ', ' + s + '%, ' + l + '%, ' + (av/100) + ')';
+
+          // if ( f ){
+          //   f.style.backgroundColor = 'hsla(' + v + ', ' + s + '%, ' + l + '%, ' + (av/100) + ')';
+          // }
+
+          a.style.backgroundImage = 'linear-gradient(to left, hsla(' + v + ', ' + s + '%, ' + l + '%, 1), transparent), url(./imgs/alpha.png)';
+
+          var id = 'ugh' + Date.now();
+          this.id = id;
+          var omg = 'html #' + id + '::-webkit-slider-thumb {background:hsla(' + v + ', 100%, 50%, 1) !important;}';
+
+          var sty = document.getElementsByClassName('sliderstyle3');
+
+          while(sty[0]){
+            sty[0].parentNode.removeChild(sty[0]);
+          }
+
+          sty = document.createElement('style');
+          sty.innerHTML = omg;
+          sty.className = 'sliderstyle3';
+          document.body.appendChild(sty);
+
+          setcubevalues.call(p, [v, s, l, av]);
+        }
+
+        function rgb2hex(rgb) {
+            var r = rgb[0];
+            var g = rgb[1];
+            var b = rgb[2];
+            return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+        }
+
+        function alphacubeslide(e){
+          var v = this.value;
+          var p = this.getparent('cubewrap') || this.getparent('colorpicker');
+          var c = p.getElementsByClassName('colorgrid')[0];
+          var n = p.getElementsByClassName('thecolor')[0];
+          var ai = p.getElementsByClassName('alphainput')[0];
+
+          var h = c.dataset.h || c.dataset.hue || 260;
+          var s = c.dataset.s || 100;
+          var l = c.dataset.l || 50;
+
+          c.dataset.alpha = (v/100);
+
+          n.style.backgroundColor = 'hsla(' + h + ', ' + s + '%, ' + l + '%, ' + (v/100) + ')';
+
+          ai.value = v;
+
+          var f = document.getElementsByClassName('rectangle focused')[0];
+
+
+
+          var sw = document.getElementsByClassName('bgswatch popped')[0];
+          var bord = sw ? sw.classList.contains('borderswatch') : false;
+
+          if ( f ){
+            if ( !bord ){
+              f.style.backgroundColor = 'hsla(' + h + ', ' + s + '%, ' + l + '%, ' + (v/100) + ')';
+            } else {
+              f.style.borderColor = 'hsla(' + h + ', ' + s + '%, ' + l + '%, ' + (v/100) + ')';
+            }
+          }
+
+          if ( sw ){
+            sw.style.backgroundColor = 'hsla(' + h + ', ' + s + '%, ' + l + '%, ' + (v/100) + ')';
+          }
+        }
+
         Attach.on('touchstart', '.handle', handlehandler);
         Attach.on('mousedown', '.handle', handlehandler);
 
@@ -3529,6 +4017,12 @@
 
         Attach.on('click', '.color', colorswatch);
 
+        Attach.on('click', '.selectcolor', selectcolor);
+
+        Attach.on('mousedown', '.colorgrid', cubehandler);
+        Attach.on('touchstart', '.colorgrid', cubehandler);
+
+        Attach.on('input', '.huecubeslide', huecubeslide);
 
 
 
