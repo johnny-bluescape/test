@@ -21,6 +21,8 @@ function rectanglemove(e){
 
     this.classList.add('current');
 
+    setboundingbox.call(this, e);
+
     // if ( this.classList.contains('paperdiv') ){
     //   this.classList.add('selecteditem');
     // }
@@ -38,6 +40,8 @@ function rectanglemove(e){
 
     var moved = false;
 
+    var box = this.bounds;
+
     function move(e){
       hidecontext();
       var evt = e.touches ? e.touches[0] : e;
@@ -52,6 +56,11 @@ function rectanglemove(e){
 
       rec.style.top = y + 'px';
       rec.style.left = x + 'px';
+
+      if ( box ){
+        box.style.top = y + 'px';
+        box.style.left = x + 'px';
+      }
 
       if ( !moved && Math.abs(nx) > 4 || Math.abs(ny) > 4 ){
         moved = true;
@@ -107,6 +116,13 @@ function rectanglemove(e){
 
         r.style.transform = 'translate(0,0)';
 
+        if ( r.bounds ){
+          r.bounds.style.left = ol + 'px';
+          r.bounds.style.top = ot +  'px';
+
+          r.bounds.style.transform = 'translate(0,0)';
+        }
+
       }
 
       if ( !moved ){
@@ -121,6 +137,11 @@ function rectanglemove(e){
     window.addEventListener('mousemove', move);
   }
 
+  function bhandle(e){
+
+    rectangleresize.call(this,e);
+  }
+
   function rectangleresize(e){
     e.preventDefault();
     e.stopPropagation();
@@ -129,7 +150,9 @@ function rectanglemove(e){
 
     var evt = e.touches ? e.touches[0] : e;
 
-    var rect = this.getparent('rectangle');
+    var box = this.getparent('boundingbox');
+
+    var rect = box ? box.object : this.getparent('rectangle');
 
     var w = rect.offsetWidth;
     var h = rect.offsetHeight;
@@ -153,7 +176,7 @@ function rectanglemove(e){
 
     var handle = 1;
 
-    var hs = rect.getElementsByClassName('resizehandle');
+    var hs = box ? box.getElementsByClassName('bhandle') : rect.getElementsByClassName('resizehandle');
 
     for(var i=0;i<hs.length;i++){
         var a = hs[i];
@@ -244,6 +267,12 @@ function rectanglemove(e){
         rect.style.height = nh + 'px';
         rect.style.transform = 'translate(' + tx + 'px, ' + ty + 'px)';
 
+        if ( box ){
+          box.style.width = nw + 'px';
+          box.style.height = nh + 'px';
+          box.style.transform = 'translate(' + tx + 'px, ' + ty + 'px)';
+        }
+
         cx = tx;
         cy = ty;
 
@@ -261,6 +290,13 @@ function rectanglemove(e){
 
       rect.style.top = rect.offsetTop + cy + 'px';
       rect.style.left = rect.offsetLeft + cx + 'px';
+
+      if ( box ){
+        box.style.transform = 'translate(0,0)';
+
+        box.style.top = box.offsetTop + cy + 'px';
+        box.style.left = box.offsetLeft + cx + 'px';
+      }
 
       console.log(rect.offsetLeft, rect.offsetTop);
       console.log('ughsuehfku')
@@ -322,12 +358,12 @@ function rectanglemove(e){
       rect.style.borderRadius = '50%';
     }
 
-    for(var i=0;i<4;i++){
-      var d = document.createElement('div');
-      d.className = 'resizehandle';
+    // for(var i=0;i<4;i++){
+    //   var d = document.createElement('div');
+    //   d.className = 'resizehandle';
 
-      rect.appendChild(d);
-    }
+    //   rect.appendChild(d);
+    // }
 
     var f = document.getElementsByClassName('rectangle current');
     while(f[0]){
@@ -453,24 +489,24 @@ function rectanglemove(e){
       label.appendChild(document.createTextNode('Canvas Label'));
     }
 
-    for(var i=0;i<4;i++){
-      var d = document.createElement('div');
-      d.className = 'resizehandle';
+    // for(var i=0;i<4;i++){
+    //   var d = document.createElement('div');
+    //   d.className = 'resizehandle';
 
-      if (border){
-        if (i === 0) {
-          d.style.margin = '-' + border + 'px 0 0 -' + border + 'px';
-        } else if ( i === 1 ){
-          d.style.margin = '-' + border + 'px -' + border + 'px 0 0';
-        } else if ( i == 2 ){
-          d.style.margin = '0 0 -' + border + 'px  -' + border + 'px';
-        } else {
-          d.style.margin = '0 -' + border + 'px  -' + border + 'px 0';
-        }
-      }
+    //   if (border){
+    //     if (i === 0) {
+    //       d.style.margin = '-' + border + 'px 0 0 -' + border + 'px';
+    //     } else if ( i === 1 ){
+    //       d.style.margin = '-' + border + 'px -' + border + 'px 0 0';
+    //     } else if ( i == 2 ){
+    //       d.style.margin = '0 0 -' + border + 'px  -' + border + 'px';
+    //     } else {
+    //       d.style.margin = '0 -' + border + 'px  -' + border + 'px 0';
+    //     }
+    //   }
 
-      rect.appendChild(d);
-    }
+    //   rect.appendChild(d);
+    // }
 
     if ( label ){
       rect.appendChild(label);
@@ -493,6 +529,8 @@ function rectanglemove(e){
     rect.dataset.context = cid;
     
     rect.id = cid + 'rect';
+
+    //rect.className += ' current';
 
     document.body.appendChild(ops);
 
@@ -560,11 +598,16 @@ function rectanglemove(e){
       rect.classList.remove('drawing');
       //rect.classList.add('current');
 
+      setboundingbox.call(rect, e);
+
       if ( !moved ){
         rect.remove();
 
         if ( target.className == 'rectangle' ){
           target.classList.add('current');
+
+
+
 
           //target.click();
 
@@ -623,6 +666,122 @@ function rectanglemove(e){
     window.addEventListener('touchmove', move);
     window.addEventListener('touchend', end);
 
+  }
+
+
+  function setboundingbox(e){
+    if ( !!this.bounds ){
+      return;
+    }
+
+    var off = this.offset();
+
+    var x = off.x;
+    var y = off.y;
+    var w = off.w;
+    var h = off.h;
+
+    var b = document.createElement('div');
+
+    b.className = 'boundingbox';
+
+    b.object = this;
+
+    this.bounds = b;
+
+    b.style.left = x + 'px';
+    b.style.top = y + 'px';
+    b.style.position = 'absolute';
+    b.style.width = w + 'px';
+    b.style.height = h + 'px';
+    b.style.zIndex = 999999999999999;
+
+
+    for(var i=0;i<4;i++){
+      var a = document.createElement('div');
+      a.className = 'bhandle';
+
+      b.appendChild(a);
+    }
+
+
+    document.body.appendChild(b);
+  }
+
+  function setmultibounds(e){
+      var s = this;
+  
+      // var t = this[0];
+      // if ( t.bounds ){
+      //   return;
+      // }
+  
+      var tx = null;
+      var ty = null;
+      var tw = null;
+      var th = null;
+  
+      var b = document.createElement('div');
+      b.className = 'boundingbox';
+  
+      b.object = [];
+  
+      console.log(s);
+  
+      for(var i=0;i<s.length;i++){
+        var r = s[i];
+        console.log(r);
+        var off = r.offset();
+  
+        var x = off.x;
+        var y = off.y;
+        var w = off.w;
+        var h = off.h;
+  
+        var x2 = x + w;
+        var y2 = y + h;
+  
+        if ( !tx || x < tx){
+          tx = x;
+        }
+  
+        if ( !ty || y < ty){
+          ty = y;
+        }
+  
+        if ( !tw || x2 > tw ){
+          tw = x2;
+        }
+  
+        if ( !th || y2 > th){
+          th = y2;
+        }
+  
+        r.bounds = b;
+  
+        b.object.push(r);
+      }    
+  
+      console.log(tx,ty,tw,th,'MEOW')
+  
+      b.style.left = tx + 'px';
+      b.style.top = ty + 'px';
+      b.style.position = 'absolute';
+      b.style.width = tw - tx + 'px';
+      b.style.height = th - ty + 'px';
+      b.style.zIndex = 999999999999999;
+  
+  
+      for(var i=0;i<4;i++){
+        var a = document.createElement('div');
+        a.className = 'bhandle';
+  
+        b.appendChild(a);
+      }
+  
+  
+      document.body.appendChild(b);
+    
   }
 
   function marquee(e){
@@ -717,8 +876,18 @@ function rectanglemove(e){
             if ( (y2 < oy1 ) || (y1 > oy2) || (x2 < ox1) || (x1 > ox2) ){
               elm.classList.remove('current')
             } else {
-              elm.classList.add('current')
+              elm.classList.add('current');
             }
+        }
+
+        var boxes = document.getElementsByClassName('layeritem current');
+
+        if ( !boxes[0] ){
+          return;
+        } else if ( boxes.length === 1){
+          setboundingbox.call(boxes[0], e);
+        } else {
+          setmultibounds.call(boxes, e);
         }
     }
     function end(e){

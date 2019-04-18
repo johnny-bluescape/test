@@ -318,7 +318,7 @@
             .rectangle:active {cursor:grabbing;}
 
           .rectangle:hover, .rectangle.drawing {box-shadow: 0 0 0 2px var(--select);}
-            .rectangle.current {box-shadow: 0 0 0 2px var(--select);z-index:7;}
+            .rectangle.current {/*box-shadow: 0 0 0 2px var(--select);*/z-index:7;box-shadow:none;}
 
             .resizehandle {border-radius:50%;position:absolute;background:var(--handlecolor);box-shadow:0 0 0 1px var(--handlecolor);width:var(--handlesize);height:var(--handlesize);display:none;transition:box-shadow 125ms ease-in-out;}
               .resizehandle:hover, .resizehandle.active {box-shadow:0 0 0 1px var(--handlecolor), inset 0 0 0 12px #fff;}
@@ -330,6 +330,23 @@
             .rectangle .resizehandle:nth-child(2) {top:var(--handlegap);right:var(--handlegap);cursor:nesw-resize;}
             .rectangle .resizehandle:nth-child(3) {bottom:var(--handlegap);left:var(--handlegap);cursor:nesw-resize;}
             .rectangle .resizehandle:nth-child(4) {bottom:var(--handlegap);right:var(--handlegap);cursor:nwse-resize;}
+
+
+            
+            .boundingbox {box-shadow: 0 0 0 2px var(--select);pointer-events:none;}
+
+
+                .bhandle {border-radius:50%;position:absolute;background:var(--handlecolor);box-shadow:0 0 0 1px var(--handlecolor);width:var(--handlesize);height:var(--handlesize);transition:box-shadow 125ms ease-in-out;pointer-events:all;}
+                    .bhandle:hover, .bhandle.active {box-shadow:0 0 0 1px var(--handlecolor), inset 0 0 0 12px #fff;}
+
+                    .bhandle::after {content:'';position:absolute;width:48px;height:48px;top:50%;left:50%;transform:translate(-50%, -50%);}
+
+                .boundingbox .bhandle:nth-child(1) {top:var(--handlegap);left:var(--handlegap);cursor:nwse-resize;}
+                .boundingbox .bhandle:nth-child(2) {top:var(--handlegap);right:var(--handlegap);cursor:nesw-resize;}
+                .boundingbox .bhandle:nth-child(3) {bottom:var(--handlegap);left:var(--handlegap);cursor:nesw-resize;}
+                .boundingbox .bhandle:nth-child(4) {bottom:var(--handlegap);right:var(--handlegap);cursor:nwse-resize;}
+            
+
 
             .ellipse .resizehandle:nth-child(1) {top:-5px;left:50%;margin-left:-4px;cursor:ns-resize;}
             .ellipse .resizehandle:nth-child(2) {top:50%;margin-top:-4px;right:-5px;cursor:ew-resize;}
@@ -361,10 +378,10 @@
             .recticon {width:24px;height:24px;border:3px solid rgba(255,255,255,.5);box-sizing:border-box;}
 
 
-            .menuwrap {position:fixed;opacity:0;transition: all 150ms ease-in-out;user-select:none;z-index:999999999999991;transform: translateX(6px);touch-action: manipulation;}
+            .menuwrap {position:fixed;opacity:0;transition: transform 150ms ease-in-out, opacity 150ms ease-in-out;user-select:none;z-index:999999999999991;transform: translateX(100%);touch-action: manipulation;}
                 .menuwrap.visible {transform:translateX(0);opacity:1;}
 
-                .menuwrap.subsublevel {margin-left:-8px;opacity:0;pointer-events:none;}
+                .menuwrap.subsublevel {margin-left:-360px;opacity:0;pointer-events:none;}
 
             .overflowmenu {overflow:hidden;background: var(--toolselect);border-radius:var(--toolbarradius);padding:4px 0;box-shadow: 0 2px 20px var(--shadow2);}
                 
@@ -2545,6 +2562,8 @@
             console.log('TYPETOOL');
             blurall();
 
+            //blurelm.call(this, e);
+
             var p = e.target.getparent('textarea');
             var b = e.target.getparent('toolbar');
             var pp = e.target.getparent('panel');
@@ -2623,7 +2642,7 @@
 
             var nx = x + (w/2) - ( k.offsetWidth/2);
 
-            var ny = y + h + 24;
+            var ny = y + h + 80;
 
             if ( nx < 16 ){
                 nx = 16;
@@ -2682,10 +2701,11 @@
             var c = document.getElementsByClassName('layeritem current');
             c.removeclass('current');
 
-            c = document.getElementsByClassName('contextpanel visible');
-            c.removeclass('visible');
-
             hidekeyboard();
+
+            hidecontext();
+
+            removebounding();
         }
 
         function blurelm(e){
@@ -2715,6 +2735,17 @@
             bc.style.opacity = 0;
             bc.style.pointerEvents = 'none';
             bc.style.transform = 'translateY(6px)';
+
+            removebounding();
+        }
+
+        function removebounding(e){
+            var bb = document.getElementsByClassName('boundingbox');
+
+            while(bb[0]){
+                bb[0].object.bounds = null;
+                bb[0].parentNode.removeChild(bb[0]);
+            }
         }
 
         function hidecontext(){
@@ -2864,6 +2895,8 @@
             var w = off.w;
             var h = off.h;
 
+            var y2 = y + h;
+
             var cid = this.dataset.context;
 
             var c = document.getElementById(cid);
@@ -2880,18 +2913,16 @@
 
             c.style.left = Math.round(x) + 'px';
 
-            if ( y < 72 ){
 
-                console.log(y+h)
-                if ( y+h > window.innerHeight - 72 ){
-                    y += 16;
-
-                    y = Math.max(y, 16);
-                } else {
-                    y = y + h + 16;
-                }
+            if ( window.innerHeight - y2 >= 80 ){
+                y = y2 + 16;
             } else {
-                y -= 64;
+
+                if ( y > 80 ){
+                    y = y - 64;
+                } else {
+                    y = Math.max(y, 0) + 16;
+                }
             }
 
             c.style.top = Math.round(y) + 'px';
@@ -3090,9 +3121,20 @@
             p.style.top = y + 'px';
             p.style.left = x + (w/2) - (p.offsetWidth / 2) + 'px';
             p.style.left = x + 48 + 12 + 'px';
-            p.style.left = x + w + 12 + 'px';
+            p.style.left = x + 48 + 12+ 'px';//x + w + 12 + 'px';
 
-            p.style.transform = 'translateX(0px)';
+            //p.style.transform = 'translateX(0px)';
+
+            var ph = p.offsetHeight;
+
+            var edge = window.innerHeight - y - ph;
+
+            if ( edge < 16 ){
+                // if ( edge > -16 ){
+                //     edge = window.innerHeight - 16;
+                // }
+                p.style.top = y + edge - 16 + 'px';
+            }
 
             p.offsetLeft;
 
@@ -3102,7 +3144,7 @@
             
             p.offsetLeft;
 
-            p.style.transform = 'translateX(' + ox + 'px)';
+            p.style.transform = 'translateX(0px)';//'translateX(' + ox + 'px)';
 
             if ( shell == 'fsmenu'){
                 var sc = step.dataset.scroll;
@@ -3162,6 +3204,15 @@
             p.style.left = x + w + 12 + 'px';
 
             p.style.transform = 'translateX(0px)';
+
+            var ph = p.offsetHeight;
+
+            var edge = window.innerHeight - y - ph;
+
+            if ( edge < 16 ){
+                p.style.top = y + edge - 16 + 'px';
+            }
+
 
             p.offsetLeft;
 
@@ -3537,12 +3588,12 @@
             var v = Number(this.dataset.value);
 
             var c = document.getElementsByClassName('layeritem current')[0];
-            var handles = c.getElementsByClassName('resizehandle');
+            // var handles = c.getElementsByClassName('resizehandle');
 
-            handles[0].style.margin = -v + 'px 0 0 -' + v + 'px' ;
-            handles[1].style.margin = -v + 'px -' + v + 'px 0 0';
-            handles[2].style.margin = '0 0 -' + v + 'px  -' + v + 'px';
-            handles[3].style.margin = '0 -' + v + 'px -' + v + 'px 0';
+            // handles[0].style.margin = -v + 'px 0 0 -' + v + 'px' ;
+            // handles[1].style.margin = -v + 'px -' + v + 'px 0 0';
+            // handles[2].style.margin = '0 0 -' + v + 'px  -' + v + 'px';
+            // handles[3].style.margin = '0 -' + v + 'px -' + v + 'px 0';
 
             c.style.borderWidth = v + 'px';
 
@@ -3567,10 +3618,25 @@
 
             p.appendChild(c);
 
+            var y = off.y ;
+
             p.style.left = off.x + 'px';
-            p.style.top = off.y  + 'px';
+            p.style.top = y + 'px';
+            
 
             document.body.appendChild(p);
+
+
+            var ph = p.offsetHeight;
+
+            var edge = window.innerHeight - y - ph;
+
+            if ( edge < 16 ){
+                // if ( edge > -16 ){
+                //     edge = window.innerHeight - 16;
+                // }
+                p.style.top = y + edge - 16 + 'px';
+            }
 
             p.offsetLeft;
             p.classList.add('visible');
@@ -3995,7 +4061,9 @@
         Attach.on('mousedown', '.draggable', draggable);
         Attach.on('touchstart', '.draggable', draggable);
 
-       
+        Attach.on('mousedown', '.bhandle', bhandle);
+        Attach.on('touchstart', '.bhandle', bhandle);
+
         Attach.on('mousedown', '.resizehandle', rectangleresize);
         Attach.on('touchstart', '.resizehandle', rectangleresize);
         
