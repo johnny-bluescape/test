@@ -389,7 +389,7 @@
             .menuwrap {position:fixed;opacity:0;transition: transform 150ms ease-in-out, opacity 150ms ease-in-out;user-select:none;z-index:999999999999991;transform: translateX(100%);touch-action: manipulation;}
                 .menuwrap.visible {transform:translateX(0);opacity:1;}
 
-                .menuwrap.subsublevel {margin-left:-360px;opacity:0;pointer-events:none;}
+                .menuwrap.subsublevel {transform:translateX(-100%) !important;opacity:0;pointer-events:none;}
 
             .overflowmenu {overflow:hidden;background: var(--toolselect);border-radius:var(--toolbarradius);padding:4px 0;box-shadow: 0 2px 20px var(--shadow2);}
                 
@@ -2630,6 +2630,8 @@
 
             document.body.appendChild(ops);
 
+            ops.dataset.w = ops.offsetWidth;
+
 
             t.addEventListener('input', autoexpand);
 
@@ -2928,7 +2930,7 @@
             var cid = this.dataset.context;
 
             var c = document.getElementById(cid);
-            var cw = c.offsetWidth;
+            var cw = Number(c.dataset.w) || c.offsetWidth;
             var ch = c.offsetHeight;
 
             x = x + (w/2) - ( cw/2 );
@@ -2958,6 +2960,12 @@
             c.classList.remove('visible');
         }
 
+        function animationdone(e){
+            this.removeEventListener('transitionend', animationdone);
+
+            this.parentNode.removeChild(this);
+        }
+
         function closemenu(e){
             e = e || {};
             var t = e.target || document.body;
@@ -2975,7 +2983,14 @@
 
             if ( sub[0] ){
                 var am = document.getElementsByClassName('menuwrap visible');
-                am.remove();
+                //am.remove();
+               while(am[0]){
+                    var amm = am[0];
+                    amm.classList.add('remove');
+                    amm.addEventListener('transitionend', animationdone);
+                    amm.classList.remove('visible');
+                }
+
                 sub[sub.length-1].classList.add('visible');
                 sub[sub.length-1].classList.remove('subsublevel');
 
@@ -2990,8 +3005,16 @@
             var o = document.getElementsByClassName('option opened');
             o.removeclass('opened');
 
-            var m = document.getElementsByClassName('menuwrap');
-            m.remove();
+            var m = document.getElementsByClassName('menuwrap visible');
+
+            while(m[0]){
+                var mm = m[0];
+                mm.classList.add('remove');
+                mm.addEventListener('transitionend', animationdone);
+                mm.style.transform = 'translateX(100%)';
+                mm.classList.remove('visible');
+            }
+            //m.remove();
 
             var o = document.getElementsByClassName('contextpanel sublevel');
 
@@ -3007,7 +3030,7 @@
 
             o1.offsetLeft;
 
-            setTimeout(function(){setcontextpanel.call(document.getElementsByClassName('layeritem current')[0])}, 151);
+            setTimeout(function(){setcontextpanel.call(document.getElementsByClassName('layeritem current')[0])}, 0);
 
         }
 

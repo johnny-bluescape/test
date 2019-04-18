@@ -392,6 +392,9 @@ function rectanglemove(e){
     document.getElementById('select_tool').click();
 
 
+    ops.dataset.w = ops.offsetWidth;
+
+
     setcontextpanel.call(rect);
   }
 
@@ -536,6 +539,8 @@ function rectanglemove(e){
     //rect.className += ' current';
 
     document.body.appendChild(ops);
+
+    ops.dataset.w = ops.offsetWidth;
 
     var tx = 0;
     var ty = 0;
