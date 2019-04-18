@@ -90,6 +90,8 @@
 
             --selectgap: 0px;
             --selectwidth: 2px;
+
+            --menutitle: rgba(255, 255, 255, 0.54);
         }
 
         .light {
@@ -115,6 +117,8 @@
             --gridcolor2: rgba(0, 0, 0, 0.05);
 
             --toolselect2: #ddd;
+
+            --menutitle: rgba(0, 0, 0, 0.54);
         }
 
         .darkgrid {
@@ -545,7 +549,7 @@
 
 
         .contextmenu {max-width:336px;padding:12px;background:var(--panel);box-shadow:0 3px 20px var(--shadow2);border-radius:var(--toolbarradius);}
-            .menutitle {font-weight: 600;padding:2px 8px;margin-bottom:4px;}
+            .menutitle {font-weight: 600;padding:2px 8px;margin-bottom:4px;color:var(--menutitle);}
 
         .colors {display: flex;flex-wrap: wrap;margin-top:12px;} 
             .colors .color {width:48px;height:48px;display:flex;align-items:center;justify-content:center;cursor:pointer;}
@@ -1027,8 +1031,8 @@
             
         </div>
 
-        <div id=fsmenu>
-            <div class=menutitle>Font Size</div>
+        <div id=fsmenu style="min-width:80px;">
+            <!-- <div class=menutitle>Font Size</div> -->
             
         </div>
 
@@ -2232,7 +2236,7 @@
                 menuhandler.call(this, e);
                 return;
             }
-            var p = l.getparent('panel');
+            var p = l.getparent('panel') || l.getparent('contextmenu');
 
             if ( !p || p.classList.contains('moving') ){
                 return;
@@ -3547,7 +3551,9 @@
 
             //t.classList.add('current');
 
-            p.scrollTop = (y - 111);
+            var oy = 72 + p.offsetTop;
+
+            p.scrollTop = (y - oy);
         }
 
         function stepper2(e){
@@ -3560,7 +3566,7 @@
 
             d.style.height = '188px';
             d.style.width = 'calc(100% + 24px)';
-            d.style.margin = '0 -12px -12px';
+            d.style.margin = '-12px -12px -12px';
 
             var nums = document.createElement('div');
             nums.className = 'select';
@@ -3578,7 +3584,7 @@
                 if ( num == v ){
                     a.className += ' current';
                     x = a;
-                    ii = i - 1;
+                    ii = i;
                 }                
 
                 nums.appendChild(a);
@@ -3588,7 +3594,7 @@
 
             d.appendChild(nums);
 
-            nums.scrollTop = d.dataset.scroll = (ii * 48) + 39;
+            nums.scrollTop = d.dataset.scroll = (ii * 48) + d.offsetTop;
 
             return d;
         }
@@ -3596,7 +3602,7 @@
         function selectscroll(e){
             console.log(this, this.scrollTop);
 
-            var s = this.scrollTop + (this.offsetHeight /2) + 24;
+            var s = this.scrollTop + (this.offsetHeight / 2);
 
             var c = this.getElementsByClassName('selectitem');
             var o = this.getElementsByClassName('selectitem current');
