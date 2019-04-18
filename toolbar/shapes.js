@@ -288,14 +288,17 @@ function rectanglemove(e){
 
       rect.style.transform = 'translate(0,0)';
 
-      rect.style.top = rect.offsetTop + cy + 'px';
-      rect.style.left = rect.offsetLeft + cx + 'px';
+      var tx2 = rect.offsetLeft + cx;
+      var ty2 = rect.offsetTop + cy;
+
+      rect.style.top =  ty2 + 'px';
+      rect.style.left = tx2 + 'px';
 
       if ( box ){
         box.style.transform = 'translate(0,0)';
 
-        box.style.top = box.offsetTop + cy + 'px';
-        box.style.left = box.offsetLeft + cx + 'px';
+        box.style.top = ty2 + 'px';
+        box.style.left = tx2 + 'px';
       }
 
       console.log(rect.offsetLeft, rect.offsetTop);

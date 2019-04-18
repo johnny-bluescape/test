@@ -87,6 +87,9 @@
             --toolselect2: #0f0f10;
 
             --null: rgb(66,66,66);
+
+            --selectgap: 0px;
+            --selectwidth: 2px;
         }
 
         .light {
@@ -333,7 +336,12 @@
 
 
             
-            .boundingbox {box-shadow: 0 0 0 2px var(--select);pointer-events:none;}
+            .boundingbox {box-shadow: 0 0 0 var(--selectwidth) var(--select);pointer-events:none;
+                padding:var(--selectgap);margin:calc(var(--selectgap) * -1) 0 0  calc(var(--selectgap) * -1);
+            }
+
+            .selectwhite .boundingbox {box-shadow: 0 0 0 var(--selectwidth) var(--select), inset 0 0 0 1px white;}
+            .selectblack .boundingbox {box-shadow: 0 0 0 var(--selectwidth) var(--select), inset 0 0 0 1px black;}
 
 
                 .bhandle {border-radius:50%;position:absolute;background:var(--handlecolor);box-shadow:0 0 0 1px var(--handlecolor);width:var(--handlesize);height:var(--handlesize);transition:box-shadow 125ms ease-in-out;pointer-events:all;}
@@ -1238,6 +1246,22 @@
             <div class=tweak>
                 <div class=label><span>Toolbar Icon Scale</span><div class=value>52</div></div>
                 <input type=range class=tooltweak min=0 max=100 value=52 step=2 data-id=toolicons oninput="tweakedtools.call(this, event)" />
+            </div>
+            <div class=tweak>
+                <div class=label><span>Selection Gap</span><div class=value>0</div></div>
+                <input type=range class=tooltweak min=0 max=24 value=0 step=2 data-id=selectgap oninput="tweakedtools.call(this, event)" />
+            </div>
+            <div class=tweak>
+                <div class=label><span>Selection Thickness</span><div class=value>2</div></div>
+                <input type=range class=tooltweak min=1 max=4 value=2 step=1 data-id=selectwidth oninput="tweakedtools.call(this, event)" />
+            </div>
+            <div class=tweak>
+                <div class=label><span>Selection White Inlay</span><div class=value></div></div>
+                <label style="padding:0;"><input type=checkbox class=tweakr value="selectwhite" id=selectwhite onchange="document.getElementById('selectblack').checked=false;" /><div class=toggle></div> </label>
+            </div>
+            <div class=tweak>
+                <div class=label><span>Selection Black Inlay</span><div class=value></div></div>
+                <label style="padding:0;"><input type=checkbox class=tweakr value="selectblack" id=selectblack onchange="document.getElementById('selectwhite').checked=false;" /><div class=toggle></div> </label>
             </div>
             <div class=tweak>
                 <div class=label><span>Handle Spacing</span><div class=value>-4</div></div>
@@ -2234,6 +2258,10 @@
                 document.documentElement.classList.remove('grid');
             } else if ( v == 'grid' ){
                 document.documentElement.classList.remove('dotgrid');
+            } else if ( v == 'selectblack'){
+                document.documentElement.classList.remove('selectwhite');
+            } else if ( v == 'selectwhite'){
+                document.documentElement.classList.remove('selectblack');
             }
             document.documentElement.classList.toggle(v);
         }
