@@ -697,7 +697,7 @@ function rectanglemove(e){
     b.style.position = 'absolute';
     b.style.width = w + 'px';
     b.style.height = h + 'px';
-    b.style.zIndex = 999999999999999;
+    b.style.zIndex = 2147483640;
 
 
     for(var i=0;i<4;i++){
