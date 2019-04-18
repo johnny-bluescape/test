@@ -656,13 +656,28 @@
 
           .oldcolor {right:0;left:auto;}
 
-        .colorslide {margin-bottom:12px;border-radius:6px;margin-top:12px;height:36px;}
+        .colorslide {margin-bottom:12px;border-radius:calc(var(--toolbarradius) - 8px);margin-top:12px;height:36px;}
             .colorslide input {height:48px;margin-top:-6px;}
 
 
         .cubeeye {width: 48px;height: 48px;position: absolute;right: 48px;top: -2px;display:flex;align-items:center;justify-content:center;cursor:pointer;}
             .cubeeye svg {width:24px;height:24px;}
                 .cubeeye svg * {fill:var(--icon);}
+                .cubeeye:hover svg * {fill:var(--iconcurrent);}
+                .cubeeye:active svg * {fill:var(--iconcurrent);}
+
+        .svgiconcolor {cursor:pointer;}
+            .svgiconcolor svg {width:24px;height:24px;}
+                .svgiconcolor svg * {fill:var(--icon);}
+                .svgiconcolor:hover svg * {fill:var(--iconcurrent);}
+                .svgiconcolor:active svg * {fill:var(--iconcurrent);}
+
+        .dropper {}
+            .dropper svg {width:24px;height:24px;}
+                .dropper svg * {fill:var(--icon);}
+
+                .dropper:hover svg * {fill:var(--iconcurrent);}
+                .dropper:active svg * {fill:var(--iconcurrent);}
     </style>
 </head>
 <body class="rectanglex brush_tool ">
@@ -1152,6 +1167,9 @@
                 <div class="menubtn selectcolor" data-menu=huecube>
                     <div class=rainbowcolor></div>
                 </div>
+                <div class="menubtn selectcolor dropper" data-menu=huecube>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 5.63l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-3.12 3.12-1.93-1.91-1.41 1.41 1.42 1.42L3 16.25V21h4.75l8.92-8.92 1.42 1.42 1.41-1.41-1.92-1.92 3.12-3.12c.4-.4.4-1.03.01-1.42zM6.92 19L5 17.08l8.06-8.06 1.92 1.92L6.92 19z"/></svg>
+                </div>
             </div>
         </div>
 
@@ -1175,7 +1193,7 @@
                         <div class="oldcolor" style="background-color:hsla(260, 100%, 50%, 1);"></div>
                     </div>
                     <div class="colorvalues" style="padding: 0 0 4px 48px;">
-                    <input type="text" placeholder="0" value="#ff0045" class="quiet hexinput" style="font-feature-settings: 'tnum';">
+                    <input type="text" placeholder="0" value="#5501ff" class="quiet hexinput" style="font-feature-settings: 'tnum';">
                     
                     <div style="display:none"><input type="number" placeholder="0" value="260" class="quiet redinput"><input type="number" placeholder="0" value="100" class="quiet greeninput"><input type="number" placeholder="0" value="50" class="quiet blueinput"><input type="number" placeholder="0" value="100" class="quiet alphainput"></div>
                         
@@ -1184,7 +1202,7 @@
                     </div>
                     <div class="addbutton addswatch svgiconcolor " style="position:absolute;top:-2px;right:0;height: 48px;width:48px;display: flex;align-items: center;  justify-content: center;  cursor: pointer;">
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" style="padding:7px;">
-                        <path style="fill:var(--icon)" d="M14.5,8H10V3.5A0.5,0.5,0,0,0,9.5,3h-1a0.5,0.5,0,0,0-.5.5V8H3.5a0.5,0.5,0,0,0-.5.5v1a0.5,0.5,0,0,0,.5.5H8v4.5a0.5,0.5,0,0,0,.5.5h1a0.5,0.5,0,0,0,.5-0.5V10h4.5A0.5,0.5,0,0,0,15,9.5v-1A0.5,0.5,0,0,0,14.5,8Z"></path>
+                        <path d="M14.5,8H10V3.5A0.5,0.5,0,0,0,9.5,3h-1a0.5,0.5,0,0,0-.5.5V8H3.5a0.5,0.5,0,0,0-.5.5v1a0.5,0.5,0,0,0,.5.5H8v4.5a0.5,0.5,0,0,0,.5.5h1a0.5,0.5,0,0,0,.5-0.5V10h4.5A0.5,0.5,0,0,0,15,9.5v-1A0.5,0.5,0,0,0,14.5,8Z"></path>
                         </svg>
                     </div>
                     </div>
@@ -4080,6 +4098,34 @@
           }
         }
 
+        function addswatch(e){
+            var b = this.getparent('cubewrap');
+            var hex = b.getElementsByClassName('hexinput')[0].value;
+
+            console.log(hex);
+
+            var c = document.getElementsByClassName('colors');
+
+            for(var i=0;i<c.length;i++){
+
+                var w = document.createElement('div');
+                var p = document.createElement('div');
+
+                w.className = 'color';
+
+                p.className = 'chip';
+                p.style.backgroundColor = hex;
+
+                w.appendChild(p);
+
+                c[i].appendChild(w);
+
+                p.click();
+            }
+
+            //closemenu();
+        }
+
         Attach.on('touchstart', '.handle', handlehandler);
         Attach.on('mousedown', '.handle', handlehandler);
 
@@ -4166,6 +4212,8 @@
         Attach.on('touchstart', '.colorgrid', cubehandler);
 
         Attach.on('input', '.huecubeslide', huecubeslide);
+
+        Attach.on('click', '.addswatch', addswatch);
 
 
 
