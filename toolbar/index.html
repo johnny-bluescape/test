@@ -2798,6 +2798,12 @@
 
             while(bb[0]){
                 bb[0].object.bounds = null;
+
+                console.log(bb[0].object);
+                bb[0].object['bounds'] = null;
+                console.log(bb[0].object['bounds']);
+
+                delete bb[0].object.bounds;
                 bb[0].parentNode.removeChild(bb[0]);
             }
         }
