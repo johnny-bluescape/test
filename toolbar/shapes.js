@@ -623,12 +623,12 @@ function rectanglemove(e){
       rect.classList.remove('drawing');
       //rect.classList.add('current');
 
-      setboundingbox.call(rect, e);
+      
 
       if ( !moved ){
         rect.remove();
 
-        if ( target.className == 'rectangle' ){
+        if ( target.classList.contains('rectangle') ){
           target.classList.add('current');
 
 
@@ -636,8 +636,13 @@ function rectanglemove(e){
 
           //target.click();
 
-          setcontextpanel.call(target);
+
+          //setcontextpanel.call(target);
+          
+          //rectanglemove.call(target, e);
         }
+
+
 
 
         return;
@@ -656,6 +661,8 @@ function rectanglemove(e){
         rect.classList.add('current');
 
         document.getElementById('select_tool').click();
+
+        setboundingbox.call(rect, e);
       }
 
       rect.style.transform = 'translate(0,0)';
