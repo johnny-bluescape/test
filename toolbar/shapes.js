@@ -673,10 +673,18 @@ function rectanglemove(e){
 
       setcontextpanel.call(rect, ops);
 
+      var com = window.getComputedStyle(rect);
+
       var con = document.getElementsByClassName('contextpanel visible')[0];
       var col = con.getElementsByClassName('shape2fill')[0];
 
-      var bg = window.getComputedStyle(rect).backgroundColor;
+      var bg = com.backgroundColor;
+
+      
+      var bc = con.getElementsByClassName('border')[0];
+
+      bc.style.borderColor = com.borderColor;
+
 
       if ( bg == 'rgba(0, 0, 0, 0)' || bg == 'transparent' ){
         // bg = 'linear-gradient(135deg, transparent 48%, #3c3b3d 48%, #3c3b3d 52%, transparent 52%)';
@@ -687,6 +695,10 @@ function rectanglemove(e){
       } else {
         col.style.boxShadow = 'inset 0 0 0 1px hsla(0, 0%, 100%, 0.175)';
         col.style.transform = 'rotate(0deg)';
+      }
+
+      if ( com.borderColor == 'rgba(0, 0, 0, 0)' || com.borderColor == 'transparent' ){
+          bc.style.borderColor = 'rgba(155, 155, 155, 0.15)';
       }
 
       col.style.background = bg;
@@ -729,6 +741,10 @@ function rectanglemove(e){
     b.style.width = w + 'px';
     b.style.height = h + 'px';
     b.style.zIndex = 2147483640;
+
+    if ( this.classList.contains('canvasboard') ){
+      b.style.boxShadow = 'none';
+    }
 
 
     for(var i=0;i<4;i++){
