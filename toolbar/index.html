@@ -403,7 +403,7 @@
                 .mitem:hover {background-color:var(--hover);}
                 .mitem:active {background-color:var(--active);}
 
-                .mgap {height:20px;}
+                .mgap {height:24px;}
 
                 .mlevel {padding-right:48px;background:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z" fill="rgba(255,255,255,0.58)"></path></svg>') no-repeat center right 8px / 20px;}
 
@@ -664,7 +664,7 @@
           .oldcolor {right:0;left:auto;}
 
         .colorslide {margin-bottom:12px;border-radius:calc(var(--toolbarradius) - 8px);margin-top:12px;height:36px;}
-            .colorslide input {height:48px;margin-top:-6px;}
+            .colorslide input {height:48px;margin-top:-6px;width:100%;}
 
 
         .cubeeye {width: 48px;height: 48px;position: absolute;right: 48px;top: -2px;display:flex;align-items:center;justify-content:center;cursor:pointer;}
@@ -3724,6 +3724,7 @@
 
             var halo = c.getElementsByClassName('colorhalo')[0];
 
+
             var rec = document.getElementsByClassName('layeritem current')[0];
 
             var hue = 300;
@@ -3734,21 +3735,34 @@
                 var hsl = color2hsl(bg);
                 hue = hsl[0];
 
-                // var gr = halo.getparent('colorgrid');
-                // var gw = gr.offsetWidth;
-                // var gh = gr.offsetHeight;
+                var hsv = hsl2hsv(hsl);
 
-                // var s = hsl[1];
-                // var l = hsl[2];
+                var gr = halo.getparent('colorgrid');
+                var gw = gr.offsetWidth || 344;
+                var gh = gr.offsetHeight || 344;
 
-                // var xx = (s/100) * gw;
-                // var yy = (l/100) * gh;
 
-                // halo.style.transform = 'translate(' + xx + 'px,' + yy + 'px)';
+                gr.dataset.h = hsl[0];
+                gr.dataset.s = hsl[1];
+                gr.dataset.l = hsl[2];
+
+                console.log(hsv);
+
+                var s = hsv[1] || 0;
+                var v = hsv[2] || 0;
+
+                var xx = (s) * gw;
+                var yy = (1 - (v)) * gh;
+
+                console.log(s, gw, gh, v);
+
+                console.log(xx,yy);
+
+                halo.style.transform = 'translate(' + (xx-10) + 'px,' + (yy-10) + 'px)';
             }
 
             cs.value = hue;
-            //huecubeslide.call(cs, event);
+            huecubeslide.call(cs, event);
 
             p.appendChild(c);
 
@@ -3926,6 +3940,9 @@
                 h.style.backgroundColor = hsl;
 
 
+                console.log(hsl2hsv([Number(g.dataset.hue), s3, l2]));
+
+
                 console.log(hsl);
             }
 
@@ -3945,6 +3962,42 @@
 
             window.addEventListener('mousemove', move);
             window.addEventListener('mouseup', end);
+        }
+
+        // function hsl2hsv(hsl){
+
+        //     var h = Number(hsl[0]);
+        //     var s = Number(hsl[1]);
+        //     var l = Number(hsl[2]);
+
+        //     s = s / 100 || 0;
+        //     l = l / 100 || 0;
+
+        //     console.log(h, s, l, 'HSL');
+
+        //     var ll = l * 2;
+        //     var ss = ll <= 1 ? ll : 2 - ll;
+        //     var v = (ll + ss ) / 2;
+        //     s = (2 * ss) / ( ll + ss);
+
+            
+        //     console.log(h, s, v, 'HSV');
+
+        //     return [h, s * 100, v * 100];
+        // }
+
+        function hsl2hsv(hsl){
+            var h = Number(hsl[0]);
+            var s = Number(hsl[1]);
+            var l = Number(hsl[2]);
+
+            s = s / 100 || 0;
+            l = l / 100 || 0;
+
+            var sat = s;
+            sat *= l < .5 ? l : 1 - l;
+
+            return [ h, (2 * sat / (l + sat)) || 0, (l + sat) || 0 ];
         }
 
         function color2hsl(x){
