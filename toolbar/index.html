@@ -392,7 +392,7 @@
             .recticon {width:24px;height:24px;border:3px solid rgba(255,255,255,.5);box-sizing:border-box;}
 
 
-            .menuwrap {position:fixed;opacity:0;transition: transform 150ms ease-in-out, opacity 150ms ease-in-out;user-select:none;z-index:999999999999991;transform: translateX(100%);touch-action: manipulation;}
+            .menuwrap {position:fixed;opacity:0;transition: transform 150ms ease-in-out, opacity 150ms ease-in-out;user-select:none;z-index:999999999999991;transform: translateX(100%);touch-action: manipulation;min-width:216px;}
                 .menuwrap.visible {transform:translateX(0);opacity:1;}
 
                 .menuwrap.subsublevel {transform:translateX(-100%) !important;opacity:0;pointer-events:none;}
@@ -402,6 +402,10 @@
                 .mitem {cursor:pointer;min-height:48px;padding:8px 16px;display:flex;align-content:center;align-items:center;box-sizing:border-box;font-size:18px;}
                 .mitem:hover {background-color:var(--hover);}
                 .mitem:active {background-color:var(--active);}
+
+                .mgap {height:20px;}
+
+                .mlevel {padding-right:48px;background:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z" fill="rgba(255,255,255,0.58)"></path></svg>') no-repeat center right 8px / 20px;}
 
 
         .flyout {padding:0 16px;font-size:18px;line-height:23px;}
@@ -553,7 +557,7 @@
             }
 
 
-        .contextmenu {max-width:336px;padding:12px;background:var(--panel);box-shadow:0 3px 20px var(--shadow2);border-radius:var(--toolbarradius);}
+        .contextmenu {padding:12px;background:var(--panel);box-shadow:0 3px 20px var(--shadow2);border-radius:var(--toolbarradius);}
             .menutitle {font-weight: 600;padding:2px 8px;margin-bottom:4px;color:var(--menutitle);}
 
         .colors {display: flex;flex-wrap: wrap;margin-top:12px;} 
@@ -646,7 +650,7 @@
          .thecolor::after  {content: '';position:absolute;top:0;left:0;right:0;bottom:0;z-index:-2;background:url(./imgs/alpha.png);}
          .oldcolor  {width:50%;position:absolute;top:0;left:0;bottom:0;background:#20CC89;box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.05);}
 
-        .cube .colorgrid {width:280px;padding-bottom:280px;height:0;}
+        .cube .colorgrid {width:344px;padding-bottom:344px;height:0;}
 
 
         .colorvalues {}
@@ -1039,8 +1043,13 @@
         <div id=moremenu>
             <div class=mitem>Copy</div>
             <div class="mitem delete">Delete</div>
-            <div class=mitem>Comment</div>
-            <div class=mitem>Pin</div>
+            <div class="mitem mlevel">Comment</div>
+            <div class=mitem>Export</div>
+            <div class="mitem mlevel">Align</div>
+            <div class=mgap></div>
+            <div class="mitem mlevel">Properties</div>
+            <div class="mitem mlevel">Share</div>
+            <div class="mitem mlevel">Link To</div>
         </div>
 
         <div id=bgmenu>
@@ -3002,7 +3011,7 @@
         function closemenu(e){
             e = e || {};
             var t = e.target || document.body;
-            if ( t.classList.contains('delete') || t.getparent('contextmenu') || t.getparent('tweaks') || (t.getparent('option') && (e.type == 'mousedown' || e.type == 'touchstart')  ) ){
+            if ( t.classList.contains('delete') || t.getparent('contextmenu') || t.getparent('overflowmenu') || t.getparent('tweaks') || (t.getparent('option') && (e.type == 'mousedown' || e.type == 'touchstart')  ) ){
                 return;
             }
 
@@ -3319,10 +3328,16 @@
             while(d[0]){
                 var a = d[0];
                 var cid = a.dataset.context;
+                var bs = a.bounds;
                 a.remove();
                 var b = document.getElementById(cid);
                 b.remove();
+
+                if ( bs ){
+                    bs.remove();
+                }
             }
+            
             document.body.click();
 
             hidekeyboard();
@@ -4189,6 +4204,10 @@
             //closemenu();
         }
 
+        function menuitem(e){
+            closemenu.call(document.body, {});
+        }
+
         Attach.on('touchstart', '.handle', handlehandler);
         Attach.on('mousedown', '.handle', handlehandler);
 
@@ -4277,7 +4296,7 @@
         Attach.on('input', '.huecubeslide', huecubeslide);
 
         Attach.on('click', '.addswatch', addswatch);
-
+        Attach.on('click', '.mitem', menuitem);
 
 
         //document.addEventListener('mousewheel', mousescroll, { passive:false });
