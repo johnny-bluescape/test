@@ -159,6 +159,15 @@ function rectanglemove(e){
 
     var rect = box ? box.object[0] : this.getparent('rectangle');
 
+//     var multi = false;
+// alert(typeof rect);
+//     if ( typeof rect == 'array' ){
+//       multi = true;
+
+//       //rect = document.getElementsByClassName('boundingbox multi')[0];
+//       rect = rect[0];
+//     }
+
     var w = rect.offsetWidth;
     var h = rect.offsetHeight;
 
@@ -809,7 +818,7 @@ function rectanglemove(e){
 
         var o = document.getElementsByClassName('boundingbox');
         o.remove();
-        
+
         document.body.appendChild(b);
       }
   

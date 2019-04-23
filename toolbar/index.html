@@ -525,6 +525,9 @@
         input[type=range]:focus::-webkit-slider-runnable-track {}
 
 
+        .colorslide input[type=range]::-webkit-slider-thumb {border:3px solid white;height:20px;width:20px;transition:none;box-sizing:border-box;box-shadow:0 3px 6px rgba(0,0,0,.2);}
+
+
         .lock .locked {display:none;}
         .lock.unlock .unlocked {display:none;}
         .lock.unlock .locked {display:block;}
@@ -652,7 +655,7 @@
 
         .cubewrap {position:relative;}
 
-          .cubewrap .handle {position: absolute;top: 0;left: 0;border-radius: 50%;border: 2px solid white;box-shadow: 0 0 0 2px rgba(0,0,0,.05);width: 12px;height: 12px;transition: border-color 125ms ease-in-out;}
+          .cubewrap .handle {position: absolute;top: 0;left: 0;border-radius: 50%;border: 3px solid white;box-shadow: 0 0 0 2px rgba(0,0,0,.05);width:20px;height:20px;transition: border-color 125ms ease-in-out;box-sizing:border-box;}
 
           .oldcolor {right:0;left:auto;}
 
@@ -1181,10 +1184,10 @@
                 <div class="cubeslides">
                     <div class="rotateslides">
                     <div class="colorslide regular clip hue" style="width:100%;background: linear-gradient(to right, red 0%, #ff0 17%, lime 33%, cyan 50%, blue 66%, #f0f 83%, red 100%);">
-                        <input type="range" class="nocolor hue2 hueslide huecubeslide" value="260" max="360">
+                        <input type="range" class="nocolor hue2 hueslide huecubeslide" value="260" max="360" style="margin-left: -8px;margin-right: -8px;width: calc(100% + 16px);padding:0;">
                     </div>
                     <div class="colorslide regular clip alpha alphacubeslide" style="width:100%;background: linear-gradient(to left, hsla(260, 100%, 50%, 1), hsla(260, 100%, 50%, 0)), url(./imgs/alpha.png);">
-                        <input type="range" class="  nocolor alpha2 alphaslide alphacubeslide2" value="100" max="100">
+                        <input type="range" class="nocolor alpha2 alphaslide alphacubeslide2" value="100" max="100">
                     </div>
                     </div>
                 </div>
@@ -2797,13 +2800,13 @@
             var bb = document.getElementsByClassName('boundingbox');
 
             while(bb[0]){
-                bb[0].object.bounds = null;
+                // bb[0].object.bounds = null;
 
-                console.log(bb[0].object);
-                bb[0].object['bounds'] = null;
-                console.log(bb[0].object['bounds']);
+                // console.log(bb[0].object);
+                // bb[0].object['bounds'] = null;
+                // console.log(bb[0].object['bounds']);
 
-                delete bb[0].object.bounds;
+                // delete bb[0].object.bounds;
                 bb[0].parentNode.removeChild(bb[0]);
             }
         }
@@ -3701,6 +3704,37 @@
 
             c.className += ' contextmenu ';
 
+
+            var cs = c.getElementsByClassName('huecubeslide')[0];
+
+            var halo = c.getElementsByClassName('colorhalo')[0];
+
+            var rec = document.getElementsByClassName('layeritem current')[0];
+
+            var hue = 300;
+
+            if ( rec.classList.contains('rectangle') ){
+                var bg = window.getComputedStyle(rec).backgroundColor;
+
+                var hsl = color2hsl(bg);
+                hue = hsl[0];
+
+                // var gr = halo.getparent('colorgrid');
+                // var gw = gr.offsetWidth;
+                // var gh = gr.offsetHeight;
+
+                // var s = hsl[1];
+                // var l = hsl[2];
+
+                // var xx = (s/100) * gw;
+                // var yy = (l/100) * gh;
+
+                // halo.style.transform = 'translate(' + xx + 'px,' + yy + 'px)';
+            }
+
+            cs.value = hue;
+            //huecubeslide.call(cs, event);
+
             p.appendChild(c);
 
             var y = off.y ;
@@ -3757,15 +3791,17 @@
             var h = this.getElementsByClassName('handle')[0];
             var c = g.parentElement.getElementsByClassName('thecolor')[0];
             var a = g.parentElement.getElementsByClassName('alpha')[0];
-            var w = this.offsetWidth + 2;
+            var w = this.offsetWidth ;
             var wrap = this.getparent('cubewrap') || this.getparent('colorpicker');
             var swatch = document.getElementsByClassName('bgswatch popped')[0];
 
             //var hx = Number(h.dataset.x) || 0;
             //var hy = Number(h.dataset.y) || 0;
 
-            var hx = -(totalOffsetX - sx + 9);
-            var hy = sy - totalOffsetY - 9 + scroll;
+            var hsize = h.offsetWidth / 2;
+
+            var hx = -(totalOffsetX - sx + hsize);
+            var hy = sy - totalOffsetY - hsize + scroll;
 
             h.style.transform = 'translate(' + hx + 'px,' + hy + 'px)';
             if ( swatch ){
@@ -3773,7 +3809,7 @@
               swatch.dataset.y = hy;
             }
 
-            var ss = Math.round(((hx + 8) / w ) * 100);
+            var ss = Math.round(((hx + hsize) / w ) * 100);
             g.dataset.s = ss;
 
             var b = Math.round(((g.offsetHeight - Math.min(Math.max(hy+6,0), g.offsetHeight) )/ g.offsetHeight) * 100);
@@ -3807,6 +3843,8 @@
 
             h.style.backgroundColor = hsl;
 
+            
+
             function move(e){
                 e = e.touches ? e.touches[0] : e;
                 var x = e.pageX;
@@ -3815,14 +3853,14 @@
                 //var dx = sx - x;
                 //var dy = sy - y;
 
-                var dx = -(totalOffsetX - x + 9);
-                var dy = y - totalOffsetY - 9 + scroll;
+                var dx = -(totalOffsetX - x + hsize);
+                var dy = y - totalOffsetY - hsize + scroll;
 
                 console.log(dx);
                 console.log(dy);
 
-                dx = Math.min(Math.max( dx, -8), g.offsetWidth - 8);
-                dy = Math.min(Math.max( dy, -8), g.offsetHeight - 8);
+                dx = Math.min(Math.max( dx, -hsize), g.offsetWidth - hsize);
+                dy = Math.min(Math.max( dy, -hsize), g.offsetHeight - hsize);
 
                 h.style.transform = 'translate(' + dx + 'px,' + dy + 'px)';
 
@@ -3835,11 +3873,11 @@
                 //h.dataset.y = dy;
 
 
-                var s = Math.round(((dx + 8) / w ) * 100);
+                var s = Math.round(((dx + hsize) / w ) * 100);
                 console.log(s + ' SS');
                 //g.dataset.s = s;
 
-                var b2 = Math.round(((g.offsetHeight - Math.min(Math.max(dy+8,0), g.offsetHeight) )/ g.offsetHeight) * 100);
+                var b2 = Math.round(((g.offsetHeight - Math.min(Math.max(dy +  hsize, 0), g.offsetHeight) )/ g.offsetHeight) * 100);
 
 
                 var l2 = (2 - s / 100) * b2 / 2; // Ligh. range 0-100
@@ -3871,6 +3909,9 @@
                 }
 
                 h.style.backgroundColor = hsl;
+
+
+                console.log(hsl);
             }
 
             function end(e){
@@ -3889,6 +3930,22 @@
 
             window.addEventListener('mousemove', move);
             window.addEventListener('mouseup', end);
+        }
+
+        function color2hsl(x){
+            if ( x.indexOf('rgb') >= 0 ){
+                x = x.replace('rgb(', '').replace('rgba(', '').replace(')', '');
+                x = x.split(',');
+
+                var hsl = rgb2hsl(x);
+
+                return hsl;
+            } else if ( x.indexOf('#') >= 0 ){
+                var rgb = hex2rgb(x);
+                var hsl = rgb2hsl(rgb);
+
+                return hsl;
+            }
         }
 
         function hexinput(e){
