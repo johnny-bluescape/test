@@ -424,7 +424,10 @@ function rectanglemove(e){
     var pan = e.target.getparent('panel');
     var tw = e.target.getparent('tweaks');
 
-    if ( tb || pan || tw ){
+    var mw = e.target.getparent('menuwrap');
+    var cx = e.target.getparent('contextpanel');
+
+    if ( tb || pan || tw || cx || mw ){
         return;
     }
 

@@ -29,7 +29,7 @@
     <title>TEST</title>
     <link rel="icon" type="image/png" href="./favicon.png" />
     <script src="../js/gator.js"></script>
-    <script src="../js/hammer.js"></script>
+    <!-- <script src="../js/hammer.js"></script> -->
     <script src="../js/base.js"></script>
     <script src="./draw.js"></script>
     <script src="./shapes.js"></script>
@@ -76,10 +76,10 @@
 
             --dotgrid: 48px;
             --dotsize: 1px;
-            --dotcolor: rgba(255, 255, 255, 0.1);
+            --dotcolor: rgba(255, 255, 255, 0.125);
             --gridcolor: rgba(255, 255, 255, 0.025);
 
-            --dotcolor2: rgba(255, 255, 255, 0.35);
+            --dotcolor2: rgba(255, 255, 255, 0.4);
             --gridcolor2: rgba(255, 255, 255, 0.05);
 
             --panelicons: var(--icon); /* rgba(255, 255, 255, 0.85) */
@@ -167,10 +167,16 @@
                     .toolbtn svg * {fill:var(--icon);}
                     .active .toolbtn svg * {fill:var(--iconcurrent);}
 
-                .options {height:40px;background:var(--tool);border-radius:0 20px 20px 0;width:calc(var(--toolbtn) - 20px);position:absolute;top:calc(50% - 20px);left:20px;overflow:hidden;opacity:0;pointer-events:none;transition:all 150ms ease-in-out;box-shadow:0 2px 20px rgba(0,0,0,0);}
-                    .active .options {background:var(--toolselect);opacity:1;pointer-events:all;box-shadow:0 2px 20px var(--shadow2);}
+                .tools .options {background:var(--tool);border-radius:var(--toolbarradius);position:absolute;top:calc(50% - 20px);left:var(--toolbtn);opacity:0;pointer-events:none;transition:all 150ms ease-in-out;box-shadow:0 2px 20px rgba(0,0,0,0);top:50%;left:calc(var(--toolbtn) + 12px);transform:translate(-16px, -50%);}
+                    .tools .active .options {background:var(--toolselect);}
 
-                .toggled .options {width:348px;}
+                .toggled .options {opacity:1;pointer-events:all;box-shadow:0 2px 20px var(--shadow2);transform:translate(0, -50%);}
+
+                .horizontal .options {left:50%;top:-100%;transform:translate(-50%, 4px);}
+
+                .horizontal .toggled .options {transform:translate(-50%, -4px);}
+
+                
 
                 .controls {padding-left:48px;}
                         .control {float:left;margin-right:24px;line-height:40px;cursor: pointer;}
@@ -236,20 +242,23 @@
         #tweaks {position:fixed;top:0;right:0;bottom:0;padding:8px;overflow-y:auto;width:200px;box-sizing:border-box;background:#f4f4f4;z-index:1336;color:#333;}
             #tweaks h4 {padding: 8px 8px 12px;font-weight: 600;}
 
-        .ui2 .tools {background:var(--toolselect);box-shadow:0 3px 40px rgba(0,0,0,.4);padding:0 0 48px;border-radius:var(--toolbarradius);}
+        .ui2 .tools {background:var(--toolselect);box-shadow:0 3px 40px var(--shadow);padding:0 0 var(--toolbtn);border-radius:var(--toolbarradius);}
             .ui2 .tools::after {content:'';display:block;clear:both;}
 
-            .ui2 .horizontal  .tools, .horiz.ui2 .tools {padding:0;}
-            .ui2 .horizontal .handle {display:none;}
+            
 
         .ui2 .tool {display:flex;}
             .ui2 .toolbtn {width:calc(100% - 8px);margin:4px auto;height:calc(100% - 8px);background:transparent;box-shadow:none;}
 
                 .ui2 .tool.active .toolbtn {background:var(--toolselect2);}
                 
-            .ui2 .handle {bottom:0;top: auto;left: 0;}
+            .ui2 .handle {bottom:0;top: auto;left: 0;width:var(--toolbtn);height:var(--toolbtn);}
 
-            .ui2 .options {left:calc(var(--toolbtn) + 8px);border-radius:var(--toolbarradius);width:48px;height: auto;opacity:0;pointer-events:none;}
+            .ui2.horizontal  .tools, .horiz.ui2 .tools {padding:0 var(--toolbtn) 0 0;}
+            .ui2.horizontal .handle {left:auto;right:0;}
+            
+
+            /* .ui2 .options {left:calc(var(--toolbtn) + 8px);border-radius:var(--toolbarradius);width:48px;height: auto;opacity:0;pointer-events:none;}
 
             .ui2 .toggled .options {opacity:1;pointer-events:all;}
 
@@ -259,7 +268,7 @@
                 .ui2 .controls * {float:none;}
                 .ui2 .options .label {display:none;}
                 .ui2 .control .option {width:48px;height:48px;display: flex;align-content: center;align-items: center;justify-content: center;justify-items: center;}
-            .ui2 .option .fill {margin:0;}
+            .ui2 .option .fill {margin:0;} */
 
         .ui3 .tools {height:48px;background:var(--toolselect);box-shadow:0 3px 40px rgba(0,0,0,.4);padding:0px 40px 0 0;border-radius:var(--toolbarradius);}
             .ui3 .tool {float:left;min-width:48px;height:40px;margin:4px 0 0;width:auto;border-radius:4px;}
@@ -275,8 +284,8 @@
 
         .ui3 .toggled .options {width:auto;}
 
-        .size {width:28px;height:28px;margin-top:6px;border-radius:50%;box-shadow:inset 0 0 0 1px hsla(0, 0%, 100%, 0.5);position:relative;}
-            .size .actual {position:absolute;top:50%;left:50%;width:8px;height:8px;background:white;border-radius:50%;transform:translate(-50%, -50%);}
+        .size {width:28px;height:28px;margin-top:6px;border-radius:50%;box-shadow:inset 0 0 0 1px var(--dotcolor2);position:relative;}
+            .size .actual {position:absolute;top:50%;left:50%;width:8px;height:8px;background:var(--iconcurrent);border-radius:50%;transform:translate(-50%, -50%);}
 
         .option .fill {cursor:pointer;width:28px;height:28px;margin-top:6px;border-radius:50%;box-shadow:inset 0 0 0 1px hsla(0, 0%, 100%, 0.175);position:absolute;background:black;}
         .option .border {cursor:pointer;width:28px;height:28px;border-radius:50%;border:4px solid rgba(155, 155, 155, 0.15);box-sizing:border-box;}
@@ -377,8 +386,10 @@
 
             .contextpanel .option {cursor:pointer;min-width:48px;height:48px;box-sizing:border-box;display:inline-flex;vertical-align:top;align-content:center;align-items:center;justify-content:center;justify-items:center;}
 
+            .contextpanel .optionwrap {transition:margin 150ms ease-in-out;}
+
             .contextpanel .option:first-child {transition:all 150ms ease-in-out;}
-                .sublevel.contextpanel .option:first-child {margin-left:-240px;}
+                .sublevel.contextpanel .option:first-child {}
 
                 .morebtn svg {transition:all 150ms ease-in-out;}
                 .sublevel .morebtn svg {transform:rotate(180deg);}
@@ -399,7 +410,7 @@
 
                 .menuwrap.subsublevel {transform:translateX(-100%) !important;opacity:0;pointer-events:none;}
 
-            .overflowmenu {overflow:hidden;background: var(--toolselect);border-radius:var(--toolbarradius);padding:4px 0;box-shadow: 0 2px 20px var(--shadow2);min-width: 216px;}
+            .overflowmenu {overflow:hidden;background: var(--toolselect);border-radius:var(--toolbarradius);padding:0 0;box-shadow: 0 2px 20px var(--shadow2);min-width: 216px;}
                 
                 .mitem {cursor:pointer;min-height:48px;padding:8px 16px;display:flex;align-content:center;align-items:center;box-sizing:border-box;font-size:18px;}
                 .mitem:hover {background-color:var(--hover);}
@@ -485,15 +496,24 @@
         #keyboard .row:last-child .key:first-child {border-radius: 0 0 0 6px;}
         #keyboard .row:last-child .key:last-child {border-radius: 0 0 6px 0;}
 
-        .minishape {width:48px;height:48px;display:inline-flex;align-items:center;justify-content:center;cursor: pointer;}
+        .minishape {width:48px;height:48px;display:inline-flex;align-items:center;justify-content:center;cursor: pointer;border-radius:8px;transition:all 150ms ease-in-out;}
 
-        .minishape .square, .minishape .circle {width:22px;height:22px;border-radius:2px;border:2px solid var(--icon);box-sizing:border-box;}
+        .minishape .square, .minishape .circle, .shapeicon.square {width:22px;height:22px;border-radius:2px;border:2px solid var(--icon);box-sizing:border-box;}
             .minishape .circle {border-radius:50%;}
+
+            .minishape:hover {background:var(--hover);}
+            .minishape:active {background:var(--active);}
+
+        .rectanglex .minishape.rx, .circlex .minishape.cx {background:var(--iconcurrent);}
+            .rectanglex .minishape.rx .shapeicon, .circlex .minishape.cx .shapeicon {border-color:var(--panel);opacity:1;}
+
+            .shapemenu .minishape {margin-right:8px;}
+                .shapemenu .minishape:last-child {margin-right:0;}
 
             #brush_context {opacity:0;pointer-events:none;top:auto !important;}
             .brush_tool #brush_context {opacity:1;pointer-events:all;bottom:24px;left:24px;top:auto !important;transform:translateY(0);}
             
-            .hidebrush #brush_context {display:none !important;}
+            .hidebrush #brush_context {opacity:0 !important;pointer-events:none !important;}
         
         .canvaslabel {position: absolute;top:-32px;left:-2px;padding:3px 8px 4px;background:#4E4D4D;color:white;border-radius:6px;white-space:nowrap;font-size:14px;font-weight:500;transition:all 150ms ease-in-out;}
             .current .canvaslabel {background:#433453;}
@@ -720,13 +740,24 @@
                         <path d="M7,8v22h22V8H7z M26,27H10V11h16V27z"/>
                     </svg>
                 </div>
-                <div class=options>
-                    <div class=controls>
+                <div class="options contextpanel">
+                    <!-- <div class=controls>
                         <div class=control id=shapecolor>
                             <div class=label>Color</div>
                             <div class=option>
                                 <div class=fill id=shapefill style="background: rgb(255, 59, 48);"></div>
                             </div>
+                        </div>
+                    </div> -->
+                    <div class=optionwrap>
+                        <div class="option shapetype" data-menu=shapemenu>
+                            <div class="shapeicon square"></div>
+                        </div><div class="option fillcolor shapefillactual" data-menu=bgmenu2> 
+                            <div class="fill shape2fill" id=shapefill style="background:rgb(255, 59, 48);"></div>
+                        </div><div class="option shapeborder shapeborderactual" data-menu=bmenu>
+                            <div class="border"></div>
+                        </div><div class="option morebtn">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
                         </div>
                     </div>
                 </div>
@@ -738,8 +769,8 @@
                         <polygon points="29,10 7,10 7,13 16.5,13 16.5,27.5 19.5,27.5 19.5,13 29,13 "/>
                     </svg>
                 </div>
-                <div class=options>
-                    <div class=controls>
+                <div class="options contextpanel">
+                    <!-- <div class=controls>
                         <div class=control id=font>
                             <div class=label>Font</div>
                             <div class=option>Helvetica</div>
@@ -751,6 +782,27 @@
                         <div class=control>
                             <div class=label>Color</div>
                             <div class=option id=textfill2>Blue</div>
+                        </div>
+                    </div> -->
+                    <div class=optionwrap>
+                        <div class="option typeface" data-menu=tfmenu>
+                            <div class=flyout>
+                                <div class=label>Helvetica</div>
+                            </div>
+                        </div><div class="option fontsize" data-menu=fsmenu>
+                            <div class=flyout>
+                                <div class=label>24</div><div class=icon>
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                        <path d="M7,10l5-5l5,5H7z"/>
+                                        <path d="M7,14l5,5l5-5H7z"/>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div><div class="option textcolor textcoloractual" data-menu=tcmenu>
+                            <div class="fill textfill" style="background:white;"></div>
+                        </div><div class="option morebtn">
+                            <!-- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg> -->
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
                         </div>
                     </div>
                 </div>
@@ -764,8 +816,8 @@
                         <path d="M13.9,33c-0.4,0-0.9-0.2-1.2-0.6c-0.5-0.7-0.4-1.6,0.3-2.1c0.7-0.5,1.1-1.5,1.4-2.7c-3.1-1.4-5-4-5.5-7.2		c-0.7-5.1,3-8.6,6-11.5c1.7-1.6,3.4-3.2,3.4-4.4C18.3,3.6,19,3,19.8,3c0.8,0,1.5,0.7,1.4,1.6C21.1,7,19.1,8.9,16.9,11		c-2.8,2.6-5.6,5.4-5.1,8.9c0.3,2.3,1.8,3.7,3.1,4.5c0.5-3.3,1-7.1,4.3-8.3c2.6-1,5.3-0.1,6.9,2.2c1.7,2.6,1.5,5.9-0.5,8.1		c-1.8,1.9-5.1,2.7-8.3,2.1c-0.4,1.7-1.1,3.2-2.4,4.2C14.5,32.9,14.2,33,13.9,33z M17.8,25.5c2.3,0.4,4.6,0,5.6-1.1		c1.2-1.3,1-3.2,0.2-4.4c-0.4-0.6-1.4-1.8-3.3-1.1c-1.6,0.6-2,2.8-2.4,6C17.8,25.1,17.8,25.3,17.8,25.5z"/>
                     </svg>
                 </div>
-                <div class=options style="max-width: 208px;">
-                    <div class=controls>
+                <div class="options contextpanel" style="max-width: 208px;">
+                    <!-- <div class=controls>
                         <div class=control id=brushsize>
                             <div class=label>Size</div>
                             <div class=option>
@@ -779,6 +831,17 @@
                             <div class=option>
                                 <div class=fill id=brushfill></div>
                             </div>
+                        </div>
+                    </div> -->
+                    <div class=optionwrap>
+                        <div class="option brushsize brushsizeactual" data-menu=bsmenu>
+                            <div class="size" style="margin:0;">
+                                <div class="actual brushactual2"></div>
+                            </div>
+                        </div><div class="option brushcolor brushcoloractual" data-menu=bcmenu>
+                            <div class="fill brushfill2"></div>
+                        </div><div class="option morebtn">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
                         </div>
                     </div>
                 </div>
@@ -891,7 +954,7 @@
 
     <div id=panels style="display:none;">
         <div class="panel shapes_panel" id=shapes_panel style="border-radius: var(--toolbarradius);padding: 2px 4px;">
-            <div class="minishape" data-type=rectanglex><div class="square"></div></div><div class="minishape" data-type=circlex><div class="circle"></div></div>
+            <div class="minishape rx" data-type=rectanglex><div class="square shapeicon"></div></div><div class="minishape cx" data-type=circlex><div class="circle shapeicon"></div></div>
         </div>
         <div class=panel id=fontsize_panel style="padding:4px;border-radius:32px;margin-left:18px;transform:translateY(4px);">
             <div class=slider data-y=136>
@@ -1066,6 +1129,30 @@
             
         </div>
 
+        <div id=bgmenu2>
+            <div class=menutitle>Background Color</div>
+        </div>
+
+        <div id=shapemenu>
+            <div class="minishape rx" data-type=rectanglex><div class="square shapeicon"></div></div><div class="minishape cx" data-type=circlex><div class="circle shapeicon"></div></div>
+        </div>
+
+        <div id=bsmenu>
+            <!-- <div class=menutitle>Brush Size</div> -->
+          
+            <div class="slider" data-y="136">
+                <div class="knob" style="top: 136px; transform: translateX(-50%) scale(0.3);"></div>
+            </div>
+        </div>
+
+        <div id=bcmenu>
+            <div class=menutitle>Brush Color</div>
+        </div>
+
+        <div id=tcmenu>
+            <div class=menutitle>Text Color</div>
+        </div>
+
         <div id=fsmenu style="min-width:80px;">
             <!-- <div class=menutitle>Font Size</div> -->
             
@@ -1086,6 +1173,23 @@
         </div>
 
         <div id=bordermenu>
+            <div class=menutitle>Border Style</div>
+
+            <div class=menurow style="justify-content: space-between;padding:4px 8px 0;">
+                <div class=menurowtitle>Border Thickness</div>
+                <div class=slidervalue></div>
+                <!-- <input type=range class="range borderwidth" min=0 max=24 value=0 /> -->
+                <div class="slider hslider" data-x=5 data-y=2 data-min=0 data-max=24 data-value=0 data-callback=borderwidth>
+                    <div class=track></div>
+                    <div class=knob style="left: 4px; transform: translateY(-50%) scale(0.142857);"></div>
+                </div>
+            </div>
+
+            <div class=menurowtitle style="padding:0 8px;">Border Color</div>
+    
+        </div>
+
+        <div id=bmenu>
             <div class=menutitle>Border Style</div>
 
             <div class=menurow style="justify-content: space-between;padding:4px 8px 0;">
@@ -1237,11 +1341,15 @@
             <label><input type=checkbox value=light class=tweakr /><div class=toggle></div> Light</label>
         </div>
         <div class=tweak>
-            <label><input type=checkbox value=ui2 id=ui2t class=tweakr onchange="document.getElementById('ui3t').checked=false;" /><div class=toggle></div> Vertical Bar</label>
+            <label><input type=checkbox value=ui2 id=ui2t class=tweakr onchange="document.getElementById('ui3t').checked=false;" /><div class=toggle></div> Solid Toolbar</label>
         </div>
 
         <div class=tweak>
-            <label><input type=checkbox value=ui3 id=ui3t class=tweakr onchange="document.getElementById('ui2t').checked=false;" /><div class=toggle></div> Horizontal Bar</label>
+            <label><input type=checkbox value=horizontal class=tweakr /><div class=toggle></div> Horizontal Toolbar</label>
+        </div>
+
+        <div class=tweak>
+            <label><input type=checkbox value=ui3 id=ui3t class=tweakr onchange="document.getElementById('ui2t').checked=false;" /><div class=toggle></div> Horizontal Bar 2</label>
         </div>
 
         <!-- <div class=tweak>
@@ -1316,10 +1424,6 @@
             <div class=tweak>
                 <div class=label><span>Handle Size</span><div class=value>8</div></div>
                 <input type=range class=tooltweak min=4 max=24 value=8 step=2 data-id=handlesize oninput="tweakedtools.call(this, event)" />
-            </div>
-            <div class=tweak>
-                <div class=label><span>Horizontal Toolbar</span><div class=value></div></div>
-                <label style="padding:0;"><input type=checkbox class=tweakr value="horiz" onchange="document.body.classList.toggle('horizontal');" /><div class=toggle></div> </label>
             </div>
             <div class=tweak>
                 <div class=label><span>Toolbar Color</span><div class="value"></div></div>
@@ -2546,6 +2650,17 @@
 
                         temp.appendChild(cc);
                     }
+
+                    //var bs = s.getparent('bsmenu');
+
+                    //if ( bs ){
+                        var bs2 = document.getElementById('bsmenu');
+                        bs2.empty();
+
+                        var sc = s.cloneNode(true);
+
+                        bs2.appendChild(sc);
+                    //}
                 }
 
                 closepanel();
@@ -2643,7 +2758,9 @@
             var pp = e.target.getparent('panel');
             var tw = e.target.getparent('tweaks');
 
-            if ( p || b || pp || tw ){
+            var mw = e.target.getparent('menuwrap');
+
+            if ( p || b || pp || tw || mw ){
                 return;
             }
 
@@ -3090,11 +3207,21 @@
             
             o.removeclass('sublevel');
 
+            var o2 = o1.getparent('optionwrap');
+
+            if ( o2 ){
+                o1 = o2;
+            }
+
             o1.style.marginLeft = 0;
 
             o1.offsetLeft;
 
-            setTimeout(function(){setcontextpanel.call(document.getElementsByClassName('layeritem current')[0])}, 0);
+            if ( !o2 ){
+                setTimeout(function(){
+                    setcontextpanel.call(document.getElementsByClassName('layeritem current')[0])
+                }, 0);
+            }
 
         }
 
@@ -3221,6 +3348,8 @@
                 var step = stepper2.call(this, e);
                 step.classList.add('menud');
                 m.appendChild(step);
+            } else if ( shell == 'bcmenu' || shell == 'tcmenu' || shell == 'bgmenu2' || shell == 'bmenu' ){
+                m.appendChild(s);
             }
 
             var o = c.getElementsByClassName('option');
@@ -3229,6 +3358,13 @@
             o = o[0];
 
             var ox = -(c.offsetWidth - 48);
+
+            var o2 = o.getparent('optionwrap');
+
+            if ( o2 ){
+                o = o2;
+            }
+
             o.style.marginLeft = ox + 'px';
 
             //p.offsetLeft;
@@ -3307,6 +3443,12 @@
 
             var l = o.length - 1;
             o = o[0];
+            
+            var o2 = o.getparent('optionwrap');
+
+            if ( o2 ){
+                o = o2;
+            }
 
             var ox = -(c.offsetWidth - 48);
             o.style.marginLeft = ox + 'px';
@@ -3469,6 +3611,13 @@
 
         }
 
+        function colorsetting(e, color, menu){
+            console.log(color, menu);
+
+
+
+        }
+
         function colorswatch(e){
             console.log('COLOR');
             var m = this.getparent('contextmenu');
@@ -3484,7 +3633,13 @@
             console.log(a);
 
             var l = document.getElementsByClassName('layeritem current')[0];
-            var id = l.dataset.context;
+            var id = l ? l.dataset.context : null;
+
+            if ( !id ){
+                colorsetting.call(this, e, a, m);
+
+                return;
+            }
 
             var fill = true;
 
@@ -3751,7 +3906,7 @@
 
             var hue = 300;
 
-            if ( rec.classList.contains('rectangle') ){
+            if ( rec && rec.classList.contains('rectangle') ){
                 var bg = window.getComputedStyle(rec).backgroundColor;
 
                 var hsl = color2hsl(bg);
@@ -4343,9 +4498,7 @@
 
         Attach.on('click', '.morebtn', moremenu);
 
-        Attach.on('click', '.fillcolor', colormenu);
-        Attach.on('click', '.textcolor', colormenu);
-        Attach.on('click', '.shapeborder, .fontsize, .typeface', colormenu);
+        Attach.on('click', '.fillcolor, .textcolor, .shapeborder, .fontsize, .typeface, .shapecoloractual, .shapeborderactual, .textcoloractual, .brushcoloractual, .brushsizeactual, .shapetype', colormenu);
 
         Attach.on('mousedown', '.select_tool', marquee);
         Attach.on('touchstart', '.select_tool', marquee);
@@ -4354,7 +4507,7 @@
 
         Attach.on('click' , '.key', key);
 
-        Attach.on('click', '#shape_tool2', shape_tool2);
+        //Attach.on('click', '#shape_tool2', shape_tool2);
         Attach.on('click', '#type_tool2', type_tool2);
 
         Attach.on('click', '.minishape', minishape);
@@ -4498,6 +4651,17 @@
         //     opt.e.stopPropagation();
         // })
 
+
+
+
+        function zoomtest(e) {
+            e.preventDefault();
+            console.log(e.scale, 'SCALE', e.type);
+        }
+
+        document.addEventListener('gesturestart', zoomtest);
+        document.addEventListener('gesturechange', zoomtest);
+        document.addEventListener('gestureend', zoomtest);
         
     </script>
 </body>
