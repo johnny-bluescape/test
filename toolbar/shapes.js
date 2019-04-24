@@ -1,3 +1,10 @@
+SHAPEBORDERCOLOR = 'transparent';
+SHAPECOLOR = 'rgb(255, 58, 48)';
+BORDERWIDTH = 0;
+
+CANVASBORDERCOLOR = 'rgba(255,255,255,.2)';
+CANVASCOLOR = 'transparent';
+
 function rectanglemove(e){
 
     console.log('mnove')
@@ -469,24 +476,24 @@ function rectanglemove(e){
 
     console.log(paper.offset());
 
-    var color = document.getElementsByClassName('fillswatch')[0];
-    var ac = document.getElementById('shapefill');
-    color =  typeof window.shapecolor == 'string' ? window.shapecolor : window.getComputedStyle(ac).backgroundColor;//'rgb(255, 59, 48)';//color.parentElement.getElementsByClassName('togglewrap')[0].classList.contains('on') ? window.getComputedStyle(color).backgroundColor : 'transparent';
+    // var color = document.getElementsByClassName('fillswatch')[0];
+    // var ac = document.getElementById('shapefill');
+    // color =  typeof window.shapecolor == 'string' ? window.shapecolor : window.getComputedStyle(ac).backgroundColor;//'rgb(255, 59, 48)';//color.parentElement.getElementsByClassName('togglewrap')[0].classList.contains('on') ? window.getComputedStyle(color).backgroundColor : 'transparent';
 
-    var bordercolor = document.getElementsByClassName('borderswatch')[0];
-    bordercolor = 'transparent';//bordercolor.parentElement.getElementsByClassName('togglewrap')[0].classList.contains('on') ? window.getComputedStyle(bordercolor).backgroundColor : 'transparent';
+    // var bordercolor = document.getElementsByClassName('borderswatch')[0];
+    // bordercolor = 'transparent';//bordercolor.parentElement.getElementsByClassName('togglewrap')[0].classList.contains('on') ? window.getComputedStyle(bordercolor).backgroundColor : 'transparent';
 
-    var border = document.getElementsByClassName('borderwidth')[0];
-    border = 0;//border && border.parentNode.getElementsByClassName('togglewrap on')[0] ? border.value || 0 : 0;
+    // var border = document.getElementsByClassName('borderwidth')[0];
+    // border = 0;//border && border.parentNode.getElementsByClassName('togglewrap on')[0] ? border.value || 0 : 0;
 
     var rect = document.createElement('div');
     rect.className = 'rectangle drawing current layeritem';
     rect.style.position = 'absolute';
     rect.style.top = sy + scrolly - ot + 'px';
     rect.style.left = sx - ol + 'px';
-    rect.style.backgroundColor = color;
-    rect.style.borderColor = bordercolor;
-    rect.style.borderWidth = border + 'px';
+    rect.style.backgroundColor = SHAPECOLOR;
+    rect.style.borderColor = SHAPEBORDERCOLOR;
+    rect.style.borderWidth = BORDERWIDTH + 'px';
     rect.style.borderStyle = 'solid';
     rect.style.backgroundClip = 'padding-box';
     rect.style.boxSizing = 'border-box';
@@ -502,10 +509,9 @@ function rectanglemove(e){
     }
 
     if ( document.body.classList.contains('canvas_tool') ){
-      rect.style.background = 'transparent';
-      border = 2;
-      rect.style.borderWidth = border + 'px';
-      rect.style.borderColor = 'rgba(255,255,255,.2)';//'#7754A1';
+      rect.style.background = CANVASCOLOR;
+      rect.style.borderWidth = '2px';
+      rect.style.borderColor = CANVASBORDERCOLOR;//'rgba(255,255,255,.2)';//'#7754A1';
       rect.style.borderRadius = '8px';
 
       rect.className += ' canvasboard';
@@ -757,7 +763,7 @@ function rectanglemove(e){
       b.appendChild(a);
     }
 
-    console.log('-----GUH----')
+    console.log('-----BB----')
     document.body.appendChild(b);
   }
 
@@ -820,7 +826,7 @@ function rectanglemove(e){
       b.style.position = 'absolute';
       b.style.width = tw - tx + 'px';
       b.style.height = th - ty + 'px';
-      b.style.zIndex = 999999999999999;
+      b.style.zIndex = 2147483641;
   }
 
   function setmultibounds(e){

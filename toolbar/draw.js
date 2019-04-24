@@ -1,5 +1,5 @@
-window.brushsize = 10;
-window.brushcolor = 'rgba(0,0,0,1)';
+window.brushsize = BRUSHSIZE = 10;
+window.brushcolor = BRUSHCOLOR = 'rgba(0,0,0,1)';
 window.canvashistory = [];
 
 function canvassetup(){
@@ -163,10 +163,10 @@ function sketchHandler(e){
                 beginPath();
                 moveTo(lines[id2].lx, lines[id2].ly);
                 lineTo(nx, ny);
-                lineWidth = brushsize;//20;
+                lineWidth = BRUSHSIZE;//20;
                 lineCap = 'round';
                 lineJoin = 'round';
-                strokeStyle = brushcolor;//'rgba(0,0,0,1)';
+                strokeStyle = BRUSHCOLOR;//'rgba(0,0,0,1)';
                 stroke();
             }
 
@@ -243,10 +243,10 @@ function sketchHandlerM(e){
             beginPath();
             moveTo(lines[id2].lx, lines[id2].ly);
             lineTo(nx, ny);
-            lineWidth = brushsize;//20;
+            lineWidth = BRUSHSIZE;//20;
             lineCap = 'round';
             lineJoin = 'round';
-            strokeStyle = brushcolor;//'rgba(0,0,0,1)';
+            strokeStyle = BRUSHCOLOR;//'rgba(0,0,0,1)';
             stroke();
         }
 

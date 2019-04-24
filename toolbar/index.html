@@ -20,7 +20,7 @@
 
 -->
 <!doctype html>
-<html>
+<html class=hidebrush>
 <head>
     <meta charset=utf-8>
     <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1">
@@ -498,8 +498,8 @@
 
         .minishape {width:48px;height:48px;display:inline-flex;align-items:center;justify-content:center;cursor: pointer;border-radius:8px;transition:all 150ms ease-in-out;}
 
-        .minishape .square, .minishape .circle, .shapeicon.square {width:22px;height:22px;border-radius:2px;border:2px solid var(--icon);box-sizing:border-box;}
-            .minishape .circle {border-radius:50%;}
+        .minishape .square, .minishape .circle, .shapeicon {width:22px;height:22px;border-radius:2px;border:2px solid var(--icon);box-sizing:border-box;}
+            .minishape .circle, .shapeicon.circle {border-radius:50%;}
 
             .minishape:hover {background:var(--hover);}
             .minishape:active {background:var(--active);}
@@ -839,7 +839,7 @@
                                 <div class="actual brushactual2"></div>
                             </div>
                         </div><div class="option brushcolor brushcoloractual" data-menu=bcmenu>
-                            <div class="fill brushfill2"></div>
+                            <div class="fill brushfill2" id=brushfill2></div>
                         </div><div class="option morebtn">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
                         </div>
@@ -870,8 +870,16 @@
                             </g>
                         </svg>
                 </div>
-                <div class=options>
-                    
+                <div class="options contextpanel">
+                    <div class=optionwrap>
+                        <div class="option canvasfillactual" data-menu=bgmenu3> 
+                            <div class="fill canvasfill2" id=canvasfill style="background: linear-gradient(to right, var(--null) 3px, transparent 3px) 12.5px;box-shadow: inset 0 0 0 3px var(--null);transform: rotate(45deg);"></div>
+                        </div><div class="option canvasborder canvasborderactual" data-menu=cbmenu>
+                            <div class="border" style="border-color:grey;"></div>
+                        </div><div class="option morebtn">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class=tool>
@@ -1121,6 +1129,15 @@
             <div class="mitem mlevel">Link To</div>
         </div>
 
+        <div id=moremenu2>
+            <div class=mitem>Save Default</div>
+            <div class="mitem ">Copy Style</div>
+
+            <!-- <div class=mgap></div> -->
+            <div class="mitem mlevel">Properties</div>
+            <div class="mitem ">Reset</div>
+        </div>
+
         <div id=bgmenu>
             <div class=menutitle>Background Color</div>
             <!-- <div class=menutabs>
@@ -1133,7 +1150,12 @@
             <div class=menutitle>Background Color</div>
         </div>
 
+        <div id=bgmenu3>
+            <div class=menutitle>Background Color</div>
+        </div>
+
         <div id=shapemenu>
+            <!-- <div class=menutitle>Shape</div> -->
             <div class="minishape rx" data-type=rectanglex><div class="square shapeicon"></div></div><div class="minishape cx" data-type=circlex><div class="circle shapeicon"></div></div>
         </div>
 
@@ -1204,6 +1226,10 @@
 
             <div class=menurowtitle style="padding:0 8px;">Border Color</div>
     
+        </div>
+
+        <div id=cbmenu>
+            <div class=menutitle>Border Color</div>
         </div>
 
         <div id=textcolormenu>
@@ -1377,7 +1403,7 @@
         </div>
 
         <div class=tweak>
-            <label><input type=checkbox value=hidebrush class=tweakr checked=true /><div class=toggle></div> Brush Context</label>
+            <label><input type=checkbox value=hidebrush class=tweakr /><div class=toggle></div> Brush Context</label>
         </div>
 
         <div class=tweaked>
@@ -1517,8 +1543,9 @@
     <div id=layers></div>
 
     <script>
-        FONTSIZE = 24;
-        FONTCOLOR = 'white';
+        TEXTSIZE = 24;
+        TEXTCOLOR = 'white';
+
 
         function toolbarcolor(e){
             var n = 'tweaked_toolbar';
@@ -2428,6 +2455,8 @@
             var sx = ev.pageX;
             var sy = ev.pageY;
 
+            var _t = this;
+
             var ox = Number(this.dataset.x) || 0;
             var oy = Number(this.dataset.y) || 0;
 
@@ -2503,9 +2532,25 @@
 
                 var az = 36 * scale;
                 
-                brushsize = az;
+                
 
-                console.log(az)
+                console.log(az);
+
+                s.dataset.x = Math.max(Math.min(nx, t), minknob);
+                s.dataset.y = Math.max(Math.min(ny, t), minknob);
+
+                var vv = Math.round(((max - min) * z) + min);
+
+
+                s.dataset.value = vv;
+
+                var sv = s.parentElement.getElementsByClassName('slidervalue')[0];
+                if (sv ){
+                    sv.innerText = vv;
+                }
+
+
+                
 
                 if ( dx ){
                     k.style.left = d + 'px';
@@ -2521,29 +2566,30 @@
                     var ba2 = document.getElementsByClassName('brushactual2')[0];
 
                     ba.style.width = ba.style.height = ba2.style.width = ba2.style.height = ba.parentElement.offsetHeight * scale + 'px';
+
+                    BRUSHSIZE = az;
                 }
 
-                s.dataset.x = Math.max(Math.min(nx, t), minknob);
-                s.dataset.y = Math.max(Math.min(ny, t), minknob);
+ 
+                if ( _t.getparent('toolmenu') ){
+                    BORDERWIDTH = vv;
+
+                    return;
+                }
+
 
                 // if ( range ){
                 //     var vv = ((max - min) * z) + min;
                 //     range.value = Math.round(vv);
                 // }
 
-                var vv = Math.round(((max - min) * z) + min);
-
-
-                s.dataset.value = vv;
-
-                var sv = s.parentElement.getElementsByClassName('slidervalue')[0];
-                if (sv ){
-                    sv.innerText = vv;
-                }
+                
 
                 if ( callback ){
                     window[callback].call(s, e);
                 }
+
+
             }
 
             function end(e){
@@ -2599,7 +2645,7 @@
 
                     var az = 36 * scale;
                     
-                    brushsize = az;
+                    BRUSHSIZE = az;
 
                     console.log(az)
 
@@ -2733,7 +2779,7 @@
 
                 ugh.getElementsByClassName('textfill')[0].style.background = c;
 
-                textcolor = c;
+                //TEXTCOLOR = c;
 
                 document.getElementById('textfill2').style.backgroundColor = c;
             }
@@ -2749,7 +2795,7 @@
         function typetool(e){
 
             console.log('TYPETOOL');
-            blurall();
+            
 
             //blurelm.call(this, e);
 
@@ -2764,12 +2810,16 @@
                 return;
             }
 
+            blurall();
+
             e = e.touches ? e.touches[0] : e;
 
             var w = document.createElement('div');
             var t = document.createElement('textarea');
 
             t.className = 'textarea';
+
+            t.style.color = TEXTCOLOR;
 
             w.className = 'textwrap current layeritem';
 
@@ -2822,6 +2872,8 @@
             //if ( e.touches ){
                 showkeyboard.call(w, e);
             //}
+
+            document.getElementsByClassName('contextpanel visible')[0].getElementsByClassName('textfill')[0].style.background = TEXTCOLOR;
         }
 
         function keyboardshowhide(e){
@@ -3089,6 +3141,10 @@
 
         function setcontextpanel(x){
 
+            if ( !this ){
+                return;
+            }
+
             contextfollow.call(this);
             var cid = this.dataset.context;
 
@@ -3264,7 +3320,9 @@
 
             m.removeAttribute('id');
 
-            m.className = 'contextmenu ' + shell;
+            var tool = this.getparent('tool') ? ' toolmenu' : '';
+
+            m.className = 'contextmenu ' + shell + tool;
 
             s.style.width = '336px';
             
@@ -3288,10 +3346,50 @@
                 var rec = document.getElementsByClassName('layeritem current')[0];
                 //bw.value = rec.dataset.border || 0;
 
+                var com = window.getComputedStyle(rec);
+
                 var ma = Number(bw.dataset.max);
                 var mi = Number(bw.dataset.min);
 
-                var br = Number(rec.dataset.border) || 0;
+
+                var br = Number(rec.dataset.border) || Number(com.borderWidth.replace('px', '')) || 0;
+
+                sv.innerText = br;
+
+                var z = (br / ma);
+                var scale = ((24 * z) + 4) / 28;
+
+                var lx = Math.max((bw.offsetWidth - 32) * z, 4);
+
+                kn.style.left = lx + 'px';
+                kn.style.transform = 'translateY(-50%) scale(' + scale +')';
+
+                bw.dataset.x = lx;
+
+                var bc = com.borderColor;
+
+                var chips = p.getElementsByClassName('chip');
+                for(var i=0;i<chips.length;i++){
+                    var cc = chips[i];
+                    if ( bc == window.getComputedStyle(cc).backgroundColor ){
+                        cc.parentElement.classList.add('current');
+                        break;
+                    }
+                }
+
+            } else if ( shell == 'bmenu' ){
+                m.appendChild(s);
+
+                var bw = p.getElementsByClassName('hslider')[0];
+                var kn = bw.getElementsByClassName('knob')[0];
+                var sv = bw.parentElement.getElementsByClassName('slidervalue')[0];
+                var rec = this.getElementsByClassName('border')[0];//document.getElementsByClassName('layeritem current')[0];
+                //bw.value = rec.dataset.border || 0;
+
+                var ma = Number(bw.dataset.max);
+                var mi = Number(bw.dataset.min);
+
+                var br = BORDERWIDTH; //Number(rec.dataset.border) || 0;
 
                 sv.innerText = br;
 
@@ -3348,8 +3446,32 @@
                 var step = stepper2.call(this, e);
                 step.classList.add('menud');
                 m.appendChild(step);
-            } else if ( shell == 'bcmenu' || shell == 'tcmenu' || shell == 'bgmenu2' || shell == 'bmenu' ){
+            } else if ( shell == 'bgmenu2' || shell == 'bgmenu3' || shell == 'bcmenu' || shell == 'tcmenu' ){
                 m.appendChild(s);
+
+                var bc = window.getComputedStyle(this.getElementsByClassName('fill')[0]).backgroundColor;
+                var chips = p.getElementsByClassName('chip');
+
+                for(var i=0;i<chips.length;i++){
+                    var cc = chips[i];
+                    if ( bc == window.getComputedStyle(cc).backgroundColor ){
+                        cc.parentElement.classList.add('current');
+                        break;
+                    }
+                }
+            } else if ( shell == 'cbmenu' ){
+                m.appendChild(s);
+
+                var bc = window.getComputedStyle(this.getElementsByClassName('border')[0]).borderColor;
+                var chips = p.getElementsByClassName('chip');
+
+                for(var i=0;i<chips.length;i++){
+                    var cc = chips[i];
+                    if ( bc == window.getComputedStyle(cc).backgroundColor ){
+                        cc.parentElement.classList.add('current');
+                        break;
+                    }
+                }
             }
 
             var o = c.getElementsByClassName('option');
@@ -3420,6 +3542,10 @@
 
             var p = document.createElement('div');
             var m = document.getElementById('moremenu');
+
+            if ( c.classList.contains('options') ){
+                m = document.getElementById('moremenu2');
+            }
 
             p.className = 'menuwrap';
             
@@ -3593,6 +3719,13 @@
                 insertrect();
             }
 
+
+            var p = document.getElementsByClassName('option shapetype')[0];
+            p = p.getElementsByClassName('shapeicon')[0];
+
+            p.className = 'shapeicon ' + (t == 'rectanglex' ? 'square' : 'circle');
+
+
             closepanel();
         }
 
@@ -3614,8 +3747,86 @@
         function colorsetting(e, color, menu){
             console.log(color, menu);
 
+            e.preventDefault();
+            e.stopPropagation();
 
 
+            if ( menu.classList.contains('bcmenu') ){
+
+                var bf = document.getElementsByClassName('brushfill2');
+                for(var i=0;i<bf.length;i++){
+                    bf[i].style.backgroundColor = color;
+                }
+                //window.brushcolor = color;
+                BRUSHCOLOR = color;
+            } else if ( menu.classList.contains('tcmenu') ){
+                //document.getElementsByClassName('textcoloractual')[0].backgroundColor = color;
+                var b = document.getElementsByClassName('textcoloractual');
+                for(var i=0;i<b.length;i++){
+                    var a = b[i].getElementsByClassName('textfill')[0];
+                    a.style.backgroundColor = color;
+                }
+
+                TEXTCOLOR = color;
+            } else if ( menu.classList.contains('bgmenu2') ){
+                var b = document.getElementById('shapefill');//getElementsByClassName('shape2fill');
+                //for(var i=0;i<b.length;i++){
+                    var a = b;//[i];//.getElementsByClassName('textfill')[0];
+                    a.style.background = color;
+
+                    if ( color == 'transparent' || !color || color == 'rgba(0, 0, 0, 0)' ){
+                        a.style.background = 'linear-gradient(to right, var(--null) 3px, transparent 3px) 12.5px';
+                        a.style.boxShadow = 'inset 0 0 0 3px var(--null)';
+                        a.style.transform = 'rotate(45deg)';
+                    } else {
+                        a.style.boxShadow =  'none';
+                        a.style.transform = 'rotate(0)';
+                    }
+                //}
+
+                SHAPECOLOR = color;
+            } else if ( menu.classList.contains('bmenu') ){
+                var b = document.getElementsByClassName('shapeborderactual');
+                for(var i=0;i<b.length;i++){
+                    var a = b[i].getElementsByClassName('border')[0];
+                    a.style.borderColor = color;
+
+                    if ( color == 'transparent' || !color || color == 'rgba(0, 0, 0, 0)' ){
+                        a.style.borderColor = 'rgba(155, 155, 155, 0.15)';
+                    }
+                }
+
+                SHAPEBORDERCOLOR = color;
+            } else if (menu.classList.contains('cbmenu') ){
+
+                var b = document.getElementsByClassName('canvasborderactual');
+                for(var i=0;i<b.length;i++){
+                    var a = b[i].getElementsByClassName('border')[0];
+                    a.style.borderColor = color;
+
+                    if ( color == 'transparent' || !color || color == 'rgba(0, 0, 0, 0)' ){
+                        a.style.borderColor = 'rgba(155, 155, 155, 0.15)';
+                    }
+                }
+
+                CANVASBORDERCOLOR = color;
+
+            } else if ( menu.classList.contains('bgmenu3') ){
+                var a = document.getElementById('canvasfill');
+
+                a.style.background = color;
+
+                if ( color == 'transparent' || !color || color == 'rgba(0, 0, 0, 0)' ){
+                    a.style.background = 'linear-gradient(to right, var(--null) 3px, transparent 3px) 12.5px';
+                    a.style.boxShadow = 'inset 0 0 0 3px var(--null)';
+                    a.style.transform = 'rotate(45deg)';
+                } else {
+                    a.style.boxShadow =  'none';
+                    a.style.transform = 'rotate(0)';
+                }
+
+                CANVASCOLOR = color;
+            } 
         }
 
         function colorswatch(e){
@@ -3635,7 +3846,7 @@
             var l = document.getElementsByClassName('layeritem current')[0];
             var id = l ? l.dataset.context : null;
 
-            if ( !id ){
+            if ( !id || m.classList.contains('toolmenu') ){
                 colorsetting.call(this, e, a, m);
 
                 return;
@@ -3875,9 +4086,12 @@
             // handles[2].style.margin = '0 0 -' + v + 'px  -' + v + 'px';
             // handles[3].style.margin = '0 -' + v + 'px -' + v + 'px 0';
 
-            c.style.borderWidth = v + 'px';
-
-            c.dataset.border = v;
+            if ( c && !this.getparent('toolmenu') ){
+                c.style.borderWidth = v + 'px';
+                c.dataset.border = v;
+            } else {
+                BORDERWIDTH = v;
+            }
         }
 
         function selectcolor(e){
@@ -4498,7 +4712,7 @@
 
         Attach.on('click', '.morebtn', moremenu);
 
-        Attach.on('click', '.fillcolor, .textcolor, .shapeborder, .fontsize, .typeface, .shapecoloractual, .shapeborderactual, .textcoloractual, .brushcoloractual, .brushsizeactual, .shapetype', colormenu);
+        Attach.on('click', '.fillcolor, .textcolor, .shapeborder, .fontsize, .typeface, .shapecoloractual, .shapeborderactual, .textcoloractual, .brushcoloractual, .brushsizeactual, .shapetype, .canvasborderactual, .canvasfillactual', colormenu);
 
         Attach.on('mousedown', '.select_tool', marquee);
         Attach.on('touchstart', '.select_tool', marquee);
