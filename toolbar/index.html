@@ -47,6 +47,8 @@
             --toolhover: #1e1f25;
             --toolpress: #1B1B1C;
             --toolselect: #1B1B1C;
+            --toolselect2: #0f0f10;
+            --toolselect3: #1B1B1C;
             --icon:#bbb;
             --iconcurrent:#fff;
             --color:#fff;
@@ -84,7 +86,7 @@
 
             --panelicons: var(--icon); /* rgba(255, 255, 255, 0.85) */
 
-            --toolselect2: #0f0f10;
+
 
             --null: rgb(66,66,66);
 
@@ -100,6 +102,8 @@
             --toolhover: #fdfdfd;
             --toolpress: #fff;
             --toolselect: #fff;
+            --toolselect2: #ddd;
+            --toolselect3: #fff;
             --icon:#777;
             --iconcurrent:#000;
             --color:#000;
@@ -115,8 +119,6 @@
 
             --dotcolor2: rgba(0, 0, 0, 0.35);
             --gridcolor2: rgba(0, 0, 0, 0.05);
-
-            --toolselect2: #ddd;
 
             --menutitle: rgba(0, 0, 0, 0.54);
         }
@@ -161,7 +163,7 @@
                     .toolbtn:hover {background:var(--toolhover);}
                     .toolbtn:active {background:var(--toolselect);}
 
-                .tool.active .toolbtn {background:var(--toolselect);box-shadow:0 2px 20px var(--shadow2);}
+                .tool.active .toolbtn {background:var(--toolselect3);box-shadow:0 2px 20px var(--shadow2);}
 
                 .toolbtn svg {max-width:var(--toolicons);display:block;position:absolute;z-index:1337;top:50%;left:50%;transform:translate(-50%, -50%);}
                     .toolbtn svg * {fill:var(--icon);}
@@ -169,6 +171,8 @@
 
                 .tools .options {background:var(--tool);border-radius:var(--toolbarradius);position:absolute;top:calc(50% - 20px);left:var(--toolbtn);opacity:0;pointer-events:none;transition:all 150ms ease-in-out;box-shadow:0 2px 20px rgba(0,0,0,0);top:50%;left:calc(var(--toolbtn) + 12px);transform:translate(-16px, -50%);}
                     .tools .active .options {background:var(--toolselect);}
+
+                    .ui3 .tools .active .options {background:#0f0f10;}
 
                 .toggled .options {opacity:1;pointer-events:all;box-shadow:0 2px 20px var(--shadow2);transform:translate(0, -50%);}
 
@@ -218,7 +222,7 @@
                 .ui2 .fakehandle, .ui3 .fakehandle {box-shadow:none;}
 
         #toolbar.minimized {pointer-events:none;}
-        .ui2 #toolbar.minimized, .ui3 #toolbar.minimized {width:48px;height:48px;overflow:hidden;border-radius:8px;}
+        .ui2 #toolbar.minimized, .ui3 #toolbar.minimized {width:var(--toolbtn);height:var(--toolbtn);overflow:hidden;border-radius:var(--toolbarradius);}
             #toolbar.minimized .tools {pointer-events:none;}
             #toolbar.minimized .tool {transform:translateX(-12px);opacity:0;pointer-events:none;}
 
@@ -250,7 +254,7 @@
         .ui2 .tool {display:flex;}
             .ui2 .toolbtn {width:calc(100% - 8px);margin:4px auto;height:calc(100% - 8px);background:transparent;box-shadow:none;}
 
-                .ui2 .tool.active .toolbtn {background:var(--toolselect2);}
+                .ui2 .tool.active .toolbtn {background:var(--toolselect2);box-shadow:none;}
                 
             .ui2 .handle {bottom:0;top: auto;left: 0;width:var(--toolbtn);height:var(--toolbtn);}
 
@@ -270,14 +274,14 @@
                 .ui2 .control .option {width:48px;height:48px;display: flex;align-content: center;align-items: center;justify-content: center;justify-items: center;}
             .ui2 .option .fill {margin:0;} */
 
-        .ui3 .tools {height:48px;background:var(--toolselect);box-shadow:0 3px 40px rgba(0,0,0,.4);padding:0px 40px 0 0;border-radius:var(--toolbarradius);}
-            .ui3 .tool {float:left;min-width:48px;height:40px;margin:4px 0 0;width:auto;border-radius:4px;}
-            .ui3 .toolbtn {width:48px;float:left;margin:4px auto;height:calc(100% - 8px);background:transparent !important;box-shadow:none !important;}
+        .ui3 .tools {overflow:hidden;height:var(--toolbtn);background:var(--toolselect);box-shadow:0 3px 40px rgba(0,0,0,.4);padding:0px var(--toolbtn) 0 0;border-radius:var(--toolbarradius);}
+            .ui3 .tool {float:left;min-width:var(--toolbtn);height:var(--toolbtn);margin:0px 0 0;width:auto;border-radius:4px;}
+            .ui3 .toolbtn {width:var(--toolbtn);float:left;margin:4px auto;height:calc(100% - 8px);background:transparent !important;box-shadow:none !important;}
 
         .ui3 .tool.active {background:#0f0f10;}
             
 
-        .ui3 .handle {bottom:1px;top: auto;left: auto;right:0px;box-shadow:none;}
+        .ui3 .handle {bottom:0;top: auto;left: auto;right:0px;box-shadow:none;width:var(--toolbtn);height:var(--toolbtn);}
 
         .ui3 .options {position:relative;left:0;width:0;background:transparent;border-radius: 0;box-shadow:none;}
         .ui3 .controls {padding:0;}
@@ -1563,8 +1567,26 @@
             av.empty();
             av.appendChild(document.createTextNode(v));
 
-            var hover = 'hsl(' + hsl[0] + ',' + hsl[1] + '%,' + (Number(hsl[2]) - 4) + '%)';
-            var press = 'hsl(' + hsl[0] + ',' + hsl[1] + '%,' + (Number(hsl[2]) - 6) + '%)';
+            var hsv = hsl2hsv(hsl);
+
+            var s2 = hsv[1];
+            var v2 = hsv[2];
+
+            var v2a = Math.max(v2 - .15, 0);
+            var v2b = Math.max(v2 - .25, 0);
+            var v2c = Math.max(v2 - .1, 0);
+
+            var hsl1 = hsv2hsl([hsv[0], s2, v2a]);
+            var hsl2 = hsv2hsl([hsv[0], s2, v2b]);
+            var hsl3 = hsv2hsl([hsv[0], s2, v2c]);
+
+            //var hover = 'hsl(' + hsl[0] + ',' + hsl[1] + '%,' + (Number(hsl[2]) - 4) + '%)';
+            // var press = 'hsl(' + hsl[0] + ',' + hsl[1] + '%,' + (Number(hsl[2]) - 6) + '%)';
+            // var pressed = 'hsl(' + hsl[0] + ',' + hsl[1] + '%,' + (Number(hsl[2]) - 14) + '%)';
+
+            var hover = 'hsl(' + hsl[0] + ',' + hsl3[1] + '%,' + hsl3[2] + '%)';
+            var press = 'hsl(' + hsl[0] + ',' + hsl1[1] + '%,' + hsl1[2] + '%)';
+            var pressed = 'hsl(' + hsl[0] + ',' + hsl2[1] + '%,' + hsl2[2] + '%)';
 
             var s = document.createElement('style');
             s.className = n;
@@ -1572,7 +1594,7 @@
             var css = ':root{ --tool: ' + v + ';';//
             
             css += '--toolhover: ' + hover + ';';
-            css += '--toolpress: ' + press + ';--toolselect: ' + press + ';--panel: ' + press + ';';
+            css += '--toolpress: ' + press + ';--toolselect: ' + press + ';--toolselect3: ' + hover + ';--panel: ' + press + ';--toolselect2: ' + pressed + ';';
             // css += '--ui: ' + rgb[0] + ',' + rgb[1] + ',' + rgb[2];
             css += '}';
 
@@ -1585,6 +1607,16 @@
             iconcolor.call(document.getElementById('iconcolor'), e);
         }
 
+        function hsv2hsl(hsv) {
+            var h = hsv[0];
+            var s = hsv[1] || 0;
+            var v = hsv[2] || 0;
+
+            var l = (2 - s) * v / 2;
+            var ss = l && l < 1 ? s * v / ( l < 0.5 ? l * 2 : 2- l * 2) : s;
+
+            return [h, ss * 100, l * 100];
+        }
         function iconcolor(e){
             var n = 'tweaked_icons';
             var o = document.head.getElementsByClassName(n);
