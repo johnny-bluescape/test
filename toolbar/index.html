@@ -322,7 +322,7 @@
 
         .type_tool canvas, .type_tool {cursor:text !important;}
 
-        .textwrap {position:absolute;}
+        .textwrap {position:absolute;cursor: -webkit-grab;cursor:grab;}
         .textarea {cursor: default;user-select:none;pointer-events:none;padding:12px;resize:none;border-radius:4px;position:relative;min-width:48px;height:28px;z-index:1337;background:transparent;border:none;color:white;font-size:24px;}
             .textwrap:not(.current):hover .textarea {box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);}
             .current .textarea {box-shadow:0 0 0 var(--selectwidth) var(--select);user-select:text;cursor:text;pointer-events:all;}
@@ -2902,6 +2902,7 @@
             t.className = 'textarea';
 
             t.style.color = TEXTCOLOR;
+            t.style.fontSize = TEXTSIZE + 'px';
 
             w.className = 'textwrap current layeritem';
 
@@ -2910,7 +2911,8 @@
 
             w.style.top = y - 24 + 'px';
             w.style.left = x + 'px';
-            t.style.width = '48px';
+            t.style.width = TEXTSIZE * 2 + 'px';
+            t.style.height = TEXTSIZE + 12 + 'px';
             w.style.zIndex = 1337;
 
             var ops = document.getElementById('text_context').cloneNode(true);
@@ -2956,6 +2958,8 @@
             //}
 
             document.getElementsByClassName('contextpanel visible')[0].getElementsByClassName('textfill')[0].style.background = TEXTCOLOR;
+            document.getElementsByClassName('contextpanel visible')[0].getElementsByClassName('fontsize')[0].getElementsByClassName('label')[0].innerText = TEXTSIZE;
+            document.getElementsByClassName('contextpanel visible')[0].getElementsByClassName('typeface')[0].getElementsByClassName('label')[0].innerText = TYPEFACE;
         }
 
         function keyboardshowhide(e){
@@ -5030,9 +5034,6 @@
         //     console.log(ev);
         // });
 
-
-
-
    
         //var canvas = document.getElementById('canvas2');
 
@@ -5048,9 +5049,6 @@
         //     opt.e.preventDefault();
         //     opt.e.stopPropagation();
         // })
-
-
-
 
         function zoomtest(e) {
             e.preventDefault();
