@@ -170,6 +170,9 @@
                     .active .toolbtn svg * {fill:var(--iconcurrent);}
 
                 .tools .options {background:var(--tool);border-radius:var(--toolbarradius);position:absolute;top:calc(50% - 20px);left:var(--toolbtn);opacity:0;pointer-events:none;transition:all 150ms ease-in-out;box-shadow:0 2px 20px rgba(0,0,0,0);top:50%;left:calc(var(--toolbtn) + 12px);transform:translate(-16px, -50%);}
+
+                .swap .tools .options {right:calc(var(--toolbtn) + 12px);left:auto;}
+
                     .tools .active .options {background:var(--toolselect);}
 
                     .ui3 .tools .active .options {background:#0f0f10;}
@@ -731,7 +734,7 @@
                 .svgiconcolor:hover svg * {fill:var(--iconcurrent);}
                 .svgiconcolor:active svg * {fill:var(--iconcurrent);}
 
-        .dropper {}
+        .dropper {position:absolute;right:12px;}
             .dropper svg {width:24px;height:24px;}
                 .dropper svg * {fill:var(--icon);}
 
@@ -3623,6 +3626,21 @@
                         break;
                     }
                 }
+            } else if ( shell == 'tfmenu' ){
+                var v = this.innerText;
+
+                var op = p.getElementsByClassName('item');
+
+                for(var i=0;i<op.length;i++){
+                    var o = op[i];
+
+                    if ( o.innerText == v ){
+                        o.classList.add('current');
+                    } else {
+                        o.classList.remove('current');
+                    }
+                }
+
             }
 
             var xx = c.getElementsByClassName('option');
