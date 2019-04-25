@@ -249,6 +249,7 @@
         #tweaks {position:fixed;top:0;right:0;bottom:0;padding:8px;overflow-y:auto;width:200px;box-sizing:border-box;background:#f4f4f4;z-index:1336;color:#333;}
 
             .hidetweak #tweaks {display:none;}
+            .hidetweak .rez {right:8px !important;}
 
             #tweaks h4 {padding: 8px 8px 12px;font-weight: 600;}
 
@@ -4551,6 +4552,15 @@
 
 
                 console.log(hsl);
+
+
+                //  @todo brush color
+
+                if ( document.body.classList.contains('brush_tool') ){
+                    BRUSHCOLOR = hsl;
+
+                    document.getElementById('brushfill2').style.background = hsl;
+                }
             }
 
             function end(e){
