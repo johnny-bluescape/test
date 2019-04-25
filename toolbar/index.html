@@ -151,7 +151,7 @@
         #toolbar {position:fixed;top:50%;left:64px;margin-top:-252px;user-select:none;z-index:2147483645;pointer-events:none;}
 
             .tools {transition:transform 150ms ease-in-out;}
-            #toolbar.swap .tools {transform: translateX(calc(-100% - 60px));}
+            html:not(.ui2) #toolbar.swap .tools {transform: translateX(calc(-100% - 60px));}
 
             .tool {width:var(--toolbtn);height:var(--toolbtn);margin-bottom:var(--toolgap);position:relative;transition:all 150ms ease-in-out;pointer-events:all;}
                 .tool:last-child {margin-bottom:0;}
@@ -407,6 +407,7 @@
 
                 .morebtn svg {transition:all 150ms ease-in-out;}
                 .sublevel .morebtn svg {transform:rotate(180deg);}
+                    .swap .sublevel .morebtn svg {transform:rotate(0deg);}
     
             .contextpanel .option svg {width:24px;height:24px;}
                 .contextpanel .option svg * {fill:var(--panelicons);}
@@ -2241,7 +2242,7 @@
                     ny = ty2;
                 }
 
-                if ( nx > ww * .75 && !(document.documentElement.classList.contains('ui2') || document.documentElement.classList.contains('ui3')) ){
+                if ( nx > ww * .75 && !document.documentElement.classList.contains('ui3') ){
                     t.classList.add('swap');
                 } else {
                     t.classList.remove('swap');
@@ -3467,6 +3468,12 @@
             if ( this.classList.contains('morebtn')){
                 shell = 'moremenu';
             }
+
+            var swap = false;
+
+            if ( document.getElementById('toolbar').classList.contains('swap') ){
+                swap = true;
+            }
             
             var coff = c.offset();
             var x = coff.x;
@@ -3478,6 +3485,10 @@
 
             var p = document.createElement('div');
             var m = document.getElementById(shell);
+
+            if ( shell == 'moremenu' && c.classList.contains('options') ){
+                m = document.getElementById('moremenu2');
+            }
 
             var s = document.getElementById('colorswatches').cloneNode(true);
             s.removeAttribute('id');
@@ -3682,7 +3693,11 @@
             p.style.top = y + 'px';
             p.style.left = x + (w/2) - (p.offsetWidth / 2) + 'px';
             p.style.left = x + 48 + 12 + 'px';
-            p.style.left = x + 48 + 12+ 'px';//x + w + 12 + 'px';
+            p.style.left = x + 48 + 12 + 'px';//x + w + 12 + 'px';
+
+            if ( swap ){
+                p.style.left = x + w - m.offsetWidth - 48 - 12 + 'px';
+            }
 
             //p.style.transform = 'translateX(0px)';
 
