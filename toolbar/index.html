@@ -247,6 +247,9 @@
 
 
         #tweaks {position:fixed;top:0;right:0;bottom:0;padding:8px;overflow-y:auto;width:200px;box-sizing:border-box;background:#f4f4f4;z-index:1336;color:#333;}
+
+            .hidetweak #tweaks {display:none;}
+
             #tweaks h4 {padding: 8px 8px 12px;font-weight: 600;}
 
         .ui2 .tools {background:var(--toolselect);box-shadow:0 3px 40px var(--shadow);padding:0 0 var(--toolbtn);border-radius:var(--toolbarradius);}
@@ -740,6 +743,10 @@
 
                 .dropper:hover svg * {fill:var(--iconcurrent);}
                 .dropper:active svg * {fill:var(--iconcurrent);}
+
+        #hide {position:fixed;top:0;right:0;padding:14px 12px;z-index:834573894753895;opacity:.54;cursor:pointer;transition:all 150ms ease-in-out;}
+            #hide:hover {opacity:.7;}
+            #hide:active {opacity:.9;}
     </style>
 </head>
 <body class="rectanglex brush_tool ">
@@ -761,8 +768,16 @@
                         <path d="M28.1,16.6c0-0.5-0.3-0.9-0.8-1.1L9.8,9c-0.5-0.2-1-0.1-1.3,0.3C8.2,9.6,8,10.1,8.2,10.6l6.4,17.5c0.2,0.5,0.6,0.8,1.1,0.8	c0,0,0,0,0.1,0c0.5,0,0.9-0.3,1.1-0.7l2.8-5.8l5.5,5.6c0.2,0.2,0.6,0.4,0.9,0.4c0.3,0,0.6-0.1,0.9-0.4c0.5-0.5,0.5-1.3,0-1.8	l-5.5-5.6l5.9-2.9C27.8,17.5,28.1,17.1,28.1,16.6z M19,19.1c-0.2,0.1-0.4,0.1-0.5,0.3c-0.1,0.1-0.2,0.3-0.3,0.5L16,24.5l-4.5-12.2	l12.2,4.5L19,19.1z"/>
                     </svg>
                 </div>
-                <div class=options>
-                    
+                <div class="options contextpanel">
+                    <div class=optionwrap>
+                        <div class="option " data-menu=shapemenu>
+                            Lasso
+                        </div><div class="option fillcolor shapefillactual" data-menu=bgmenu2> 
+                            Marquee
+                        </div><div class="option morebtn">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class=tool>
@@ -1395,8 +1410,11 @@
 
     <canvas id="canvas2" style="cursor: crosshair; position: absolute; top: 0px; left: 0px; right: 0px; bottom: 0px; width: 100%; height: 100%;z-index:1;"></canvas>
 
+    <div id=hide title="Hide/Show Tweak Panel">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+    </div>
     <div id=tweaks>
-        <h4>Tweaks</h4>
+        <h4>Tweaks </h4>
         <div class=tweak>
             <label><input type=checkbox value=light class=tweakr /><div class=toggle></div> Light</label>
         </div>
@@ -4857,6 +4875,10 @@
             closemenu.call(document.body, {});
         }
 
+        function tweakstate(e){
+            document.body.classList.toggle('hidetweak');
+        }
+
         Attach.on('touchstart', '.handle', handlehandler);
         Attach.on('mousedown', '.handle', handlehandler);
 
@@ -4864,6 +4886,9 @@
         Attach.on('mousedown', '#toolbar', handlehandler);
 
         Attach.on('click', '.toolbtn', toolhandler);
+
+        Attach.on('click', '#hide', tweakstate);
+
 
         Attach.on('click', '.control', panelhandler);
 
