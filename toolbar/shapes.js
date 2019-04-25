@@ -224,8 +224,12 @@ function rectanglemove(e){
     //var offy = sy - Math.min(Math.max(sy, ot), ot + h);
 
 
+    hidecontext();
+
+
     function move(e){
         e.preventDefault();
+        
 
         var evt = e.touches ? e.touches[0] : e;
 
