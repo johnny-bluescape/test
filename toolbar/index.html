@@ -382,7 +382,10 @@
             .ellipse .resizehandle:nth-child(3) {bottom:-5px;left:50%;margin-left:-4px;cursor:ns-resize;}
             .ellipse .resizehandle:nth-child(4) {top:50%;margin-top:-4px;left:-5px;cursor:ew-resize;}
 
-        .contextpanel {overflow:hidden;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity 150ms ease-in-out, transform 150ms ease-in-out;background:var(--panel);border-radius:var(--toolbarradius);box-shadow:0 3px 20px var(--shadow);min-height:48px;position:absolute;top:-64px;left:50%;transform:translate(0, 4px);z-index:9999999999999;}
+        .contextpanel {overflow:hidden;white-space:nowrap;opacity:0;pointer-events:none;transition:none;background:var(--panel);border-radius:var(--toolbarradius);box-shadow:0 3px 20px var(--shadow);min-height:48px;position:absolute;top:-64px;left:50%;transform:translate(0, 4px);z-index:2147483643;}
+
+            .contextpanel.visible {transition:opacity 150ms ease-in-out, transform 150ms ease-in-out;}
+
             .current:not(.drawing) .contextpanel, .current:not(.moving) .contextpanel, .contextpanel.visible {opacity:1;pointer-events:all;transform:translate(0, 0);}
             
             /* .contextpanel.visible.sublevel {opacity:0;pointer-events:none;transform:translate(-8px, 0);} */
@@ -409,12 +412,17 @@
             .recticon {width:24px;height:24px;border:3px solid rgba(255,255,255,.5);box-sizing:border-box;}
 
 
-            .menuwrap {position:fixed;opacity:0;transition: transform 150ms ease-in-out, opacity 150ms ease-in-out;user-select:none;z-index:999999999999991;transform: translateX(100%);touch-action: manipulation;}
+            .menuwrap {position:fixed;opacity:0;transition: transform 150ms ease-in-out, opacity 150ms ease-in-out;user-select:none;z-index:2147483644;transform: translateX(100%);touch-action: manipulation;}
                 .menuwrap.visible {transform:translateX(0);opacity:1;}
 
                 .menuwrap.subsublevel {transform:translateX(-100%) !important;opacity:0;pointer-events:none;}
 
+                .menuwrap.notransition {transition:none;}
+
             .overflowmenu {overflow:hidden;background: var(--toolselect);border-radius:var(--toolbarradius);padding:0 0;box-shadow: 0 2px 20px var(--shadow2);min-width: 216px;}
+                
+                .moremenu, .contextmenu.moremenu {padding:0;min-width: 216px;overflow:hidden;}
+
                 
                 .mitem {cursor:pointer;min-height:48px;padding:8px 16px;display:flex;align-content:center;align-items:center;box-sizing:border-box;font-size:18px;}
                 .mitem:hover {background-color:var(--hover);}
@@ -3045,7 +3053,13 @@
             var p = document.getElementsByClassName('contextpanel visible');
             p.removeclass('visible');
 
-            closemenu();
+            removemenu(); // closemenu();
+        }
+
+        function removemenu(){
+            var m = document.getElementsByClassName('menuwrap');
+            m.remove();
+            console.log('----REMOVE-----')
         }
 
         function texthandler(e){
@@ -3173,7 +3187,7 @@
 
         function setcontextpanel(x){
 
-            if ( !this ){
+            if ( !this || !this.className ){
                 return;
             }
 
@@ -3227,6 +3241,14 @@
             c.style.top = Math.round(y) + 'px';
 
             c.classList.remove('visible');
+            c.classList.remove('opened');
+
+            console.log(c.firstElementChild);
+            
+            c.firstElementChild.style.marginLeft = 0;
+            c.firstElementChild.style.tranform = 'none';
+
+            removemenu();
         }
 
         function animationdone(e){
@@ -3236,8 +3258,11 @@
         }
 
         function closemenu(e){
+
+            console.log(e);
             e = e || {};
             var t = e.target || document.body;
+            
             if ( t.classList.contains('delete') || t.getparent('contextmenu') || t.getparent('overflowmenu') || t.getparent('tweaks') || (t.getparent('option') && (e.type == 'mousedown' || e.type == 'touchstart')  ) ){
                 return;
             }
@@ -3267,11 +3292,14 @@
             }
             
 
-            document.body.removeEventListener('mousedown', closemenu);
-            document.body.removeEventListener('touchstart', closemenu);
-            document.body.removeEventListener('click', closemenu);
+            // document.body.removeEventListener('mousedown', closemenu);
+            // document.body.removeEventListener('touchstart', closemenu);
+            // document.body.removeEventListener('click', closemenu);
 
-            var o = document.getElementsByClassName('option opened');
+            document.body.removeEventListener('mouseup', closemenu);
+            document.body.removeEventListener('touchend', closemenu);
+
+            var o = document.getElementsByClassName('contextpanel opened');
             o.removeclass('opened');
 
             var m = document.getElementsByClassName('menuwrap visible');
@@ -3287,11 +3315,13 @@
 
             var o = document.getElementsByClassName('contextpanel sublevel');
 
-            if ( !o[0]){
+            if ( !o[0] ){
                 return;
             }
 
             var o1 = o[0].getElementsByClassName('option')[0];
+
+            o[0].classList.add('opened');
             
             o.removeclass('sublevel');
 
@@ -3322,22 +3352,37 @@
             return b;
         }
 
+        function preclosemenu(e){
+            var t = e.target;
+
+            console.log(t, 'TARGET----');
+
+            if ( !t.getparent('menuwrap') ){
+                document.body.addEventListener('mouseup', closemenu);
+                document.body.addEventListener('touchend', closemenu);
+            }
+        }
+
         function colormenu(e){
-            var o = this.classList.contains('opened');
+            var c = this.getparent('contextpanel');
+            var o = c.classList.contains('opened');
             if ( o ){
                 return;
             }
 
             var shell = this.dataset.menu;
 
-            var c = this.getparent('contextpanel');
+            if ( this.classList.contains('morebtn')){
+                shell = 'moremenu';
+            }
+            
             var coff = c.offset();
             var x = coff.x;
             var y = coff.y;
             var w = coff.w;
             var h = coff.h;
 
-            this.classList.add('opened');
+            c.classList.add('opened');
 
             var p = document.createElement('div');
             var m = document.getElementById(shell);
@@ -3363,9 +3408,12 @@
 
             p.appendChild(m);
             
-            document.body.addEventListener('mousedown', closemenu);
-            document.body.addEventListener('touchstart', closemenu);
-            document.body.addEventListener('click', closemenu);
+            // document.body.addEventListener('mousedown', closemenu);
+            // document.body.addEventListener('touchstart', closemenu);
+            //document.body.addEventListener('click', closemenu);
+
+            document.body.addEventListener('mousedown', preclosemenu);
+            document.body.addEventListener('touchstart', preclosemenu);
 
             document.body.appendChild(p);
 
@@ -3558,6 +3606,9 @@
         }
 
         function moremenu(e){
+            console.log('MORE  MEUN----', e);
+
+
             var o = this.classList.contains('opened');
             if ( o ){
                 return;
@@ -3591,9 +3642,12 @@
 
             p.appendChild(m);
             
-            document.body.addEventListener('mousedown', closemenu);
-            document.body.addEventListener('touchstart', closemenu);
-            document.body.addEventListener('click', closemenu);
+            // document.body.addEventListener('mousedown', closemenu);
+            // document.body.addEventListener('touchstart', closemenu);
+            // document.body.addEventListener('click', closemenu);
+
+            document.body.addEventListener('mousedown', preclosemenu);
+            document.body.addEventListener('touchstart', preclosemenu);
 
             document.body.appendChild(p);
 
@@ -3659,6 +3713,9 @@
                     bs.remove();
                 }
             }
+
+            var m = document.getElementsByClassName('menuwrap');
+            m.remove();
             
             document.body.click();
 
@@ -3863,7 +3920,8 @@
 
         function colorswatch(e){
             console.log('COLOR');
-            var m = this.getparent('contextmenu');
+            console.log(e);
+            var m = this.getparent('contextmenu') || document.getElementsByClassName('menuwrap subsublevel')[0] || document.getElementsByClassName('menuwrap')[0];
             var o = m.getElementsByClassName('color current');
 
             o.removeclass('current');
@@ -4182,6 +4240,12 @@
                 console.log(xx,yy);
 
                 halo.style.transform = 'translate(' + (xx-10) + 'px,' + (yy-10) + 'px)';
+
+
+                var cw = gr.getparent('cubewrap');
+                var oc = cw.getElementsByClassName('oldcolor')[0];
+
+                oc.style.background = 'hsl(' + hsl[0] + ',' + hsl[1] + '%,' + hsl[2] +'%)';
             }
 
             cs.value = hue;
@@ -4485,7 +4549,7 @@
           gs.value = rgb.g;
           bs.value = rgb.b;
 
-          rgbslide.call(rs, e);
+          //rgbslide.call(rs, e);
         }
 
         function alphainput(e){
@@ -4494,7 +4558,7 @@
           var a = p.getElementsByClassName('alphaslide')[0];
           a.value = v;
 
-          rgbslide.call(a, e);
+          //rgbslide.call(a, e);
         }
 
         function setcubevalues(hsla){
@@ -4594,7 +4658,7 @@
           this.id = id;
           var omg = 'html #' + id + '::-webkit-slider-thumb {background:hsla(' + v + ', 100%, 50%, 1) !important;}';
 
-          var sty = document.getElementsByClassName('sliderstyle3');
+          var sty = document.head.getElementsByClassName('sliderstyle3');
 
           while(sty[0]){
             sty[0].parentNode.removeChild(sty[0]);
@@ -4603,7 +4667,7 @@
           sty = document.createElement('style');
           sty.innerHTML = omg;
           sty.className = 'sliderstyle3';
-          document.body.appendChild(sty);
+          document.head.appendChild(sty);
 
           setcubevalues.call(p, [v, s, l, av]);
         }
@@ -4667,17 +4731,24 @@
 
                 w.className = 'color';
 
+                if ( c[i].getparent('menuwrap')){
+                    w.classList.add('current');
+                }
+
                 p.className = 'chip';
                 p.style.backgroundColor = hex;
 
                 w.appendChild(p);
 
+                var o = c[i].getElementsByClassName('color current');
+                o.removeclass('current');
+
                 c[i].appendChild(w);
 
-                p.click();
+                //p.click();
             }
 
-            //closemenu();
+            closemenu();
         }
 
         function menuitem(e){
@@ -4742,9 +4813,9 @@
 
         Attach.on('click', '.delete', deletecurrent);
 
-        Attach.on('click', '.morebtn', moremenu);
+        // Attach.on('click', '.morebtn', moremenu);
 
-        Attach.on('click', '.fillcolor, .textcolor, .shapeborder, .fontsize, .typeface, .shapecoloractual, .shapeborderactual, .textcoloractual, .brushcoloractual, .brushsizeactual, .shapetype, .canvasborderactual, .canvasfillactual', colormenu);
+        Attach.on('click', '.fillcolor, .textcolor, .shapeborder, .fontsize, .typeface, .shapecoloractual, .shapeborderactual, .textcoloractual, .brushcoloractual, .brushsizeactual, .shapetype, .canvasborderactual, .canvasfillactual, .morebtn', colormenu);
 
         Attach.on('mousedown', '.select_tool', marquee);
         Attach.on('touchstart', '.select_tool', marquee);
@@ -4797,7 +4868,22 @@
             }
         }, true);
 
-        document.body.addEventListener('mouseup', function(e){
+
+        document.body.addEventListener('mousedown', function(e){
+            var t = e.target;
+            if ( t == document.body || t.id == 'canvas2' ){
+                document.body.addEventListener('mouseup', blurup);
+            }
+        });
+
+        document.body.addEventListener('touchstart', function(e){
+            var t = e.target;
+            if ( t == document.body || t.id == 'canvas2' ){
+                document.body.addEventListener('touchend', blurup);
+            }
+        });
+
+        function blurup(e){
             var t = e.target;
 
             if ( t == document.body || t.id == 'canvas2' ){
@@ -4809,7 +4895,10 @@
                 // var p = document.getElementsByClassName('contextpanel visible');
                 // p.removeclass('visible');
             }
-        });
+
+            document.body.removeEventListener('mouseup', blurup);
+            document.body.removeEventListener('touchend', blurup);
+        }
 
         function screenrez(){
             var r = document.getElementsByClassName('rez');
