@@ -482,31 +482,48 @@
             .brush_tool #advancedpanel .brushpanel, .type_tool #advancedpanel .typepanel {display:block;}
 
 
-        #keyboard {position:fixed;max-width:772px;width:100%;top:50%;left:50%;z-index:9999999999999999;background:#181819;padding:8px 8px 0px;border-radius:12px;box-shadow: 0 2px 20px var(--shadow2);opacity:0;pointer-events:none;transition:opacity 150ms ease-in-out;}
+        #keyboard {position:fixed;max-width:772px;width:100%;top:50%;left:50%;z-index:2147483644;background:var(--panel);padding:8px 8px 0px;border-radius:var(--toolbarradius);box-shadow: 0 2px 20px var(--shadow2);opacity:0;pointer-events:none;transition:opacity 150ms ease-in-out;}
+            #keyboard {max-width:652px;}
+
             #keyboard.show {opacity:1;transform:translateY(0);pointer-events:all;}
         #keyboard .row {display:flex;padding: 0 0 8px;margin:0;}
             #keyboard .key {display:flex;width:60px;height:60px;align-items:center;justify-content:center;font-size:24px;font-weight:600;background:#262627;margin-right:8px;cursor:pointer;}
 
+            #keyboard .key {display:flex;width:48px;height:48px;align-items:center;justify-content:center;font-size:22px;font-weight:600;background:transparent;margin-right:8px;cursor:pointer;border-radius:calc(var(--toolbarradius) - 6px);user-select:none;}
+
                 #keyboard .key:last-child {margin:0;}
+
+                #keyboard .key.shift, #keyboard .key.space, #keyboard .key.return, #keyboard .key.del, #keyboard .key.num {background:#303031;}
+                #keyboard .key.shift, #keyboard .key.return, #keyboard .key.del, #keyboard .key.num {background:transparent;}
                
-                #keyboard .key.shift {width:92px;background:#303031;}
+                #keyboard .key.shift {width:92px;}
 
-                #keyboard .key.space {width:704px;background:#303031;}
+                #keyboard .key.space {width:704px;color:transparent;background:#262627;}
 
-                #keyboard .key.return {width:76px;background:#303031;}
-                #keyboard .key.del {width:92px;background:#303031;}
-                #keyboard .key.num {background:#303031;}
+                #keyboard .key.return {width:76px;}
+                #keyboard .key.del {width:92px;}
+                #keyboard .key.num {}
+
+                
 
                 #keyboard .key:hover {background:#303031;}
                 #keyboard .key:active {background:#434348;}
 
+                #keyboard .key:hover {background:#262627;}
+                #keyboard .key:active {background:#303031;}
+
+                #keyboard .key.space:hover {background:#303031;}
+                #keyboard .key.space:active {background:#434348;}
+
         #keyboard.uppercase .key {text-transform:uppercase;}
             #keyboard.uppercase .shift {background:#434348;}
 
-        #keyboard .row:first-child .key:first-child {border-radius: 6px 0 0 0;}
+            #keyboard.uppercase .shift {background:#262627;}
+
+        /* #keyboard .row:first-child .key:first-child {border-radius: 6px 0 0 0;}
         #keyboard .row:first-child .key:last-child {border-radius: 0 6px 0 0;}
         #keyboard .row:last-child .key:first-child {border-radius: 0 0 0 6px;}
-        #keyboard .row:last-child .key:last-child {border-radius: 0 0 6px 0;}
+        #keyboard .row:last-child .key:last-child {border-radius: 0 0 6px 0;} */
 
         .minishape {width:48px;height:48px;display:inline-flex;align-items:center;justify-content:center;cursor: pointer;border-radius:8px;transition:all 150ms ease-in-out;}
 
@@ -1504,7 +1521,7 @@
             <div class="key shift">Shift</div><div class=key>z</div><div class=key>x</div><div class=key>c</div><div class=key>v</div><div class=key>b</div><div class=key>n</div><div class=key>m</div><div class=key>,</div><div class=key>.</div><div class=key>?</div>
         </div>
         <div class=row>
-            <div class="key num">&123</div><div class="key space">Space</div>
+            <!-- <div class="key num">&123</div> --><div class="key space">Space</div>
         </div>
     </div>
 
