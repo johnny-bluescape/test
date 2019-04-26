@@ -749,6 +749,21 @@
         #hide {position:fixed;top:0;right:0;padding:14px 12px;z-index:834573894753895;opacity:.54;cursor:pointer;transition:all 150ms ease-in-out;}
             #hide:hover {opacity:.7;}
             #hide:active {opacity:.9;}
+
+        #layers {height:100%;pointer-events:none;position:relative;z-index:2;}
+            #layers > * {pointer-events:all;}
+
+
+        .toast {position:fixed;top:12px;right:212px;z-index:999999999999;background:var(--panel);border-radius:var(--toolbarradius);box-shadow: 0 4px 20px var(--shadow2);display:flex;padding:8px;align-items:center;}
+            .hidetweak .toast {right:12px;}
+
+            .toast .message {font-weight:600;padding-left:4px;}
+            .toast .dismiss {cursor:pointer;padding:0 12px;height:48px;font-weight:600;background:rgba(255,255,255,.05);border-radius:calc(var(--toolbarradius) - 4px);display:flex;align-items:center;margin-left:12px;}
+                .toast .dismiss:hover {background:rgba(255,255,255,.075);}
+                .toast .dismiss:active {background:rgba(255,255,255,.1);}
+
+
+        .tnum {font-feature-settings:'tnum';}
     </style>
 </head>
 <body class="rectanglex brush_tool ">
@@ -1462,6 +1477,10 @@
 
         <div class=tweaked>
             <div class=tweak>
+                <div class=label><span>Grid Size</span><div class=value>48</div></div>
+                <input type=range class=tooltweak min=24 max=240 value=48 step=4 data-id=grid oninput="gridtweak.call(this, event)" />
+            </div>
+            <div class=tweak>
                 <div class=label><span>Toolbar Button Size</span><div class=value>60</div></div>
                 <input type=range class=tooltweak min=16 max=76 value=60 step=4 data-id=toolbtn oninput="tweakedtools.call(this, event)" />
             </div>
@@ -1600,7 +1619,9 @@
         TEXTSIZE = 24;
         TEXTCOLOR = 'white';
         TYPEFACE = 'Helvetica';
-
+        LAYERSCALE = 1;
+        GRIDSIZE = 48;
+        DELTASCALE = 1;
 
         function toolbarcolor(e){
             var n = 'tweaked_toolbar';
@@ -5077,23 +5098,91 @@
             document.body.appendChild(d);
         }
 
-        screenrez();
+        function gridtweak(e){
+            var v = this.value;
 
-        var dotgrid2 = 48;
+            GRIDSIZE = v;
+
+            var dotgrid2 = GRIDSIZE * DELTASCALE;
+
+            var n = 'tweaked_dotgrid';
+            var o = document.head.getElementsByClassName(n);
+            o.remove();
+
+            var s = document.createElement('style');
+            s.className = n;
+
+            var css = ':root{ --dotgrid: ' + dotgrid2 + 'px; --grid: ' + dotgrid2 + 'px;}';
+
+            s.appendChild(document.createTextNode(css));
+
+            document.head.appendChild(s);
+
+
+            var p = this.getparent('tweak');
+            if ( !p ){
+                return;
+            }
+            var l = p.getElementsByClassName('value')[0];
+
+            l.empty();
+            l.appendChild(document.createTextNode(v));
+        }
+
         function dotspacing(e){
-            //e.preventDefault();
+            
+            if ( e.target.getparent('tweaks') || ( !document.documentElement.classList.contains('dotgrid') && !document.documentElement.classList.contains('grid') ) ){
+                return;
+            }
+
+            e.preventDefault();
+
+
+            var l = document.getElementById('layers');
+            var d = document.getElementById('canvas2');
+            var ls = LAYERSCALE;
 
             console.log(e.deltaY);
 
             var delta = 1;
+            var ds = 0.01;
 
             if ( e.deltaY < 0 ){
                 delta = -1;
             }
 
-            dotgrid2 += delta;
+            if (e.deltaY % 1 != 0){
+                delta = delta * -1;
+            }
+
+            console.log(e);
+
+            if ( DELTASCALE <= 0.01 ){ //|| delta < 0 && DELTASCALE == 0.01 
+                ds = 0.0005 ;
+            } else if ( DELTASCALE >= 2 ){
+                ds = 0.1;
+            }
+
+            DELTASCALE = Math.max(DELTASCALE + (delta * ds), ds);
+
+            //dotgrid2 += delta;
+            var dotgrid2 = GRIDSIZE * DELTASCALE;
 
             dotgrid2 = Math.max(dotgrid2, 0.1);
+
+            // if ( LAYERSCALE === 1 ){
+            //     l.style.transformOrigin = d.style.transformOrigin = e.pageX + 'px ' + e.pageY + 'px';
+            //     document.body.style.backgroundPosition = (e.pageX - 48) + 'px ' + (e.pageY - 48) + 'px';
+            // }
+
+
+            LAYERSCALE = ls = Math.max(ls + (delta * ds), ds);
+
+            l.style.transform = d.style.transform = 'scale(' + ls + ')';
+
+
+            setboundingposition();
+            setcontextpanel.call(document.getElementsByClassName('layeritem current')[0]);
             
 
             var n = 'tweaked_dotgrid';
@@ -5103,12 +5192,65 @@
             var s = document.createElement('style');
             s.className = n;
 
-            var css = ':root{ --dotgrid: ' + dotgrid2 + 'px; --grid: ' + dotgrid2 + 'px;}'
+            var css = ':root{ --dotgrid: ' + dotgrid2 + 'px; --grid: ' + dotgrid2 + 'px;}';
 
             s.appendChild(document.createTextNode(css));
 
             document.head.appendChild(s);
 
+
+            if ( LAYERSCALE !== 1 ){
+                var zt = document.getElementsByClassName('zoomtoast');
+                
+                if ( zt ){
+                    zt.remove();
+                }
+                
+                var t = document.createElement('div');
+                var d = document.createElement('div');
+                var z = document.createElement('div');
+
+                t.className = 'toast zoomtoast';
+                d.className = 'dismiss resetzoom';
+                z.className = 'zoom message tnum';
+
+                d.onclick = resetzoom;
+
+                var scale = 100 * LAYERSCALE;
+
+                scale = Math.round(scale*100)/100;
+
+                z.appendChild(document.createTextNode(scale + '%'));
+                d.appendChild(document.createTextNode('Reset'));
+
+
+                t.appendChild(z);
+                t.appendChild(d);
+
+                document.body.appendChild(t);
+            }
+
+        }
+
+        function resetzoom(e){
+            LAYERSCALE = DELTASCALE = 1;
+            gridtweak.call({value : GRIDSIZE}, e);
+
+            var l = document.getElementById('layers');
+            var d = document.getElementById('canvas2');
+
+            l.style.transform = d.style.transform = 'scale(1)';
+
+            l.style.transformOrigin = d.style.transformOrigin = 'center';
+            document.body.style.backgroundPosition = 'center';
+
+            setboundingposition();
+            setcontextpanel.call(document.getElementsByClassName('layeritem current')[0]);
+
+            var zt = document.getElementsByClassName('zoomtoast');
+            if ( zt ){
+                zt.remove();
+            }
         }
 
         window.addEventListener('mousewheel', dotspacing, {passive:false});
@@ -5148,6 +5290,8 @@
         if ( location.href.indexOf('localhost') < 0 && location.hash != '#debug' ){
             console.log = function(){};
         }
+
+        screenrez();
         
     </script>
     <!-- <script src="./fabric.js"></script> -->
