@@ -764,6 +764,67 @@
 
 
         .tnum {font-feature-settings:'tnum';}
+
+        .btn {width:48px;height:48px;display:flex;align-items:center;justify-content:center;}
+            .btn svg {width:24px;height:24px;}
+                .btn svg * {fill:white;}
+
+
+
+        .colorwheel2 {}
+        .pie {
+            width: 0;
+            height: 0;
+            border-left: 9px solid transparent;
+            border-right: 9px solid transparent;
+            border-top: 80px solid red;
+            transform: rotate(0);
+            transform-origin: bottom center;
+            position:absolute;top:0;left:0;
+        }
+
+        .pie:nth-child(1) {transform: rotate(0deg);}
+        .pie:nth-child(2) {transform: rotate(12deg);}
+        .pie:nth-child(3) {transform: rotate(24deg);}
+        .pie:nth-child(4) {transform: rotate(36deg);}
+        .pie:nth-child(5) {transform: rotate(48deg);}
+        .pie:nth-child(6) {transform: rotate(60deg);}
+        .pie:nth-child(7) {transform: rotate(72deg);}
+        .pie:nth-child(8) {transform: rotate(84deg);}
+        .pie:nth-child(9) {transform: rotate(96deg);}
+        .pie:nth-child(10) {transform: rotate(108deg);}
+        .pie:nth-child(11) {transform: rotate(120deg);}
+        .pie:nth-child(12) {transform: rotate(132deg);}
+        .pie:nth-child(13) {transform: rotate(144deg);}
+        .pie:nth-child(14) {transform: rotate(156deg);}
+        .pie:nth-child(15) {transform: rotate(168deg);}
+        .pie:nth-child(16) {transform: rotate(180deg);}
+        .pie:nth-child(17) {transform: rotate(192deg);}
+        .pie:nth-child(18) {transform: rotate(204deg);}
+        .pie:nth-child(19) {transform: rotate(216deg);}
+        .pie:nth-child(20) {transform: rotate(228deg);}
+        .pie:nth-child(21) {transform: rotate(240deg);}
+        .pie:nth-child(22) {transform: rotate(252deg);}
+        .pie:nth-child(23) {transform: rotate(264deg);}
+        .pie:nth-child(24) {transform: rotate(276deg);}
+        .pie:nth-child(25) {transform: rotate(288deg);}
+        .pie:nth-child(26) {transform: rotate(300deg);}
+        .pie:nth-child(27) {transform: rotate(312deg);}
+        .pie:nth-child(28) {transform: rotate(324deg);}
+        .pie:nth-child(29) {transform: rotate(336deg);}
+        .pie:nth-child(30) {transform: rotate(348deg);}
+
+
+        .colorwheel {position:relative;top:0;left:0;margin-left:0;width:264px;height:264px;border-radius:50%;overflow:hidden;transform:translateZ(0);color:white;}
+        .colorblur {position:absolute;width:160px;height:160px;transform:translate(60px, -50%) scale(2);left:50%;top:50%;-webkit-filter:blur(28px);}
+
+        .piecover {position:absolute;top:24px;left:24px;right:24px;bottom:24px;background:var(--panel);border-radius:50%;}
+        .spin {position:absolute;top:0;left:0;right:0;bottom:0;cursor:pointer;}
+        .spinhandle {width:16px;height:16px;position:absolute;left:50%;transform:translateX(-50%);top:4px;border-radius:50%;background:transparent;border:2px solid white;box-sizing:border-box;box-shadow:0 0 0 2px rgba(0,0,0,.05);}
+        /* .spintri {-webkit-clip-path: polygon(50% 0%, 0% 100%, 100% 100%);-moz-clip-path: polygon(50% 0%, 0% 100%, 100% 100%);clip-path: polygon(50% 0%, 0% 100%, 100% 100%);background:red;position:absolute;top:24px;left:40px;right:40px;bottom: 76px;background-image:linear-gradient(45deg, white, transparent 70%), linear-gradient(-45deg, black, transparent 70%);} */
+        .spintri {background:red;position:absolute;top:28px;left:28px;right:28px;bottom: 28px;background-image:linear-gradient(to top, #000, rgba(204, 154, 129, 0)), linear-gradient(to right, #fff, rgba(204, 154, 129, 0));border-radius:50%;}
+
+            .trihandle {position:absolute;top:-8px;left:-8px;width:12px;height:12px;position:absolute;transform:translate(134px, 44px);border-radius:50%;background:transparent;border:2px solid white;box-sizing:border-box;box-shadow:0 0 0 2px rgba(0,0,0,.05);pointer-events:none;}
     </style>
 </head>
 <body class="rectanglex brush_tool ">
@@ -787,10 +848,8 @@
                 </div>
                 <div class="options contextpanel">
                     <div class=optionwrap>
-                        <div class="option " data-menu=shapemenu>
-                            Lasso
-                        </div><div class="option fillcolor shapefillactual" data-menu=bgmenu2> 
-                            Marquee
+                        <div class="option marqueeselect current" data-menu=smenu> 
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 5v4h2V5h4V3H5c-1.1 0-2 .9-2 2zm2 10H3v4c0 1.1.9 2 2 2h4v-2H5v-4zm14 4h-4v2h4c1.1 0 2-.9 2-2v-4h-2v4zm0-16h-4v2h4v4h2V5c0-1.1-.9-2-2-2z"/></svg>
                         </div><div class="option morebtn">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
                         </div>
@@ -1212,6 +1271,15 @@
             
         </div>
 
+        <div id=smenu>
+            <div class="btn"> 
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 5v4h2V5h4V3H5c-1.1 0-2 .9-2 2zm2 10H3v4c0 1.1.9 2 2 2h4v-2H5v-4zm14 4h-4v2h4c1.1 0 2-.9 2-2v-4h-2v4zm0-16h-4v2h4v4h2V5c0-1.1-.9-2-2-2z"/></svg>
+            </div>
+            <div class="btn" >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18.6 6.62c-1.44 0-2.8.56-3.77 1.53L12 10.66 10.48 12h.01L7.8 14.39c-.64.64-1.49.99-2.4.99-1.87 0-3.39-1.51-3.39-3.38S3.53 8.62 5.4 8.62c.91 0 1.76.35 2.44 1.03l1.13 1 1.51-1.34L9.22 8.2C8.2 7.18 6.84 6.62 5.4 6.62 2.42 6.62 0 9.04 0 12s2.42 5.38 5.4 5.38c1.44 0 2.8-.56 3.77-1.53l2.83-2.5.01.01L13.52 12h-.01l2.69-2.39c.64-.64 1.49-.99 2.4-.99 1.87 0 3.39 1.51 3.39 3.38s-1.52 3.38-3.39 3.38c-.9 0-1.76-.35-2.44-1.03l-1.14-1.01-1.51 1.34 1.27 1.12c1.02 1.01 2.37 1.57 3.82 1.57 2.98 0 5.4-2.41 5.4-5.38s-2.42-5.37-5.4-5.37z"/></svg>
+            </div>
+        </div>
+
         <div id=bgmenu2>
             <div class=menutitle>Background Color</div>
         </div>
@@ -1384,6 +1452,66 @@
                 <div class="menubtn selectcolor dropper" data-menu=huecube>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 5.63l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-3.12 3.12-1.93-1.91-1.41 1.41 1.42 1.42L3 16.25V21h4.75l8.92-8.92 1.42 1.42 1.41-1.41-1.92-1.92 3.12-3.12c.4-.4.4-1.03.01-1.42zM6.92 19L5 17.08l8.06-8.06 1.92 1.92L6.92 19z"/></svg>
                 </div>
+            </div>
+        </div>
+
+        <div class="colorwrap2 colorwheel2" id=colorwheel>
+
+            <div class="relative" style="height:264px;">
+                <div class="colorwheel" data-deg="357.4438499214217">
+                    <div class="colorrotate" style="transform: rotate(72deg);
+                    width: 100%;height: 100%;">
+                        <div class="colorblur">
+                            <div class="pie" style="border-top-color:#ffff00;"></div>
+                            <div class="pie" style="border-top-color:#d1ff00;"></div>
+                            <div class="pie" style="border-top-color:#a2ff00;"></div>
+                            <div class="pie" style="border-top-color:#73ff00;"></div>
+                            <div class="pie" style="border-top-color:#3fff00;"></div>
+                            <div class="pie" style="transform: rotate(60deg);border-top-color:#11ff00;"></div>
+                            <!--<div class=pie style="border-top-color:#00ff1d;"></div>-->
+                            <div class="pie" style="border-top-color:#00ff4c;"></div>
+
+                            <div class="pie" style="border-top-color:#00ff80;"></div>
+                            <div class="pie" style="border-top-color:#00ffae;"></div>
+                            <div class="pie" style="border-top-color:#00ffdd;"></div>
+                            <div class="pie" style="border-top-color:#00f3ff;"></div>
+                            <div class="pie" style="border-top-color:#00bfff;"></div>
+                            <div class="pie" style="border-top-color:#0091ff;"></div>
+                            <div class="pie" style="border-top-color:#0062ff;"></div>
+
+                            <div class="pie" style="border-top-color:#0033ff;"></div>
+                            <div class="pie" style="border-top-color:#0000ff;"></div>
+                            <div class="pie" style="border-top-color:#2e00ff;"></div>
+                            <div class="pie" style="border-top-color:#5d00ff;"></div>
+                            <div class="pie" style="border-top-color:#8f00ff;"></div>
+                            <!--<div class=pie style="transform: rotate(240deg);border-top-color:#bf00ff;"></div>-->
+                            <div class="pie" style="border-top-color:#ee00ff;"></div>
+
+                            <div class="pie" style="border-top-color:#ff00e2;"></div>
+                            <div class="pie" style="border-top-color:#ff00b3;"></div>
+                            <div class="pie" style="border-top-color:#ff0080;"></div>
+                            <div class="pie" style="border-top-color:#ff0051;"></div>
+                            <div class="pie" style="border-top-color:#ff0022;"></div>
+                            <div class="pie" style="border-top-color:#ff0c00;"></div>
+                            <div class="pie" style="border-top-color:#ff3f00;"></div>
+
+                            <div class="pie" style="border-top-color:#ff6e00;"></div>
+                            <div class="pie" style="border-top-color:#ff9d00;"></div>
+                            <div class="pie" style="border-top-color:#ffcc00;"></div>
+                        </div>
+                    </div>
+                    <div class="piecover bg3"></div>
+                    <div class="spin" style="transform: rotate(357.444deg);">
+                        <div class="spinhandle"></div>
+                        <!--<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 138.56 120">
+                        <polygon points="69.28 0 138.56 120 0 120 69.28 0"/>
+                        </svg>-->
+                        <div class="spintri" style="background-color: rgb(255, 0, 11);">
+                        </div>
+                        <div class="trihandle" style="background-color: rgb(185, 136, 139); transform: translate(106.576px, 147.415px);" data-s="25.686865474112068" data-l="63.01339482140872"></div>
+                    </div>
+                </div>
+                <!--linear-gradient(to right, red 0%, #ff0 17%, lime 33%, cyan 50%, blue 66%, #f0f 83%, red 100%);-->
             </div>
         </div>
 
@@ -2504,6 +2632,264 @@
             window.addEventListener('mouseup', end);
         }
 
+        function getdegree(ccx,ccy, wi, hi){
+          var xxx = (wi/2) - ccx;
+          var yyy = (hi/2) - ccy;
+          console.log(xxx,yyy);
+
+          var xx = Math.abs(xxx);
+          var yy = Math.abs(yyy);
+
+          var hh = Math.sqrt(Math.pow(xx, 2) + Math.pow(yy, 2));
+
+          var arc = xx / hh;
+
+          console.log(xx,yy,hh,arc);
+
+          var arcsin = Math.asin(arc);
+
+          var degrees = arcsin * (180/Math.PI);
+          console.log(arcsin);
+          console.log(degrees);
+
+
+          if ( xxx <= 0 && yyy < 0){
+            degrees = 180 - degrees;
+          } else if ( xxx > 0 && yyy < 0 ){
+            degrees = 180 + degrees;
+          } else if ( xxx > 0 ){
+            degrees = 360 - degrees;
+          }
+
+          console.log(degrees);
+
+          return degrees;
+        }
+
+        function spin(e){
+          e.preventDefault();
+          var target = e.target;
+          var spintri = target.getparent('spintri');
+          var sx = e.pageX;
+          var sy = e.pageY;
+          var od = Number(this.dataset.deg) || 0;
+          var _this = this;
+          var w = this.offsetWidth;
+          var h = this.offsetHeight;
+
+          var _spin = this.getElementsByClassName('spin')[0];
+
+          var w2 = w/2;
+          var h2 = h/2
+
+          var deg = 0;
+          var moved = 0;
+
+          var offtop = 0;
+          var offleft = 0;
+          var scroll = 0;
+
+          console.log(e.target);
+
+          var meow = this;
+
+          while(meow){
+            if ( meow.tagName !== 'SECTION'){
+              offtop += meow.offsetTop;
+              offleft += meow.offsetLeft;
+              scroll += meow.scrollTop;
+            }
+
+            meow = meow.parentElement;
+          }
+
+          var correctionx = 0;//387;//same as below
+          var correctiony = 0;//not sure why??
+
+          console.log(offleft, offtop);
+
+          //offleft = document.getElementById('proppanel').offsetLeft + 28;
+          var cx = sx - offleft + correctionx;
+          var cy = sy - offtop + correctiony;
+          console.log(cx, cy);
+
+          if ( spintri ){
+            trilambda.call(target, e, cx, cy, od, offleft, offtop, correctionx, correctiony);
+            return;
+          }
+
+          var deg = getdegree(cx, cy, w, h);
+
+
+          _spin.style.transform = 'rotate(' + deg + 'deg)';
+          _this.dataset.deg = deg;
+          
+
+          //var lr = w2 - cx;
+
+          // var deg = 0;
+
+          // //if ( lr >= 0 ){
+          //   deg = -(lr / w2) * 90;
+          // //} else {
+          //   //deg = -(lr / w2) * 90;
+          // //}
+
+          // var tr = cy - h2;
+          // if ( tr >= 0 ){
+          //   var td = (tr / h2) * 90;
+          //   if ( lr > 0 ){
+          //     deg = -td  -90;
+          //   } else {
+          //      deg = td + 90;
+          //   }
+          // }
+
+
+
+          var tri = this.getElementsByClassName('spintri')[0];
+          var handle = this.getElementsByClassName('trihandle')[0];
+          var sat = handle.dataset.s || 90;
+          var lum = handle.dataset.l || 50;
+
+          tri.style.transform = 'rotate(-' + deg + 'deg)';
+
+          tri.style.backgroundColor = 'hsl(' + deg + ', 100%, 50%)';
+
+          handle.style.backgroundColor = 'hsl(' + deg + ', ' + sat + '%, ' + lum + '%)';
+
+          var cw = this.getparent('colorwrap2');
+          //setval.call(cw, e, deg,sat,lum);
+
+          window.addEventListener('mousemove', spinning);
+          window.addEventListener('mouseup', spun);
+
+          function spinning(e){
+            var x = e.pageX;
+            var y = e.pageY;
+
+            var moved = 1;
+
+            //deg = x - sx + od + (y - sy);
+
+            //_this.style.transform = 'rotate('+ deg + 'deg)';
+            //_this.dataset.deg = deg;
+
+            var cx = x - offleft + correctionx;
+            var cy = y - offtop + correctiony;
+            console.log(cx, cy);
+
+            //var lr = w2 - cx;
+
+            var deg = getdegree(cx, cy, w, h);
+
+            _spin.style.transform = 'rotate(' + deg + 'deg)';
+            _this.dataset.deg = deg;
+
+            tri.style.transform = 'rotate(-' + deg + 'deg)';
+
+
+            tri.style.backgroundColor = 'hsl(' + deg + ', 100%, 50%)';
+            handle.style.backgroundColor = 'hsl(' + deg + ', ' + sat + '%, ' + lum + '%)';
+
+            console.log(deg);
+
+            //setval.call(cw, e, deg,sat,lum);
+          }
+
+          function spun(e){
+            window.removeEventListener('mousemove', spinning);
+            window.removeEventListener('mouseup', spun);
+
+            if ( !moved ){
+
+            }
+
+          }
+        }
+
+        function trilambda(e, x, y, a, ol, ot, cnx, cny){
+          console.log('lambda lambda lambda');
+
+          var tri = this.parentNode.getElementsByClassName('trihandle')[0];
+
+          //x -= 141;
+          //y -= 35;
+          // var aa = a * (Math.PI/180);
+
+          // var cos = Math.cos;
+          // var sin = Math.sin;
+
+          //var y2 = Math.abs(y * Math.cos(aa) - x * Math.sin(aa));
+          //var x2 = y * Math.sin(aa) + x * Math.cos(aa);
+
+          // var x2 = (x - 132) * cos(aa) - (y - 132) * sin(aa)  + 132;
+          // var y2 = (x - 132) * sin(aa) + (y - 132) * cos(aa)  + 132;
+
+
+          var radians = (Math.PI / 180) * a,
+            cos = Math.cos(radians),
+            sin = Math.sin(radians),
+            cx = 132,
+            cy = 132,
+            x2 = (cos * (x - cx)) + (sin * (y - cy)) + cx,
+            y2 = (cos * (y - cy)) - (sin * (x - cx)) + cy;
+
+
+          console.log(x, y, a, x2, y2);
+
+
+          tri.style.transform = 'translate(' + x2 + 'px, ' + y2 + 'px)';
+
+
+          var s = Math.max(Math.min(100 - (((y2 - 30) / 158 ) * 100), 100), 0);
+          var l = Math.max(Math.min(100-((x2-40) / 180) * 100, 100), 0);
+
+          tri.dataset.s = s;
+          tri.dataset.l = l;
+          tri.style.backgroundColor = 'hsl(' + a + ',' + s+'%,' + l +'%)';
+
+          var cw = this.getparent('colorwrap2');
+          //setval.call(cw, e, a,s,l);
+
+          function moving(e){
+            var tar = e.target;
+            if ( !tar || !tar.classList.contains('spintri') ){
+              return;
+            }
+            var x = e.pageX;
+            var y = e.pageY;
+            x = x - ol + cnx;
+            y = y - ot + cny;
+
+            var x2 = (cos * (x - cx)) + (sin * (y - cy)) + cx;
+            var y2 = (cos * (y - cy)) - (sin * (x - cx)) + cy;
+
+            tri.style.transform = 'translate(' + x2 + 'px, ' + y2 + 'px)';
+
+            var s = Math.max(Math.min(100 - (((y2 - 30) / 158 ) * 100), 100), 0);
+            var l = Math.max(Math.min(100-((x2-40) / 180) * 100, 100), 0);
+
+            console.log('COLOR', s, l);
+
+            tri.dataset.s = s;
+            tri.dataset.l = l;
+            tri.style.backgroundColor = 'hsl(' + a + ',' + s+'%,' + l +'%)';
+
+            //setval.call(cw, e, a,s,l);
+          }
+
+          function mouseup(){
+            window.removeEventListener('mousemove', moving);
+            window.removeEventListener('mouseup', mouseup);
+          }
+
+
+          window.addEventListener('mousemove', moving);
+          window.addEventListener('mouseup', mouseup);
+
+        }
+
         function menuhandler(e){
             var m = this.getparent('menu');
             
@@ -2890,6 +3276,7 @@
 
             if ( id == 'brush'){
                 document.getElementsByClassName('brushfill2')[0].style.background = c;
+                BRUSHCOLOR = hsl;
             }
 
             if ( id == 'shape' ){
@@ -4352,6 +4739,8 @@
             var c = document.getElementById('huecube');
             c = c.cloneNode(true);
 
+            c.removeAttribute('id');
+
             var p = document.createElement('div');
             p.className = 'menuwrap';
 
@@ -4405,8 +4794,11 @@
                 oc.style.background = 'hsl(' + hsl[0] + ',' + hsl[1] + '%,' + hsl[2] +'%)';
             }
 
-            cs.value = hue;
-            huecubeslide.call(cs, event);
+            if ( cs ){
+
+                cs.value = hue;
+                huecubeslide.call(cs, event);
+            }
 
             p.appendChild(c);
 
@@ -4464,7 +4856,7 @@
             var h = this.getElementsByClassName('handle')[0];
             var c = g.parentElement.getElementsByClassName('thecolor')[0];
             var a = g.parentElement.getElementsByClassName('alpha')[0];
-            var w = this.offsetWidth ;
+            var w = this.offsetWidth;
             var wrap = this.getparent('cubewrap') || this.getparent('colorpicker');
             var swatch = document.getElementsByClassName('bgswatch popped')[0];
 
@@ -4516,7 +4908,11 @@
 
             h.style.backgroundColor = hsl;
 
-            
+            if ( document.body.classList.contains('brush_tool') ){
+                BRUSHCOLOR = hsl;
+
+                document.getElementById('brushfill2').style.background = hsl;
+            }
 
             function move(e){
                 e = e.touches ? e.touches[0] : e;
@@ -4814,6 +5210,8 @@
 
           n.style.backgroundColor = 'hsla(' + v + ', ' + s + '%, ' + l + '%, ' + (av/100) + ')';
 
+          var hsla = 'hsla(' + v + ', ' + s + '%, ' + l + '%, ' + (av/100) + ')';
+
           // if ( f ){
           //   f.style.backgroundColor = 'hsla(' + v + ', ' + s + '%, ' + l + '%, ' + (av/100) + ')';
           // }
@@ -4836,6 +5234,12 @@
           document.head.appendChild(sty);
 
           setcubevalues.call(p, [v, s, l, av]);
+
+          if ( document.body.classList.contains('brush_tool') ){
+                BRUSHCOLOR = hsla;
+
+                document.getElementById('brushfill2').style.background = hsla;
+            }
         }
 
         function rgb2hex(rgb) {
@@ -4925,6 +5329,10 @@
             document.body.classList.toggle('hidetweak');
         }
 
+
+        Attach.on('touchstart', '.colorwheel', spin);
+        Attach.on('mousedown', '.colorwheel', spin);
+
         Attach.on('touchstart', '.handle', handlehandler);
         Attach.on('mousedown', '.handle', handlehandler);
 
@@ -4988,7 +5396,7 @@
 
         // Attach.on('click', '.morebtn', moremenu);
 
-        Attach.on('click', '.fillcolor, .textcolor, .shapeborder, .fontsize, .typeface, .shapecoloractual, .shapeborderactual, .textcoloractual, .brushcoloractual, .brushsizeactual, .shapetype, .canvasborderactual, .canvasfillactual, .morebtn', colormenu);
+        Attach.on('click', '.fillcolor, .textcolor, .shapeborder, .fontsize, .typeface, .shapecoloractual, .shapeborderactual, .textcoloractual, .brushcoloractual, .brushsizeactual, .shapetype, .canvasborderactual, .canvasfillactual, .morebtn, .marqueeselect', colormenu);
 
         Attach.on('mousedown', '.select_tool', marquee);
         Attach.on('touchstart', '.select_tool', marquee);
