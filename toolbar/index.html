@@ -389,7 +389,7 @@
             .ellipse .resizehandle:nth-child(3) {bottom:-5px;left:50%;margin-left:-4px;cursor:ns-resize;}
             .ellipse .resizehandle:nth-child(4) {top:50%;margin-top:-4px;left:-5px;cursor:ew-resize;}
 
-        .contextpanel {overflow:hidden;white-space:nowrap;opacity:0;pointer-events:none;transition:none;background:var(--panel);border-radius:var(--toolbarradius);box-shadow:0 3px 20px var(--shadow);min-height:48px;position:absolute;top:-64px;left:50%;transform:translate(0, 4px);z-index:2147483643;}
+        .contextpanel {overflow:hidden;white-space:nowrap;opacity:0;pointer-events:none;transition:none;background:var(--panel);border-radius:var(--toolbarradius);box-shadow:0 3px 20px var(--shadow);min-height:48px;position:absolute;top:-64px;left:50%;transform:translate(0, 4px);z-index:2147483646;}
 
             .contextpanel.visible {transition:opacity 150ms ease-in-out, transform 150ms ease-in-out;}
 
@@ -1606,7 +1606,7 @@
         <div class=tweaked>
             <div class=tweak>
                 <div class=label><span>Grid Size</span><div class=value>48</div></div>
-                <input type=range class=tooltweak min=24 max=240 value=48 step=4 data-id=grid oninput="gridtweak.call(this, event)" />
+                <input type=range class=tooltweak min=24 max=960 value=48 step=12 data-id=grid oninput="gridtweak.call(this, event)" />
             </div>
             <div class=tweak>
                 <div class=label><span>Toolbar Button Size</span><div class=value>60</div></div>
