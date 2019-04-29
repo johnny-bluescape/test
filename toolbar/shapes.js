@@ -195,6 +195,8 @@ function rectanglemove(e){
     var re = w + ol;
     var be = h + ot;
 
+    var ratio = w/h;
+
     var handle = 1;
 
     var hs = box ? box.getElementsByClassName('bhandle') : rect.getElementsByClassName('resizehandle');
@@ -237,19 +239,21 @@ function rectanglemove(e){
 
         var x = evt.pageX;
         var y = evt.pageY;
+        
+        
         var nx = x - sx;
         var ny = y - sy;
 
-        if ( shift ){
-          if ( Math.abs(nx) > Math.abs(ny) ){
-            ny = nx;
-          } else {
-            nx = ny;
-          }
-        }
+        // if ( shift ){
+        //   if ( nx <= ny ){
+        //     ny = nx;
+        //   } else {
+        //     nx = ny;
+        //   }
+        // }
 
-        var nw = w + nx;
-        var nh = h + ny;
+        var nw = Math.abs(w + nx);
+        var nh = Math.abs(h + ny);
 
         var tx = 0;//nx < 0 ? sx : 0;
         var ty = 0;//ny < 0 ? sy : 0;
@@ -268,11 +272,10 @@ function rectanglemove(e){
         }
 
         if ( handle === 1 || handle === 2 ){
+            nh = h - ny;
             if ( ny < 0 ){
-                nh = h - ny;
                 ty = ny;
             } else {
-                nh = h + sy - y;
                 ty = Math.abs(ny);
             }
 
@@ -283,10 +286,8 @@ function rectanglemove(e){
         }
         
         if ( handle === 1 || handle === 3 ){
-            if ( nx < 0 ){
-                nw = w + sx - x;
-            } else {
-                nw = w - nx;
+            nw = w - nx;
+            if ( nx >= 0 ){
                 tx = nx;
             }
 
@@ -297,6 +298,27 @@ function rectanglemove(e){
         }
 
         console.log(tx,ty, nw, nh, nx, ny);
+
+        if ( shift ){ // Half works ugh
+
+          var w2 = nw;
+          var h2 = nh;
+          if ( nx >= ny ){
+            w2 = (nh / h) * w;
+          } else {
+            h2 = (nw / w) * h;
+          }
+
+          console.log(tx, ty, 'tx ty');
+
+          ty = ty * (h2/nh);
+          tx = tx * (w2/nw);
+
+          console.log(tx, ty, 'tx ty 2');
+
+          nw = w2;
+          nh = h2;
+        }
 
         rect.style.width = nw + 'px';
         rect.style.height = nh + 'px';
@@ -801,7 +823,6 @@ function rectanglemove(e){
   
       for(var i=0;i<s.length;i++){
         var r = s[i];
-        console.log(r);
         var off = r.offset();
   
         var x = off.x;
@@ -832,9 +853,7 @@ function rectanglemove(e){
   
         b.object.push(r);
       }    
-  
-      console.log(tx,ty,tw,th,'MEOW');
-  
+    
       b.style.left = tx + 'px';
       b.style.top = ty + 'px';
       b.style.position = 'absolute';
@@ -874,9 +893,7 @@ function rectanglemove(e){
       var th = null;
   
       b.object = [];
-  
-      console.log(s);
-  
+    
       for(var i=0;i<s.length;i++){
         var r = s[i];
         console.log(r);
