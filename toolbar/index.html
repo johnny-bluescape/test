@@ -196,7 +196,7 @@
                     .slide {width:100%;height:316px;position:absolute;top:0;left:0;transition:all 150ms ease-in-out;}
                         .slide:nth-child(2) {left:-100%;}
 
-                .list {height:300px;overflow-y:auto;padding:4px 0;margin:0 8px;border-bottom:1px solid rgba(255, 255, 255, 0.08);}
+                .list {height:100%;max-height:300px;overflow-y:auto;padding:4px 0;margin:0 8px;border-bottom:1px solid rgba(255, 255, 255, 0.08);}
                     .item {line-height:40px;font-size:18px;padding:0 12px;margin:4px 0;border-radius:calc(var(--toolbarradius) - 6px);font-weight:500;user-select:none;cursor:pointer;transition:all 150ms ease-in-out;}
                         .item:hover {background:rgba(255, 255, 255, 0.06);}
                         .item:active {background:rgba(255, 255, 255, 0.1);}
@@ -970,14 +970,22 @@
                 </div>
             </div>
             <div class=tool>
-                <div class=toolbtn>
+                <div class=toolbtn data-tool=upload>
                     <!-- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg> -->
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36">
                         <polygon points="29,16.5 19.5,16.5 19.5,7 16.5,7 16.5,16.5 7,16.5 7,19.5 16.5,19.5 16.5,29 19.5,29 19.5,19.5 29,19.5 "/>
                     </svg>
                 </div>
-                <div class=options>
-                    
+                <div class="options contextpanel">
+                    <div class=optionwrap>
+                        <div class="option uploadfileactual" data-menu=umenu style="padding: 0 12px;"> 
+                            Upload
+                        </div><div class="option importfileactual" data-menu=imenu style="padding: 0 12px;">
+                            Import from ...
+                        </div><div class="option morebtn">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class=tool>
@@ -1312,6 +1320,20 @@
         <div id=fsmenu style="min-width:80px;">
             <!-- <div class=menutitle>Font Size</div> -->
             
+        </div>
+
+        <div id=umenu>
+            <div class=menutitle>Upload</div>
+        </div>
+
+        <div id=imenu>
+            <div class=list style="margin:-12px -4px -12px;border:none;">
+                <div class="item">Google Drive</div>
+                <div class=item>Dropbox</div>
+                <div class=item>Box</div>
+                <div class=item>OneDrive</div>
+                <div class=item>iCloud Drive</div>
+            </div>
         </div>
 
         <div id=tfmenu>
@@ -2179,6 +2201,10 @@
 
         function tooltoggle(e){
             this.classList.toggle('toggled');
+    
+            if ( this.getElementsByClassName('toolbtn')[0].dataset.tool == 'upload'){
+                this.classList.add('toggled');
+            }
 
             closepanel();
         }
@@ -2192,7 +2218,7 @@
                 return;
             }
 
-            if ( document.documentElement.classList.contains('ui3') ){
+            if ( document.documentElement.classList.contains('ui3') || this.dataset.tool == 'upload' ){
                 tooltoggle.call(t, e);
             }
 
@@ -4079,6 +4105,18 @@
                     }
                 }
 
+            } else if ( shell == 'umenu' ){
+                var s = document.createElement('input');
+                s.type = 'file';
+
+                document.body.appendChild(s);
+
+                s.click();
+
+                s.remove();
+                p.remove();
+
+                return;
             }
 
             var xx = c.getElementsByClassName('option');
@@ -5396,7 +5434,7 @@
 
         // Attach.on('click', '.morebtn', moremenu);
 
-        Attach.on('click', '.fillcolor, .textcolor, .shapeborder, .fontsize, .typeface, .shapecoloractual, .shapeborderactual, .textcoloractual, .brushcoloractual, .brushsizeactual, .shapetype, .canvasborderactual, .canvasfillactual, .morebtn, .marqueeselect', colormenu);
+        Attach.on('click', '.fillcolor, .textcolor, .shapeborder, .fontsize, .typeface, .shapecoloractual, .shapeborderactual, .textcoloractual, .brushcoloractual, .brushsizeactual, .shapetype, .canvasborderactual, .canvasfillactual, .morebtn, .marqueeselect, .uploadfileactual, .importfileactual', colormenu);
 
         Attach.on('mousedown', '.select_tool', marquee);
         Attach.on('touchstart', '.select_tool', marquee);
