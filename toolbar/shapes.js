@@ -233,10 +233,20 @@ function rectanglemove(e){
 
         var evt = e.touches ? e.touches[0] : e;
 
+        var shift = e.shiftKey;
+
         var x = evt.pageX;
         var y = evt.pageY;
         var nx = x - sx;
         var ny = y - sy;
+
+        if ( shift ){
+          if ( Math.abs(nx) > Math.abs(ny) ){
+            ny = nx;
+          } else {
+            nx = ny;
+          }
+        }
 
         var nw = w + nx;
         var nh = h + ny;
