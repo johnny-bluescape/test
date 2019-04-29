@@ -7,7 +7,7 @@ CANVASCOLOR = 'transparent';
 
 function rectanglemove(e){
 
-    console.log('mnove')
+    console.log('mnove');
     //e.preventDefault();
     e.stopPropagation();
 

@@ -4108,12 +4108,90 @@
             } else if ( shell == 'umenu' ){
                 var s = document.createElement('input');
                 s.type = 'file';
+                s.multiple = true;
+
+                s.onchange = function(e) {
+                    var files = e.target.files; // FileList object
+
+                    // Loop through the FileList and render image files as thumbnails.
+                    for (var i = 0, f; f = files[i]; i++) {
+                        // Only process image files.
+                        if (!f.type.match('image.*')) {
+                            continue;
+                        }
+
+                        var reader = new FileReader();
+
+                        var ss = s;
+
+                        reader.onload = (function(theFile) {
+                            return function(e) {
+                                //theFile.name
+
+                                var src = e.target.result
+                                var img = document.createElement('img');
+
+                                img.className = 'layeritem rectangle';
+                                
+
+                                img.style.position = 'absolute';
+                                img.style.zIndex = 1337;
+
+
+                                var ops = document.getElementById('shape_context').cloneNode(true);
+                                var cid = 's' + Date.now() + '-' + Math.floor(Math.random()*1000);
+
+                                ops.id = cid;
+                                img.dataset.context = cid;
+                                
+                                img.id = cid + 'img';
+
+                                img.draggable = false;
+                                img.style.userSelect = 'none';
+                                img.style.userDrag = 'none';
+
+                                document.body.appendChild(ops); 
+
+                                img.onload = function() {
+                                    
+                                    var w = this.width || this.naturalWidth;
+                                    var h = this.height || this.naturalHeight;
+
+
+                                    img.style.top = (window.innerHeight / 2) - (h/2) + 'px';
+                                    img.style.left = (window.innerWidth / 2) - (w/2) + 'px';
+
+
+                                    document.getElementById('layers').appendChild(img);
+
+                                    document.getElementById('select_tool').click();
+
+                                    ops.dataset.w = ops.offsetWidth;
+
+                                    setcontextpanel.call(img);
+
+                                    ss.remove();
+
+                                    blurall();
+
+                                    this.classList.add('current');
+
+                                    setboundingbox.call(this);
+                                };
+
+                                img.src = src;
+                            };
+                        })(f);
+
+                        // Read in the image file as a data URL.
+                        reader.readAsDataURL(f);
+                    }
+                }
 
                 document.body.appendChild(s);
 
                 s.click();
 
-                s.remove();
                 p.remove();
 
                 return;
