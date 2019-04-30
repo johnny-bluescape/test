@@ -1325,7 +1325,6 @@
 
         <div id=bsmenu>
             <!-- <div class=menutitle>Brush Size</div> -->
-          
             <div class="slider" data-y="136">
                 <div class="knob" style="top: 136px; transform: translateX(-50%) scale(0.3);"></div>
             </div>
@@ -3124,9 +3123,6 @@
                     sv.innerText = vv;
                 }
 
-
-                
-
                 if ( dx ){
                     k.style.left = d + 'px';
                     //z = 1 - z;
@@ -3136,7 +3132,15 @@
                     k.style.transform = 'translateX(-50%) scale(' + scale + ')';
                 }
 
+                if ( _t.getparent('bmenu') ){
+                    BORDERWIDTH = vv;
+
+                    return;
+                }
+
                 if ( !dx ){
+
+    
                     var ba = document.getElementById('brushactual');
                     var ba2 = document.getElementsByClassName('brushactual2')[0];
 
@@ -3145,20 +3149,11 @@
                     BRUSHSIZE = az;
                 }
 
- 
-                if ( _t.getparent('toolmenu') ){
-                    BORDERWIDTH = vv;
-
-                    return;
-                }
-
 
                 // if ( range ){
                 //     var vv = ((max - min) * z) + min;
                 //     range.value = Math.round(vv);
-                // }
-
-                
+                // }                
 
                 if ( callback ){
                     window[callback].call(s, e);
@@ -3272,16 +3267,16 @@
                         temp.appendChild(cc);
                     }
 
-                    //var bs = s.getparent('bsmenu');
+                    var bs = s.getparent('bsmenu');
 
-                    //if ( bs ){
+                    if ( bs ){
                         var bs2 = document.getElementById('bsmenu');
                         bs2.empty();
 
                         var sc = s.cloneNode(true);
 
                         bs2.appendChild(sc);
-                    //}
+                    }
                 }
 
                 closepanel();
