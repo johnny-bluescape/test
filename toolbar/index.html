@@ -76,13 +76,15 @@
             --handlecolor: var(--select);
             --handlesize: 8px;
 
+            --gridopacity: 125;
+
             --dotgrid: 48px;
             --dotsize: 1px;
-            --dotcolor: rgba(255, 255, 255, 0.125);
-            --gridcolor: rgba(255, 255, 255, 0.025);
+            --dotcolor: rgba(255, 255, 255, calc(var(--gridopacity) / 1000));
+            --gridcolor: rgba(255, 255, 255, calc(var(--gridopacity) / 5000));
 
-            --dotcolor2: rgba(255, 255, 255, 0.4);
-            --gridcolor2: rgba(255, 255, 255, 0.05);
+            --dotcolor2: rgba(255, 255, 255, calc(var(--gridopacity) / 312));
+            --gridcolor2: rgba(255, 255, 255, calc(var(--gridopacity) / 2500));
 
             --panelicons: var(--icon); /* rgba(255, 255, 255, 0.85) */
 
@@ -1654,6 +1656,10 @@
                 <input type=range class=tooltweak min=24 max=960 value=48 step=12 data-id=grid oninput="gridtweak.call(this, event)" />
             </div>
             <div class=tweak>
+                <div class=label><span>Grid Opacity</span><div class=value>125</div></div>
+                <input type=range class=tooltweak min=1 max=1000 value=125 data-id=gridopacity oninput="tweakedtools.call(this, event)" />
+            </div>
+            <div class=tweak>
                 <div class=label><span>Toolbar Button Size</span><div class=value>60</div></div>
                 <input type=range class=tooltweak min=16 max=76 value=60 step=4 data-id=toolbtn oninput="tweakedtools.call(this, event)" />
             </div>
@@ -2074,6 +2080,10 @@
                 var x = 'px';
                 if ( d == 'toolradius' || d == 'toolicons' ){
                     x = '%';
+                }
+
+                if ( d == 'gridopacity'){
+                    x = '';
                 }
 
                 css += '--' + d +  ':' + v + x + ';';
