@@ -112,6 +112,8 @@ function sketchHandler(e){
         return;
     }
 
+    blurall();
+
     var offset = canvas.offset();
     var ol = offset.x;
     var ot = offset.y;

@@ -3319,7 +3319,7 @@
 
             if ( id == 'brush'){
                 document.getElementsByClassName('brushfill2')[0].style.background = c;
-                BRUSHCOLOR = hsl;
+                BRUSHCOLOR = c;
             }
 
             if ( id == 'shape' ){
@@ -4893,6 +4893,10 @@
 
             if ( rec && rec.classList.contains('rectangle') ){
                 var bg = window.getComputedStyle(rec).backgroundColor;
+
+                if ( this.getparent('bordermenu') ){
+                    var bg = window.getComputedStyle(rec).borderColor;
+                }
 
                 var hsl = color2hsl(bg);
                 hue = hsl[0];
