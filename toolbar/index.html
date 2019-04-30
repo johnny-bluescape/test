@@ -3970,6 +3970,27 @@
             }
         }
 
+        function setchip(x,y,z){
+            var chips = y.getElementsByClassName('chip');
+            var found = false;
+            for(var i=0;i<chips.length;i++){
+                var cc = chips[i];
+                if ( x == window.getComputedStyle(cc).backgroundColor ){
+                    cc.parentElement.classList.add('current');
+                    found = true;
+                    break;
+                }
+            }
+
+            if ( !found ){
+                if ( x == 'rgba(0, 0, 0, 0)' || x == 'transparent'){
+                    y.getElementsByClassName('transparentcolor')[0].classList.add('current');
+                } else {
+                    y.getElementsByClassName('selectcolor')[0].classList.add('current');
+                }
+            }
+        }
+
         function colormenu(e){
             e.preventDefault();
             e.stopPropagation();
@@ -4077,14 +4098,25 @@
 
                 var bc = com.borderColor;
 
-                var chips = p.getElementsByClassName('chip');
-                for(var i=0;i<chips.length;i++){
-                    var cc = chips[i];
-                    if ( bc == window.getComputedStyle(cc).backgroundColor ){
-                        cc.parentElement.classList.add('current');
-                        break;
-                    }
-                }
+                setchip(bc, p);
+                // var chips = p.getElementsByClassName('chip');
+                // var found = false;
+                // for(var i=0;i<chips.length;i++){
+                //     var cc = chips[i];
+                //     if ( bc == window.getComputedStyle(cc).backgroundColor ){
+                //         cc.parentElement.classList.add('current');
+                //         found = true;
+                //         break;
+                //     }
+                // }
+
+                // if ( !found ){
+                //     if ( bc == 'rgba(155, 155, 155, 0.15)' || bc == 'rgba(0, 0, 0, 0)' || bc == 'transparent'){
+                //         p.getElementsByClassName('transparentcolor')[0].classList.add('current');
+                //     } else {
+                //         p.getElementsByClassName('selectcolor')[0].classList.add('current');
+                //     }
+                // }
 
             } else if ( shell == 'bmenu' ){
                 m.appendChild(s);
@@ -4114,43 +4146,47 @@
 
                 var bc = window.getComputedStyle(rec).borderColor;
 
-                var chips = p.getElementsByClassName('chip');
-                for(var i=0;i<chips.length;i++){
-                    var cc = chips[i];
-                    if ( bc == window.getComputedStyle(cc).backgroundColor ){
-                        cc.parentElement.classList.add('current');
-                        break;
-                    }
-                }
+                setchip(bc, p);
+
+                // var chips = p.getElementsByClassName('chip');
+                // for(var i=0;i<chips.length;i++){
+                //     var cc = chips[i];
+                //     if ( bc == window.getComputedStyle(cc).backgroundColor ){
+                //         cc.parentElement.classList.add('current');
+                //         break;
+                //     }
+                // }
 
             } else if ( shell == 'bgmenu' ){
                 m.appendChild(s);
 
                 var rec = document.getElementsByClassName('layeritem current')[0];
                 var bc = window.getComputedStyle(rec).backgroundColor;
-                var chips = p.getElementsByClassName('chip');
+                setchip(bc, p);
+                // var chips = p.getElementsByClassName('chip');
 
-                for(var i=0;i<chips.length;i++){
-                    var cc = chips[i];
-                    if ( bc == window.getComputedStyle(cc).backgroundColor ){
-                        cc.parentElement.classList.add('current');
-                        break;
-                    }
-                }
+                // for(var i=0;i<chips.length;i++){
+                //     var cc = chips[i];
+                //     if ( bc == window.getComputedStyle(cc).backgroundColor ){
+                //         cc.parentElement.classList.add('current');
+                //         break;
+                //     }
+                // }
             } else if ( shell == 'textcolormenu' ){
                 m.appendChild(s);
 
                 var rec = document.getElementsByClassName('layeritem current')[0].getElementsByClassName('textarea')[0];
                 var bc = window.getComputedStyle(rec).color;
-                var chips = p.getElementsByClassName('chip');
+                setchip(bc, p);
+                // var chips = p.getElementsByClassName('chip');
 
-                for(var i=0;i<chips.length;i++){
-                    var cc = chips[i];
-                    if ( bc == window.getComputedStyle(cc).backgroundColor ){
-                        cc.parentElement.classList.add('current');
-                        break;
-                    }
-                }
+                // for(var i=0;i<chips.length;i++){
+                //     var cc = chips[i];
+                //     if ( bc == window.getComputedStyle(cc).backgroundColor ){
+                //         cc.parentElement.classList.add('current');
+                //         break;
+                //     }
+                // }
             } else if ( shell == 'fsmenu' ){
                 var step = stepper2.call(this, e);
                 step.classList.add('menud');
@@ -4160,28 +4196,30 @@
                 m.appendChild(s);
 
                 var bc = window.getComputedStyle(this.getElementsByClassName('fill')[0]).backgroundColor;
-                var chips = p.getElementsByClassName('chip');
+                setchip(bc, p);
+                // var chips = p.getElementsByClassName('chip');
 
-                for(var i=0;i<chips.length;i++){
-                    var cc = chips[i];
-                    if ( bc == window.getComputedStyle(cc).backgroundColor ){
-                        cc.parentElement.classList.add('current');
-                        break;
-                    }
-                }
+                // for(var i=0;i<chips.length;i++){
+                //     var cc = chips[i];
+                //     if ( bc == window.getComputedStyle(cc).backgroundColor ){
+                //         cc.parentElement.classList.add('current');
+                //         break;
+                //     }
+                // }
             } else if ( shell == 'cbmenu' ){
                 m.appendChild(s);
 
                 var bc = window.getComputedStyle(this.getElementsByClassName('border')[0]).borderColor;
-                var chips = p.getElementsByClassName('chip');
+                setchip(bc, p);
+                // var chips = p.getElementsByClassName('chip');
 
-                for(var i=0;i<chips.length;i++){
-                    var cc = chips[i];
-                    if ( bc == window.getComputedStyle(cc).backgroundColor ){
-                        cc.parentElement.classList.add('current');
-                        break;
-                    }
-                }
+                // for(var i=0;i<chips.length;i++){
+                //     var cc = chips[i];
+                //     if ( bc == window.getComputedStyle(cc).backgroundColor ){
+                //         cc.parentElement.classList.add('current');
+                //         break;
+                //     }
+                // }
             } else if ( shell == 'tfmenu' ){
                 var v = this.innerText;
 
@@ -4714,7 +4752,8 @@
             console.log(e);
             var m = this.getparent('contextmenu') || document.getElementsByClassName('menuwrap subsublevel')[0] || document.getElementsByClassName('menuwrap')[0];
             var o = m.getElementsByClassName('color current');
-
+            o.removeclass('current');
+            o = m.getElementsByClassName('selectcolor current');
             o.removeclass('current');
 
             this.classList.add('current');
@@ -5184,6 +5223,12 @@
 
                 document.getElementById('brushfill2').style.background = hsl;
             }
+
+            var sub = document.getElementsByClassName('menuwrap subsublevel')[0];
+            var oc = sub.getElementsByClassName('color current');
+            oc.removeclass('current');
+            sub.getElementsByClassName('selectcolor')[0].classList.add('current');
+
 
             function move(e){
                 e = e.touches ? e.touches[0] : e;
