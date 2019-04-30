@@ -5045,6 +5045,12 @@
 
             c.className += ' contextmenu ';
 
+            var fixed = window.getComputedStyle(m).getPropertyValue('position') == 'fixed' ? true : false;
+
+            if ( fixed ){
+                p.style.position = 'fixed';
+            }
+
 
             var cs = c.getElementsByClassName('huecubeslide')[0];
 
@@ -5148,18 +5154,11 @@
             var sx = e.pageX;
             var sy = e.pageY;
 
-            var totalOffsetX = 0;
-            var totalOffsetY = 0;
-            var currentElement = this;
-            var scroll = 0;
 
+            var off = this.offset();
 
-            do {
-                totalOffsetX += currentElement.offsetLeft;
-                totalOffsetY += currentElement.offsetTop;
-                scroll += currentElement.scrollTop;
-            }
-            while(currentElement = currentElement.offsetParent)
+            var totalOffsetX = off.x;
+            var totalOffsetY = off.y;
 
 
             var g = this;
@@ -5176,7 +5175,7 @@
             var hsize = h.offsetWidth / 2;
 
             var hx = -(totalOffsetX - sx + hsize);
-            var hy = sy - totalOffsetY - hsize + scroll;
+            var hy = sy - totalOffsetY - hsize;
 
             h.style.transform = 'translate(' + hx + 'px,' + hy + 'px)';
             if ( swatch ){
@@ -5239,7 +5238,7 @@
                 //var dy = sy - y;
 
                 var dx = -(totalOffsetX - x + hsize);
-                var dy = y - totalOffsetY - hsize + scroll;
+                var dy = y - totalOffsetY - hsize;
 
                 console.log(dx);
                 console.log(dy);
