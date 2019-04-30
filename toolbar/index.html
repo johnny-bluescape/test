@@ -5892,6 +5892,13 @@
         screenrez();
 
 
+        window.onscroll = function (e) {  
+            var l = document.getElementsByClassName('layeritem current')[0];
+
+            if ( l ){
+                setcontextpanel.call(l);
+            }
+        } 
 
 
         window.scrollTo(200,200);
