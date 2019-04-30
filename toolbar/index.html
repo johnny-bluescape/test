@@ -767,7 +767,7 @@
 
         .tnum {font-feature-settings:'tnum';}
 
-        .btn {width:48px;height:48px;display:flex;align-items:center;justify-content:center;}
+        .btn {width:48px;height:48px;display:flex;align-items:center;justify-content:center;cursor:pointer;}
             .btn svg {width:24px;height:24px;}
                 .btn svg * {fill:white;}
 
@@ -3783,7 +3783,7 @@
 
             console.log(cx, x, sl, cx + cw + ox, ww - thres);
 
-            if ( cx < thres ){
+            if ( cx + ox < thres ){
                 x = sl + thres;
             } else if ( cx + cw + ox > ww - thres ){
                 x = ww - thres - cw + sl;
