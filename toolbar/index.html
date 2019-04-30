@@ -4443,6 +4443,49 @@
 
         // }
 
+        function duplicatecurrent(e){
+            e.preventDefault();
+            e.stopPropagation();
+            var d = document.getElementsByClassName('layeritem current')[0];
+
+
+            var a = d;
+            var cid = a.dataset.context;
+            var token = 's' + Date.now() + '-' + Math.floor(Math.random()*1000);
+            
+            var c = a.cloneNode(true);
+            var p = document.getElementById(cid);
+
+            p = p.cloneNode(true);
+
+            p.id = token;
+
+            p.classList.remove('opened');
+            var ow = p.getElementsByClassName('optionwrap')[0];
+
+            ow.style.marginLeft = 0;
+
+            c.id = token + 'rect';
+            c.dataset.context = token;
+
+            var com = window.getComputedStyle(a);
+
+            var l = parseFloat(com.left);
+            var t = parseFloat(com.top);
+
+            c.style.left = l + 48 + 'px';
+            c.style.top = t + 48 + 'px';
+
+            
+            blurall();
+
+            document.body.appendChild(p);
+            document.getElementById('layers').appendChild(c);
+
+            setboundingbox.call(c);
+            setcontextpanel.call(c);
+        }
+
         function deletecurrent(e){
             console.log('delete');
             e.preventDefault();
@@ -5621,6 +5664,7 @@
         Attach.on('click', '.shapeback', shapez);
 
         Attach.on('click', '.delete', deletecurrent);
+        Attach.on('click', '.duplicate', duplicatecurrent);
 
         // Attach.on('click', '.morebtn', moremenu);
 
