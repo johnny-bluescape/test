@@ -1,9 +1,9 @@
-SHAPEBORDERCOLOR = 'transparent';
+SHAPEBORDERCOLOR = 'rgba(0,0,0,0)';
 SHAPECOLOR = 'rgb(255, 58, 48)';
 BORDERWIDTH = 0;
 
 CANVASBORDERCOLOR = 'rgba(255,255,255,.2)';
-CANVASCOLOR = 'transparent';
+CANVASCOLOR = 'rgba(0,0,0,0)';
 
 function rectanglemove(e){
 

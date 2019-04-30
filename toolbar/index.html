@@ -5061,47 +5061,66 @@
 
             var hue = 300;
 
+            var bg = null;
+
             if ( rec && rec.classList.contains('rectangle') ){
                 var bg = window.getComputedStyle(rec).backgroundColor;
 
                 if ( this.getparent('bordermenu') ){
                     var bg = window.getComputedStyle(rec).borderColor;
                 }
-
-                var hsl = color2hsl(bg);
-                hue = hsl[0];
-
-                var hsv = hsl2hsv(hsl);
-
-                var gr = halo.getparent('colorgrid');
-                var gw = gr.offsetWidth || 344;
-                var gh = gr.offsetHeight || 344;
-
-
-                gr.dataset.h = hsl[0];
-                gr.dataset.s = hsl[1];
-                gr.dataset.l = hsl[2];
-
-                console.log(hsv);
-
-                var s = hsv[1] || 0;
-                var v = hsv[2] || 0;
-
-                var xx = (s) * gw;
-                var yy = (1 - (v)) * gh;
-
-                console.log(s, gw, gh, v);
-
-                console.log(xx,yy);
-
-                halo.style.transform = 'translate(' + (xx-10) + 'px,' + (yy-10) + 'px)';
-
-
-                var cw = gr.getparent('cubewrap');
-                var oc = cw.getElementsByClassName('oldcolor')[0];
-
-                oc.style.background = 'hsl(' + hsl[0] + ',' + hsl[1] + '%,' + hsl[2] +'%)';
             }
+            
+            if ( fixed ){
+                if ( document.body.classList.contains('rectangle_tool') ){
+                    if ( this.getparent('bmenu') ){
+                        bg = SHAPEBORDERCOLOR;
+                    } else { 
+                        bg = SHAPECOLOR;
+                    }
+                } else if ( document.body.classList.contains('brush_tool') ){
+                    bg = BRUSHCOLOR;
+                } else if ( document.body.classList.contains('type_tool') ){
+                    bg = TEXTCOLOR;
+                } else if ( document.body.classList.contains('canvas_tool') ){
+                    bg = CANVASBORDERCOLOR;
+                }
+            }
+
+            var hsl = color2hsl(bg);
+            hue = hsl[0];
+
+            var hsv = hsl2hsv(hsl);
+
+            var gr = halo.getparent('colorgrid');
+            var gw = gr.offsetWidth || 344;
+            var gh = gr.offsetHeight || 344;
+
+
+            gr.dataset.h = hsl[0];
+            gr.dataset.s = hsl[1];
+            gr.dataset.l = hsl[2];
+
+            console.log(hsv);
+
+            var s = hsv[1] || 0;
+            var v = hsv[2] || 0;
+
+            var xx = (s) * gw;
+            var yy = (1 - (v)) * gh;
+
+            console.log(s, gw, gh, v);
+
+            console.log(xx,yy);
+
+            halo.style.transform = 'translate(' + (xx-10) + 'px,' + (yy-10) + 'px)';
+
+
+            var cw = gr.getparent('cubewrap');
+            var oc = cw.getElementsByClassName('oldcolor')[0];
+
+            oc.style.background = 'hsl(' + hsl[0] + ',' + hsl[1] + '%,' + hsl[2] +'%)';
+            
 
             if ( cs ){
 
@@ -5168,6 +5187,8 @@
             var w = this.offsetWidth;
             var wrap = this.getparent('cubewrap') || this.getparent('colorpicker');
             var swatch = document.getElementsByClassName('bgswatch popped')[0];
+
+            var fixed = window.getComputedStyle(this.getparent('menuwrap')).getPropertyValue('position') == 'fixed' ? true : false;
 
             //var hx = Number(h.dataset.x) || 0;
             //var hy = Number(h.dataset.y) || 0;
@@ -5301,12 +5322,33 @@
                 console.log(hsl);
 
 
-                //  @todo brush color
-
-                if ( document.body.classList.contains('brush_tool') ){
-                    BRUSHCOLOR = hsl;
-
-                    document.getElementById('brushfill2').style.background = hsl;
+                if ( fixed ){
+                    if ( document.body.classList.contains('rectangle_tool') ){
+                        if ( document.getElementsByClassName('menuwrap subsublevel')[0].getElementsByClassName('bmenu')[0] ){
+                            SHAPEBORDERCOLOR = hsl;
+                            document.getElementsByClassName('shapeborderactual')[0].getElementsByClassName('border')[0].style.borderColor = hsl;
+                        } else { 
+                            SHAPECOLOR = hsl;
+                            document.getElementsByClassName('shapefillactual')[0].getElementsByClassName('fill')[0].style.background = hsl;
+                            document.getElementsByClassName('shapefillactual')[0].getElementsByClassName('fill')[0].style.boxShadow = 'none';
+                        }
+                    } else if ( document.body.classList.contains('brush_tool') ){
+                        BRUSHCOLOR = hsl;
+                        document.getElementById('brushfill2').style.background = hsl;
+                    } else if ( document.body.classList.contains('type_tool') ){
+                        TEXTCOLOR = hsl;
+                        document.getElementsByClassName('textcoloractual')[0].getElementsByClassName('fill')[0].style.background = hsl;
+                    } else if ( document.body.classList.contains('canvas_tool') ){
+                        
+                        if ( document.getElementsByClassName('menuwrap subsublevel')[0].getElementsByClassName('cbmenu')[0] ){
+                            CANVASBORDERCOLOR = hsl;
+                            document.getElementsByClassName('canvasborderactual')[0].getElementsByClassName('border')[0].style.borderColor = hsl;
+                        } else { 
+                            CANVASCOLOR = hsl;
+                            document.getElementsByClassName('canvasfillactual')[0].getElementsByClassName('fill')[0].style.background = hsl;
+                            document.getElementsByClassName('canvasfillactual')[0].getElementsByClassName('fill')[0].style.boxShadow = 'none';
+                        }
+                    }
                 }
             }
 
@@ -5365,6 +5407,11 @@
         }
 
         function color2hsl(x){
+
+            if ( x == 'white' ){
+                x = '#fff';
+            }
+
             if ( x.indexOf('rgb') >= 0 ){
                 x = x.replace('rgb(', '').replace('rgba(', '').replace(')', '');
                 x = x.split(',');
