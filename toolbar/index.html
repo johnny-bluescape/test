@@ -5629,6 +5629,9 @@
                 var o = c[i].getElementsByClassName('color current');
                 o.removeclass('current');
 
+                o = c[i].parentElement.getElementsByClassName('selectcolor current');
+                o.removeclass('current');
+
                 c[i].appendChild(w);
 
                 //p.click();
@@ -6023,7 +6026,12 @@
         screenrez();
 
 
-        window.onscroll = function (e) {  
+        window.onscroll = function(e) {
+            console.log(e.target);
+        
+            if ( e.target.getparent('menuwrap') ){
+                return;
+            }
             var l = document.getElementsByClassName('layeritem current')[0];
 
             if ( l ){
