@@ -3809,14 +3809,39 @@
             c.style.top = Math.round(y2) + 'px';
 
             // c.classList.remove('visible');
-            c.classList.remove('opened');
+            //c.classList.remove('opened');
 
             // console.log(c.firstElementChild);
             
             // c.firstElementChild.style.marginLeft = 0;
             // c.firstElementChild.style.tranform = 'none';
         
-            removemenu();
+            //removemenu();
+
+            if ( c.classList.contains('opened')){
+                var m = document.getElementsByClassName('menuwrap');
+
+                for(var i=0,m;mm = m[i];i++){
+                    var coff = c.offset();
+                    //var x = coff.x;
+                    var y = coff.y;
+                    // var w = coff.w;
+                    // var h = coff.h;
+
+                    var mh = mm.offsetHeight;
+
+                    var st = window.pageYOffset || document.documentElement.scrollTop;
+                    //var sl = window.pageXOffset || document.documentElement.scrollLeft;
+
+                    var edge = window.innerHeight - y - mh + st;
+
+                    if ( edge < 16 ){
+                        mm.style.top = y + edge - 16 + 'px';
+                    } else {
+                        mm.style.top = y + 'px';
+                    }
+                }
+            }
         }
 
         function animationdone(e){
@@ -4999,12 +5024,19 @@
 
             var ph = p.offsetHeight;
 
-            var edge = window.innerHeight - y - ph;
+            var st = window.pageYOffset || document.documentElement.scrollTop;
+            //var sl = window.pageXOffset || document.documentElement.scrollLeft;
+
+            var edge = window.innerHeight - y - ph + st;
 
             if ( edge < 16 ){
                 // if ( edge > -16 ){
                 //     edge = window.innerHeight - 16;
                 // }
+
+                
+
+
                 p.style.top = y + edge - 16 + 'px';
             }
 
@@ -5896,8 +5928,13 @@
             var l = document.getElementsByClassName('layeritem current')[0];
 
             if ( l ){
-                setcontextpanel.call(l);
+                contextfollow.call(l);
             }
+
+            // var m = document.getElementsByClassName('menuwrap visible')[0];
+            // if ( m ){
+            //     menuposition.call(m);
+            // }
         } 
 
 
