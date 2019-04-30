@@ -133,7 +133,7 @@
         html {background:var(--canvas);cursor:pointer;}
         html, input, textarea, button {font-family:Barlow, sans-serif;color:var(--color);}
 
-        body {cursor:pointer;}
+        body {cursor:pointer;width:calc(100% + 400px);height:calc(100% + 400px);}
 
         body.rectangle_tool, body.select_tool {cursor:crosshair;}
 
@@ -420,7 +420,7 @@
             .recticon {width:24px;height:24px;border:3px solid rgba(255,255,255,.5);box-sizing:border-box;}
 
 
-            .menuwrap {position:fixed;opacity:0;transition: transform 150ms ease-in-out, opacity 150ms ease-in-out;user-select:none;z-index:2147483644;transform: translateX(100%);touch-action: manipulation;}
+            .menuwrap {position:absolute;opacity:0;transition: transform 150ms ease-in-out, opacity 150ms ease-in-out;user-select:none;z-index:2147483644;transform: translateX(100%);touch-action: manipulation;}
                 .menuwrap.visible {transform:translateX(0);opacity:1;}
 
                 .menuwrap.subsublevel {transform:translateX(-100%) !important;opacity:0;pointer-events:none;}
@@ -1186,26 +1186,28 @@
         </div>
 
         <div id=shape_context class=contextpanel>
-            <!-- <div class=option>
-                <div class=recticon></div>
-            </div> -->
-            <div class="option fillcolor" data-menu=bgmenu> <!-- id=shape2color -->
-                <div class="fill shape2fill" style="background:rgb(255, 59, 48);"></div>
-            </div><div class="option shapeborder" data-menu=bordermenu>
-                <div class="border" id="shapeborder"></div>
-            </div><div class="option shapeup">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8-8 8z"/></svg>
-            </div><div class="option shapeback">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 12l-1.41-1.41L13 16.17V4h-2v12.17l-5.58-5.59L4 12l8 8 8-8z"/></svg>
-            </div><div class="option lock" onclick="this.classList.toggle('unlock');">
-                <svg xmlns="http://www.w3.org/2000/svg" class=locked viewBox="0 0 24 24"><path d="M18,8H17V6A5,5,0,0,0,7,6V8H6a2,2,0,0,0-2,2V20a2,2,0,0,0,2,2H18a2,2,0,0,0,2-2V10A2,2,0,0,0,18,8ZM9,6a3,3,0,0,1,6,0V8H9Zm9,14H6V10H18Z"/></svg>
-                <svg xmlns="http://www.w3.org/2000/svg" class=unlocked viewBox="0 0 24 24"><path d="M18,8h-1V6c0-2.8-2.2-5-5-5S7,3.2,7,6h2c0-1.7,1.3-3,3-3s3,1.3,3,3v2H6c-1.1,0-2,0.9-2,2v10c0,1.1,0.9,2,2,2h12 c1.1,0,2-0.9,2-2V10C20,8.9,19.1,8,18,8z M18,20H6V10h12V20z"/></svg>
-            </div><div class="option morebtn">
-                <!-- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg> -->
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+            <div class=optionwrap>
+                <!-- <div class=option>
+                    <div class=recticon></div>
+                </div> -->
+                <div class="option fillcolor" data-menu=bgmenu> <!-- id=shape2color -->
+                    <div class="fill shape2fill" style="background:rgb(255, 59, 48);"></div>
+                </div><div class="option shapeborder" data-menu=bordermenu>
+                    <div class="border" id="shapeborder"></div>
+                </div><div class="option shapeup">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8-8 8z"/></svg>
+                </div><div class="option shapeback">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 12l-1.41-1.41L13 16.17V4h-2v12.17l-5.58-5.59L4 12l8 8 8-8z"/></svg>
+                </div><div class="option lock" onclick="this.classList.toggle('unlock');">
+                    <svg xmlns="http://www.w3.org/2000/svg" class=locked viewBox="0 0 24 24"><path d="M18,8H17V6A5,5,0,0,0,7,6V8H6a2,2,0,0,0-2,2V20a2,2,0,0,0,2,2H18a2,2,0,0,0,2-2V10A2,2,0,0,0,18,8ZM9,6a3,3,0,0,1,6,0V8H9Zm9,14H6V10H18Z"/></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" class=unlocked viewBox="0 0 24 24"><path d="M18,8h-1V6c0-2.8-2.2-5-5-5S7,3.2,7,6h2c0-1.7,1.3-3,3-3s3,1.3,3,3v2H6c-1.1,0-2,0.9-2,2v10c0,1.1,0.9,2,2,2h12 c1.1,0,2-0.9,2-2V10C20,8.9,19.1,8,18,8z M18,20H6V10h12V20z"/></svg>
+                </div><div class="option morebtn">
+                    <!-- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg> -->
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+                </div>
+            
+                <div class="content"></div>
             </div>
-        
-            <div class="content"></div>
         </div>
 
         <div id=img_context class=contextpanel>
@@ -2281,6 +2283,7 @@
             if( ev.which == 3 ){
                 return;
             }
+
             var tar = e.target;
             var t = this;
             var sx = ev.pageX;
@@ -3464,7 +3467,7 @@
         }
 
         function showkeyboard(e){
-            var off = this.offset();
+            var off = this.offset(true);
             var x = off.x;
             var y = off.y;
             var h = off.h;
@@ -3483,7 +3486,7 @@
             }
 
             if ( ny > window.innerHeight  - k.offsetHeight - 16 ){
-                ny = y - k.offsetHeight - 16;
+                ny = y - k.offsetHeight - 16 - 64;
             }
 
             k.style.top = ny + 'px';
@@ -3596,7 +3599,6 @@
         function removemenu(){
             var m = document.getElementsByClassName('menuwrap');
             m.remove();
-            console.log('----REMOVE-----')
         }
 
         function texthandler(e){
@@ -3745,7 +3747,16 @@
             var w = off.w;
             var h = off.h;
 
-            var y2 = y + h;
+            var st = window.pageYOffset || document.documentElement.scrollTop;
+            var sl = window.pageXOffset || document.documentElement.scrollLeft;
+
+            var cx = x - sl;
+            var cy = y - st;
+
+            var gap = 16;
+            var thres = 16;
+
+            //var y2 = y + h;
 
             var cid = this.dataset.context;
 
@@ -3753,29 +3764,49 @@
             var cw = Number(c.dataset.w) || c.offsetWidth;
             var ch = c.offsetHeight;
 
-            x = x + (w/2) - ( cw/2 );
+            var ox = (w/2) - ( cw/2 );
 
-            if ( x < 16){
-                x = 16
-            } else if ( x + cw > window.innerWidth - 16 ){
-                x = window.innerWidth - 16 - cw;
+            x = x + ox;
+
+            var ww = window.innerWidth;
+            var wh = window.innerHeight;
+
+            console.log(cx, x, sl, cx + cw + ox, ww - thres);
+
+            if ( cx < thres ){
+                x = sl + thres;
+            } else if ( cx + cw + ox > ww - thres ){
+                x = ww - thres - cw + sl;
             }
 
             c.style.left = Math.round(x) + 'px';
 
 
-            if ( window.innerHeight - y2 >= 80 ){
-                y = y2 + 16;
-            } else {
+            console.log(x,y, 'xy')
 
-                if ( y > 80 ){
-                    y = y - 64;
-                } else {
-                    y = Math.max(y, 0) + 16;
+
+            // if ( hh - y2 >= 80 ){
+            //     y = y2 + 16;
+            // } else {
+            //     if ( y > 80 ){
+            //         y = y - 64;
+            //     } else {
+            //         y = Math.max(y, 0) + 16;
+            //     }
+            // }
+
+            var y2 = y + h + gap;
+
+            if ( cy > wh - h - ch - (gap*2) ){
+                y2 = y - ch - gap;
+
+                if ( cy < 80 ){
+                    y2 = y + gap - cy;
                 }
             }
+            
 
-            c.style.top = Math.round(y) + 'px';
+            c.style.top = Math.round(y2) + 'px';
 
             // c.classList.remove('visible');
             c.classList.remove('opened');
@@ -3925,17 +3956,26 @@
             if ( document.getElementById('toolbar').classList.contains('swap') ){
                 swap = true;
             }
+
+             c.classList.add('opened');
+
+            var p = document.createElement('div');
+            var m = document.getElementById(shell);
+
+            var tool = this.getparent('tool') ? ' toolmenu' : '';
+            var xx = false;
+            if ( tool ){
+                p.style.position = 'fixed';
+                xx = true;
+            }
             
-            var coff = c.offset();
+            var coff = c.offset(xx);
             var x = coff.x;
             var y = coff.y;
             var w = coff.w;
             var h = coff.h;
 
-            c.classList.add('opened');
-
-            var p = document.createElement('div');
-            var m = document.getElementById(shell);
+           
 
             if ( shell == 'moremenu' && c.classList.contains('options') ){
                 m = document.getElementById('moremenu2');
@@ -3951,7 +3991,7 @@
 
             m.removeAttribute('id');
 
-            var tool = this.getparent('tool') ? ' toolmenu' : '';
+            
 
             m.className = 'contextmenu ' + shell + tool;
 
@@ -4246,12 +4286,19 @@
 
             var ph = p.offsetHeight;
 
-            var edge = window.innerHeight - y - ph;
+            var st = window.pageYOffset || document.documentElement.scrollTop;
+            //var sl = window.pageXOffset || document.documentElement.scrollLeft;
+
+            var edge = window.innerHeight - y - ph + st;
 
             if ( edge < 16 ){
                 // if ( edge > -16 ){
                 //     edge = window.innerHeight - 16;
                 // }
+
+                
+
+
                 p.style.top = y + edge - 16 + 'px';
             }
 
@@ -5678,7 +5725,11 @@
 
         function dotspacing(e){
             
-            if ( e.target.getparent('tweaks') || ( !document.documentElement.classList.contains('dotgrid') && !document.documentElement.classList.contains('grid') ) ){
+            // if ( e.target.getparent('tweaks') || e.target.getparent('contextmenu') || ( !document.documentElement.classList.contains('dotgrid') && !document.documentElement.classList.contains('grid') ) ){
+            //     return;
+            // }
+
+            if ( !e.ctrlKey && !e.metaKey ){
                 return;
             }
 
@@ -5839,6 +5890,12 @@
         }
 
         screenrez();
+
+
+
+
+        window.scrollTo(200,200);
+
         
     </script>
     <!-- <script src="./fabric.js"></script> -->

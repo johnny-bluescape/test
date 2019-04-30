@@ -5,6 +5,9 @@ String.prototype.stripslashes = function(){
 Object.prototype.getparent = function(c) { //class, tag, or id
     var a = this;
     var x = false;
+    if ( typeof c != 'string' ){
+        return false;
+    }
     while ( a ){
         if ( a.classList && a.classList.contains(c) || a.tagName == c.toUpperCase() || a.id == c ){
             x = a;
@@ -43,10 +46,17 @@ Array.prototype.random = function () {
     return this[Math.floor(Math.random() * this.length)]
 };
 
-Object.prototype.offset = function() {
+Object.prototype.offset = function(x) {
     var coords = this.getBoundingClientRect();
-    var top  = window.pageYOffset || document.documentElement.scrollTop;
+    var top = window.pageYOffset || document.documentElement.scrollTop;
     var left = window.pageXOffset || document.documentElement.scrollLeft;
+
+    var fixed = window.getComputedStyle(this).getPropertyValue('position') == 'fixed' || x ? true : false;
+
+    if ( fixed ){
+        top = 0;
+        left = 0;
+    }
 
     return {
         x: left + coords.x,

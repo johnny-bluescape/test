@@ -51,7 +51,7 @@ function rectanglemove(e){
     
 
     function move(e){
-      hidecontext();
+      
       var evt = e.touches ? e.touches[0] : e;
 
       var x = evt.pageX;
@@ -72,6 +72,8 @@ function rectanglemove(e){
 
       if ( !moved && Math.abs(nx) > 4 || Math.abs(ny) > 4 ){
         moved = true;
+
+        hidecontext();
       }
 
       contextfollow.call(rec);
@@ -818,9 +820,7 @@ function rectanglemove(e){
       var th = null;
   
       b.object = [];
-  
-      console.log(s);
-  
+    
       for(var i=0;i<s.length;i++){
         var r = s[i];
         var off = r.offset();
