@@ -300,8 +300,33 @@
         .size {width:28px;height:28px;margin-top:6px;border-radius:50%;box-shadow:inset 0 0 0 1px var(--dotcolor2);position:relative;}
             .size .actual {position:absolute;top:50%;left:50%;width:8px;height:8px;background:var(--iconcurrent);border-radius:50%;transform:translate(-50%, -50%);}
 
-        .option .fill {cursor:pointer;width:28px;height:28px;margin-top:6px;border-radius:50%;box-shadow:inset 0 0 0 1px hsla(0, 0%, 100%, 0.175);position:absolute;background:black;}
-        .option .border {cursor:pointer;width:28px;height:28px;border-radius:50%;border:4px solid rgba(155, 155, 155, 0.15);box-sizing:border-box;}
+        .option .fill {cursor:pointer;width:28px;height:28px;margin-top:6px;border-radius:50%;position:absolute;background:black;}
+            .option .fill::before, .option .border::before {
+                content: '';
+                width: 100%;
+                height: 100%;
+                display: block;
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                border-radius: 50%;
+                box-sizing: border-box;
+                position:absolute;top:0;left:0;
+            }
+
+            .option .border::before {top:-1px;left:-1px;width:calc(100% + 2px);height:calc(100% + 2px);border: 1px solid #30313c;mix-blend-mode: lighten;}
+
+            .option .border::after {
+                content: '';
+                width: calc(100% + 8px);
+                height: calc(100% + 8px);
+                display: block;
+                border: 1px solid #30313c;
+                border-radius: 50%;
+                box-sizing: border-box;
+                position:absolute;top:-4px;left:-4px;
+                mix-blend-mode: lighten;
+            }
+
+        .option .border {cursor:pointer;width:28px;height:28px;border-radius:50%;border:4px solid rgba(155, 155, 155, 0.15);box-sizing:border-box;position:relative;}
 
         .slider {width:48px;height:200px;position:relative;box-shadow:inset 0 0 0 1px rgba(255,255,255,.1);border-radius:24px;touch-action: manipulation;background:#212122;cursor:pointer;}
 
@@ -332,11 +357,14 @@
         .type_tool canvas, .type_tool {cursor:text !important;}
 
         .textwrap {position:absolute;cursor: -webkit-grab;cursor:grab;}
-        .textarea {cursor: default;user-select:none;pointer-events:none;padding:12px;resize:none;border-radius:4px;position:relative;min-width:48px;height:28px;z-index:1337;background:transparent;border:none;color:white;font-size:24px;}
-            .textwrap:not(.current):hover .textarea {box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);}
-            .current .textarea {box-shadow:0 0 0 var(--selectwidth) var(--select);user-select:text;cursor:text;pointer-events:all;}
-                .selectblack .current .textarea {box-shadow:0 0 0 var(--selectwidth) var(--select), inset 0 0 0 1px black;}
-                .selectwhite .current .textarea {box-shadow:0 0 0 var(--selectwidth) var(--select), inset 0 0 0 1px white;}
+        .textarea {cursor: default;user-select:none;padding:0;resize:none;border-radius:4px;position:relative;min-width:48px;height:100%;min-height:28px;z-index:1337;background:transparent;border:none;color:white;font-size:24px;width:100%;max-width: 100%;box-sizing: border-box;padding: 12px;pointer-events:none;}
+            .textwrap:not(.current):hover {box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);}
+
+            /* .current .textarea {box-shadow:0 0 0 var(--selectwidth) var(--select);user-select:text;cursor:text;pointer-events:all;} */
+            .current .textarea {}
+            .current.editable .textarea {user-select:text;cursor:text;pointer-events:all;}
+                /* .selectblack .current .textarea {box-shadow:0 0 0 var(--selectwidth) var(--select), inset 0 0 0 1px black;}
+                .selectwhite .current .textarea {box-shadow:0 0 0 var(--selectwidth) var(--select), inset 0 0 0 1px white;} */
         
 
         .backbtn {width:48px;height:48px;background:var(--panel);border-radius:var(--toolbarradius);display:flex;align-content:center;align-items:center;justify-content:center;justify-items:center;position: absolute;top: 0;left: -56px;box-shadow: 0 2px 20px var(--shadow2);}
@@ -1295,6 +1323,14 @@
             <!-- <div class=mgap></div> -->
             <div class="mitem mlevel">Properties</div>
             <div class="mitem ">Reset</div>
+        </div>
+
+        <div id=randommenu style="padding:0;min-width:200px;overflow:hidden;">
+            <div class="mitem ">Menu Item 1</div>
+            <div class="mitem ">Menu Item 2</div>
+            <div class="mitem ">Menu Item 3</div>
+            <div class="mitem ">Menu Item 4</div>
+            <div class="mitem ">Menu Item 5</div>
         </div>
 
         <div id=bgmenu>
@@ -3376,10 +3412,16 @@
             closepanel();
         }
 
-        function typetool(e){
+        function textfocus(e){
+            console.log('----FOCUS----');
+        }
 
+        function textblur(e){
+            console.log('----BLUR----');
+        }
+
+        function typetool(e){
             console.log('TYPETOOL');
-            
 
             //blurelm.call(this, e);
 
@@ -3415,8 +3457,8 @@
 
             w.style.top = y - 24 + 'px';
             w.style.left = x + 'px';
-            t.style.width = TEXTSIZE * 2 + 'px';
-            t.style.height = TEXTSIZE + 12 + 'px';
+            // t.style.width = TEXTSIZE * 2 + 'px';
+            // t.style.height = TEXTSIZE + 12 + 'px';
             w.style.zIndex = 1337;
 
             var ops = document.getElementById('text_context').cloneNode(true);
@@ -3435,6 +3477,9 @@
 
 
             t.addEventListener('input', autoexpand);
+
+            t.addEventListener('focus', textfocus, true);
+            t.addEventListener('blur', textblur, true);
 
             // t.onblur = function(){
             //     t.getparent('textwrap').classList.remove('current');
@@ -3456,6 +3501,8 @@
             t.parentElement.classList.add('current');
 
             setcontextpanel.call(w);
+
+            setboundingbox.call(w);
 
             //if ( e.touches ){
                 //showkeyboard.call(w, e);
@@ -3521,29 +3568,70 @@
             d.style.fontSize = window.getComputedStyle(this).fontSize;
 
             document.body.appendChild(d);
-            
+
+            var tw = this.getparent('textwrap');           
 
             var w = d.offsetWidth;
             var h = d.offsetHeight;
 
-            this.style.width = w + 9 + 'px';
 
-            this.style.height = 0;
-            var s = this.scrollHeight;
+            if ( !tw.classList.contains('resized') ){
+                tw.style.width = w + 9 + 24 + 'px';
 
-            this.style.height = s - 16 - 8 + 'px';
+                this.style.height = 0;
+                var s = this.scrollHeight;
+
+                tw.style.height = s + 'px';
+                this.style.height = '100%';
+            }
 
             d.parentNode.removeChild(d);
+
+            setboundingposition();
 
             if ( document.getElementsByClassName('contextpanel visible sublevel')[0] ){
                 return;
             }
 
-            setcontextpanel.call(this.getparent('textwrap'));
+            setcontextpanel.call(tw);
+            
         }
+
+        // function autoexpand(e){
+        //     var v = this.value;
+
+        //     var d = document.createElement('div');
+        //     d.innerText = v;
+        //     d.style.display = 'inline';
+        //     d.style.whiteSpace = 'nowrap';
+        //     d.style.fontSize = window.getComputedStyle(this).fontSize;
+
+        //     document.body.appendChild(d);
+            
+
+        //     var w = d.offsetWidth;
+        //     var h = d.offsetHeight;
+
+        //     this.style.width = w + 9 + 'px';
+
+        //     this.style.height = 0;
+        //     var s = this.scrollHeight;
+
+        //     this.style.height = s - 16 - 8 + 'px';
+
+        //     d.parentNode.removeChild(d);
+
+        //     if ( document.getElementsByClassName('contextpanel visible sublevel')[0] ){
+        //         return;
+        //     }
+
+        //     setcontextpanel.call(this.getparent('textwrap'));
+        // }
 
         function blurall(e){
             var c = document.getElementsByClassName('layeritem current');
+            c.removeclass('editable');
+            c.removeclass('preedit');
             c.removeclass('current');
 
             hidekeyboard();
@@ -3570,6 +3658,8 @@
                 ta.blur();
                 ta.readOnly = true;
             }
+            c.removeclass('editable');
+            c.removeclass('preedit');
             c.removeclass('current');
 
             hidecontext();
@@ -3616,11 +3706,13 @@
             var ev = e.touches ? e.touches[0] : e;
             if( ev.which == 3 ){
                 return;
-            }
+            }            
 
             var ta = this.getElementsByClassName('textarea')[0];
 
             blurelm.call(this, e);
+
+            setboundingbox.call(this, e);
 
             var sx = ev.pageX;
             var sy = ev.pageY;
@@ -3634,6 +3726,8 @@
 
             var nx = 0;
             var ny = 0;
+
+            this.classList.add('current');
 
             function move(e){
                 var ev = e.touches ? e.touches[0] : e;
@@ -3664,6 +3758,8 @@
 
                 t.dataset.x = nx;
                 t.dataset.y = ny;
+
+                setboundingposition.call(t);
             }
 
             function end(e){
@@ -3691,20 +3787,28 @@
                 if ( !moved ){
                     console.log('clicked');
 
-                    if ( !t.classList.contains('current')){
+                    if ( !t.classList.contains('preedit') ){
 
-                        t.classList.add('current');
+                        t.classList.add('preedit');
+
+                    } else if (t.classList.contains('preedit')){
+                        
+                        t.classList.add('editable');
+                        t.classList.remove('preedit');
+
                         ta.readOnly = false;
                         ta.focus();
 
                         if ( e.touches ){
-
                             showkeyboard.call(t);
                         }
                     }
-
-                    setcontextpanel.call(t);
+                } else { 
+                    t.classList.add('current2');
                 }
+
+                setcontextpanel.call(t);
+                setboundingposition.call(t);
             }
 
             window.addEventListener('touchmove', move);
@@ -3876,9 +3980,10 @@
                 e.preventDefault();
                 e.stopPropagation();
             }
-            
-            var sub = document.getElementsByClassName('subsublevel');
 
+            var back = t.getparent('contextpanel'); 
+
+            var sub = document.getElementsByClassName('subsublevel');
 
             if ( sub[0] ){
                 var am = document.getElementsByClassName('menuwrap visible');
@@ -3893,7 +3998,9 @@
                 sub[sub.length-1].classList.add('visible');
                 sub[sub.length-1].classList.remove('subsublevel');
 
-                return;
+                if ( back ){
+                    return;
+                }
             }
             
 
@@ -4036,8 +4143,6 @@
             var y = coff.y;
             var w = coff.w;
             var h = coff.h;
-
-           
 
             if ( shell == 'moremenu' && c.classList.contains('options') ){
                 m = document.getElementById('moremenu2');
@@ -4183,6 +4288,12 @@
 
                 s.onchange = function(e) {
                     var files = e.target.files; // FileList object
+                    var multi = false;
+                    var mx = 0;
+
+                    if ( files.length > 1 ){
+                        multi = true;
+                    } 
 
                     // Loop through the FileList and render image files as thumbnails.
                     for (var i = 0, f; f = files[i]; i++) {
@@ -4230,7 +4341,9 @@
 
 
                                     img.style.top = (window.innerHeight / 2) - (h/2) + 'px';
-                                    img.style.left = (window.innerWidth / 2) - (w/2) + 'px';
+                                    img.style.left = (window.innerWidth / 2) - (w/2) + mx + 'px';
+
+                                    mx += w;
 
 
                                     document.getElementById('layers').appendChild(img);
@@ -4343,7 +4456,7 @@
             p.id = token;
 
             p.classList.remove('opened');
-            var ow = p.getElementsByClassName('optionwrap')[0];
+            var ow = p.getElementsByClassName('optionwrap')[0] || p.getElementsByClassName('option')[0];
 
             ow.style.marginLeft = 0;
 
@@ -5372,7 +5485,8 @@
                 var sw = document.getElementsByClassName('contextpanel visible')[0];
                 sw = sw.getElementsByClassName('fill')[0];
 
-                f.style.backgroundColor = sw.style.backgroundColor = 'hsla(' + h + ', ' + s + '%, ' + l + '%, ' + (a/100) + ')';
+                sw.style.boxShadow = 'none';
+                f.style.backgroundColor = sw.style.background = 'hsla(' + h + ', ' + s + '%, ' + l + '%, ' + (a/100) + ')';
             } else if ( me == 'textcolormenu'){
                 var sw = document.getElementsByClassName('contextpanel visible')[0];
                 sw = sw.getElementsByClassName('textfill')[0];
@@ -5519,7 +5633,59 @@
             closemenu();
         }
 
+        function level2(e){
+            var m = this.getparent('menuwrap');
+
+            var off = m.offset();
+
+            m.classList.add('subsublevel');
+            m.classList.remove('visible');
+
+            var c = document.getElementById('randommenu');
+            c = c.cloneNode(true);
+
+            c.removeAttribute('id');
+
+            var p = document.createElement('div');
+            p.className = 'menuwrap';
+
+            c.className += ' contextmenu ';
+
+            var fixed = window.getComputedStyle(m).getPropertyValue('position') == 'fixed' ? true : false;
+
+            if ( fixed ){
+                p.style.position = 'fixed';
+            }
+
+            p.appendChild(c);
+
+            var y = off.y ;
+
+            p.style.left = off.x + 'px';
+            p.style.top = y + 'px';
+            
+            document.body.appendChild(p);
+
+            var ph = p.offsetHeight;
+
+            var st = window.pageYOffset || document.documentElement.scrollTop;
+            //var sl = window.pageXOffset || document.documentElement.scrollLeft;
+
+            var edge = window.innerHeight - y - ph + st;
+
+            if ( edge < 16 ){
+                p.style.top = y + edge - 16 + 'px';
+            }
+
+            p.offsetLeft;
+            p.classList.add('visible');
+        }
+
         function menuitem(e){
+            if ( this.classList.contains('mlevel') ){
+                level2.call(this, e);
+                return;
+            }
             closemenu.call(document.body, {});
         }
 

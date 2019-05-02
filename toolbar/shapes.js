@@ -230,9 +230,18 @@ function rectanglemove(e){
 
     hidecontext();
 
+    var moved = false;
 
     function move(e){
         e.preventDefault();
+
+        if ( !moved ){
+          moved = true;
+
+          if ( rect.classList.contains('textwrap') ){
+            rect.classList.add('resized');
+          }
+        }
         
 
         var evt = e.touches ? e.touches[0] : e;
