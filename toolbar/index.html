@@ -5064,11 +5064,13 @@
             var bg = null;
 
             if ( rec && rec.classList.contains('rectangle') ){
-                var bg = window.getComputedStyle(rec).backgroundColor;
+                bg = window.getComputedStyle(rec).backgroundColor;
 
                 if ( this.getparent('bordermenu') ){
-                    var bg = window.getComputedStyle(rec).borderColor;
+                    bg = window.getComputedStyle(rec).borderColor;
                 }
+            } else if (rec && rec.classList.contains('textwrap') ){
+                bg = window.getComputedStyle(rec.getElementsByClassName('textarea')[0]).color;
             }
             
             if ( fixed ){
@@ -5086,6 +5088,10 @@
                     bg = CANVASBORDERCOLOR;
                 }
             }
+
+            
+
+            console.log(bg);
 
             var hsl = color2hsl(bg);
             hue = hsl[0];
@@ -5407,19 +5413,20 @@
         }
 
         function color2hsl(x){
-
             if ( x == 'white' ){
                 x = '#fff';
             }
 
-            if ( x.indexOf('rgb') >= 0 ){
+            console.log(x);
+
+            if ( x && x.indexOf('rgb') >= 0 ){ //ugh
                 x = x.replace('rgb(', '').replace('rgba(', '').replace(')', '');
                 x = x.split(',');
 
                 var hsl = rgb2hsl(x);
 
                 return hsl;
-            } else if ( x.indexOf('#') >= 0 ){
+            } else if ( x && x.indexOf('#') >= 0 ){
                 var rgb = hex2rgb(x);
                 var hsl = rgb2hsl(rgb);
 
