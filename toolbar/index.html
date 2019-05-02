@@ -3865,6 +3865,8 @@
             console.log(e);
             e = e || {};
             var t = e.target || document.body;
+
+            document.body.style.overflow = 'auto';
             
             if ( t.classList.contains('delete') || t.getparent('contextmenu') || t.getparent('overflowmenu') || t.getparent('tweaks') || (t.getparent('option') && (e.type == 'mousedown' || e.type == 'touchstart')  ) ){
                 return;
@@ -3962,9 +3964,13 @@
         function preclosemenu(e){
             var t = e.target;
 
-            console.log(t, 'TARGET----');
+            document.body.removeEventListener('mouseup', closemenu);
+            document.body.removeEventListener('touchend', closemenu);
+
+            console.log(t, 'TARGET----', t.getparent('menuwrap'));
 
             if ( !t.getparent('menuwrap') ){
+
                 document.body.addEventListener('mouseup', closemenu);
                 document.body.addEventListener('touchend', closemenu);
             }
@@ -4048,19 +4054,12 @@
             m.removeAttribute('id');
 
             
-
             m.className = 'contextmenu ' + shell + tool;
 
             s.style.width = '336px';
-            
-            //m.appendChild(backbtn());
-            // m.appendChild(s);
+
 
             p.appendChild(m);
-            
-            // document.body.addEventListener('mousedown', closemenu);
-            // document.body.addEventListener('touchstart', closemenu);
-            //document.body.addEventListener('click', closemenu);
 
             document.body.addEventListener('mousedown', preclosemenu);
             document.body.addEventListener('touchstart', preclosemenu);
@@ -4099,24 +4098,6 @@
                 var bc = com.borderColor;
 
                 setchip(bc, p);
-                // var chips = p.getElementsByClassName('chip');
-                // var found = false;
-                // for(var i=0;i<chips.length;i++){
-                //     var cc = chips[i];
-                //     if ( bc == window.getComputedStyle(cc).backgroundColor ){
-                //         cc.parentElement.classList.add('current');
-                //         found = true;
-                //         break;
-                //     }
-                // }
-
-                // if ( !found ){
-                //     if ( bc == 'rgba(155, 155, 155, 0.15)' || bc == 'rgba(0, 0, 0, 0)' || bc == 'transparent'){
-                //         p.getElementsByClassName('transparentcolor')[0].classList.add('current');
-                //     } else {
-                //         p.getElementsByClassName('selectcolor')[0].classList.add('current');
-                //     }
-                // }
 
             } else if ( shell == 'bmenu' ){
                 m.appendChild(s);
@@ -4148,78 +4129,38 @@
 
                 setchip(bc, p);
 
-                // var chips = p.getElementsByClassName('chip');
-                // for(var i=0;i<chips.length;i++){
-                //     var cc = chips[i];
-                //     if ( bc == window.getComputedStyle(cc).backgroundColor ){
-                //         cc.parentElement.classList.add('current');
-                //         break;
-                //     }
-                // }
-
             } else if ( shell == 'bgmenu' ){
                 m.appendChild(s);
 
                 var rec = document.getElementsByClassName('layeritem current')[0];
                 var bc = window.getComputedStyle(rec).backgroundColor;
                 setchip(bc, p);
-                // var chips = p.getElementsByClassName('chip');
 
-                // for(var i=0;i<chips.length;i++){
-                //     var cc = chips[i];
-                //     if ( bc == window.getComputedStyle(cc).backgroundColor ){
-                //         cc.parentElement.classList.add('current');
-                //         break;
-                //     }
-                // }
             } else if ( shell == 'textcolormenu' ){
                 m.appendChild(s);
 
                 var rec = document.getElementsByClassName('layeritem current')[0].getElementsByClassName('textarea')[0];
                 var bc = window.getComputedStyle(rec).color;
                 setchip(bc, p);
-                // var chips = p.getElementsByClassName('chip');
 
-                // for(var i=0;i<chips.length;i++){
-                //     var cc = chips[i];
-                //     if ( bc == window.getComputedStyle(cc).backgroundColor ){
-                //         cc.parentElement.classList.add('current');
-                //         break;
-                //     }
-                // }
             } else if ( shell == 'fsmenu' ){
                 var step = stepper2.call(this, e);
                 step.classList.add('menud');
                 
                 m.appendChild(step);
+
+                document.body.style.overflow = 'hidden';
             } else if ( shell == 'bgmenu2' || shell == 'bgmenu3' || shell == 'bcmenu' || shell == 'tcmenu' ){
                 m.appendChild(s);
 
                 var bc = window.getComputedStyle(this.getElementsByClassName('fill')[0]).backgroundColor;
                 setchip(bc, p);
-                // var chips = p.getElementsByClassName('chip');
 
-                // for(var i=0;i<chips.length;i++){
-                //     var cc = chips[i];
-                //     if ( bc == window.getComputedStyle(cc).backgroundColor ){
-                //         cc.parentElement.classList.add('current');
-                //         break;
-                //     }
-                // }
             } else if ( shell == 'cbmenu' ){
                 m.appendChild(s);
 
                 var bc = window.getComputedStyle(this.getElementsByClassName('border')[0]).borderColor;
                 setchip(bc, p);
-                // var chips = p.getElementsByClassName('chip');
-
-                // for(var i=0;i<chips.length;i++){
-                //     var cc = chips[i];
-                //     if ( bc == window.getComputedStyle(cc).backgroundColor ){
-                //         cc.parentElement.classList.add('current');
-                //         break;
-                //     }
-                // }
             } else if ( shell == 'tfmenu' ){
                 var v = this.innerText;
 
@@ -4365,13 +4306,6 @@
             var edge = window.innerHeight - y - ph + st;
 
             if ( edge < 16 ){
-                // if ( edge > -16 ){
-                //     edge = window.innerHeight - 16;
-                // }
-
-                
-
-
                 p.style.top = y + edge - 16 + 'px';
             }
 
@@ -4390,96 +4324,6 @@
                 step.getElementsByClassName('select')[0].scrollTop = sc;
             }
         }
-
-        // function moremenu(e){
-        //     console.log('MORE  MEUN----', e);
-
-
-        //     var o = this.classList.contains('opened');
-        //     if ( o ){
-        //         return;
-        //     }
-
-        //     var c = this.getparent('contextpanel');
-        //     var coff = c.offset();
-        //     var x = coff.x;
-        //     var y = coff.y;
-        //     var w = coff.w;
-        //     var h = coff.h;
-
-        //     this.classList.add('opened');
-
-        //     var p = document.createElement('div');
-        //     var m = document.getElementById('moremenu');
-
-        //     if ( c.classList.contains('options') ){
-        //         m = document.getElementById('moremenu2');
-        //     }
-
-        //     p.className = 'menuwrap';
-            
-        //     m = m.cloneNode(true);
-
-        //     m.removeAttribute('id');
-
-        //     m.className = 'overflowmenu';
-            
-        //     //m.appendChild(backbtn());
-
-        //     p.appendChild(m);
-            
-        //     // document.body.addEventListener('mousedown', closemenu);
-        //     // document.body.addEventListener('touchstart', closemenu);
-        //     // document.body.addEventListener('click', closemenu);
-
-        //     document.body.addEventListener('mousedown', preclosemenu);
-        //     document.body.addEventListener('touchstart', preclosemenu);
-
-        //     document.body.appendChild(p);
-
-        //     var o = c.getElementsByClassName('option');
-
-        //     var l = o.length - 1;
-        //     o = o[0];
-            
-        //     var o2 = o.getparent('optionwrap');
-
-        //     if ( o2 ){
-        //         o = o2;
-        //     }
-
-        //     var ox = -(c.offsetWidth - 48);
-        //     o.style.marginLeft = ox + 'px';
-
-        //     //p.offsetLeft;
-
-        //     p.style.top = y + 'px';
-        //     p.style.left = x + (w/2) - (p.offsetWidth / 2) + 'px';
-        //     p.style.left = x + 48 + 12 + 'px';
-        //     p.style.left = x + w + 12 + 'px';
-
-        //     p.style.transform = 'translateX(0px)';
-
-        //     var ph = p.offsetHeight;
-
-        //     var edge = window.innerHeight - y - ph;
-
-        //     if ( edge < 16 ){
-        //         p.style.top = y + edge - 16 + 'px';
-        //     }
-
-
-        //     p.offsetLeft;
-
-        //     c.classList.add('sublevel')
-
-        //     p.classList.add('visible');
-            
-        //     p.offsetLeft;
-
-        //     p.style.transform = 'translateX(' + ox + 'px)';
-
-        // }
 
         function duplicatecurrent(e){
             e.preventDefault();
@@ -4659,7 +4503,6 @@
             b.classList.remove('panel');
 
             //c.appendChild(b);
-
         }
 
         function colorsetting(e, color, menu){
@@ -5089,10 +4932,6 @@
                 }
             }
 
-            
-
-            console.log(bg);
-
             var hsl = color2hsl(bg);
             hue = hsl[0];
 
@@ -5106,8 +4945,6 @@
             gr.dataset.h = hsl[0];
             gr.dataset.s = hsl[1];
             gr.dataset.l = hsl[2];
-
-            console.log(hsv);
 
             var s = hsv[1] || 0;
             var v = hsv[2] || 0;
@@ -5127,9 +4964,7 @@
 
             oc.style.background = 'hsl(' + hsl[0] + ',' + hsl[1] + '%,' + hsl[2] +'%)';
             
-
             if ( cs ){
-
                 cs.value = hue;
                 huecubeslide.call(cs, event);
             }
@@ -5141,9 +4976,7 @@
             p.style.left = off.x + 'px';
             p.style.top = y + 'px';
             
-
             document.body.appendChild(p);
-
 
             var ph = p.offsetHeight;
 
@@ -5153,13 +4986,6 @@
             var edge = window.innerHeight - y - ph + st;
 
             if ( edge < 16 ){
-                // if ( edge > -16 ){
-                //     edge = window.innerHeight - 16;
-                // }
-
-                
-
-
                 p.style.top = y + edge - 16 + 'px';
             }
 
