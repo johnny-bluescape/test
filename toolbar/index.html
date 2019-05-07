@@ -255,7 +255,7 @@
 
             #tweaks h4 {padding: 8px 8px 12px;font-weight: 600;}
 
-        .ui2 .tools {background:var(--toolselect);box-shadow:0 3px 40px var(--shadow);padding:0 0 var(--toolbtn);border-radius:var(--toolbarradius);}
+        .ui2 .tools {background:var(--toolselect);box-shadow:0 3px 40px var(--shadow);padding:0 0 0;border-radius:var(--toolbarradius);}
             .ui2 .tools::after {content:'';display:block;clear:both;}
 
             
@@ -265,9 +265,9 @@
 
                 .ui2 .tool.active .toolbtn {background:var(--toolselect2);box-shadow:none;}
                 
-            .ui2 .handle {bottom:0;top: auto;left: 0;width:var(--toolbtn);height:var(--toolbtn);}
+            .ui2 #toolbar .handle {bottom:0;top:auto;left:0;width:var(--toolbtn);height:var(--toolbtn);display:none;}
 
-            .ui2.horizontal  .tools, .horiz.ui2 .tools {padding:0 var(--toolbtn) 0 0;}
+            .ui2.horizontal .tools, .horiz.ui2 .tools {padding:0 0 0 0;}
             .ui2.horizontal .handle {left:auto;right:0;}
             
 
@@ -855,6 +855,9 @@
         .spintri {background:red;position:absolute;top:28px;left:28px;right:28px;bottom: 28px;background-image:linear-gradient(to top, #000, rgba(204, 154, 129, 0)), linear-gradient(to right, #fff, rgba(204, 154, 129, 0));border-radius:50%;}
 
             .trihandle {position:absolute;top:-8px;left:-8px;width:12px;height:12px;position:absolute;transform:translate(134px, 44px);border-radius:50%;background:transparent;border:2px solid white;box-sizing:border-box;box-shadow:0 0 0 2px rgba(0,0,0,.05);pointer-events:none;}
+
+        .filmstrip {position:fixed;bottom:24px;left:50%;padding:8px;padding-right:48px;background:var(--panel);border-radius:var(--toolbarradius);z-index:2147483640;}
+            .filmstrip video {max-width:240px;border-radius:calc(var(--toolbarradius) - 6px);display:block;transform: scaleX(-1);}
     </style>
 </head>
 <body class="rectanglex brush_tool ">
@@ -1045,11 +1048,41 @@
                 </div>
             </div>
             <div class=tool>
-                <div class=toolbtn>
-                    <!-- <svg xmlns="http://www.w3.org/2000/svg" style="width:28px;" viewBox="0 0 20 20"><path d="M15.95 10.78c.03-.25.05-.51.05-.78s-.02-.53-.06-.78l1.69-1.32c.15-.12.19-.34.1-.51l-1.6-2.77c-.1-.18-.31-.24-.49-.18l-1.99.8c-.42-.32-.86-.58-1.35-.78L12 2.34c-.03-.2-.2-.34-.4-.34H8.4c-.2 0-.36.14-.39.34l-.3 2.12c-.49.2-.94.47-1.35.78l-1.99-.8c-.18-.07-.39 0-.49.18l-1.6 2.77c-.1.18-.06.39.1.51l1.69 1.32c-.04.25-.07.52-.07.78s.02.53.06.78L2.37 12.1c-.15.12-.19.34-.1.51l1.6 2.77c.1.18.31.24.49.18l1.99-.8c.42.32.86.58 1.35.78l.3 2.12c.04.2.2.34.4.34h3.2c.2 0 .37-.14.39-.34l.3-2.12c.49-.2.94-.47 1.35-.78l1.99.8c.18.07.39 0 .49-.18l1.6-2.77c.1-.18.06-.39-.1-.51l-1.67-1.32zM10 13c-1.65 0-3-1.35-3-3s1.35-3 3-3 3 1.35 3 3-1.35 3-3 3z"/></svg> -->
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36">
+                <div class=toolbtn data-tool=meeting>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.56-.35-.12-.74-.03-1.01.24l-1.57 1.97c-2.83-1.35-5.48-3.9-6.89-6.83l1.95-1.66c.27-.28.35-.67.24-1.02-.37-1.11-.56-2.3-.56-3.53 0-.54-.45-.99-.99-.99H4.19C3.65 3 3 3.24 3 3.99 3 13.28 10.73 21 20.01 21c.71 0 .99-.63.99-1.18v-3.45c0-.54-.45-.99-.99-.99z"/></svg>
+                </div>
+                <div class="options contextpanel">
+                    <div class=optionwrap>
+                        <div class="option startmeeting" data-menu=smeet style="padding: 0 12px;"> 
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>
+                        </div><div class="option joinmeeting" data-menu=jmeet style="padding: 0 12px;">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4zM14 13h-3v3H9v-3H6v-2h3V8h2v3h3v2z"/></svg>
+                        </div><div class="option morebtn">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class=tool>
+                <div class=toolbtn data-tool=settings>
+                    <svg xmlns="http://www.w3.org/2000/svg" style="width:28px;" viewBox="0 0 20 20"><path d="M15.95 10.78c.03-.25.05-.51.05-.78s-.02-.53-.06-.78l1.69-1.32c.15-.12.19-.34.1-.51l-1.6-2.77c-.1-.18-.31-.24-.49-.18l-1.99.8c-.42-.32-.86-.58-1.35-.78L12 2.34c-.03-.2-.2-.34-.4-.34H8.4c-.2 0-.36.14-.39.34l-.3 2.12c-.49.2-.94.47-1.35.78l-1.99-.8c-.18-.07-.39 0-.49.18l-1.6 2.77c-.1.18-.06.39.1.51l1.69 1.32c-.04.25-.07.52-.07.78s.02.53.06.78L2.37 12.1c-.15.12-.19.34-.1.51l1.6 2.77c.1.18.31.24.49.18l1.99-.8c.42.32.86.58 1.35.78l.3 2.12c.04.2.2.34.4.34h3.2c.2 0 .37-.14.39-.34l.3-2.12c.49-.2.94-.47 1.35-.78l1.99.8c.18.07.39 0 .49-.18l1.6-2.77c.1-.18.06-.39-.1-.51l-1.67-1.32zM10 13c-1.65 0-3-1.35-3-3s1.35-3 3-3 3 1.35 3 3-1.35 3-3 3z"/></svg>
+                    <!-- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm7-7H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.11 0 2-.9 2-2V5c0-1.1-.89-2-2-2zm-1.75 9c0 .23-.02.46-.05.68l1.48 1.16c.13.11.17.3.08.45l-1.4 2.42c-.09.15-.27.21-.43.15l-1.74-.7c-.36.28-.76.51-1.18.69l-.26 1.85c-.03.17-.18.3-.35.3h-2.8c-.17 0-.32-.13-.35-.29l-.26-1.85c-.43-.18-.82-.41-1.18-.69l-1.74.7c-.16.06-.34 0-.43-.15l-1.4-2.42c-.09-.15-.05-.34.08-.45l1.48-1.16c-.03-.23-.05-.46-.05-.69s.02-.46.05-.68l-1.48-1.16c-.13-.11-.17-.3-.08-.45l1.4-2.42c.09-.15.27-.21.43-.15l1.74.7c.36-.28.76-.51 1.18-.69l.26-1.85c.03-.17.18-.3.35-.3h2.8c.17 0 .32.13.35.29l.26 1.85c.43.18.82.41 1.18.69l1.74-.7c.16-.06.34 0 .43.15l1.4 2.42c.09.15.05.34-.08.45l-1.48 1.16c.03.23.05.46.05.69z"/></svg> -->
+                    <!-- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg> -->
+                    <!-- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36">
                         <path d="M8,28V8h20l-6.4,6.4h-7.2v7.2L8,28z"/>
-                    </svg>
+                    </svg> -->
+                </div>
+                <div class="options contextpanel">
+                    <div class=optionwrap>
+                        <div class=moremenu>
+                            <div class=mitem>Hide Toolbar</div>
+                            <div class="mitem ">Exit </div>
+                            <div class="mitem ">Save</div>
+                            <div class=mitem>Delete</div>
+                            <!-- <div class=mgap></div> -->
+                            <div class="mitem ">Properties</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1356,6 +1389,28 @@
 
         <div id=bgmenu3>
             <div class=menutitle>Background Color</div>
+        </div>
+
+        <div id=smeet>
+            <div class=menutitle>Meeting Stuff</div>
+            <div class=maction>End</div>
+            <div class=maction>Video</div>
+            <div class=maction>Mute
+                <!-- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 11h-1.7c0 .74-.16 1.43-.43 2.05l1.23 1.23c.56-.98.9-2.09.9-3.28zm-4.02.17c0-.06.02-.11.02-.17V5c0-1.66-1.34-3-3-3S9 3.34 9 5v.18l5.98 5.99zM4.27 3L3 4.27l6.01 6.01V11c0 1.66 1.33 3 2.99 3 .22 0 .44-.03.65-.08l1.66 1.66c-.71.33-1.5.52-2.31.52-2.76 0-5.3-2.1-5.3-5.1H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c.91-.13 1.77-.45 2.54-.9L19.73 21 21 19.73 4.27 3z"/></svg> -->
+            </div>
+            <div class=maction>Share</div>
+            <div class=maction>Record</div>
+            <div class=maction>Invite</div>
+            <div class=maction>People</div>
+            <div class=maction>Chat</div>
+            <div class=maction>Meeting id = 24835y8347583758734875</div>
+        </div>
+
+        <div id=jmeet>
+            <div class=menutitle>Join Meetinging</div>
+            <div class=maction>Search</div>
+            <div class=maction>Meeting 1</div>
+            <div class=maction>Meeting 2</div>
         </div>
 
         <div id=shapemenu>
@@ -1781,8 +1836,6 @@
             <!-- <div class="key num">&123</div> --><div class="key space">Space</div>
         </div>
     </div>
-
-
 
     <div class="toolbar minimized toolbar4">
         <div class="handle fob">
@@ -2270,8 +2323,8 @@
 
         function tooltoggle(e){
             this.classList.toggle('toggled');
-    
-            if ( this.getElementsByClassName('toolbtn')[0].dataset.tool == 'upload'){
+            var t = this.getElementsByClassName('toolbtn')[0].dataset.tool;
+            if ( t == 'upload' || t =='settings' || t =='meeting' ){
                 this.classList.add('toggled');
             }
 
@@ -2287,7 +2340,9 @@
                 return;
             }
 
-            if ( document.documentElement.classList.contains('ui3') || this.dataset.tool == 'upload' ){
+            var l = this.dataset.tool;
+
+            if ( document.documentElement.classList.contains('ui3') || l == 'upload' || l == 'settings' || l == 'meeting' ){
                 tooltoggle.call(t, e);
             }
 
@@ -4381,6 +4436,9 @@
                 p.remove();
 
                 return;
+            } else if ( shell == 'smeet' ){
+                setupvideo();
+
             }
 
             var xx = c.getElementsByClassName('option');
@@ -5045,7 +5103,10 @@
                 }
             }
 
+            console.log(bg);
+
             var hsl = color2hsl(bg);
+            console.log(hsl);
             hue = hsl[0];
 
             var hsv = hsl2hsv(hsl);
@@ -5358,19 +5419,26 @@
 
             console.log(x);
 
+            var hsl = null;
+
             if ( x && x.indexOf('rgb') >= 0 ){ //ugh
                 x = x.replace('rgb(', '').replace('rgba(', '').replace(')', '');
                 x = x.split(',');
 
-                var hsl = rgb2hsl(x);
+                hsl = rgb2hsl(x);
 
-                return hsl;
             } else if ( x && x.indexOf('#') >= 0 ){
                 var rgb = hex2rgb(x);
-                var hsl = rgb2hsl(rgb);
+                hsl = rgb2hsl(rgb);
+            } else if ( x && x.indexOf('hsl') >= 0 ){
+                x = x.replace('rgb(', '').replace('rgba(', '').replace(')', '').replace(/%/gi, '');
+                x = x.split(',');
 
-                return hsl;
+                hsl = [Number(x[0]), Number(x[1]), Number(x[2])];
+                
             }
+
+            return hsl;
         }
 
         function hexinput(e){
@@ -5634,7 +5702,7 @@
         }
 
         function level2(e){
-            var m = this.getparent('menuwrap');
+            var m = this.getparent('menuwrap');// || this.getparent('optionwrap');
 
             var off = m.offset();
 
@@ -5761,7 +5829,7 @@
 
         // Attach.on('click', '.morebtn', moremenu);
 
-        Attach.on('click', '.fillcolor, .textcolor, .shapeborder, .fontsize, .typeface, .shapecoloractual, .shapeborderactual, .textcoloractual, .brushcoloractual, .brushsizeactual, .shapetype, .canvasborderactual, .canvasfillactual, .morebtn, .marqueeselect, .uploadfileactual, .importfileactual', colormenu);
+        Attach.on('click', '.fillcolor, .textcolor, .shapeborder, .fontsize, .typeface, .shapecoloractual, .shapeborderactual, .textcoloractual, .brushcoloractual, .brushsizeactual, .shapetype, .canvasborderactual, .canvasfillactual, .morebtn, .marqueeselect, .uploadfileactual, .importfileactual, .startmeeting, .joinmeeting, .opensubmenu', colormenu);
 
         Attach.on('mousedown', '.select_tool', marquee);
         Attach.on('touchstart', '.select_tool', marquee);
@@ -6028,6 +6096,56 @@
             if ( zt ){
                 zt.remove();
             }
+        }
+
+        function setupvideo(e){
+            var constraints = {
+                audio: true,
+                video: true
+            };
+
+            function handleSuccess(stream) {
+                var f = document.createElement('div');
+                var v = document.createElement('video');
+
+                f.className = 'filmstrip draggable';
+                v.className = 'uservideo';
+
+                v.autoplay = true;
+                v.playsinline = true;
+
+                window.STREAM = stream;
+                v.srcObject = stream;
+
+                f.appendChild(v);
+
+                document.body.appendChild(f);
+            }
+
+            function handleError(error) {
+                console.log('navigator.MediaDevices.getUserMedia error: ', error.message, error.name);
+            }
+
+            navigator.mediaDevices.getUserMedia(constraints).then(handleSuccess).catch(handleError);
+        }
+
+        function stopvideo(e){
+            console.log(STREAM.getTracks());
+            STREAM.getTracks()[0].stop();
+            STREAM.getTracks()[1].stop();
+        }
+
+        function stopaudio(e){
+            console.log(STREAM.getTracks());
+            STREAM.getTracks()[0].stop();
+            STREAM.getTracks()[1].stop();
+        }
+
+        function removefilmstrip(e){
+            stopaudio();
+            stopvideo();
+            STREAM = null;
+            document.getElementsByClassName('filmstrip').remove();
         }
 
         window.addEventListener('mousewheel', dotspacing, {passive:false});
