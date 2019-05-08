@@ -35,11 +35,11 @@
     <script src="./shapes.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Barlow:400,400i,500,500i,600,600i,700,700i,800" rel="stylesheet">
     <style>
-        /*@font-face {
+        /* @font-face {
             font-family: '';
             font-weight: 200;
             src: url("./fonts/woff/.woff") format("woff");
-        }*/
+        } */
 
         :root {
             --canvas:#323440;
@@ -696,7 +696,7 @@
             .stepper {}
                 .stepper .step {width:100%;height:48px;display:flex;align-items:center;justify-content:center;}
                     .step svg {width:24px;height:24px;}
-                        .step svg * {fill:var(--icons);}
+                        .step svg * {fill:var(--icon);}
 
                 .stepvalue {position: absolute;top: 50%;width: 100%;text-align: center;height:24px;pointer-events:none;margin-top:-12px;font-size:18px;font-weight:500;}
 
@@ -856,8 +856,29 @@
 
             .trihandle {position:absolute;top:-8px;left:-8px;width:12px;height:12px;position:absolute;transform:translate(134px, 44px);border-radius:50%;background:transparent;border:2px solid white;box-sizing:border-box;box-shadow:0 0 0 2px rgba(0,0,0,.05);pointer-events:none;}
 
-        .filmstrip {position:fixed;bottom:24px;left:50%;padding:8px;padding-right:48px;background:var(--panel);border-radius:var(--toolbarradius);z-index:2147483640;}
-            .filmstrip video {max-width:240px;border-radius:calc(var(--toolbarradius) - 6px);display:block;transform: scaleX(-1);}
+        .filmstrip {position:fixed;top:24px;left:50%;transform:translateX(-50%);padding:8px;padding-right:48px;background:var(--panel);border-radius:var(--toolbarradius);z-index:2147483640;max-width:80%;}     
+            .filmstrip .videowrap {display:flex;max-width:100%;overflow:hidden;}
+            .filmstrip video {width:192px;height:144px;background:black;max-width:192px;border-radius:calc(var(--toolbarradius) - 6px);display:block;transform: scaleX(-1);margin-right:8px;object-fit: cover;}
+                .filmstrip .videowrap video:last-child {margin-right:0;}
+
+
+        .videocontrols {position:absolute;bottom:0;left:0;display:flex;}
+            .videocontrols .vcbtn {width:48px;height:48px;display:flex;align-items:center;justify-content:center;}
+                .videocontrols .vcbtn svg {width:24px;height:24px;}
+                    .videocontrols .vcbtn svg * {fill:var(--panelicons);}
+
+            .stripbtns {position:absolute;top:0;right:0;display: block;bottom: auto;left: auto;}
+
+                /* .filmbtn {position:absolute;top:0;right:0;} */
+
+            .maction {height:48px;padding:0 12px;display:flex;align-items:center;border-radius:calc(var(--toolbarradius) - 6px);margin:0 -4px 8px;font-size: 18px;cursor:pointer;}
+                .mlabel {margin-right:12px;font-feature-settings: 'tnum';}
+                .mcount {color:rgba(255,255,255,.54);background:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" fill="rgba(255,255,255,0.58)"></path></svg>') no-repeat center left 8px / 16px;padding-left:28px;}
+
+            .maction:hover {background:var(--hover);}
+            .maction:active {background:var(--active);}
+
+            .mbtn {height:48px;padding:0 8px;display:flex;align-items:center;justify-content:center;border-radius:calc(var(--toolbarradius) - 6px);background:var(--active);margin:0 -4px -4px;font-weight:600;}
     </style>
 </head>
 <body class="rectanglex brush_tool ">
@@ -1407,10 +1428,17 @@
         </div>
 
         <div id=jmeet>
-            <div class=menutitle>Join Meetinging</div>
-            <div class=maction>Search</div>
-            <div class=maction>Meeting 1</div>
-            <div class=maction>Meeting 2</div>
+            <div class=menutitle>Join a Meeting</div>
+            <div class="maction join" data-count=4>
+                <div class=mlabel>Meeting 478298</div><div class=mcount>4</div>
+            </div>
+            <div class="maction join" data-count=17>
+                <div class=mlabel>Meeting 745950</div><div class=mcount>17</div>
+            </div>
+            <div class="maction join" data-count=1>
+                <div class=mlabel>Meeting 923854</div><div class=mcount>1</div>
+            </div>
+            <div class="maction mbtn">Enter Meeting ID</div>
         </div>
 
         <div id=shapemenu>
@@ -1440,6 +1468,46 @@
 
         <div id=umenu>
             <div class=menutitle>Upload</div>
+        </div>
+
+        <div id=stripbtns class="videocontrols stripbtns">
+            <div class="vcbtn stripbtn">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"></path></svg>
+            </div>
+            <!-- <div class="vcbtn stripbtn">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
+            </div>
+            <div class="vcbtn stripbtn">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6 19h12v2H6z"/></svg>
+            </div>
+            <div class="vcbtn stripbtn">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 13H5v-2h14v2z"/></svg>
+            </div> -->
+        </div>
+
+        <div id=videocontrols class=videocontrols>
+
+            <div class=vcbtn>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 9c-1.6 0-3.15.25-4.6.72v3.1c0 .39-.23.74-.56.9-.98.49-1.87 1.12-2.66 1.85-.18.18-.43.28-.7.28-.28 0-.53-.11-.71-.29L.29 13.08c-.18-.17-.29-.42-.29-.7 0-.28.11-.53.29-.71C3.34 8.78 7.46 7 12 7s8.66 1.78 11.71 4.67c.18.18.29.43.29.71 0 .28-.11.53-.29.71l-2.48 2.48c-.18.18-.43.29-.71.29-.27 0-.52-.11-.7-.28-.79-.74-1.69-1.36-2.67-1.85-.33-.16-.56-.5-.56-.9v-3.1C15.15 9.25 13.6 9 12 9z"/></svg>
+            </div>
+            <div class=vcbtn>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 6.5l-4 4V7c0-.55-.45-1-1-1H9.82L21 17.18V6.5zM3.27 2L2 3.27 4.73 6H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.21 0 .39-.08.54-.18L19.73 21 21 19.73 3.27 2z"/></svg>
+            </div>
+            <div class=vcbtn>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 11h-1.7c0 .74-.16 1.43-.43 2.05l1.23 1.23c.56-.98.9-2.09.9-3.28zm-4.02.17c0-.06.02-.11.02-.17V5c0-1.66-1.34-3-3-3S9 3.34 9 5v.18l5.98 5.99zM4.27 3L3 4.27l6.01 6.01V11c0 1.66 1.33 3 2.99 3 .22 0 .44-.03.65-.08l1.66 1.66c-.71.33-1.5.52-2.31.52-2.76 0-5.3-2.1-5.3-5.1H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c.91-.13 1.77-.45 2.54-.9L19.73 21 21 19.73 4.27 3z"/></svg>
+            </div>
+            <!-- <div class=vcbtn>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 3H3c-1.11 0-2 .89-2 2v14c0 1.11.89 2 2 2h18c1.11 0 2-.89 2-2V5c0-1.11-.89-2-2-2zm0 16.02H3V4.98h18v14.04zM10 12H8l4-4 4 4h-2v4h-4v-4z"/></svg>
+            </div>
+            <div class=vcbtn>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+            </div>
+            <div class=vcbtn>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 0H4v2h16V0zM4 24h16v-2H4v2zM20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 2.75c1.24 0 2.25 1.01 2.25 2.25s-1.01 2.25-2.25 2.25S9.75 10.24 9.75 9 10.76 6.75 12 6.75zM17 17H7v-1.5c0-1.67 3.33-2.5 5-2.5s5 .83 5 2.5V17z"/></svg>
+            </div> -->
+            <div class=vcbtn>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+            </div>
         </div>
 
         <div id=imenu>
@@ -2400,10 +2468,17 @@
 
             var moved = false;
 
+            var safe = this.classList.contains('safebounds');
+
             t.style.left = t.style.top = 0;
             t.style.right = t.style.bottom = 'auto';
 
             t.style.transform = 'translate(' + ox + 'px, ' + oy + 'px)';
+
+            var safegap = 8;
+
+            var h = offset.h;
+            var w = offset.w;
 
             function move(e){
                 var ev = e.touches ? e.touches[0] : e;
@@ -2424,6 +2499,27 @@
 
                 e.preventDefault();
                 e.stopPropagation();
+
+                if ( safe ){
+                    if ( nx < safegap ){
+                        nx = safegap;
+                    }
+
+                    if ( ny < safegap ){
+                        ny = safegap;
+                    }
+
+                    var my = window.innerHeight - safegap - h;
+                    var mx = window.innerWidth - safegap - w;
+
+                    if ( ny > my ){
+                        ny = my;
+                    }
+
+                    if ( nx > mx ){
+                        nx = mx;
+                    }
+                }
 
                 t.style.transform = 'translate(' + Math.round(nx) + 'px, ' + Math.round(ny) + 'px)';
             }
@@ -5859,6 +5955,9 @@
 
         Attach.on('click', '.showkeyboard', keyboardshowhide);
 
+        Attach.on('click', '.join', joinmeeting);
+        
+
 
         //document.addEventListener('mousewheel', mousescroll, { passive:false });
 
@@ -6098,26 +6197,58 @@
             }
         }
 
-        function setupvideo(e){
+        function joinmeeting(e){
+            setupvideo.call(this, e, true);
+        }
+
+        function setupvideo(e, x){
             var constraints = {
                 audio: true,
                 video: true
             };
 
+            var c = x ? Number(this.dataset.count): 0;
+
             function handleSuccess(stream) {
                 var f = document.createElement('div');
                 var v = document.createElement('video');
+                var vc = document.getElementById('videocontrols');
+                var vw = document.createElement('div');
+                var sb = document.getElementById('stripbtns');
 
-                f.className = 'filmstrip draggable';
+                f.className = 'filmstrip draggable safebounds';
                 v.className = 'uservideo';
+                vw.className = 'videowrap';
 
                 v.autoplay = true;
                 v.playsinline = true;
 
+                vc = vc.cloneNode(true);
+                vc.removeAttribute('id');
+
+                sb = sb.cloneNode(true);
+                sb.removeAttribute('id');
+
+
                 window.STREAM = stream;
                 v.srcObject = stream;
 
-                f.appendChild(v);
+                vw.appendChild(v);
+
+                for(var i=0;i<c;i++){
+                    var a = document.createElement('video');
+                    a.autoplay = true;
+                    a.playsinline = true;
+                    a.loop = true;
+                    a.muted = true;
+
+                    a.src = './vids/m' + (i + 1) + '.webm';
+                    vw.appendChild(a);
+                }
+
+                f.appendChild(vw);
+                f.appendChild(vc);
+                f.appendChild(sb);
 
                 document.body.appendChild(f);
             }
