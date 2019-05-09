@@ -2034,6 +2034,8 @@
         LAYERSCALE = 1;
         GRIDSIZE = 48;
         DELTASCALE = 1;
+        SHARESTREAM = null;
+        STREAM = null;
 
         function toolbarcolor(e){
             var n = 'tweaked_toolbar';
@@ -6297,8 +6299,6 @@
             }
         }
 
-        var SHARESTREAM = null;
-
         function stopshare(){
             if ( SHARESTREAM ){
                 for(var i=0;i<SHARESTREAM.getTracks().length;i++){
@@ -6402,8 +6402,10 @@
 
                 console.log(stream);
 
-                window.STREAM = stream;
-                v.srcObject = stream;
+                if ( !stream ){
+                    STREAM = stream;
+                    v.srcObject = stream;
+                }
 
                 var names = ['Daniel Desario','Lindsay Weir','Ken Miller','Nick Andopolis','Kim Kelly','Bill Haverchuck','Sam Weir','Neal Schweiber','Harold Weir','Jean Weir','Jeff Rosso','Cindy Sanders','Millie Kentner','Frank Kowchevski','Alan White','Gordon Crisp','Herbert the mascot','Coach Ben Fredricks','Eli','Maureen Sampson'];
 
@@ -6470,7 +6472,7 @@
             function error(error) {
                 console.warn('navigator.MediaDevices.getUserMedia error: ', error.message, error.name);
 
-                //success({});
+                success();
             }
 
             navigator.mediaDevices.getUserMedia(constraints).then(success).catch(error);
