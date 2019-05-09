@@ -904,6 +904,8 @@
             .username {position:absolute;bottom:4px;left:4px;text-shadow: 1px 1px black;}
 
             .offed .username {left:8px;right:8px;text-align:center;bottom:50%;transform:translateY(50%);}
+
+            .dragging > * {pointer-events:none !important;}
     </style>
 </head>
 <body class="rectanglex brush_tool ">
@@ -2547,6 +2549,7 @@
 
                 if ( !moved && (Math.abs(nx) > 3 || Math.abs(ny) > 3) ){
                     moved = true;
+                    t.classList.add('dragging');
                 } else if ( !moved ){
                     return;
                 }
@@ -2588,6 +2591,8 @@
                 if ( !moved ){
                     //tar.click();
                 }
+
+                t.classList.remove('dragging');
 
                 console.log(nx,ny);
 
