@@ -906,6 +906,10 @@
             .offed .username {left:8px;right:8px;text-align:center;bottom:50%;transform:translateY(50%);}
 
             .dragging > * {pointer-events:none !important;}
+
+
+            .vcsub svg {transition:transform 150ms ease-in-out;}
+                .sublevel .vcsub svg {transform:rotate(180deg);}
     </style>
 </head>
 <body class="rectanglex brush_tool ">
@@ -1206,29 +1210,32 @@
     </div>
 
     <div id=vc_context class="permapanel draggable safebounds">
-        <div class="option hangup">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 9c-1.6 0-3.15.25-4.6.72v3.1c0 .39-.23.74-.56.9-.98.49-1.87 1.12-2.66 1.85-.18.18-.43.28-.7.28-.28 0-.53-.11-.71-.29L.29 13.08c-.18-.17-.29-.42-.29-.7 0-.28.11-.53.29-.71C3.34 8.78 7.46 7 12 7s8.66 1.78 11.71 4.67c.18.18.29.43.29.71 0 .28-.11.53-.29.71l-2.48 2.48c-.18.18-.43.29-.71.29-.27 0-.52-.11-.7-.28-.79-.74-1.69-1.36-2.67-1.85-.33-.16-.56-.5-.56-.9v-3.1C15.15 9.25 13.6 9 12 9z"/></svg>
-        </div>
-        <div class="option videooff">
-            <svg xmlns="http://www.w3.org/2000/svg" class=on1 viewBox="0 0 24 24"><path d="M21 6.5l-4 4V7c0-.55-.45-1-1-1H9.82L21 17.18V6.5zM3.27 2L2 3.27 4.73 6H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.21 0 .39-.08.54-.18L19.73 21 21 19.73 3.27 2z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class=on2 viewBox="0 0 24 24"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>
-        </div>
-        <div class="option mutemic">
-            <svg xmlns="http://www.w3.org/2000/svg" class=on1 viewBox="0 0 24 24"><path d="M19 11h-1.7c0 .74-.16 1.43-.43 2.05l1.23 1.23c.56-.98.9-2.09.9-3.28zm-4.02.17c0-.06.02-.11.02-.17V5c0-1.66-1.34-3-3-3S9 3.34 9 5v.18l5.98 5.99zM4.27 3L3 4.27l6.01 6.01V11c0 1.66 1.33 3 2.99 3 .22 0 .44-.03.65-.08l1.66 1.66c-.71.33-1.5.52-2.31.52-2.76 0-5.3-2.1-5.3-5.1H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c.91-.13 1.77-.45 2.54-.9L19.73 21 21 19.73 4.27 3z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class=on2 viewBox="0 0 24 24"><path d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/></svg>
-        </div>
-        <div class="option sharescreen">
-            <svg xmlns="http://www.w3.org/2000/svg" class=on1 viewBox="0 0 24 24"><path d="M21 3H3c-1.11 0-2 .89-2 2v14c0 1.11.89 2 2 2h18c1.11 0 2-.89 2-2V5c0-1.11-.89-2-2-2zm0 16.02H3V4.98h18v14.04zM10 12H8l4-4 4 4h-2v4h-4v-4z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class=on2 viewBox="0 0 24 24"><path d="M21 19.1H3V5h18v14.1zM21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/><path d="M14.59 8L12 10.59 9.41 8 8 9.41 10.59 12 8 14.59 9.41 16 12 13.41 14.59 16 16 14.59 13.41 12 16 9.41z"/></svg>
-        </div>
-        <div class=option>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
-        </div>
-        <div class=option>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 0H4v2h16V0zM4 24h16v-2H4v2zM20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 2.75c1.24 0 2.25 1.01 2.25 2.25s-1.01 2.25-2.25 2.25S9.75 10.24 9.75 9 10.76 6.75 12 6.75zM17 17H7v-1.5c0-1.67 3.33-2.5 5-2.5s5 .83 5 2.5V17z"/></svg>
-        </div>
-        <div class=option>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+        <div class=optionwrap>
+            <div class="option hangup">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 9c-1.6 0-3.15.25-4.6.72v3.1c0 .39-.23.74-.56.9-.98.49-1.87 1.12-2.66 1.85-.18.18-.43.28-.7.28-.28 0-.53-.11-.71-.29L.29 13.08c-.18-.17-.29-.42-.29-.7 0-.28.11-.53.29-.71C3.34 8.78 7.46 7 12 7s8.66 1.78 11.71 4.67c.18.18.29.43.29.71 0 .28-.11.53-.29.71l-2.48 2.48c-.18.18-.43.29-.71.29-.27 0-.52-.11-.7-.28-.79-.74-1.69-1.36-2.67-1.85-.33-.16-.56-.5-.56-.9v-3.1C15.15 9.25 13.6 9 12 9z"/></svg>
+            </div>
+            <div class="option videooff">
+                <svg xmlns="http://www.w3.org/2000/svg" class=on1 viewBox="0 0 24 24"><path d="M21 6.5l-4 4V7c0-.55-.45-1-1-1H9.82L21 17.18V6.5zM3.27 2L2 3.27 4.73 6H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.21 0 .39-.08.54-.18L19.73 21 21 19.73 3.27 2z"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" class=on2 viewBox="0 0 24 24"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>
+            </div>
+            <div class="option mutemic">
+                <svg xmlns="http://www.w3.org/2000/svg" class=on1 viewBox="0 0 24 24"><path d="M19 11h-1.7c0 .74-.16 1.43-.43 2.05l1.23 1.23c.56-.98.9-2.09.9-3.28zm-4.02.17c0-.06.02-.11.02-.17V5c0-1.66-1.34-3-3-3S9 3.34 9 5v.18l5.98 5.99zM4.27 3L3 4.27l6.01 6.01V11c0 1.66 1.33 3 2.99 3 .22 0 .44-.03.65-.08l1.66 1.66c-.71.33-1.5.52-2.31.52-2.76 0-5.3-2.1-5.3-5.1H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c.91-.13 1.77-.45 2.54-.9L19.73 21 21 19.73 4.27 3z"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" class=on2 viewBox="0 0 24 24"><path d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/></svg>
+            </div>
+            <div class="option sharescreen">
+                <svg xmlns="http://www.w3.org/2000/svg" class=on1 viewBox="0 0 24 24"><path d="M21 3H3c-1.11 0-2 .89-2 2v14c0 1.11.89 2 2 2h18c1.11 0 2-.89 2-2V5c0-1.11-.89-2-2-2zm0 16.02H3V4.98h18v14.04zM10 12H8l4-4 4 4h-2v4h-4v-4z"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" class=on2 viewBox="0 0 24 24"><path d="M21 19.1H3V5h18v14.1zM21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/><path d="M14.59 8L12 10.59 9.41 8 8 9.41 10.59 12 8 14.59 9.41 16 12 13.41 14.59 16 16 14.59 13.41 12 16 9.41z"/></svg>
+            </div>
+            <div class=option>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+            </div>
+            <div class=option>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 0H4v2h16V0zM4 24h16v-2H4v2zM20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 2.75c1.24 0 2.25 1.01 2.25 2.25s-1.01 2.25-2.25 2.25S9.75 10.24 9.75 9 10.76 6.75 12 6.75zM17 17H7v-1.5c0-1.67 3.33-2.5 5-2.5s5 .83 5 2.5V17z"/></svg>
+            </div>
+            <div class="option vcsub opensubmenu" data-menu="vcmenu">
+                <!-- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg> -->
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+            </div>
         </div>
     </div>
 
@@ -1525,6 +1532,19 @@
         <div id=umenu>
             <div class=menutitle>Upload</div>
         </div>
+
+        <div id=vcmenu style="padding:0;overflow:hidden;min-width:200px;">
+            <div class=mitem>Invite</div>
+            <div class="mitem ">Auto Follow</div>
+            <div class="mitem ">Mute All</div>
+            <div class="mitem mlevel">Chat</div>
+            <div class="mitem mlevel">Participants</div>
+            <div class=mgap></div>
+            <div class="mitem mlevel">Properties</div>
+            <div class="mitem ">Meeting Link</div>
+        </div>
+
+        
 
         <div id=stripbtns class="videocontrols stripbtns">
             <div class="vcbtn stripbtn">
@@ -2536,6 +2556,8 @@
             var h = offset.h;
             var w = offset.w;
 
+            this.classList.remove('dragging');
+
             function move(e){
                 var ev = e.touches ? e.touches[0] : e;
                 var x = ev.pageX;
@@ -2544,10 +2566,9 @@
                 nx = x - sx;
                 ny = y - sy;
 
-                nx += ox;
-                ny += oy;
+                var thres = 4;
 
-                if ( !moved && (Math.abs(nx) > 3 || Math.abs(ny) > 3) ){
+                if ( !moved && ( Math.abs(nx) > thres || Math.abs(ny) > thres ) ){
                     moved = true;
                     t.classList.add('dragging');
                 } else if ( !moved ){
@@ -2556,6 +2577,9 @@
 
                 e.preventDefault();
                 e.stopPropagation();
+
+                nx += ox;
+                ny += oy;   
 
                 if ( safe ){
                     if ( nx < safegap ){
@@ -4191,7 +4215,7 @@
                 e.stopPropagation();
             }
 
-            var back = t.getparent('contextpanel'); 
+            var back = t.getparent('contextpanel') || t.getparent('permapanel'); 
 
             var sub = document.getElementsByClassName('subsublevel');
 
@@ -4222,7 +4246,9 @@
             document.body.removeEventListener('touchend', closemenu);
 
             var o = document.getElementsByClassName('contextpanel opened');
+            var oo = document.getElementsByClassName('permapanel opened');
             o.removeclass('opened');
+            oo.removeclass('opened');
 
             var m = document.getElementsByClassName('menuwrap visible');
 
@@ -4236,9 +4262,14 @@
             //m.remove();
 
             var o = document.getElementsByClassName('contextpanel sublevel');
+            var oo = document.getElementsByClassName('permapanel sublevel');
 
-            if ( !o[0] ){
+            if ( !o[0] && !oo[0] ){
                 return;
+            }
+
+            if ( oo[0] ){
+                o = oo;
             }
 
             var o1 = o[0].getElementsByClassName('option')[0];
@@ -4317,11 +4348,10 @@
         function colormenu(e){
             e.preventDefault();
             e.stopPropagation();
-            var c = this.getparent('contextpanel');
+            var c = this.getparent('contextpanel') || this.getparent('permapanel');
             var o = c.classList.contains('opened');
             if ( o ){
                 return;
-            
             }
 
             var shell = this.dataset.menu;
@@ -4336,7 +4366,7 @@
                 swap = true;
             }
 
-             c.classList.add('opened');
+            c.classList.add('opened');
 
             var p = document.createElement('div');
             var m = document.getElementById(shell);
@@ -4344,6 +4374,9 @@
             var tool = this.getparent('tool') ? ' toolmenu' : '';
             var xx = false;
             if ( tool ){
+                p.style.position = 'fixed';
+                xx = true;
+            } else if ( this.getparent('permapanel') ){
                 p.style.position = 'fixed';
                 xx = true;
             }
@@ -5860,7 +5893,8 @@
         function level2(e){
             var m = this.getparent('menuwrap');// || this.getparent('optionwrap');
 
-            var off = m.offset();
+            var ugh = document.getElementsByClassName('opened sublevel')[0] || m;
+            var off = ugh.offset();//m.offset();
 
             m.classList.add('subsublevel');
             m.classList.remove('visible');
@@ -5885,7 +5919,7 @@
 
             var y = off.y ;
 
-            p.style.left = off.x + 'px';
+            p.style.left = off.x + off.w + 12 + 'px';
             p.style.top = y + 'px';
             
             document.body.appendChild(p);
