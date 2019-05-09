@@ -6400,6 +6400,8 @@
                 sb = sb.cloneNode(true);
                 sb.removeAttribute('id');
 
+                console.log(stream);
+
                 window.STREAM = stream;
                 v.srcObject = stream;
 
@@ -6468,7 +6470,7 @@
             function error(error) {
                 console.log('navigator.MediaDevices.getUserMedia error: ', error.message, error.name);
 
-                success({});
+                //success({});
             }
 
             navigator.mediaDevices.getUserMedia(constraints).then(success).catch(error);
