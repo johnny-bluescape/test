@@ -863,8 +863,8 @@
             .trihandle {position:absolute;top:-8px;left:-8px;width:12px;height:12px;position:absolute;transform:translate(134px, 44px);border-radius:50%;background:transparent;border:2px solid white;box-sizing:border-box;box-shadow:0 0 0 2px rgba(0,0,0,.05);pointer-events:none;}
 
         .filmstrip {position:fixed;top:24px;left:50%;transform:translateX(-50%);padding:8px;padding-right:48px;background:var(--panel);border-radius:var(--toolbarradius);z-index:2147483640;max-width:80%;}     
-            .filmstrip .videowrap {display:flex;max-width:100%;overflow:hidden;}
-              .filmstrip .videowrapper {background:transparent;margin-right:8px;border-radius:calc(var(--toolbarradius) - 6px);overflow:hidden;position:relative;}
+            .filmstrip .videowrap {display:flex;max-width:100%;overflow:hidden;overflow-x:auto;}
+              .filmstrip .videowrapper {min-width:192px;width:192px;background:transparent;margin-right:8px;border-radius:calc(var(--toolbarradius) - 6px);overflow:hidden;position:relative;}
             .filmstrip video {width:192px;height:144px;background:transparent;max-width:192px;display:block;transform: scaleX(-1);object-fit: cover;}
                 .filmstrip .videowrap .videowrapper:last-child {margin-right:0;}
 
@@ -6364,8 +6364,9 @@
                 window.STREAM = stream;
                 v.srcObject = stream;
 
-                var yournamehere = ['Strother Martin', 'Edie Adams', 'Harold Fong', 'Richard Novo', 'Jane Moder', 'Pam Bille', 'Arthur Roberts'];
-                yournamehere = yournamehere[Math.floor(Math.random() * yournamehere.length)];
+                var names = ['Daniel Desario','Lindsay Weir','Ken Miller','Nick Andopolis','Kim Kelly','Bill Haverchuck','Sam Weir','Neal Schweiber','Harold Weir','Jean Weir','Jeff Rosso','Cindy Sanders','Millie Kentner','Frank Kowchevski','Alan White','Gordon Crisp','Herbert the mascot','Coach Ben Fredricks','Eli','Maureen Sampson'];
+
+                var yournamehere = names.randomremove();
 
                 n.appendChild(document.createTextNode(yournamehere));
                 m.appendChild(document.createTextNode('Muted'));
@@ -6375,7 +6376,7 @@
                 r.appendChild(m);
                 vw.appendChild(r);
 
-                var names = ['Daniel Desario','Lindsay Weir','Ken Miller','Nick Andopolis','Kim Kelly','Bill Haverchuck','Sam Weir','Neal Schweiber','Harold Weir','Jean Weir','Jeff Rosso','Cindy Sanders','Millie Kentner','Frank Kowchevski','Alan White','Gordon Crisp','Herbert the mascot','Coach Ben Fredricks','Eli','Maureen Sampson'];
+                var vids = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17];
 
                 for(var i=0;i<count;i++){
                     var a = document.createElement('video');
@@ -6392,9 +6393,11 @@
                     c.className = 'username';
                     d.className = 'usermuted';
 
-                    a.src = './vids/m' + (i + 1) + '.webm';
+                    a.src = './vids/m' + vids.randomremove() + '.webm';
 
-                    c.appendChild(document.createTextNode(names[i]));
+                    var name = names.randomremove();
+
+                    c.appendChild(document.createTextNode(name));
                     d.appendChild(document.createTextNode('Muted'));
 
                     b.appendChild(a);
