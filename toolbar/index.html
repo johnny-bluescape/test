@@ -2568,9 +2568,15 @@
                 nx = x - sx;
                 ny = y - sy;
 
+                var xx = nx;
+                var yy = ny;
+
+                nx += ox;
+                ny += oy;  
+
                 var thres = 4;
 
-                if ( !moved && ( Math.abs(nx) > thres || Math.abs(ny) > thres ) ){
+                if ( !moved && ( Math.abs(xx) > thres || Math.abs(yy) > thres ) ){
                     moved = true;
                     t.classList.add('dragging');
                 } else if ( !moved ){
@@ -2578,10 +2584,7 @@
                 }
 
                 e.preventDefault();
-                e.stopPropagation();
-
-                nx += ox;
-                ny += oy;   
+                e.stopPropagation(); 
 
                 if ( safe ){
                     if ( nx < safegap ){
