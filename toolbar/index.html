@@ -864,7 +864,7 @@
 
         .filmstrip {position:fixed;top:24px;left:50%;transform:translateX(-50%);padding:8px;padding-right:48px;background:var(--panel);border-radius:var(--toolbarradius);z-index:2147483640;max-width:80%;}     
             .filmstrip .videowrap {display:flex;max-width:100%;overflow:hidden;overflow-x:auto;}
-              .filmstrip .videowrapper {min-width:192px;width:192px;background:transparent;margin-right:8px;border-radius:calc(var(--toolbarradius) - 6px);overflow:hidden;position:relative;}
+              .filmstrip .videowrapper {min-width:192px;width:192px;background:black;margin-right:8px;border-radius:calc(var(--toolbarradius) - 6px);overflow:hidden;position:relative;}
             .filmstrip video {width:192px;height:144px;background:transparent;max-width:192px;display:block;transform: scaleX(-1);object-fit: cover;}
                 .filmstrip .videowrap .videowrapper:last-child {margin-right:0;}
 
@@ -5953,122 +5953,6 @@
             document.body.classList.toggle('hidetweak');
         }
 
-
-        Attach.on('touchstart', '.colorwheel', spin);
-        Attach.on('mousedown', '.colorwheel', spin);
-
-        Attach.on('touchstart', '.handle', handlehandler);
-        Attach.on('mousedown', '.handle', handlehandler);
-
-        Attach.on('touchstart', '#toolbar', handlehandler);
-        Attach.on('mousedown', '#toolbar', handlehandler);
-
-        Attach.on('click', '.toolbtn', toolhandler);
-
-        Attach.on('click', '#hide', tweakstate);
-
-
-        Attach.on('click', '.control', panelhandler);
-
-        Attach.on('click', '.contextpanel .option', panelhandler);
-
-        Attach.on('click', '.stepped', stepper);
-
-        Attach.on('click', '.item', listhandler);
-
-        Attach.on('touchstart', '.panel', swipehandler);
-        Attach.on('mousedown', '.panel', swipehandler);
-
-        Attach.on('change', '.tweakr', tweak);
-
-        Attach.on('mousedown', '.slider', sliderhandler);
-        Attach.on('touchstart', '.slider', sliderhandler);
-
-        Attach.on('click', '.swatch', swatchhandler);
-
-        Attach.on('click', '.type_tool', typetool);
-
-        //Attach.on('click', '.textarea', texthandler);
-
-        Attach.on('mousedown', '.textwrap', texthandler);
-        Attach.on('touchstart', '.textwrap', texthandler);
-
-        Attach.on('mousedown', '.rectangle_tool', rectanglex);
-        Attach.on('touchstart', '.rectangle_tool', rectanglex);
-
-        Attach.on('mousedown', '.canvas_tool', rectanglex);
-        Attach.on('touchstart', '.canvas_tool', rectanglex);
-
-        Attach.on('mousedown', '.draggable', draggable);
-        Attach.on('touchstart', '.draggable', draggable);
-
-        Attach.on('mousedown', '.bhandle', bhandle);
-        Attach.on('touchstart', '.bhandle', bhandle);
-
-        Attach.on('mousedown', '.resizehandle', rectangleresize);
-        Attach.on('touchstart', '.resizehandle', rectangleresize);
-        
-        Attach.on('mousedown', '.rectangle', rectanglemove);
-        Attach.on('touchstart', '.rectangle', rectanglemove);
-
-        //Attach.on('click', '.rectangle', ffocus);
-
-        Attach.on('click', '.shapeup', shapez);
-        Attach.on('click', '.shapeback', shapez);
-
-        Attach.on('click', '.delete', deletecurrent);
-        Attach.on('click', '.duplicate', duplicatecurrent);
-
-        // Attach.on('click', '.morebtn', moremenu);
-
-        Attach.on('click', '.fillcolor, .textcolor, .shapeborder, .fontsize, .typeface, .shapecoloractual, .shapeborderactual, .textcoloractual, .brushcoloractual, .brushsizeactual, .shapetype, .canvasborderactual, .canvasfillactual, .morebtn, .marqueeselect, .uploadfileactual, .importfileactual, .startmeeting, .joinmeeting, .opensubmenu', colormenu);
-
-        Attach.on('mousedown', '.select_tool', marquee);
-        Attach.on('touchstart', '.select_tool', marquee);
-
-        Attach.on('click' , '.shift', shift);
-
-        Attach.on('click' , '.key', key);
-
-        //Attach.on('click', '#shape_tool2', shape_tool2);
-        Attach.on('click', '#type_tool2', type_tool2);
-
-        Attach.on('click', '.minishape', minishape);
-
-        //Attach.on('click', '.shapeborder', bordercontext);
-
-        Attach.on('click', '.color', colorswatch);
-
-        Attach.on('click', '.selectcolor', selectcolor);
-
-        Attach.on('mousedown', '.colorgrid', cubehandler);
-        Attach.on('touchstart', '.colorgrid', cubehandler);
-
-        Attach.on('input', '.huecubeslide', huecubeslide);
-
-        Attach.on('click', '.addswatch', addswatch);
-        Attach.on('click', '.mitem', menuitem);
-
-        Attach.on('click', '.showkeyboard', keyboardshowhide);
-
-        Attach.on('click', '.join', joinmeeting);
-        
-        Attach.on('click', '.hangup', hangup);
-
-        Attach.on('click', '.videooff', videooff);
-
-        Attach.on('click', '.mutemic', mutemic);
-
-        Attach.on('click', '.sharescreen', screenshare);
-
-        //document.addEventListener('mousewheel', mousescroll, { passive:false });
-
-        //Attach.on('mousedown', '.contextpanel', stopprop, true);
-
-        canvassetup();
-
-        window.onresize = resize;
-
         function resize(){
             screenrez();
             resize2();
@@ -6554,6 +6438,9 @@
         }
 
         function stopstream(){
+            if ( !STREAM ){
+                return;
+            }
             for(var i=0;i<STREAM.getTracks().length;i++){
                 var s = STREAM.getTracks()[i];
                 s.stop();
@@ -6568,31 +6455,8 @@
             var vc = document.getElementsByClassName('vc_context');
             vc.remove();
         }
-
-        window.addEventListener('mousewheel', dotspacing, {passive:false});
-
-
-        // var hammertime = new Hammer(document.body, {});
-        // hammertime.on('pan', function(ev) {
-        //     console.log(ev);
-        // });
-
-   
-        //var canvas = document.getElementById('canvas2');
-
-        //var canvas2 = new fabric.Canvas('canvas2');
-
-        // canvas2.on('mouse:wheel', function(opt) {
-        //     var delta = opt.e.deltaY;
-        //     var zoom = canvas2.getZoom();
-        //     zoom = zoom + delta/200;
-        //     if (zoom > 20) zoom = 20;
-        //     if (zoom < 0.01) zoom = 0.01;
-        //     canvas2.setZoom(zoom);
-        //     opt.e.preventDefault();
-        //     opt.e.stopPropagation();
-        // })
-
+        
+        // TEST
         function zoomtest(e) {
             e.preventDefault();
             console.log(e.scale, 'SCALE', e.type);
@@ -6606,9 +6470,6 @@
         if ( location.href.indexOf('localhost') < 0 && location.hash != '#debug' ){
             console.log = function(){};
         }
-
-        screenrez();
-
 
         window.onscroll = function(e) {
             console.log(e.target);
@@ -6626,13 +6487,125 @@
             // if ( m ){
             //     menuposition.call(m);
             // }
-        } 
+        }
+
+        Attach.on('touchstart', '.colorwheel', spin);
+        Attach.on('mousedown', '.colorwheel', spin);
+
+        Attach.on('touchstart', '.handle', handlehandler);
+        Attach.on('mousedown', '.handle', handlehandler);
+
+        Attach.on('touchstart', '#toolbar', handlehandler);
+        Attach.on('mousedown', '#toolbar', handlehandler);
+
+        Attach.on('click', '.toolbtn', toolhandler);
+
+        Attach.on('click', '#hide', tweakstate);
 
 
-        window.scrollTo(200,200);
+        Attach.on('click', '.control', panelhandler);
 
+        Attach.on('click', '.contextpanel .option', panelhandler);
+
+        Attach.on('click', '.stepped', stepper);
+
+        Attach.on('click', '.item', listhandler);
+
+        Attach.on('touchstart', '.panel', swipehandler);
+        Attach.on('mousedown', '.panel', swipehandler);
+
+        Attach.on('change', '.tweakr', tweak);
+
+        Attach.on('mousedown', '.slider', sliderhandler);
+        Attach.on('touchstart', '.slider', sliderhandler);
+
+        Attach.on('click', '.swatch', swatchhandler);
+
+        Attach.on('click', '.type_tool', typetool);
+
+        //Attach.on('click', '.textarea', texthandler);
+
+        Attach.on('mousedown', '.textwrap', texthandler);
+        Attach.on('touchstart', '.textwrap', texthandler);
+
+        Attach.on('mousedown', '.rectangle_tool', rectanglex);
+        Attach.on('touchstart', '.rectangle_tool', rectanglex);
+
+        Attach.on('mousedown', '.canvas_tool', rectanglex);
+        Attach.on('touchstart', '.canvas_tool', rectanglex);
+
+        Attach.on('mousedown', '.draggable', draggable);
+        Attach.on('touchstart', '.draggable', draggable);
+
+        Attach.on('mousedown', '.bhandle', bhandle);
+        Attach.on('touchstart', '.bhandle', bhandle);
+
+        Attach.on('mousedown', '.resizehandle', rectangleresize);
+        Attach.on('touchstart', '.resizehandle', rectangleresize);
         
+        Attach.on('mousedown', '.rectangle', rectanglemove);
+        Attach.on('touchstart', '.rectangle', rectanglemove);
+
+        //Attach.on('click', '.rectangle', ffocus);
+
+        Attach.on('click', '.shapeup', shapez);
+        Attach.on('click', '.shapeback', shapez);
+
+        Attach.on('click', '.delete', deletecurrent);
+        Attach.on('click', '.duplicate', duplicatecurrent);
+
+        // Attach.on('click', '.morebtn', moremenu);
+
+        Attach.on('click', '.fillcolor, .textcolor, .shapeborder, .fontsize, .typeface, .shapecoloractual, .shapeborderactual, .textcoloractual, .brushcoloractual, .brushsizeactual, .shapetype, .canvasborderactual, .canvasfillactual, .morebtn, .marqueeselect, .uploadfileactual, .importfileactual, .startmeeting, .joinmeeting, .opensubmenu', colormenu);
+
+        Attach.on('mousedown', '.select_tool', marquee);
+        Attach.on('touchstart', '.select_tool', marquee);
+
+        Attach.on('click' , '.shift', shift);
+
+        Attach.on('click' , '.key', key);
+
+        //Attach.on('click', '#shape_tool2', shape_tool2);
+        Attach.on('click', '#type_tool2', type_tool2);
+
+        Attach.on('click', '.minishape', minishape);
+
+        //Attach.on('click', '.shapeborder', bordercontext);
+
+        Attach.on('click', '.color', colorswatch);
+
+        Attach.on('click', '.selectcolor', selectcolor);
+
+        Attach.on('mousedown', '.colorgrid', cubehandler);
+        Attach.on('touchstart', '.colorgrid', cubehandler);
+
+        Attach.on('input', '.huecubeslide', huecubeslide);
+
+        Attach.on('click', '.addswatch', addswatch);
+        Attach.on('click', '.mitem', menuitem);
+
+        Attach.on('click', '.showkeyboard', keyboardshowhide);
+
+        Attach.on('click', '.join', joinmeeting);
+        
+        Attach.on('click', '.hangup', hangup);
+
+        Attach.on('click', '.videooff', videooff);
+
+        Attach.on('click', '.mutemic', mutemic);
+
+        Attach.on('click', '.sharescreen', screenshare);
+
+        //document.addEventListener('mousewheel', mousescroll, { passive:false });
+
+        //Attach.on('mousedown', '.contextpanel', stopprop, true);
+
+        canvassetup();
+        window.onresize = resize;
+        screenrez();
+        window.scrollTo( 200, 200 );
+        window.addEventListener('mousewheel', dotspacing, { passive: false });
+
     </script>
-    <!-- <script src="./fabric.js"></script> -->
 </body>
 </html>
