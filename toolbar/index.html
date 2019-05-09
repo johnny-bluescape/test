@@ -901,7 +901,7 @@
             .usermuted {display:none;position:absolute;top:4px;right:4px;background:transparent;padding:2px 4px;border-radius:4px;font-size: 12px;text-transform: uppercase;font-weight: 600;color: #c42322;}
             .muted .usermuted {display:block;}
 
-            .username {position:absolute;bottom:4px;left:4px;text-shadow: 1px 1px black;}
+            .username {position:absolute;bottom:4px;left:6px;text-shadow: 1px 1px black;white-space: nowrap;text-overflow: ellipsis;overflow: hidden;max-width: calc(100% - 12px);}
 
             .offed .username {left:8px;right:8px;text-align:center;bottom:50%;transform:translateY(50%);}
 
@@ -1542,6 +1542,7 @@
             <div class=mgap></div>
             <div class="mitem mlevel">Properties</div>
             <div class="mitem ">Meeting Link</div>
+            <div class="mitem " style="pointer-events:none;opacity:.45;font-size:16px;">Meeting ID: 232425262728</div>
         </div>
 
         
@@ -6300,6 +6301,8 @@
                 if ( !!stream ){
                     STREAM = stream;
                     v.srcObject = stream;
+                } else {
+                    r.classList.add('offed');
                 }
 
                 var names = ['Daniel Desario','Lindsay Weir','Ken Miller','Nick Andopolis','Kim Kelly','Bill Haverchuck','Sam Weir','Neal Schweiber','Harold Weir','Jean Weir','Jeff Rosso','Cindy Sanders','Millie Kentner','Frank Kowchevski','Alan White','Gordon Crisp','Herbert the mascot','Coach Ben Fredricks','Eli','Maureen Sampson'];
