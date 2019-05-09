@@ -4668,6 +4668,10 @@
             var st = window.pageYOffset || document.documentElement.scrollTop;
             //var sl = window.pageXOffset || document.documentElement.scrollLeft;
 
+            if( xx ){
+                st = 0;
+            }
+
             var edge = window.innerHeight - y - ph + st;
 
             if ( edge < 16 ){
@@ -5933,6 +5937,10 @@
 
             var st = window.pageYOffset || document.documentElement.scrollTop;
             //var sl = window.pageXOffset || document.documentElement.scrollLeft;
+
+            if ( fixed ){
+                st = 0;
+            }
 
             var edge = window.innerHeight - y - ph + st;
 
