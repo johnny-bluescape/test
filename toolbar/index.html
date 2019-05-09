@@ -167,6 +167,8 @@
 
                 .tool.active .toolbtn {background:var(--toolselect3);box-shadow:0 2px 20px var(--shadow2);}
 
+                    .tool .toolbtn.meetingactive {background:#2B61FF;}
+
                 .toolbtn svg {max-width:var(--toolicons);display:block;position:absolute;z-index:1337;top:50%;left:50%;transform:translate(-50%, -50%);}
                     .toolbtn svg * {fill:var(--icon);}
                     .active .toolbtn svg * {fill:var(--iconcurrent);}
@@ -879,6 +881,8 @@
             .maction:active {background:var(--active);}
 
             .mbtn {height:48px;padding:0 8px;display:flex;align-items:center;justify-content:center;border-radius:calc(var(--toolbarradius) - 6px);background:var(--active);margin:0 -4px -4px;font-weight:600;}
+
+            .contextpanel .hangup svg * {fill:#c52323;}
     </style>
 </head>
 <body class="rectanglex brush_tool ">
@@ -1069,7 +1073,7 @@
                 </div>
             </div>
             <div class=tool>
-                <div class=toolbtn data-tool=meeting>
+                <div class="toolbtn meetingbtn" data-tool=meeting>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.56-.35-.12-.74-.03-1.01.24l-1.57 1.97c-2.83-1.35-5.48-3.9-6.89-6.83l1.95-1.66c.27-.28.35-.67.24-1.02-.37-1.11-.56-2.3-.56-3.53 0-.54-.45-.99-.99-.99H4.19C3.65 3 3 3.24 3 3.99 3 13.28 10.73 21 20.01 21c.71 0 .99-.63.99-1.18v-3.45c0-.54-.45-.99-.99-.99z"/></svg>
                 </div>
                 <div class="options contextpanel">
@@ -1173,6 +1177,30 @@
             </div>
         </div><div class="option" id=brushcolor>
             <div class="fill brushfill2" id="brushfill"></div>
+        </div>
+    </div>
+
+    <div id=vc_context class=contextpanel>
+        <div class="option hangup">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 9c-1.6 0-3.15.25-4.6.72v3.1c0 .39-.23.74-.56.9-.98.49-1.87 1.12-2.66 1.85-.18.18-.43.28-.7.28-.28 0-.53-.11-.71-.29L.29 13.08c-.18-.17-.29-.42-.29-.7 0-.28.11-.53.29-.71C3.34 8.78 7.46 7 12 7s8.66 1.78 11.71 4.67c.18.18.29.43.29.71 0 .28-.11.53-.29.71l-2.48 2.48c-.18.18-.43.29-.71.29-.27 0-.52-.11-.7-.28-.79-.74-1.69-1.36-2.67-1.85-.33-.16-.56-.5-.56-.9v-3.1C15.15 9.25 13.6 9 12 9z"/></svg>
+        </div>
+        <div class=option>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 6.5l-4 4V7c0-.55-.45-1-1-1H9.82L21 17.18V6.5zM3.27 2L2 3.27 4.73 6H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.21 0 .39-.08.54-.18L19.73 21 21 19.73 3.27 2z"/></svg>
+        </div>
+        <div class=option>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 11h-1.7c0 .74-.16 1.43-.43 2.05l1.23 1.23c.56-.98.9-2.09.9-3.28zm-4.02.17c0-.06.02-.11.02-.17V5c0-1.66-1.34-3-3-3S9 3.34 9 5v.18l5.98 5.99zM4.27 3L3 4.27l6.01 6.01V11c0 1.66 1.33 3 2.99 3 .22 0 .44-.03.65-.08l1.66 1.66c-.71.33-1.5.52-2.31.52-2.76 0-5.3-2.1-5.3-5.1H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c.91-.13 1.77-.45 2.54-.9L19.73 21 21 19.73 4.27 3z"/></svg>
+        </div>
+        <div class=option>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 3H3c-1.11 0-2 .89-2 2v14c0 1.11.89 2 2 2h18c1.11 0 2-.89 2-2V5c0-1.11-.89-2-2-2zm0 16.02H3V4.98h18v14.04zM10 12H8l4-4 4 4h-2v4h-4v-4z"/></svg>
+        </div>
+        <div class=option>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+        </div>
+        <div class=option>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 0H4v2h16V0zM4 24h16v-2H4v2zM20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 2.75c1.24 0 2.25 1.01 2.25 2.25s-1.01 2.25-2.25 2.25S9.75 10.24 9.75 9 10.76 6.75 12 6.75zM17 17H7v-1.5c0-1.67 3.33-2.5 5-2.5s5 .83 5 2.5V17z"/></svg>
+        </div>
+        <div class=option>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
         </div>
     </div>
 
@@ -5957,7 +5985,7 @@
 
         Attach.on('click', '.join', joinmeeting);
         
-
+        Attach.on('click', '.hangup', hangup);
 
         //document.addEventListener('mousewheel', mousescroll, { passive:false });
 
@@ -6199,6 +6227,7 @@
 
         function joinmeeting(e){
             setupvideo.call(this, e, true);
+            closemenu();
         }
 
         function setupvideo(e, x){
@@ -6247,10 +6276,23 @@
                 }
 
                 f.appendChild(vw);
-                f.appendChild(vc);
+                //f.appendChild(vc);
                 f.appendChild(sb);
 
+                var cx = document.getElementById('vc_context');
+                cx = cx.cloneNode(true);
+                cx.removeAttribute('id');
+
+                cx.classList.add('perma', 'vc_context', 'visible', 'draggable', 'safebounds');
+
+                cx.style.position = 'fixed';
+                cx.style.top = 'calc(100% - 64px)';
+                cx.style.left = '50%';
+                cx.style.transition = 'none';
+                cx.style.transform = 'translateX(-50%)';
+
                 document.body.appendChild(f);
+                document.body.appendChild(cx);
             }
 
             function handleError(error) {
@@ -6258,6 +6300,13 @@
             }
 
             navigator.mediaDevices.getUserMedia(constraints).then(handleSuccess).catch(handleError);
+
+            document.getElementsByClassName('meetingbtn')[0].classList.add('meetingactive');
+        }
+
+        function hangup(){
+            document.getElementsByClassName('meetingbtn')[0].classList.remove('meetingactive');
+            removefilmstrip();
         }
 
         function stopvideo(e){
@@ -6276,7 +6325,10 @@
             stopaudio();
             stopvideo();
             STREAM = null;
+
             document.getElementsByClassName('filmstrip').remove();
+            var vc = document.getElementsByClassName('vc_context');
+            vc.remove();
         }
 
         window.addEventListener('mousewheel', dotspacing, {passive:false});
