@@ -362,7 +362,7 @@
         .type_tool canvas, .type_tool {cursor:text !important;}
 
         .textwrap {position:absolute;cursor: -webkit-grab;cursor:grab;}
-        .textarea {cursor: default;user-select:none;padding:0;resize:none;border-radius:4px;position:relative;min-width:48px;height:100%;min-height:28px;z-index:1337;background:transparent;border:none;color:white;font-size:24px;width:100%;max-width: 100%;box-sizing: border-box;padding: 12px;pointer-events:none;}
+        .textarea {cursor: default;user-select:none;padding:0;resize:none;border-radius:4px;position:relative;min-width:48px;height:100%;min-height:28px;z-index:1337;background:transparent;border:none;color:white;font-size:24px;width:100%;max-width: 100%;box-sizing: border-box;padding: 12px;pointer-events:none;overflow-y: auto;}
             .textwrap:not(.current):hover {box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);}
 
             /* .current .textarea {box-shadow:0 0 0 var(--selectwidth) var(--select);user-select:text;cursor:text;pointer-events:all;} */
@@ -782,7 +782,7 @@
                 .dropper:hover svg * {fill:var(--iconcurrent);}
                 .dropper:active svg * {fill:var(--iconcurrent);}
 
-        #hide {position:fixed;top:0;right:0;padding:14px 12px;z-index:834573894753895;opacity:.54;cursor:pointer;transition:all 150ms ease-in-out;}
+        #hide {position:fixed;top:0;right:0;padding:14px 12px;z-index:1337;opacity:.54;cursor:pointer;transition:all 150ms ease-in-out;}
             #hide:hover {opacity:.7;}
             #hide:active {opacity:.9;}
 
@@ -1917,7 +1917,7 @@
             </div>
             <div class=tweak>
                 <div class=label><span>Selection Gap</span><div class=value>0</div></div>
-                <input type=range class=tooltweak min=0 max=24 value=0 step=2 data-id=selectgap oninput="tweakedtools.call(this, event)" />
+                <input type=range class=tooltweak min=0 max=24 value=0 step=1 data-id=selectgap oninput="tweakedtools.call(this, event)" />
             </div>
             <div class=tweak>
                 <div class=label><span>Selection Thickness</span><div class=value>2</div></div>
@@ -4044,7 +4044,8 @@
                         }
                     }
                 } else { 
-                    t.classList.add('current2');
+                    t.classList.add('current2', 'preedit');
+                    
                 }
 
                 setcontextpanel.call(t);
