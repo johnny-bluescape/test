@@ -169,6 +169,9 @@
 
                     .tool .toolbtn.meetingactive {background:#2B61FF;}
 
+                    .tool .options .inmeeting, .meetingactive  ~ .contextpanel .premeeting {display:none;}
+                    .meetingactive ~ .options .inmeeting {display:inline-flex;}
+
                 .toolbtn svg {max-width:var(--toolicons);display:block;position:absolute;z-index:1337;top:50%;left:50%;transform:translate(-50%, -50%);}
                     .toolbtn svg * {fill:var(--icon);}
                     .active .toolbtn svg * {fill:var(--iconcurrent);}
@@ -861,8 +864,13 @@
 
         .filmstrip {position:fixed;top:24px;left:50%;transform:translateX(-50%);padding:8px;padding-right:48px;background:var(--panel);border-radius:var(--toolbarradius);z-index:2147483640;max-width:80%;}     
             .filmstrip .videowrap {display:flex;max-width:100%;overflow:hidden;}
-            .filmstrip video {width:192px;height:144px;background:black;max-width:192px;border-radius:calc(var(--toolbarradius) - 6px);display:block;transform: scaleX(-1);margin-right:8px;object-fit: cover;}
-                .filmstrip .videowrap video:last-child {margin-right:0;}
+              .filmstrip .videowrapper {background:transparent;margin-right:8px;border-radius:calc(var(--toolbarradius) - 6px);overflow:hidden;position:relative;}
+            .filmstrip video {width:192px;height:144px;background:transparent;max-width:192px;display:block;transform: scaleX(-1);object-fit: cover;}
+                .filmstrip .videowrap .videowrapper:last-child {margin-right:0;}
+
+
+        .screenshare {position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);padding:8px 48px 8px 8px;border-radius:var(--toolbarradius);max-width:50%;width:100%;background:var(--panel);}
+            .screenshare video {border-radius:calc(var(--toolbarradius) - 8px);width:100%;display:block;}
 
 
         .videocontrols {position:absolute;bottom:0;left:0;display:flex;}
@@ -883,7 +891,19 @@
 
             .mbtn {height:48px;padding:0 8px;display:flex;align-items:center;justify-content:center;border-radius:calc(var(--toolbarradius) - 6px);background:var(--active);margin:0 -4px -4px;font-weight:600;}
 
-            .permapanel .hangup svg * {fill:#c52323;}
+            .permapanel .hangup svg *, .contextpanel .inmeeting svg *, .permapanel .sharescreen .on2 * {fill:#c52323;}
+
+            .on2 {display:none;}
+
+            .on .on1 {display:none;}
+            .on .on2 {display:block;}
+
+            .usermuted {display:none;position:absolute;top:4px;right:4px;background:transparent;padding:2px 4px;border-radius:4px;font-size: 12px;text-transform: uppercase;font-weight: 600;color: #c42322;}
+            .muted .usermuted {display:block;}
+
+            .username {position:absolute;bottom:4px;left:4px;text-shadow: 1px 1px black;}
+
+            .offed .username {left:8px;right:8px;text-align:center;bottom:50%;transform:translateY(50%);}
     </style>
 </head>
 <body class="rectanglex brush_tool ">
@@ -1079,10 +1099,12 @@
                 </div>
                 <div class="options contextpanel">
                     <div class=optionwrap>
-                        <div class="option startmeeting" data-menu=smeet style="padding: 0 12px;"> 
+                        <div class="option startmeeting premeeting" data-menu=smeet style="padding: 0 12px;"> 
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>
-                        </div><div class="option joinmeeting" data-menu=jmeet style="padding: 0 12px;">
+                        </div><div class="option joinmeeting premeeting" data-menu=jmeet style="padding: 0 12px;">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4zM14 13h-3v3H9v-3H6v-2h3V8h2v3h3v2z"/></svg>
+                        </div><div class="option endmeeting hangup inmeeting" data-menu=smeet style="padding: 0 12px;"> 
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17,10.5V7c0-0.6-0.5-1-1-1H4C3.5,6,3,6.4,3,7v10c0,0.5,0.5,1,1,1h12c0.5,0,1-0.5,1-1v-3.5l4,4v-11L17,10.5z M12.1,15.5 L10,13.4l-2.1,2.1l-1.4-1.4L8.6,12L6.5,9.9l1.4-1.4l2.1,2.1l2.1-2.1l1.4,1.4L11.4,12l2.1,2.1L12.1,15.5z"/></svg>
                         </div><div class="option morebtn">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
                         </div>
@@ -1185,14 +1207,17 @@
         <div class="option hangup">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 9c-1.6 0-3.15.25-4.6.72v3.1c0 .39-.23.74-.56.9-.98.49-1.87 1.12-2.66 1.85-.18.18-.43.28-.7.28-.28 0-.53-.11-.71-.29L.29 13.08c-.18-.17-.29-.42-.29-.7 0-.28.11-.53.29-.71C3.34 8.78 7.46 7 12 7s8.66 1.78 11.71 4.67c.18.18.29.43.29.71 0 .28-.11.53-.29.71l-2.48 2.48c-.18.18-.43.29-.71.29-.27 0-.52-.11-.7-.28-.79-.74-1.69-1.36-2.67-1.85-.33-.16-.56-.5-.56-.9v-3.1C15.15 9.25 13.6 9 12 9z"/></svg>
         </div>
-        <div class=option>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 6.5l-4 4V7c0-.55-.45-1-1-1H9.82L21 17.18V6.5zM3.27 2L2 3.27 4.73 6H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.21 0 .39-.08.54-.18L19.73 21 21 19.73 3.27 2z"/></svg>
+        <div class="option videooff">
+            <svg xmlns="http://www.w3.org/2000/svg" class=on1 viewBox="0 0 24 24"><path d="M21 6.5l-4 4V7c0-.55-.45-1-1-1H9.82L21 17.18V6.5zM3.27 2L2 3.27 4.73 6H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.21 0 .39-.08.54-.18L19.73 21 21 19.73 3.27 2z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" class=on2 viewBox="0 0 24 24"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>
         </div>
-        <div class=option>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 11h-1.7c0 .74-.16 1.43-.43 2.05l1.23 1.23c.56-.98.9-2.09.9-3.28zm-4.02.17c0-.06.02-.11.02-.17V5c0-1.66-1.34-3-3-3S9 3.34 9 5v.18l5.98 5.99zM4.27 3L3 4.27l6.01 6.01V11c0 1.66 1.33 3 2.99 3 .22 0 .44-.03.65-.08l1.66 1.66c-.71.33-1.5.52-2.31.52-2.76 0-5.3-2.1-5.3-5.1H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c.91-.13 1.77-.45 2.54-.9L19.73 21 21 19.73 4.27 3z"/></svg>
+        <div class="option mutemic">
+            <svg xmlns="http://www.w3.org/2000/svg" class=on1 viewBox="0 0 24 24"><path d="M19 11h-1.7c0 .74-.16 1.43-.43 2.05l1.23 1.23c.56-.98.9-2.09.9-3.28zm-4.02.17c0-.06.02-.11.02-.17V5c0-1.66-1.34-3-3-3S9 3.34 9 5v.18l5.98 5.99zM4.27 3L3 4.27l6.01 6.01V11c0 1.66 1.33 3 2.99 3 .22 0 .44-.03.65-.08l1.66 1.66c-.71.33-1.5.52-2.31.52-2.76 0-5.3-2.1-5.3-5.1H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c.91-.13 1.77-.45 2.54-.9L19.73 21 21 19.73 4.27 3z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" class=on2 viewBox="0 0 24 24"><path d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/></svg>
         </div>
-        <div class=option>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 3H3c-1.11 0-2 .89-2 2v14c0 1.11.89 2 2 2h18c1.11 0 2-.89 2-2V5c0-1.11-.89-2-2-2zm0 16.02H3V4.98h18v14.04zM10 12H8l4-4 4 4h-2v4h-4v-4z"/></svg>
+        <div class="option sharescreen">
+            <svg xmlns="http://www.w3.org/2000/svg" class=on1 viewBox="0 0 24 24"><path d="M21 3H3c-1.11 0-2 .89-2 2v14c0 1.11.89 2 2 2h18c1.11 0 2-.89 2-2V5c0-1.11-.89-2-2-2zm0 16.02H3V4.98h18v14.04zM10 12H8l4-4 4 4h-2v4h-4v-4z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" class=on2 viewBox="0 0 24 24"><path d="M21 19.1H3V5h18v14.1zM21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/><path d="M14.59 8L12 10.59 9.41 8 8 9.41 10.59 12 8 14.59 9.41 16 12 13.41 14.59 16 16 14.59 13.41 12 16 9.41z"/></svg>
         </div>
         <div class=option>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
@@ -4564,6 +4589,7 @@
             } else if ( shell == 'smeet' ){
                 setupvideo();
 
+                return;
             }
 
             var xx = c.getElementsByClassName('option');
@@ -5988,6 +6014,12 @@
         
         Attach.on('click', '.hangup', hangup);
 
+        Attach.on('click', '.videooff', videooff);
+
+        Attach.on('click', '.mutemic', mutemic);
+
+        Attach.on('click', '.sharescreen', screenshare);
+
         //document.addEventListener('mousewheel', mousescroll, { passive:false });
 
         //Attach.on('mousedown', '.contextpanel', stopprop, true);
@@ -6226,6 +6258,68 @@
             }
         }
 
+        var SHARESTREAM = null;
+
+        function stopshare(){
+            if ( SHARESTREAM ){
+                for(var i=0;i<SHARESTREAM.getTracks().length;i++){
+                    var s = SHARESTREAM.getTracks()[i];
+                    s.stop();
+                }
+                SHARESTREAM = null;
+            }
+
+            document.getElementsByClassName('screenshare').remove();
+
+            document.getElementsByClassName('sharescreen on').removeclass('on');
+            document.getElementsByClassName('sharescreen sharing').removeclass('sharing');
+        }
+
+        function screenshare(e){
+
+            var a = this.classList.contains('sharing');
+
+            if ( a ){
+                this.classList.remove('sharing', 'on');
+                stopshare();
+
+                return;
+            } else {
+                this.classList.add('sharing', 'on');
+            }
+
+
+            function success(stream) {
+                            
+                var share = document.createElement('div');
+                var video = document.createElement('video');
+                video.autoplay = true;
+                video.mute = true;
+                video.srcObject = stream;
+                video.className = 'screenvideo';
+                
+                SHARESTREAM = stream;
+
+                share.className = 'screenshare draggable safebounds';
+
+                share.appendChild(video);
+                document.body.appendChild(share);
+
+                stream.addEventListener('inactive', e => {
+                    console.log('share stopped');
+                    //share.remove();
+                    stopshare();
+                });
+            }
+
+            function error(e){
+                console.warn(e);
+                stopshare();
+            }
+
+            navigator.mediaDevices.getDisplayMedia({video: true}).then(success).catch(error);
+        }
+
         function joinmeeting(e){
             setupvideo.call(this, e, true);
             closemenu();
@@ -6237,18 +6331,26 @@
                 video: true
             };
 
-            var c = x ? Number(this.dataset.count): 0;
+            var count = x ? Number(this.dataset.count): 0;
 
-            function handleSuccess(stream) {
+            function success(stream) {
                 var f = document.createElement('div');
                 var v = document.createElement('video');
                 var vc = document.getElementById('videocontrols');
                 var vw = document.createElement('div');
                 var sb = document.getElementById('stripbtns');
 
+                var r = document.createElement('div');
+
+                var n = document.createElement('div');
+                var m = document.createElement('div');
+
                 f.className = 'filmstrip draggable safebounds';
                 v.className = 'uservideo';
                 vw.className = 'videowrap';
+                r.className = 'videowrapper webcam';
+                n.className = 'username';
+                m.className = 'usermuted';
 
                 v.autoplay = true;
                 v.playsinline = true;
@@ -6259,21 +6361,46 @@
                 sb = sb.cloneNode(true);
                 sb.removeAttribute('id');
 
-
                 window.STREAM = stream;
                 v.srcObject = stream;
 
-                vw.appendChild(v);
+                var yournamehere = ['Strother Martin', 'Edie Adams', 'Harold Fong', 'Richard Novo', 'Jane Moder', 'Pam Bille', 'Arthur Roberts'];
+                yournamehere = yournamehere[Math.floor(Math.random() * yournamehere.length)];
 
-                for(var i=0;i<c;i++){
+                n.appendChild(document.createTextNode(yournamehere));
+                m.appendChild(document.createTextNode('Muted'));
+
+                r.appendChild(v);
+                r.appendChild(n);
+                r.appendChild(m);
+                vw.appendChild(r);
+
+                var names = ['Daniel Desario','Lindsay Weir','Ken Miller','Nick Andopolis','Kim Kelly','Bill Haverchuck','Sam Weir','Neal Schweiber','Harold Weir','Jean Weir','Jeff Rosso','Cindy Sanders','Millie Kentner','Frank Kowchevski','Alan White','Gordon Crisp','Herbert the mascot','Coach Ben Fredricks','Eli','Maureen Sampson'];
+
+                for(var i=0;i<count;i++){
                     var a = document.createElement('video');
+                    var b = document.createElement('div');
+                    var c = document.createElement('div');
+                    var d = document.createElement('div');
+
                     a.autoplay = true;
                     a.playsinline = true;
                     a.loop = true;
                     a.muted = true;
 
+                    b.className = 'videowrapper';
+                    c.className = 'username';
+                    d.className = 'usermuted';
+
                     a.src = './vids/m' + (i + 1) + '.webm';
-                    vw.appendChild(a);
+
+                    c.appendChild(document.createTextNode(names[i]));
+                    d.appendChild(document.createTextNode('Muted'));
+
+                    b.appendChild(a);
+                    b.appendChild(c);
+                    b.appendChild(d);
+                    vw.appendChild(b);
                 }
 
                 f.appendChild(vw);
@@ -6296,11 +6423,13 @@
                 document.body.appendChild(cx);
             }
 
-            function handleError(error) {
+            function error(error) {
                 console.log('navigator.MediaDevices.getUserMedia error: ', error.message, error.name);
+
+                success({});
             }
 
-            navigator.mediaDevices.getUserMedia(constraints).then(handleSuccess).catch(handleError);
+            navigator.mediaDevices.getUserMedia(constraints).then(success).catch(error);
 
             document.getElementsByClassName('meetingbtn')[0].classList.add('meetingactive');
         }
@@ -6308,23 +6437,85 @@
         function hangup(){
             document.getElementsByClassName('meetingbtn')[0].classList.remove('meetingactive');
             removefilmstrip();
+            stopshare();
+        }
+
+        function videooff(e){
+            var a = this.classList.contains('on');
+            
+            if ( a ){
+                startvideo();
+            } else {
+                stopvideo();
+            }
+
+            this.classList.toggle('on');
+        }
+
+        function mutemic(e){
+            var a = this.classList.contains('on');
+
+            if ( a ){
+                startaudio();
+            } else {
+                stopaudio();
+            }
+
+            this.classList.toggle('on');
         }
 
         function stopvideo(e){
-            console.log(STREAM.getTracks());
-            STREAM.getTracks()[0].stop();
-            STREAM.getTracks()[1].stop();
+            for(var i=0;i<STREAM.getTracks().length;i++){
+                var s = STREAM.getTracks()[i];
+                if ( s.kind == 'video' ){
+                   s.enabled = false;
+                }
+            }
+            document.getElementsByClassName('videowrapper webcam').addclass('offed');
+        }
+
+        function startvideo(e){
+            for(var i=0;i<STREAM.getTracks().length;i++){
+                var s = STREAM.getTracks()[i];
+                if ( s.kind == 'video' ){
+                   s.enabled = true;
+                }
+            }
+
+            document.getElementsByClassName('videowrapper webcam').removeclass('offed');
         }
 
         function stopaudio(e){
-            console.log(STREAM.getTracks());
-            STREAM.getTracks()[0].stop();
-            STREAM.getTracks()[1].stop();
+            for(var i=0;i<STREAM.getTracks().length;i++){
+                var s = STREAM.getTracks()[i];
+                if ( s.kind == 'audio' ){
+                   s.enabled = false;
+                }
+            }
+
+            document.getElementsByClassName('videowrapper webcam').addclass('muted');
+        }
+
+        function startaudio(e){
+            for(var i=0;i<STREAM.getTracks().length;i++){
+                var s = STREAM.getTracks()[i];
+                if ( s.kind == 'audio' ){
+                   s.enabled = true;
+                }
+            }
+
+            document.getElementsByClassName('videowrapper webcam').removeclass('muted');
+        }
+
+        function stopstream(){
+            for(var i=0;i<STREAM.getTracks().length;i++){
+                var s = STREAM.getTracks()[i];
+                s.stop();
+            }
         }
 
         function removefilmstrip(e){
-            stopaudio();
-            stopvideo();
+            stopstream();
             STREAM = null;
 
             document.getElementsByClassName('filmstrip').remove();
