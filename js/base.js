@@ -38,12 +38,22 @@ Object.prototype.removeclass = function(x){
     }
 };
 
+Object.prototype.addclass = function(x){
+    for(var i=0;i<this.length;i++){
+        this[i].classList.add(x);
+    }
+};
+
 String.prototype.capitalize = function() {
 return this.charAt(0).toUpperCase() + this.slice(1);
 };
 
 Array.prototype.random = function () {
     return this[Math.floor(Math.random() * this.length)]
+};
+
+Array.prototype.randomremove = function () {
+    return this.splice(Math.floor(Math.random() * this.length), 1);
 };
 
 Object.prototype.offset = function(x) {
