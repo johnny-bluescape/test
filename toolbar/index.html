@@ -54,8 +54,8 @@
             --color:#fff;
             --incolor:#000;
             --ui:27, 26, 28;
-            --shadow:rgba(var(--ui), .16);
-            --shadow2:rgba(var(--ui), .4);
+            --shadow:rgba(0,0,0, .16);
+            --shadow2:rgba(0,0,0, .4);
             --panel: rgb(var(--ui));
             --select: #00CEFF;
 
@@ -175,6 +175,8 @@
                 .toolbtn svg {max-width:var(--toolicons);display:block;position:absolute;z-index:1337;top:50%;left:50%;transform:translate(-50%, -50%);}
                     .toolbtn svg * {fill:var(--icon);}
                     .active .toolbtn svg * {fill:var(--iconcurrent);}
+
+                html:not(.ui2) .toolbtn svg {max-width:calc(var(--toolicons) - 10%);}
 
                 .tools .options {background:var(--tool);border-radius:var(--toolbarradius);position:absolute;top:calc(50% - 20px);left:var(--toolbtn);opacity:0;pointer-events:none;transition:all 150ms ease-in-out;box-shadow:0 2px 20px rgba(0,0,0,0);top:50%;left:calc(var(--toolbtn) + 12px);transform:translate(-16px, -50%);}
 
@@ -927,9 +929,10 @@
                         <path style="transform: rotate(-20deg);transform-origin: center;" d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/>
                     </svg> -->
                     <!-- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path style="transform: rotate(-20deg);transform-origin: center;" d="M12 7.27l4.28 10.43-3.47-1.53-.81-.36-.81.36-3.47 1.53L12 7.27M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71L12 2z"/></svg> -->
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36">
+                    <!-- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36">
                         <path d="M28.1,16.6c0-0.5-0.3-0.9-0.8-1.1L9.8,9c-0.5-0.2-1-0.1-1.3,0.3C8.2,9.6,8,10.1,8.2,10.6l6.4,17.5c0.2,0.5,0.6,0.8,1.1,0.8	c0,0,0,0,0.1,0c0.5,0,0.9-0.3,1.1-0.7l2.8-5.8l5.5,5.6c0.2,0.2,0.6,0.4,0.9,0.4c0.3,0,0.6-0.1,0.9-0.4c0.5-0.5,0.5-1.3,0-1.8	l-5.5-5.6l5.9-2.9C27.8,17.5,28.1,17.1,28.1,16.6z M19,19.1c-0.2,0.1-0.4,0.1-0.5,0.3c-0.1,0.1-0.2,0.3-0.3,0.5L16,24.5l-4.5-12.2	l12.2,4.5L19,19.1z"/>
-                    </svg>
+                    </svg> -->
+                    <svg viewBox="0 0 24 24"><path d="M7 19l4.394-2.59 1.86 4.661a1 1 0 0 0 1.3.558l.499-.2a1 1 0 0 0 .557-1.3l-1.86-4.66L18.5 14 7 2v17z"></path></svg>
                 </div>
                 <div class="options contextpanel">
                     <div class=optionwrap>
@@ -944,9 +947,11 @@
             <div class=tool>
                 <div class=toolbtn data-tool=rectangle id=shape_tool2>
                     <!-- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 4H6c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H6V6h12v12z"/></svg> -->
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36">
+                    <!-- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36">
                         <path d="M7,8v22h22V8H7z M26,27H10V11h16V27z"/>
-                    </svg>
+                    </svg> -->
+                    <!-- <svg viewBox="0 0 24 24"><path d="M6.463 5L2.544 19h14.993l3.919-14H6.463zm-.758-2h17.07a1 1 0 0 1 .962 1.27l-4.479 16a1 1 0 0 1-.963.73H1.225a1 1 0 0 1-.962-1.27l4.479-16A1 1 0 0 1 5.705 3z"></path></svg> -->
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14z"/></svg>
                 </div>
                 <div class="options contextpanel">
                     <!-- <div class=controls>
@@ -973,9 +978,10 @@
             <div class=tool>
                 <div class=toolbtn data-tool=type id=type_tool2>
                     <!-- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5 17v2h14v-2H5zm4.5-4.2h5l.9 2.2h2.1L12.75 4h-1.5L6.5 15h2.1l.9-2.2zM12 5.98L13.87 11h-3.74L12 5.98z"/></svg> -->
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" >
+                    <!-- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" >
                         <polygon points="29,10 7,10 7,13 16.5,13 16.5,27.5 19.5,27.5 19.5,13 29,13 "/>
-                    </svg>
+                    </svg> -->
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 18h12v-2H3v2zM3 6v2h18V6H3zm0 7h18v-2H3v2z"/></svg>
                 </div>
                 <div class="options contextpanel">
                     <!-- <div class=controls>
@@ -1020,9 +1026,10 @@
                     <!-- <svg xmlns="http://www.w3.org/2000/svg" style="width:28px;" viewBox="0 0 24 24"><path d="M7 14c-1.66 0-3 1.34-3 3 0 1.31-1.16 2-2 2 .92 1.22 2.49 2 4 2 2.21 0 4-1.79 4-4 0-1.66-1.34-3-3-3zm13.71-9.37l-1.34-1.34c-.39-.39-1.02-.39-1.41 0L9 12.25 11.75 15l8.96-8.96c.39-.39.39-1.02 0-1.41z"/></svg> -->
                     <!-- <svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24"><path d="M14.06 9.02l.92.92L5.92 19H5v-.92l9.06-9.06M17.66 3c-.25 0-.51.1-.7.29l-1.83 1.83 3.75 3.75 1.83-1.83c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.2-.2-.45-.29-.71-.29zm-3.6 3.19L3 17.25V21h3.75L17.81 9.94l-3.75-3.75z"/></svg> -->
                     <!-- <svg xmlns="http://www.w3.org/2000/svg"  style="width:28px;" viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg> -->
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36">
+                    <!-- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36">
                         <path d="M13.9,33c-0.4,0-0.9-0.2-1.2-0.6c-0.5-0.7-0.4-1.6,0.3-2.1c0.7-0.5,1.1-1.5,1.4-2.7c-3.1-1.4-5-4-5.5-7.2		c-0.7-5.1,3-8.6,6-11.5c1.7-1.6,3.4-3.2,3.4-4.4C18.3,3.6,19,3,19.8,3c0.8,0,1.5,0.7,1.4,1.6C21.1,7,19.1,8.9,16.9,11		c-2.8,2.6-5.6,5.4-5.1,8.9c0.3,2.3,1.8,3.7,3.1,4.5c0.5-3.3,1-7.1,4.3-8.3c2.6-1,5.3-0.1,6.9,2.2c1.7,2.6,1.5,5.9-0.5,8.1		c-1.8,1.9-5.1,2.7-8.3,2.1c-0.4,1.7-1.1,3.2-2.4,4.2C14.5,32.9,14.2,33,13.9,33z M17.8,25.5c2.3,0.4,4.6,0,5.6-1.1		c1.2-1.3,1-3.2,0.2-4.4c-0.4-0.6-1.4-1.8-3.3-1.1c-1.6,0.6-2,2.8-2.4,6C17.8,25.1,17.8,25.3,17.8,25.5z"/>
-                    </svg>
+                    </svg> -->
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4.59 6.89c.7-.71 1.4-1.35 1.71-1.22.5.2 0 1.03-.3 1.52-.25.42-2.86 3.89-2.86 6.31 0 1.28.48 2.34 1.34 2.98.75.56 1.74.73 2.64.46 1.07-.31 1.95-1.4 3.06-2.77 1.21-1.49 2.83-3.44 4.08-3.44 1.63 0 1.65 1.01 1.76 1.79-3.78.64-5.38 3.67-5.38 5.37 0 1.7 1.44 3.09 3.21 3.09 1.63 0 4.29-1.33 4.69-6.1H21v-2.5h-2.47c-.15-1.65-1.09-4.2-4.03-4.2-2.25 0-4.18 1.91-4.94 2.84-.58.73-2.06 2.48-2.29 2.72-.25.3-.68.84-1.11.84-.45 0-.72-.83-.36-1.92.35-1.09 1.4-2.86 1.85-3.52.78-1.14 1.3-1.92 1.3-3.28C8.95 3.69 7.31 3 6.44 3 5.12 3 3.97 4 3.72 4.25c-.36.36-.66.66-.88.93l1.75 1.71zm9.29 11.66c-.31 0-.74-.26-.74-.72 0-.6.73-2.2 2.87-2.76-.3 2.69-1.43 3.48-2.13 3.48z"/></svg>
                 </div>
                 <div class="options contextpanel" style="max-width: 208px;">
                     <!-- <div class=controls>
@@ -1057,9 +1064,10 @@
             <div class=tool>
                 <div class=toolbtn data-tool=upload>
                     <!-- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg> -->
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36">
+                    <!-- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36">
                         <polygon points="29,16.5 19.5,16.5 19.5,7 16.5,7 16.5,16.5 7,16.5 7,19.5 16.5,19.5 16.5,29 19.5,29 19.5,19.5 29,19.5 "/>
-                    </svg>
+                    </svg> -->
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg>
                 </div>
                 <div class="options contextpanel">
                     <div class=optionwrap>
@@ -1078,14 +1086,15 @@
                 <div class=toolbtn id=canvas_tool data-tool=canvas>
                         <!-- <svg xmlns="http://www.w3.org/2000/svg" style="width:24px;" viewBox="0 0 22 22"><path d="M25-378H41v16H25Zm2,2v12H39v-12Zm-5-5h2v2H22Zm0,20h2v2H22Zm20,0h2v2H42Zm0-20h2v2H42Z" transform="translate(-22 381)" fill="#fff" fill-rule="evenodd"/></svg> -->
                         <!-- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg> -->
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36">
+                        <!-- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36">
                             <g transform="translate(-59 -557)">
                                 <polygon points="68,570.5 65,570.5 65,563 72.5,563 72.5,566 68,566"/>
                                 <polygon points="89,570.5 86,570.5 86,566 81.5,566 81.5,563 89,563"/>
                                 <polygon points="72.5,587 65,587 65,579.5 68,579.5 68,584 72.5,584"/>
                                 <polygon points="89,587 81.5,587 81.5,584 86,584 86,579.5 89,579.5"/>
                             </g>
-                        </svg>
+                        </svg> -->
+                        <svg viewBox="0 0 24 24"><path d="M6 5h12V3a1 1 0 0 1 2 0v2h2a1 1 0 0 1 0 2h-2v10h2a1 1 0 0 1 0 2h-2v2a1 1 0 0 1-2 0v-2H6v2a1 1 0 0 1-2 0v-2H2a1 1 0 0 1 0-2h2V7H2a1 1 0 1 1 0-2h2V3a1 1 0 1 1 2 0v2zm0 2v10h12V7H6z"></path></svg>
                 </div>
                 <div class="options contextpanel">
                     <div class=optionwrap>
@@ -1119,12 +1128,13 @@
             </div>
             <div class=tool>
                 <div class=toolbtn data-tool=settings>
-                    <svg xmlns="http://www.w3.org/2000/svg" style="width:28px;" viewBox="0 0 20 20"><path d="M15.95 10.78c.03-.25.05-.51.05-.78s-.02-.53-.06-.78l1.69-1.32c.15-.12.19-.34.1-.51l-1.6-2.77c-.1-.18-.31-.24-.49-.18l-1.99.8c-.42-.32-.86-.58-1.35-.78L12 2.34c-.03-.2-.2-.34-.4-.34H8.4c-.2 0-.36.14-.39.34l-.3 2.12c-.49.2-.94.47-1.35.78l-1.99-.8c-.18-.07-.39 0-.49.18l-1.6 2.77c-.1.18-.06.39.1.51l1.69 1.32c-.04.25-.07.52-.07.78s.02.53.06.78L2.37 12.1c-.15.12-.19.34-.1.51l1.6 2.77c.1.18.31.24.49.18l1.99-.8c.42.32.86.58 1.35.78l.3 2.12c.04.2.2.34.4.34h3.2c.2 0 .37-.14.39-.34l.3-2.12c.49-.2.94-.47 1.35-.78l1.99.8c.18.07.39 0 .49-.18l1.6-2.77c.1-.18.06-.39-.1-.51l-1.67-1.32zM10 13c-1.65 0-3-1.35-3-3s1.35-3 3-3 3 1.35 3 3-1.35 3-3 3z"/></svg>
+                    <!-- <svg xmlns="http://www.w3.org/2000/svg" style="width:28px;" viewBox="0 0 20 20"><path d="M15.95 10.78c.03-.25.05-.51.05-.78s-.02-.53-.06-.78l1.69-1.32c.15-.12.19-.34.1-.51l-1.6-2.77c-.1-.18-.31-.24-.49-.18l-1.99.8c-.42-.32-.86-.58-1.35-.78L12 2.34c-.03-.2-.2-.34-.4-.34H8.4c-.2 0-.36.14-.39.34l-.3 2.12c-.49.2-.94.47-1.35.78l-1.99-.8c-.18-.07-.39 0-.49.18l-1.6 2.77c-.1.18-.06.39.1.51l1.69 1.32c-.04.25-.07.52-.07.78s.02.53.06.78L2.37 12.1c-.15.12-.19.34-.1.51l1.6 2.77c.1.18.31.24.49.18l1.99-.8c.42.32.86.58 1.35.78l.3 2.12c.04.2.2.34.4.34h3.2c.2 0 .37-.14.39-.34l.3-2.12c.49-.2.94-.47 1.35-.78l1.99.8c.18.07.39 0 .49-.18l1.6-2.77c.1-.18.06-.39-.1-.51l-1.67-1.32zM10 13c-1.65 0-3-1.35-3-3s1.35-3 3-3 3 1.35 3 3-1.35 3-3 3z"/></svg> -->
                     <!-- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm7-7H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.11 0 2-.9 2-2V5c0-1.1-.89-2-2-2zm-1.75 9c0 .23-.02.46-.05.68l1.48 1.16c.13.11.17.3.08.45l-1.4 2.42c-.09.15-.27.21-.43.15l-1.74-.7c-.36.28-.76.51-1.18.69l-.26 1.85c-.03.17-.18.3-.35.3h-2.8c-.17 0-.32-.13-.35-.29l-.26-1.85c-.43-.18-.82-.41-1.18-.69l-1.74.7c-.16.06-.34 0-.43-.15l-1.4-2.42c-.09-.15-.05-.34.08-.45l1.48-1.16c-.03-.23-.05-.46-.05-.69s.02-.46.05-.68l-1.48-1.16c-.13-.11-.17-.3-.08-.45l1.4-2.42c.09-.15.27-.21.43-.15l1.74.7c.36-.28.76-.51 1.18-.69l.26-1.85c.03-.17.18-.3.35-.3h2.8c.17 0 .32.13.35.29l.26 1.85c.43.18.82.41 1.18.69l1.74-.7c.16-.06.34 0 .43.15l1.4 2.42c.09.15.05.34-.08.45l-1.48 1.16c.03.23.05.46.05.69z"/></svg> -->
                     <!-- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg> -->
                     <!-- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36">
                         <path d="M8,28V8h20l-6.4,6.4h-7.2v7.2L8,28z"/>
                     </svg> -->
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
                 </div>
                 <div class="options contextpanel">
                     <div class=optionwrap>
@@ -1901,7 +1911,7 @@
             </div>
             <div class=tweak>
                 <div class=label><span>Toolbar Button Gap</span><div class=value>12</div></div>
-                <input type=range class=tooltweak min=0 max=32 value=12 step=2 data-id=toolgap oninput="tweakedtools.call(this, event)" />
+                <input type=range class=tooltweak min=-4 max=32 value=12 step=2 data-id=toolgap oninput="tweakedtools.call(this, event)" />
             </div>
             <div class=tweak>
                 <div class=label><span>Toolbar Button Radius</span><div class=value>50</div></div>
