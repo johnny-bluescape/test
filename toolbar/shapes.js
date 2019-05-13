@@ -559,7 +559,7 @@ function rectanglemove(e){
       rect.style.background = CANVASCOLOR;
       rect.style.borderWidth = '2px';
       rect.style.borderColor = CANVASBORDERCOLOR;//'rgba(255,255,255,.2)';//'#7754A1';
-      rect.style.borderRadius = '8px';
+      //rect.style.borderRadius = '8px';
 
       rect.className += ' canvasboard';
 

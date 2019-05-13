@@ -313,7 +313,7 @@
                 width: 100%;
                 height: 100%;
                 display: block;
-                border: 1px solid rgba(255, 255, 255, 0.1);
+                border: 1px solid rgba(140, 140, 140, 0.1);
                 border-radius: 50%;
                 box-sizing: border-box;
                 position:absolute;top:0;left:0;
@@ -590,10 +590,10 @@
             
             .hidebrush #brush_context {opacity:0 !important;pointer-events:none !important;}
         
-        .canvaslabel {position: absolute;top:-32px;left:-2px;padding:3px 8px 4px;background:#4E4D4D;color:white;border-radius:6px;white-space:nowrap;font-size:14px;font-weight:500;transition:all 150ms ease-in-out;}
-            .current .canvaslabel {background:#433453;}
+        .canvaslabel {position: absolute;top:-28px;left:-2px;padding:3px 0 4px;background:;color:white;border-radius:6px;white-space:nowrap;font-size:14px;font-weight:500;transition:all 150ms ease-in-out;}
+            .current .canvaslabel {background:;}
 
-            .neartop .canvaslabel {top:4px;left:4px;}
+            .neartop .canvaslabel {top:4px;left:8px;}
 
             .ractangle.canvasboard.current {border-color:#7754A1;box-shadow:none;}
 
@@ -921,7 +921,7 @@
             .chatwrap {display: flex;flex-direction: column;height: 448px;}
                 .chattitle {opacity:.54;margin-bottom:12px;}
                 .chatwindow {height:400px;overflow-y:auto;width:240px;}
-                .chatinput {background:rgba(255,255,255,.05);margin: 0 -12px -12px;border-radius: 0 0 var(--toolbarradius) var(--toolbarradius);padding:12px;}
+                .chatinput {background:rgba(255,255,255,.04);margin: 0 -12px -12px;border-radius: 0 0 var(--toolbarradius) var(--toolbarradius);padding:12px;}
                     .chatinput textarea {width:100%;height:24px;font-size:16px;color:#ccc;background:transparent;border:none;resize:none;display:block;line-height: 24px;}
 
             .chatmessage {margin-bottom:8px;}
@@ -1501,7 +1501,11 @@
         <div id=chatmenu>
             <div class=chatwrap>
                 <div class=chattitle>Chat</div>
-                <div class=chatwindow></div>
+                <div class=chatwindow>
+                    <div class="chatmessage">
+                        <span class="chatuser">Ken Miller</span><span class="chattext">AV issues =(</span>
+                    </div>
+                </div>
                 <div class=chatinput>
                     <textarea type=text class="chat autoexpand2" placeholder="Enter message..."></textarea>
                 </div>
@@ -1509,7 +1513,7 @@
         </div>
 
         <div id=peoplemenu>
-            <div class=menutitle style="padding-left:0;font-weight:500;">Participants</div>
+            <div class=menutitle style="padding-left:0;font-weight:500;"><span class=peoplecount></span> Participants</div>
             <div class=autofollow>
                 <div class=btn2>Auto Follow Leader</div>
             </div>
@@ -3868,12 +3872,14 @@
             d.style.whiteSpace = 'nowrap';
             d.style.fontSize = window.getComputedStyle(this).fontSize;
 
+            d.style.width = 0;
+            
             document.body.appendChild(d);
 
             var tw = this.getparent('textwrap');           
 
             var w = d.offsetWidth;
-            var h = d.offsetHeight;
+            var h = d.scrollWidth;//d.offsetHeight;
 
 
             if ( !tw.classList.contains('resized') ){
@@ -4747,6 +4753,7 @@
         function getpeople(){
             var p = document.getElementsByClassName('username');
             var w = this.getElementsByClassName('peoplewrap')[0];
+            var c = this.getElementsByClassName('peoplecount')[0];
             
             for(var i=0;i<p.length;i++){
                 var t = p[i].innerText;
@@ -4772,6 +4779,9 @@
 
                 w.appendChild(d);
             }
+
+            c.appendChild(document.createTextNode(p.length));
+
             return;
         }
 
