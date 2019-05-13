@@ -26,7 +26,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1">
     <meta name="google" content="notranslate"><!-- WTF chrome, it's not in german -->
     <meta http-equiv="Content-Language" content="en">
-    <title>TEST</title>
+    <title>UI Testing Grounds</title>
     <link rel="icon" type="image/png" href="./favicon.png" />
     <script src="../js/gator.js"></script>
     <!-- <script src="../js/hammer.js"></script> -->
@@ -436,7 +436,7 @@
             /* .contextpanel.visible.sublevel {opacity:0;pointer-events:none;transform:translate(-8px, 0);} */
 
 
-            .contextpanel .option, .permapanel .option {cursor:pointer;min-width:48px;height:48px;box-sizing:border-box;display:inline-flex;vertical-align:top;align-content:center;align-items:center;justify-content:center;justify-items:center;}
+            .contextpanel .option, .permapanel .option {cursor:pointer;min-width:48px;height:48px;box-sizing:border-box;display:inline-flex;vertical-align:top;align-content:center;align-items:center;justify-content:center;justify-items:center;user-select:none;}
 
             .contextpanel .optionwrap, .permapanel .optionwrap {transition:margin 150ms ease-in-out;}
 
@@ -871,6 +871,10 @@
                 .filmstrip .videowrap .videowrapper:last-child {margin-right:0;}
 
 
+                .videowrapper .pulse {width:60px;height:60px;position:absolute;top:50%;left:50%;background:white;margin:-30px 0 0 -30px;border-radius:50%;opacity:.15;display:none;}
+
+                .videowrapper.offed .pulse {display:block;}
+
         .screenshare {position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);padding:8px 48px 8px 8px;border-radius:var(--toolbarradius);max-width:50%;width:100%;background:var(--panel);}
             .screenshare video {border-radius:calc(var(--toolbarradius) - 8px);width:100%;display:block;}
 
@@ -900,7 +904,7 @@
             .on .on1 {display:none;}
             .on .on2 {display:block;}
 
-            .usermuted {display:none;position:absolute;top:4px;right:4px;background:transparent;padding:2px 4px;border-radius:4px;font-size: 12px;text-transform: uppercase;font-weight: 600;color: #c42322;}
+            .usermuted {display:none;position:absolute;bottom:4px;right:4px;background:#c42322;padding:2px 4px;border-radius:4px;font-size: 12px;text-transform: uppercase;font-weight: 600;color:white;z-index:13;}
             .muted .usermuted {display:block;}
 
             .username {position:absolute;bottom:4px;left:6px;text-shadow: 1px 1px black;white-space: nowrap;text-overflow: ellipsis;overflow: hidden;max-width: calc(100% - 12px);}
@@ -6291,12 +6295,16 @@
                 var n = document.createElement('div');
                 var m = document.createElement('div');
 
+                var pulse = document.createElement('div');
+
                 f.className = 'filmstrip draggable safebounds';
                 v.className = 'uservideo';
                 vw.className = 'videowrap';
                 r.className = 'videowrapper webcam';
                 n.className = 'username';
                 m.className = 'usermuted';
+                
+                pulse.className = 'pulse';
 
                 v.autoplay = true;
                 v.playsinline = true;
@@ -6316,6 +6324,39 @@
                     r.classList.add('offed');
                 }
 
+                var context = new AudioContext();
+
+                var audioInput = context.createMediaStreamSource(stream);
+
+                var bufferSize = 4096;
+                var recorder = context.createScriptProcessor(bufferSize, 1, 1);
+
+                var analyser = context.createAnalyser();
+
+                analyser.smoothingTimeConstant = 0.8;
+                analyser.fftSize = 1024;
+
+                recorder.onaudioprocess = function(e){
+                    var input = e.inputBuffer.getChannelData(0);
+                    var sum = 0;
+                    for (var i = 0; i < input.length; i++) {
+                        sum += input[i] * input[i];
+
+                    }
+                    var instant = Math.sqrt(sum / input.length) * 10;
+
+                    //console.log(instant);
+
+                    pulse.style.transform = 'scale(' + instant + ')';
+
+                    // pulse.style.opacity = Math.min(0.2 * (instant), 0.2);
+                }
+
+                audioInput.connect(recorder);
+                analyser.connect(recorder);
+                recorder.connect(context.destination);
+
+
                 var names = ['Daniel Desario','Lindsay Weir','Ken Miller','Nick Andopolis','Kim Kelly','Bill Haverchuck','Sam Weir','Neal Schweiber','Harold Weir','Jean Weir','Jeff Rosso','Cindy Sanders','Millie Kentner','Frank Kowchevski','Alan White','Gordon Crisp','Herbert the mascot','Coach Ben Fredricks','Eli','Maureen Sampson'];
 
                 var yournamehere = names.randomremove();
@@ -6326,6 +6367,7 @@
                 r.appendChild(v);
                 r.appendChild(n);
                 r.appendChild(m);
+                r.appendChild(pulse);
                 vw.appendChild(r);
 
                 var vids = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17];
