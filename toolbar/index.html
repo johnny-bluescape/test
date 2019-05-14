@@ -864,6 +864,11 @@
 
             .trihandle {position:absolute;top:-8px;left:-8px;width:12px;height:12px;position:absolute;transform:translate(134px, 44px);border-radius:50%;background:transparent;border:2px solid white;box-sizing:border-box;box-shadow:0 0 0 2px rgba(0,0,0,.05);pointer-events:none;}
 
+
+        .btn3 {min-width:48px;min-height:48px;display:flex;align-items: center;justify-content: center;}
+            .btn3 svg {display:block;width:24px;}
+                .btn3 svg * {fill:var(--icon);}
+
         .filmstrip {position:fixed;top:24px;left:50%;transform:translateX(-50%);padding:8px;padding-right:48px;background:var(--panel);border-radius:var(--toolbarradius);z-index:2147483640;max-width:80%;}     
             .filmstrip .videowrap {display:flex;max-width:100%;overflow:hidden;overflow-x:auto;}
               .filmstrip .videowrapper {min-width:192px;width:192px;background:black;margin-right:8px;border-radius:calc(var(--toolbarradius) - 6px);overflow:hidden;position:relative;}
@@ -875,8 +880,20 @@
 
                 .videowrapper.offed .pulse {display:block;}
 
-        .screenshare {position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);padding:8px 48px 8px 8px;border-radius:var(--toolbarradius);max-width:50%;width:100%;background:var(--panel);}
-            .screenshare video {border-radius:calc(var(--toolbarradius) - 8px);width:100%;display:block;}
+        .screenshare {position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);padding:0;border-radius:1px;max-width:50%;width:100%;background:var(--panel);box-shadow: 0 4px 20px rgba(0,0,0,.15), 0 12px 30px rgba(0,0,0,.25), 0 20px 40px rgba(0,0,0,.25);z-index:99999999999999;}
+            .screenshare video {width:100%;display:block;}
+
+            .screenshare.fullshare {top:0;left:0;right:0;bottom:0;transform:none;max-width:none;width:auto;box-shadow:none;display:flex;}
+
+            .sscontrols {position:absolute;top:0;left:0;right:0;bottom:0;z-index:4;background:rgba(0,0,0,.54);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity 150ms ease-in-out;}
+                .showcontrols .sscontrols {opacity:1;}
+                    .showcontrols .sscontrols > * {pointer-events:all;}
+                .screencontrols {}
+
+
+            .shareexitfull {display:none;}
+            .fullshare .sharefull {display:none;}
+                .fullshare .shareexitfull {display:flex;}
 
 
         .videocontrols {position:absolute;bottom:0;left:0;display:flex;}
@@ -941,6 +958,9 @@
             .autofollow .btn2 {height: 48px;background: rgba(255, 255, 255, 0.05);display: flex;align-items: center;justify-content: center;font-weight: 600;cursor:pointer;border-radius: calc(var(--toolbarradius) - 6px);}
                 .autofollow .btn2:hover {background:var(--hover);}
                 .autofollow .btn2:active {background:var(--active);}
+
+
+            
             
     </style>
 </head>
@@ -1528,6 +1548,15 @@
             </div>
             <div class="btn" >
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18.6 6.62c-1.44 0-2.8.56-3.77 1.53L12 10.66 10.48 12h.01L7.8 14.39c-.64.64-1.49.99-2.4.99-1.87 0-3.39-1.51-3.39-3.38S3.53 8.62 5.4 8.62c.91 0 1.76.35 2.44 1.03l1.13 1 1.51-1.34L9.22 8.2C8.2 7.18 6.84 6.62 5.4 6.62 2.42 6.62 0 9.04 0 12s2.42 5.38 5.4 5.38c1.44 0 2.8-.56 3.77-1.53l2.83-2.5.01.01L13.52 12h-.01l2.69-2.39c.64-.64 1.49-.99 2.4-.99 1.87 0 3.39 1.51 3.39 3.38s-1.52 3.38-3.39 3.38c-.9 0-1.76-.35-2.44-1.03l-1.14-1.01-1.51 1.34 1.27 1.12c1.02 1.01 2.37 1.57 3.82 1.57 2.98 0 5.4-2.41 5.4-5.38s-2.42-5.37-5.4-5.37z"/></svg>
+            </div>
+        </div>
+
+        <div id=screencontrols class=screencontrols>
+            <div class="sharefull sharesize btn3">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
+            </div>
+            <div class="shareexitfull sharesize btn3">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z"/></svg>
             </div>
         </div>
 
@@ -6318,6 +6347,13 @@
                             
                 var share = document.createElement('div');
                 var video = document.createElement('video');
+                var controls = document.createElement('div');
+                
+                var c = document.getElementById('screencontrols').cloneNode(true);
+
+                c.removeAttribute('id');
+                controls.className = 'sscontrols';
+
                 video.autoplay = true;
                 video.mute = true;
                 video.srcObject = stream;
@@ -6327,7 +6363,10 @@
 
                 share.className = 'screenshare draggable safebounds';
 
+                controls.appendChild(c);
+
                 share.appendChild(video);
+                share.appendChild(controls);
                 document.body.appendChild(share);
 
                 stream.addEventListener('inactive', e => {
@@ -6634,6 +6673,46 @@
 
             return false;
         }
+
+        function sscontrols(e){
+            var s = this.getparent('screenshare');
+            if ( s.timer ){
+                clearTimeout(s.timer);
+                s.timer = null;
+            }
+            
+            if ( s.classList.contains('showcontrols')){
+                s.classList.remove('showcontrols');
+            } else {
+                s.classList.add('showcontrols');
+
+                s.timer = setTimeout(function(){
+                    document.getElementsByClassName('showcontrols').removeclass('showcontrols')
+                }, 2500);
+            }
+        }
+
+        function sharesize(e){
+            var s = this.getparent('screenshare');
+
+            s.classList.toggle('fullshare');
+
+            if ( s.classList.contains('fullshare') ){
+                s.classList.remove('draggable');
+
+                s.dataset.x = s.offsetLeft;
+                s.dataset.y = s.offsetTop;
+                s.style.top = s.style.left = s.style.right = s.style.bottom = 0;
+            } else {
+                s.classList.add('draggable');
+
+                s.style.top = s.dataset.y + 'px';
+                s.style.left = s.dataset.x + 'px';
+                s.style.right = s.style.bottom = 'auto';
+            }
+
+            s.classList.remove('showcontrols');
+        }
         
         // TEST
         function zoomtest(e) {
@@ -6774,6 +6853,11 @@
         Attach.on('click', '.mutemic', mutemic);
 
         Attach.on('click', '.sharescreen', screenshare);
+
+        Attach.on('click', '.screenvideo', sscontrols);
+
+        Attach.on('click', '.sharesize', sharesize);
+
 
         //document.addEventListener('mousewheel', mousescroll, { passive:false });
 
