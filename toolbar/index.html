@@ -3873,7 +3873,7 @@
             d.style.fontSize = window.getComputedStyle(this).fontSize;
 
             d.style.width = 0;
-            
+
             document.body.appendChild(d);
 
             var tw = this.getparent('textwrap');           
@@ -6395,42 +6395,36 @@
                 if ( !!stream ){
                     STREAM = stream;
                     v.srcObject = stream;
+
+                    var context = new AudioContext();
+
+                    var audioInput = context.createMediaStreamSource(stream);
+
+                    var bufferSize = 4096;
+                    var recorder = context.createScriptProcessor(bufferSize, 1, 1);
+
+                    var analyser = context.createAnalyser();
+
+                    analyser.smoothingTimeConstant = 0.8;
+                    analyser.fftSize = 1024;
+
+                    recorder.onaudioprocess = function(e){
+                        var input = e.inputBuffer.getChannelData(0);
+                        var sum = 0;
+                        for (var i = 0; i < input.length; i++) {
+                            sum += input[i] * input[i];
+
+                        }
+                        var instant = Math.sqrt(sum / input.length) * 10;
+                        pulse.style.transform = 'scale(' + instant + ')';
+                    }
+
+                    audioInput.connect(recorder);
+                    analyser.connect(recorder);
+                    recorder.connect(context.destination);
                 } else {
                     r.classList.add('offed');
                 }
-
-                var context = new AudioContext();
-
-                var audioInput = context.createMediaStreamSource(stream);
-
-                var bufferSize = 4096;
-                var recorder = context.createScriptProcessor(bufferSize, 1, 1);
-
-                var analyser = context.createAnalyser();
-
-                analyser.smoothingTimeConstant = 0.8;
-                analyser.fftSize = 1024;
-
-                recorder.onaudioprocess = function(e){
-                    var input = e.inputBuffer.getChannelData(0);
-                    var sum = 0;
-                    for (var i = 0; i < input.length; i++) {
-                        sum += input[i] * input[i];
-
-                    }
-                    var instant = Math.sqrt(sum / input.length) * 10;
-
-                    //console.log(instant);
-
-                    pulse.style.transform = 'scale(' + instant + ')';
-
-                    // pulse.style.opacity = Math.min(0.2 * (instant), 0.2);
-                }
-
-                audioInput.connect(recorder);
-                analyser.connect(recorder);
-                recorder.connect(context.destination);
-
 
                 var names = ['Daniel Desario','Lindsay Weir','Ken Miller','Nick Andopolis','Kim Kelly','Bill Haverchuck','Sam Weir','Neal Schweiber','Harold Weir','Jean Weir','Jeff Rosso','Cindy Sanders','Millie Kentner','Frank Kowchevski','Alan White','Gordon Crisp','Herbert the mascot','Coach Ben Fredricks','Eli','Maureen Sampson'];
 
