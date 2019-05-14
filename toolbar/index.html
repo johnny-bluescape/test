@@ -4431,15 +4431,17 @@
         function colormenu(e){
             e.preventDefault();
             e.stopPropagation();
+
             var c = this.getparent('contextpanel') || this.getparent('permapanel');
             var o = c.classList.contains('opened');
+            
             if ( o ){
                 return;
             }
 
             var shell = this.dataset.menu;
 
-            if ( this.classList.contains('morebtn')){
+            if ( this.classList.contains('morebtn') ){
                 shell = 'moremenu';
             }
 
@@ -4456,6 +4458,7 @@
 
             var tool = this.getparent('tool') ? ' toolmenu' : '';
             var xx = false;
+            
             if ( tool ){
                 p.style.position = 'fixed';
                 xx = true;
@@ -4511,7 +4514,6 @@
                 var ma = Number(bw.dataset.max);
                 var mi = Number(bw.dataset.min);
 
-
                 var br = Number(rec.dataset.border) || Number(com.borderWidth.replace('px', '')) || 0;
 
                 sv.innerText = br;
@@ -4522,7 +4524,7 @@
                 var lx = Math.max((bw.offsetWidth - 32) * z, 4);
 
                 kn.style.left = lx + 'px';
-                kn.style.transform = 'translateY(-50%) scale(' + scale +')';
+                kn.style.transform = 'translateY(-50%) scale(' + scale + ')';
 
                 bw.dataset.x = lx;
 
@@ -4720,12 +4722,12 @@
                 }, 10);
             }
 
-            var xx = c.getElementsByClassName('option');
+            var xxo = c.getElementsByClassName('option');
 
-            var l = xx.length - 1;
-            var o = xx[0];
+            var l = xxo.length - 1;
+            var o = xxo[0];
 
-            var ox = -(c.offsetWidth - xx[l].offsetWidth);
+            var ox = -(c.offsetWidth - xxo[l].offsetWidth);
 
             var o2 = o.getparent('optionwrap');
 
@@ -4753,7 +4755,7 @@
             var st = window.pageYOffset || document.documentElement.scrollTop;
             //var sl = window.pageXOffset || document.documentElement.scrollLeft;
 
-            if( xx ){
+            if ( xx ){
                 st = 0;
             }
 
