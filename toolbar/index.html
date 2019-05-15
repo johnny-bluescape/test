@@ -364,7 +364,8 @@
         .type_tool canvas, .type_tool {cursor:text !important;}
 
         .textwrap {position:absolute;cursor: -webkit-grab;cursor:grab;}
-        .textarea {cursor: default;user-select:none;padding:0;resize:none;border-radius:4px;position:relative;min-width:48px;height:100%;min-height:28px;z-index:1337;background:transparent;border:none;color:white;font-size:24px;width:100%;max-width: 100%;box-sizing: border-box;padding: 12px;pointer-events:none;overflow-y: auto;}
+            .textarea {cursor: default;user-select:none;padding:0;resize:none;border-radius:4px;position:relative;min-width:48px;height:100%;min-height:28px;z-index:1337;background:transparent;border:none;color:white;font-size:24px;width:100%;max-width: 100%;box-sizing: border-box;padding: 12px;pointer-events:none;overflow-y: auto;display:block;line-height:1.2;}
+
             .textwrap:not(.current):hover {box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);}
 
             /* .current .textarea {box-shadow:0 0 0 var(--selectwidth) var(--select);user-select:text;cursor:text;pointer-events:all;} */
@@ -3792,7 +3793,7 @@
             w.style.top = y - 24 + 'px';
             w.style.left = x + 'px';
             // t.style.width = TEXTSIZE * 2 + 'px';
-            // t.style.height = TEXTSIZE + 12 + 'px';
+             t.style.height = (TEXTSIZE * 1.2) + 24 + 'px';
             w.style.zIndex = 1337;
 
             var ops = document.getElementById('text_context').cloneNode(true);
@@ -6357,7 +6358,7 @@
                 controls.className = 'sscontrols';
 
                 video.autoplay = true;
-                video.mute = true;
+                video.muted = true;
                 video.srcObject = stream;
                 video.className = 'screenvideo';
                 
@@ -6424,6 +6425,7 @@
 
                 v.autoplay = true;
                 v.playsinline = true;
+                v.muted = true;
 
                 vc = vc.cloneNode(true);
                 vc.removeAttribute('id');
