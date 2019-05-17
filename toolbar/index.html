@@ -961,9 +961,9 @@
                 .autofollow .btn2:active {background:var(--active);}
 
         .btnwrap {display:flex;margin:0 0 12px 8px;}
-            .textbtn {color:#555;height:36px;border-radius:6px;padding:0 16px;text-transform:uppercase;font-size: 13px;margin-right:12px;background:rgba(0,0,0,.1);display:inline-flex;align-items: center;justify-content: center;font-weight: 600;cursor:pointer;}
-                .textbtn:hover {background:rgba(0,0,0,.15);color:#444;}
-                .textbtn:active {background:rgba(0,0,0,.2);}
+            .textbtn {color:#555;height:36px;border-radius:6px;padding:0 16px;transition:all 150ms ease-in-out;text-transform:uppercase;font-size: 13px;margin-right:12px;background:rgba(0,0,0,.1);display:inline-flex;align-items: center;justify-content: center;font-weight: 600;cursor:pointer;}
+                .textbtn:hover {background:rgba(0,0,0,.15);color:#333;}
+                .textbtn:active {background:rgba(0,0,0,.2);color:#222;}
             
     </style>
 </head>
@@ -2140,17 +2140,18 @@
         USERNAME = 'Dave';
 
         DEFAULTS = {};
+        HASH = 't@';
 
         function save2(){
             var css = savejson();
-
             console.log(css);
-
             css = JSON.stringify(css);
 
-            console.log(btoa(css));
+            location.hash = HASH + btoa(css);
+        }
 
-            location.hash = 'tweak=' + btoa(css);
+        function autosave(){
+            save2(); // comment out to disable
         }
 
         function savejson(){
@@ -2166,22 +2167,18 @@
                 if ( r ){
                     var v = r.checked;
                     var id = r.dataset.tweak;
-                    console.log(v, 'toggle');
-                    css[id] = v;
-                    //css.append({id : r.dataset.id, checked: v});
 
+                    css[id] = v;
                 } else if ( tt ){
                     var v = tt.value;
                     var id = tt.dataset.tweak;
                     
                     css[id] = v;
-                    // css.append({id : tt.dataset.id, value: v});
                 } else if ( c ){
                     var v = c.value;
                     var id = c.dataset.tweak;
                     
                     css[id] = v;
-                    // css.append({id : c.dataset.id, color: v});
                 }
 
             }
@@ -2198,7 +2195,7 @@
         function reset(){
             loadhash2(DEFAULTS);
 
-            location.hash = '';
+            location.hash = 'reset';
         }
 
         function loadhash2(x){
@@ -2206,21 +2203,17 @@
             if ( !x ){
                 var hash = location.hash;
 
-                if ( hash.indexOf('tweak=') < 0 ){
+                if ( hash.indexOf('#tweak=') < 0 && hash.indexOf('#' + HASH) < 0 ){
                     return;
                 }
 
-                hash = hash.replace('#tweak=', '');
+                hash = hash.replace('#tweak=', '').replace('#' + HASH, '');
                 json = atob(hash);
 
                 console.log(json);
 
                 json = JSON.parse(json);
             }
-            
-
-            console.log(json, json.a1);
-
 
             var tweaks = document.getElementsByClassName('tweak');
 
@@ -2339,7 +2332,7 @@
             var css = ':root{ --tool: ' + v + ';';//
             
             css += '--toolhover: ' + hover + ';';
-            css += '--toolpress: ' + press + ';--toolselect: ' + press + ';--toolselect3: ' + hover + ';--panel: ' + press + ';--toolselect2: ' + pressed + ';';
+            css += '--toolpress: ' + hover + ';--toolselect: ' + hover + ';--toolselect3: ' + hover + ';--panel: ' + hover + ';--toolselect2: ' + pressed + ';';
             // css += '--ui: ' + rgb[0] + ',' + rgb[1] + ',' + rgb[2];
             css += '}';
 
@@ -2351,7 +2344,7 @@
 
             iconcolor.call(document.getElementById('iconcolor'), e);
 
-            save2();
+            autosave();
         }
 
         function hsv2hsl(hsv) {
@@ -2423,7 +2416,7 @@
 
             document.head.appendChild(s);
 
-            save2();
+            autosave();
         }
 
         function canvascolor(e){
@@ -2468,7 +2461,7 @@
                 document.body.classList.remove('darkgrid');
             }
 
-            save2();
+            autosave();
         }
 
         function selectioncolor(e){
@@ -2492,7 +2485,7 @@
 
             document.head.appendChild(s);
 
-            save2();
+            autosave();
         }
 
         function toolselectioncolor(e){
@@ -2516,7 +2509,7 @@
 
             document.head.appendChild(s);
 
-            save2();
+            autosave();
         }
 
         function handlecolor(e){
@@ -2540,7 +2533,7 @@
 
             document.head.appendChild(s);
 
-            save2();
+            autosave();
         }
 
         function handlegap(e){
@@ -2564,7 +2557,7 @@
 
             document.head.appendChild(s);
 
-            save2();
+            autosave();
         }
 
         function tweakedtools(e){
@@ -2610,7 +2603,7 @@
 
             console.log(v);
 
-            save2();
+            autosave();
         }
 
         function luminanace(rgb) {
@@ -3593,7 +3586,7 @@
 
             // document.documentElement.classList.toggle(v);
 
-            save2();
+            autosave();
         }
 
         function sliderhandler(e){
@@ -6383,7 +6376,7 @@
             l.empty();
             l.appendChild(document.createTextNode(v));
 
-            save2();
+            autosave();
         }
 
         function dotspacing(e){
@@ -6491,7 +6484,7 @@
                 document.body.appendChild(t);
             }
 
-            save2();
+            autosave();
         }
 
         function resetzoom(e){
