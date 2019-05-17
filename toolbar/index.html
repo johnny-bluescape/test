@@ -20,7 +20,7 @@
 
 -->
 <!doctype html>
-<html class=hidebrush>
+<html class="">
 <head>
     <meta charset=utf-8>
     <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1">
@@ -587,9 +587,9 @@
                 .shapemenu .minishape:last-child {margin-right:0;}
 
             #brush_context {opacity:0;pointer-events:none;top:auto !important;}
-            .brush_tool #brush_context {opacity:1;pointer-events:all;bottom:24px;left:24px;top:auto !important;transform:translateY(0);}
+            .brush_tool #brush_context {opacity:0 !important;pointer-events:none  !important;bottom:24px;left:24px;top:auto !important;transform:translateY(0);}
             
-            .hidebrush #brush_context {opacity:0 !important;pointer-events:none !important;}
+            .hidebrush #brush_context {opacity:1 !important;pointer-events:all  !important;}
         
         .canvaslabel {position: absolute;top:-28px;left:-2px;padding:3px 0 4px;background:;color:white;border-radius:6px;white-space:nowrap;font-size:14px;font-weight:500;transition:all 150ms ease-in-out;}
             .current .canvaslabel {background:;}
@@ -2059,10 +2059,10 @@
                 <div class=label><span>Icon Color - <span id=iconcontrast></span></span><div class=value></div></div>
                 <input type=color id=iconcolor onchange="iconcolor.call(this,event)" data-tweak=a28 class=colortweak value="#BBBBBB" />
             </div>
-            <div class=tweak>
+            <!-- <div class=tweak>
                 <div class=label><span>Tool Selection Color </span><div class=value></div></div>
                 <input type=color onchange="toolselectioncolor.call(this,event)" data-tweak=a29 class=colortweak value="#1b1b1c" />
-            </div>
+            </div> -->
 
         </div>
     </div>
