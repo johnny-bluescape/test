@@ -960,8 +960,10 @@
                 .autofollow .btn2:hover {background:var(--hover);}
                 .autofollow .btn2:active {background:var(--active);}
 
-
-            
+        .btnwrap {display:flex;margin:0 0 12px 8px;}
+            .textbtn {color:#555;height:36px;border-radius:6px;padding:0 16px;text-transform:uppercase;font-size: 13px;margin-right:12px;background:rgba(0,0,0,.1);display:inline-flex;align-items: center;justify-content: center;font-weight: 600;cursor:pointer;}
+                .textbtn:hover {background:rgba(0,0,0,.15);color:#444;}
+                .textbtn:active {background:rgba(0,0,0,.2);}
             
     </style>
 </head>
@@ -1937,125 +1939,129 @@
     </div>
     <div id=tweaks>
         <h4>Tweaks </h4>
-        <div class=tweak>
-            <label><input type=checkbox value=light class=tweakr /><div class=toggle></div> Light</label>
+        <div class=btnwrap>
+            <!-- <div class=textbtn onclick="save2()">Save</div> -->
+            <div class=textbtn onclick="reset()">Reset</div>
         </div>
+        <!-- <div class=tweak>
+            <label><input type=checkbox value=light class=tweakr data-tweak=a1 /><div class=toggle></div> Light</label>
+        </div> -->
         <div class=tweak>
-            <label><input type=checkbox value=ui2 id=ui2t class=tweakr onchange="document.getElementById('ui3t').checked=false;" /><div class=toggle></div> Solid Toolbar</label>
+            <label><input type=checkbox value=ui2 id=ui2t class=tweakr data-tweak=a2 onchange="document.getElementById('ui3t').checked=false;" /><div class=toggle></div> Solid Toolbar</label>
         </div>
 
         <div class=tweak>
-            <label><input type=checkbox value=horizontal id=hui class=tweakr onchange="document.getElementById('ui3t').checked=false;" /><div class=toggle></div> Horizontal Toolbar</label>
+            <label><input type=checkbox value=horizontal id=hui class=tweakr data-tweak=a3 onchange="document.getElementById('ui3t').checked=false;" /><div class=toggle></div> Horizontal Toolbar</label>
         </div>
 
         <div class=tweak>
-            <label><input type=checkbox value=ui3 id=ui3t class=tweakr onchange="document.getElementById('ui2t').checked=false;document.getElementById('hui').checked=false;" /><div class=toggle></div> Horizontal Bar 2</label>
+            <label><input type=checkbox value=ui3 id=ui3t class=tweakr data-tweak=a4 onchange="document.getElementById('ui2t').checked=false;document.getElementById('hui').checked=false;" /><div class=toggle></div> Horizontal Bar 2</label>
         </div>
 
         <!-- <div class=tweak>
             <label><input type=checkbox value=ui4 id=ui4t class=tweakr onchange="" /><div class=toggle></div> UI 4</label>
         </div> -->
 
+        <!-- <div class=tweak>
+            <label><input type=checkbox value=advanced class=tweakr data-tweak=a5 /><div class=toggle></div> Advanced Panel</label>
+        </div> -->
+
+        <!-- <div class=tweak>
+            <label><input type=checkbox value=insert class=tweakr data-tweak=a6 /><div class=toggle></div> Insert</label>
+        </div> -->
+
         <div class=tweak>
-            <label><input type=checkbox value=advanced class=tweakr /><div class=toggle></div> Advanced Panel</label>
+            <label><input type=checkbox value=grid class=tweakr id=bggrid data-tweak=a7 onchange="document.getElementById('bgdots').checked=false;" /><div class=toggle></div> Grid</label>
         </div>
 
         <div class=tweak>
-            <label><input type=checkbox value=insert class=tweakr /><div class=toggle></div> Insert</label>
+            <label><input type=checkbox value=dotgrid class=tweakr id=bgdots data-tweak=a8 onchange="document.getElementById('bggrid').checked=false;" /><div class=toggle></div> Dot Grid</label>
         </div>
 
         <div class=tweak>
-            <label><input type=checkbox value=grid class=tweakr id=bggrid onchange="document.getElementById('bgdots').checked=false;" /><div class=toggle></div> Grid</label>
+            <label><input type=checkbox value=highlight class=tweakr data-tweak=a9 /><div class=toggle></div> Grid Markers</label>
         </div>
 
         <div class=tweak>
-            <label><input type=checkbox value=dotgrid class=tweakr id=bgdots onchange="document.getElementById('bggrid').checked=false;" /><div class=toggle></div> Dot Grid</label>
-        </div>
-
-        <div class=tweak>
-            <label><input type=checkbox value=highlight class=tweakr /><div class=toggle></div> Grid Markers</label>
-        </div>
-
-        <div class=tweak>
-            <label><input type=checkbox value=hidebrush class=tweakr /><div class=toggle></div> Brush Context</label>
+            <label><input type=checkbox value=hidebrush class=tweakr data-tweak=a10 /><div class=toggle></div> Brush Context</label>
         </div>
 
         <div class=tweaked>
             <div class=tweak>
                 <div class=label><span>Grid Size</span><div class=value>48</div></div>
-                <input type=range class=tooltweak min=24 max=960 value=48 step=12 data-id=grid oninput="gridtweak.call(this, event)" />
+                <input type=range class=tooltweak min=24 max=960 value=48 data-tweak=a11 step=12 data-id=grid oninput="gridtweak.call(this, event)" />
             </div>
             <div class=tweak>
                 <div class=label><span>Grid Opacity</span><div class=value>125</div></div>
-                <input type=range class=tooltweak min=1 max=1000 value=125 data-id=gridopacity oninput="tweakedtools.call(this, event)" />
+                <input type=range class=tooltweak min=1 max=1000 value=125 data-tweak=a12 data-id=gridopacity oninput="tweakedtools.call(this, event)" />
             </div>
             <div class=tweak>
                 <div class=label><span>Toolbar Button Size</span><div class=value>60</div></div>
-                <input type=range class=tooltweak min=16 max=76 value=60 step=4 data-id=toolbtn oninput="tweakedtools.call(this, event)" />
+                <input type=range class=tooltweak min=16 max=76 value=60 step=4 data-tweak=a13 data-id=toolbtn oninput="tweakedtools.call(this, event)" />
             </div>
             <div class=tweak>
                 <div class=label><span>Toolbar Button Gap</span><div class=value>12</div></div>
-                <input type=range class=tooltweak min=-4 max=32 value=12 step=2 data-id=toolgap oninput="tweakedtools.call(this, event)" />
+                <input type=range class=tooltweak min=-4 max=32 value=12 step=2 data-tweak=a14 data-id=toolgap oninput="tweakedtools.call(this, event)" />
             </div>
             <div class=tweak>
                 <div class=label><span>Toolbar Button Radius</span><div class=value>50</div></div>
-                <input type=range class=tooltweak min=0 max=50 value=50 step=2 data-id=toolradius oninput="tweakedtools.call(this, event)" />
+                <input type=range class=tooltweak min=0 max=50 value=50 step=2 data-tweak=a15 data-id=toolradius oninput="tweakedtools.call(this, event)" />
             </div>
             <div class=tweak>
                 <div class=label><span>Tool Panel Radius</span><div class=value>12</div></div>
-                <input type=range class=tooltweak min=0 max=32 value=12 step=2 data-id=toolbarradius oninput="tweakedtools.call(this, event)" />
+                <input type=range class=tooltweak min=0 max=32 value=12 step=2 data-tweak=a16 data-id=toolbarradius oninput="tweakedtools.call(this, event)" />
             </div>
             <div class=tweak>
                 <div class=label><span>Toolbar Icon Scale</span><div class=value>52</div></div>
-                <input type=range class=tooltweak min=0 max=100 value=52 step=2 data-id=toolicons oninput="tweakedtools.call(this, event)" />
+                <input type=range class=tooltweak min=0 max=100 value=52 step=2 data-tweak=a17 data-id=toolicons oninput="tweakedtools.call(this, event)" />
             </div>
             <div class=tweak>
                 <div class=label><span>Selection Gap</span><div class=value>0</div></div>
-                <input type=range class=tooltweak min=0 max=24 value=0 step=1 data-id=selectgap oninput="tweakedtools.call(this, event)" />
+                <input type=range class=tooltweak min=0 max=24 value=0 step=1 data-tweak=a18 data-id=selectgap oninput="tweakedtools.call(this, event)" />
             </div>
             <div class=tweak>
                 <div class=label><span>Selection Thickness</span><div class=value>2</div></div>
-                <input type=range class=tooltweak min=1 max=4 value=2 step=1 data-id=selectwidth oninput="tweakedtools.call(this, event)" />
+                <input type=range class=tooltweak min=1 max=4 value=2 step=1 data-tweak=a19 data-id=selectwidth oninput="tweakedtools.call(this, event)" />
             </div>
             <div class=tweak>
                 <div class=label><span>Selection White Inlay</span><div class=value></div></div>
-                <label style="padding:0;"><input type=checkbox class=tweakr value="selectwhite" id=selectwhite onchange="document.getElementById('selectblack').checked=false;" /><div class=toggle></div> </label>
+                <label style="padding:0;"><input type=checkbox class=tweakr data-tweak=a20 value="selectwhite" id=selectwhite onchange="document.getElementById('selectblack').checked=false;" /><div class=toggle></div> </label>
             </div>
             <div class=tweak>
                 <div class=label><span>Selection Black Inlay</span><div class=value></div></div>
-                <label style="padding:0;"><input type=checkbox class=tweakr value="selectblack" id=selectblack onchange="document.getElementById('selectwhite').checked=false;" /><div class=toggle></div> </label>
+                <label style="padding:0;"><input type=checkbox class=tweakr value="selectblack" data-tweak=a21 id=selectblack onchange="document.getElementById('selectwhite').checked=false;" /><div class=toggle></div> </label>
             </div>
             <div class=tweak>
                 <div class=label><span>Handle Spacing</span><div class=value>-4</div></div>
-                <input type=range class=tooltweak min=-24 max=24 value=-4 step=2 data-id=handlegap oninput="tweakedtools.call(this, event)" />
+                <input type=range class=tooltweak min=-24 max=24 value=-4 step=2 data-tweak=a22 data-id=handlegap oninput="tweakedtools.call(this, event)" />
             </div>
             <div class=tweak>
                 <div class=label><span>Handle Size</span><div class=value>8</div></div>
-                <input type=range class=tooltweak min=4 max=24 value=8 step=2 data-id=handlesize oninput="tweakedtools.call(this, event)" />
+                <input type=range class=tooltweak min=4 max=24 value=8 step=2 data-tweak=a23 data-id=handlesize oninput="tweakedtools.call(this, event)" />
             </div>
             <div class=tweak>
                 <div class=label><span>Toolbar Color</span><div class="value"></div></div>
-                <input type=color id=toolbarhex onchange="toolbarcolor.call(this,event)" value="#282931" />
+                <input type=color id=toolbarhex onchange="toolbarcolor.call(this,event)" data-tweak=a24 class=colortweak value="#282931" />
             </div>
             <div class=tweak>
                 <div class=label><span>Workspace Color</span><div class=value></div></div>
-                <input type=color onchange="canvascolor.call(this,event)" value="#323440" />
+                <input type=color onchange="canvascolor.call(this,event)" data-tweak=a25 class=colortweak value="#323440" />
             </div>
             <div class=tweak>
                 <div class=label><span>Selection Color</span><div class=value></div></div>
-                <input type=color onchange="selectioncolor.call(this,event)" value="#00CEFF" />
+                <input type=color onchange="selectioncolor.call(this,event)" data-tweak=a26 class=colortweak value="#00CEFF" />
             </div>
             <div class=tweak>
                 <div class=label><span>Handle Color</span><div class=value></div></div>
-                <input type=color onchange="handlecolor.call(this,event)" value="#00CEFF" />
+                <input type=color onchange="handlecolor.call(this,event)" data-tweak=a27 class=colortweak value="#00CEFF" />
             </div>
             <div class=tweak>
                 <div class=label><span>Icon Color - <span id=iconcontrast></span></span><div class=value></div></div>
-                <input type=color id=iconcolor onchange="iconcolor.call(this,event)" value="#BBBBBB" />
+                <input type=color id=iconcolor onchange="iconcolor.call(this,event)" data-tweak=a28 class=colortweak value="#BBBBBB" />
             </div>
             <div class=tweak>
                 <div class=label><span>Tool Selection Color </span><div class=value></div></div>
-                <input type=color onchange="toolselectioncolor.call(this,event)" value="#1b1b1c" />
+                <input type=color onchange="toolselectioncolor.call(this,event)" data-tweak=a29 class=colortweak value="#1b1b1c" />
             </div>
 
         </div>
@@ -2133,6 +2139,163 @@
         STREAM = null;
         USERNAME = 'Dave';
 
+        DEFAULTS = {};
+
+        function save2(){
+            var css = savejson();
+
+            console.log(css);
+
+            css = JSON.stringify(css);
+
+            console.log(btoa(css));
+
+            location.hash = 'tweak=' + btoa(css);
+        }
+
+        function savejson(){
+            var tweaks = document.getElementsByClassName('tweak');
+            var css = {};
+
+            for (var i=0;i < tweaks.length;i++){
+                var t = tweaks[i];
+                var r = t.getElementsByClassName('tweakr')[0];
+                var tt = t.getElementsByClassName('tooltweak')[0];
+                var c = t.getElementsByClassName('colortweak')[0];
+
+                if ( r ){
+                    var v = r.checked;
+                    var id = r.dataset.tweak;
+                    console.log(v, 'toggle');
+                    css[id] = v;
+                    //css.append({id : r.dataset.id, checked: v});
+
+                } else if ( tt ){
+                    var v = tt.value;
+                    var id = tt.dataset.tweak;
+                    
+                    css[id] = v;
+                    // css.append({id : tt.dataset.id, value: v});
+                } else if ( c ){
+                    var v = c.value;
+                    var id = c.dataset.tweak;
+                    
+                    css[id] = v;
+                    // css.append({id : c.dataset.id, color: v});
+                }
+
+            }
+
+            return css;
+        }
+
+        function presave(){
+            var css = savejson();
+
+            DEFAULTS = css;
+        }
+
+        function reset(){
+            loadhash2(DEFAULTS);
+
+            location.hash = '';
+        }
+
+        function loadhash2(x){
+            json = x;
+            if ( !x ){
+                var hash = location.hash;
+
+                if ( hash.indexOf('tweak=') < 0 ){
+                    return;
+                }
+
+                hash = hash.replace('#tweak=', '');
+                json = atob(hash);
+
+                console.log(json);
+
+                json = JSON.parse(json);
+            }
+            
+
+            console.log(json, json.a1);
+
+
+            var tweaks = document.getElementsByClassName('tweak');
+
+            for (var i=0;i < tweaks.length;i++){
+                var t = tweaks[i];
+                var r = t.getElementsByClassName('tweakr')[0];
+                var tt = t.getElementsByClassName('tooltweak')[0];
+                var c = t.getElementsByClassName('colortweak')[0];
+
+                if ( r ){
+                    var id = r.dataset.tweak;
+                    var v = json[id];
+                    console.log(v);
+                    if( v != undefined ){ //presave
+                        console.log(v, 'GRRRR--');
+                        r.checked = v;
+
+                        tweak.call(r);
+                        //r.onchange();
+                    }
+                } else if ( tt ){
+                    var id = tt.dataset.tweak;
+                    var v = json[id];
+                    if( v != undefined ){
+                        tt.value = v;
+
+                        tt.oninput();
+                    }
+                } else if ( c ){
+                    var id = c.dataset.tweak;
+                    var v = json[id];
+                    if( v != undefined ){
+                        console.log(v, 'GRRRR--2222');
+                        c.value = v;
+
+                        c.onchange();
+                    }
+                }
+
+            }
+        }
+
+        function save(){
+            var styles = document.getElementsByClassName('tweaked_style');
+            var css = '';
+
+            for (var i=0;i < styles.length;i++){
+                var s = styles[i];
+                css += s.innerText;
+            }
+
+            console.log(css);
+            console.log(btoa(css));
+
+            location.hash = 'styles=' + btoa(css);
+        }
+
+        function loadhash(){
+            var hash = location.hash;
+
+            if ( hash.indexOf('styles=') < 0 ){
+                return;
+            }
+
+            hash = hash.replace('#styles=', '');
+            var css = atob(hash);
+            console.log(css);
+
+            var s = document.createElement('style');
+            s.className = 'hashcss';
+            s.innerText = css;
+
+            document.head.appendChild(s);
+        }
+
         function toolbarcolor(e){
             var n = 'tweaked_toolbar';
             var o = document.head.getElementsByClassName(n);
@@ -2171,7 +2334,7 @@
             var pressed = 'hsl(' + hsl[0] + ',' + hsl2[1] + '%,' + hsl2[2] + '%)';
 
             var s = document.createElement('style');
-            s.className = n;
+            s.className = n + ' tweaked_style';
 
             var css = ':root{ --tool: ' + v + ';';//
             
@@ -2187,6 +2350,8 @@
             console.log(v);
 
             iconcolor.call(document.getElementById('iconcolor'), e);
+
+            save2();
         }
 
         function hsv2hsl(hsv) {
@@ -2248,7 +2413,7 @@
             var current = 'hsl(' + hsl[0] + ',' + hsl[1] + '%,' + (Number(hsl[2]) + l) + '%)';
 
             var s = document.createElement('style');
-            s.className = n;
+            s.className = n + ' tweaked_style';
 
             var css = ':root{ --icon: ' + v + ';';
             css += '--iconcurrent: ' + current + ';';
@@ -2257,6 +2422,8 @@
             s.appendChild(document.createTextNode(css));
 
             document.head.appendChild(s);
+
+            save2();
         }
 
         function canvascolor(e){
@@ -2272,7 +2439,7 @@
             av.appendChild(document.createTextNode(v));
 
             var s = document.createElement('style');
-            s.className = n;
+            s.className = n + ' tweaked_style';
             
             var css = ':root{--canvas: ' + v + ';}';
 
@@ -2300,6 +2467,8 @@
             } else {
                 document.body.classList.remove('darkgrid');
             }
+
+            save2();
         }
 
         function selectioncolor(e){
@@ -2315,13 +2484,15 @@
             av.appendChild(document.createTextNode(v));
 
             var s = document.createElement('style');
-            s.className = n;
+            s.className = n + ' tweaked_style';
             
             var css = ':root{--select: ' + v + ';}';
 
             s.appendChild(document.createTextNode(css));
 
             document.head.appendChild(s);
+
+            save2();
         }
 
         function toolselectioncolor(e){
@@ -2337,13 +2508,15 @@
             av.appendChild(document.createTextNode(v));
 
             var s = document.createElement('style');
-            s.className = n;
+            s.className = n + ' tweaked_style';
             
             var css = ':root{--toolselect2: ' + v + ';}';
 
             s.appendChild(document.createTextNode(css));
 
             document.head.appendChild(s);
+
+            save2();
         }
 
         function handlecolor(e){
@@ -2359,13 +2532,15 @@
             av.appendChild(document.createTextNode(v));
 
             var s = document.createElement('style');
-            s.className = n;
+            s.className = n + ' tweaked_style';
             
             var css = ':root{--handlecolor: ' + v + ';}';
 
             s.appendChild(document.createTextNode(css));
 
             document.head.appendChild(s);
+
+            save2();
         }
 
         function handlegap(e){
@@ -2381,13 +2556,15 @@
             av.appendChild(document.createTextNode(v));
 
             var s = document.createElement('style');
-            s.className = n;
+            s.className = n + ' tweaked_style';
             
             var css = ':root{--handlegap: ' + v + 'px;}';
 
             s.appendChild(document.createTextNode(css));
 
             document.head.appendChild(s);
+
+            save2();
         }
 
         function tweakedtools(e){
@@ -2398,7 +2575,7 @@
             var t = document.getElementsByClassName('tooltweak');
 
             var s = document.createElement('style');
-            s.className = n;
+            s.className = n + ' tweaked_style';
             var css = ':root{';
 
             for(var i=0;i<t.length;i++){
@@ -2432,6 +2609,8 @@
             document.head.appendChild(s);
 
             console.log(v);
+
+            save2();
         }
 
         function luminanace(rgb) {
@@ -3381,24 +3560,40 @@
 
         function tweak(e){
             var v = this.value;
-            console.log(v);
-            if ( v == 'ui3' ){
-                document.documentElement.classList.remove('ui2');
-                document.documentElement.classList.remove('horizontal');
-            } else if ( v == 'ui2' ){
-                document.documentElement.classList.remove('ui3');
-            } else if ( v == 'horizontal' ){
-                document.documentElement.classList.remove('ui3');
-            } else if ( v == 'dotgrid' ){
-                document.documentElement.classList.remove('grid');
-            } else if ( v == 'grid' ){
-                document.documentElement.classList.remove('dotgrid');
-            } else if ( v == 'selectblack'){
-                document.documentElement.classList.remove('selectwhite');
-            } else if ( v == 'selectwhite'){
-                document.documentElement.classList.remove('selectblack');
+
+            if ( this.checked ){
+                document.documentElement.classList.add(v);
+
+                if ( v == 'ui3' ){
+                    document.documentElement.classList.remove('ui2');
+                    document.documentElement.classList.remove('horizontal');
+                    document.getElementById('ui2t').checked=false;
+                    document.getElementById('hui').checked=false;
+                } else if ( v == 'ui2' ){
+                    document.documentElement.classList.remove('ui3');
+                    document.getElementById('ui3t').checked=false;
+                } else if ( v== 'hui'){
+                    document.getElementById('ui3t').checked=false;
+                } else if ( v == 'horizontal' ){
+                    document.documentElement.classList.remove('ui3');
+                } else if ( v == 'dotgrid' ){
+                    document.documentElement.classList.remove('grid');
+                    document.getElementById('bggrid').checked=false;
+                } else if ( v == 'grid' ){
+                    document.documentElement.classList.remove('dotgrid');
+                    document.getElementById('bgdots').checked=false;
+                } else if ( v == 'selectblack'){
+                    document.documentElement.classList.remove('selectwhite');
+                } else if ( v == 'selectwhite'){
+                    document.documentElement.classList.remove('selectblack'); 
+                }
+            } else {
+                document.documentElement.classList.remove(v);
             }
-            document.documentElement.classList.toggle(v);
+
+            // document.documentElement.classList.toggle(v);
+
+            save2();
         }
 
         function sliderhandler(e){
@@ -6170,7 +6365,7 @@
             o.remove();
 
             var s = document.createElement('style');
-            s.className = n;
+            s.className = n + ' tweaked_style';
 
             var css = ':root{ --dotgrid: ' + dotgrid2 + 'px; --grid: ' + dotgrid2 + 'px;}';
 
@@ -6187,6 +6382,8 @@
 
             l.empty();
             l.appendChild(document.createTextNode(v));
+
+            save2();
         }
 
         function dotspacing(e){
@@ -6254,7 +6451,7 @@
             o.remove();
 
             var s = document.createElement('style');
-            s.className = n;
+            s.className = n + ' tweaked_style';
 
             var css = ':root{ --dotgrid: ' + dotgrid2 + 'px; --grid: ' + dotgrid2 + 'px;}';
 
@@ -6294,6 +6491,7 @@
                 document.body.appendChild(t);
             }
 
+            save2();
         }
 
         function resetzoom(e){
@@ -6876,6 +7074,9 @@
         screenrez();
         window.scrollTo( 200, 200 );
         window.addEventListener('mousewheel', dotspacing, { passive: false });
+
+        presave();
+        loadhash2();
 
     </script>
 </body>
