@@ -262,7 +262,7 @@
 
             #tweaks h4 {padding: 8px 8px 12px;font-weight: 600;}
 
-        .ui2 .tools {background:var(--toolselect);box-shadow:0 3px 40px var(--shadow);padding:0 0 0;border-radius:var(--toolbarradius);}
+        .ui2 .tools {background:var(--toolselect);box-shadow:0 3px 40px var(--shadow);padding:0 0 0;border-radius:var(--toolbarradius);pointer-events:all;}
             .ui2 .tools::after {content:'';display:block;clear:both;}
 
             
@@ -1947,6 +1947,9 @@
             <label><input type=checkbox value=light class=tweakr data-tweak=a1 /><div class=toggle></div> Light</label>
         </div> -->
         <div class=tweak>
+            <label><input type=checkbox value=debug id=debug class=tweakr data-tweak=a00 /><div class=toggle></div> Debug</label>
+        </div>
+        <div class=tweak>
             <label><input type=checkbox value=ui2 id=ui2t class=tweakr data-tweak=a2 onchange="document.getElementById('ui3t').checked=false;" /><div class=toggle></div> Solid Toolbar</label>
         </div>
 
@@ -2147,7 +2150,13 @@
             console.log(css);
             css = JSON.stringify(css);
 
-            location.hash = HASH + btoa(css);
+            var extra = '';
+
+            if ( document.documentElement.classList.contains('debug') ){
+                extra = '&debug';
+            }
+
+            location.hash = HASH + btoa(css) + extra;
         }
 
         function autosave(){
@@ -2198,23 +2207,49 @@
             location.hash = 'reset';
         }
 
-        function loadhash2(x){
-            json = x;
-            if ( !x ){
-                var hash = location.hash;
+        function parsehash(){
+            var hash = location.hash;
 
-                if ( hash.indexOf('#tweak=') < 0 && hash.indexOf('#' + HASH) < 0 ){
-                    return;
-                }
-
-                hash = hash.replace('#tweak=', '').replace('#' + HASH, '');
-                json = atob(hash);
-
-                console.log(json);
-
-                json = JSON.parse(json);
+            if ( !hash || hash == '' ){
+                return;
             }
 
+            hash = hash.replace('#', '');
+
+            var hashes = hash.split('&');
+
+            console.log(hash, hashes)
+
+            var debug = false;
+
+            for(var i =0;i<hashes.length;i++){
+                var h = hashes[i];
+
+                var k = h.split('@');
+                var v = k[1];
+                k = k[0];
+
+                if( k == 't' || k == 'tweak' ){
+                    //hash = hash.replace('#tweak=', '').replace('#' + HASH, '');
+                    var json = atob(v);
+
+                    console.log(json);
+
+                    json = JSON.parse(json);
+                    
+                    loadhash2(json);
+                } else if ( k == 'debug' ){
+                    debug = true;
+                }
+            }
+
+            if ( location.href.indexOf('localhost') < 0 && !debug ){
+                console.log = function(){};
+            }
+        }
+
+        function loadhash2(json){
+           
             var tweaks = document.getElementsByClassName('tweak');
 
             for (var i=0;i < tweaks.length;i++){
@@ -2256,38 +2291,38 @@
             }
         }
 
-        function save(){
-            var styles = document.getElementsByClassName('tweaked_style');
-            var css = '';
+        // function save(){
+        //     var styles = document.getElementsByClassName('tweaked_style');
+        //     var css = '';
 
-            for (var i=0;i < styles.length;i++){
-                var s = styles[i];
-                css += s.innerText;
-            }
+        //     for (var i=0;i < styles.length;i++){
+        //         var s = styles[i];
+        //         css += s.innerText;
+        //     }
 
-            console.log(css);
-            console.log(btoa(css));
+        //     console.log(css);
+        //     console.log(btoa(css));
 
-            location.hash = 'styles=' + btoa(css);
-        }
+        //     location.hash = 'styles=' + btoa(css);
+        // }
 
-        function loadhash(){
-            var hash = location.hash;
+        // function loadhash(){
+        //     var hash = location.hash;
 
-            if ( hash.indexOf('styles=') < 0 ){
-                return;
-            }
+        //     if ( hash.indexOf('styles=') < 0 ){
+        //         return;
+        //     }
 
-            hash = hash.replace('#styles=', '');
-            var css = atob(hash);
-            console.log(css);
+        //     hash = hash.replace('#styles=', '');
+        //     var css = atob(hash);
+        //     console.log(css);
 
-            var s = document.createElement('style');
-            s.className = 'hashcss';
-            s.innerText = css;
+        //     var s = document.createElement('style');
+        //     s.className = 'hashcss';
+        //     s.innerText = css;
 
-            document.head.appendChild(s);
-        }
+        //     document.head.appendChild(s);
+        // }
 
         function toolbarcolor(e){
             var n = 'tweaked_toolbar';
@@ -6919,11 +6954,6 @@
         document.addEventListener('gesturechange', zoomtest);
         document.addEventListener('gestureend', zoomtest);
 
-
-        if ( location.href.indexOf('localhost') < 0 && location.hash != '#debug' ){
-            console.log = function(){};
-        }
-
         window.onscroll = function(e) {
             console.log(e.target);
         
@@ -7069,7 +7099,7 @@
         window.addEventListener('mousewheel', dotspacing, { passive: false });
 
         presave();
-        loadhash2();
+        parsehash();
 
     </script>
 </body>
