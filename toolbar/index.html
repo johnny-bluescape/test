@@ -2191,7 +2191,6 @@
                     
                     css[id] = v;
                 }
-
             }
 
             return css;
@@ -2204,7 +2203,7 @@
         }
 
         function reset(){
-            loadhash2(DEFAULTS);
+            loadhash(DEFAULTS);
 
             location.hash = 'reset';
         }
@@ -2232,14 +2231,13 @@
                 k = k[0];
 
                 if( k == 't' || k == 'tweak' ){
-                    //hash = hash.replace('#tweak=', '').replace('#' + HASH, '');
                     var json = atob(v);
 
                     console.log(json);
 
                     json = JSON.parse(json);
                     
-                    loadhash2(json);
+                    loadhash(json);
                 } else if ( k == 'debug' ){
                     debug = true;
                 }
@@ -2250,8 +2248,7 @@
             }
         }
 
-        function loadhash2(json){
-           
+        function loadhash(json){
             var tweaks = document.getElementsByClassName('tweak');
 
             for (var i=0;i < tweaks.length;i++){
@@ -2265,7 +2262,6 @@
                     var v = json[id];
                     console.log(v);
                     if( v != undefined ){ //presave
-                        console.log(v, 'GRRRR--');
                         r.checked = v;
 
                         tweak.call(r);
@@ -2283,48 +2279,13 @@
                     var id = c.dataset.tweak;
                     var v = json[id];
                     if( v != undefined ){
-                        console.log(v, 'GRRRR--2222');
                         c.value = v;
 
                         c.onchange();
                     }
                 }
-
             }
         }
-
-        // function save(){
-        //     var styles = document.getElementsByClassName('tweaked_style');
-        //     var css = '';
-
-        //     for (var i=0;i < styles.length;i++){
-        //         var s = styles[i];
-        //         css += s.innerText;
-        //     }
-
-        //     console.log(css);
-        //     console.log(btoa(css));
-
-        //     location.hash = 'styles=' + btoa(css);
-        // }
-
-        // function loadhash(){
-        //     var hash = location.hash;
-
-        //     if ( hash.indexOf('styles=') < 0 ){
-        //         return;
-        //     }
-
-        //     hash = hash.replace('#styles=', '');
-        //     var css = atob(hash);
-        //     console.log(css);
-
-        //     var s = document.createElement('style');
-        //     s.className = 'hashcss';
-        //     s.innerText = css;
-
-        //     document.head.appendChild(s);
-        // }
 
         function toolbarcolor(e){
             var n = 'tweaked_toolbar';
