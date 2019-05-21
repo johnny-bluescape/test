@@ -2145,6 +2145,8 @@
         DEFAULTS = {};
         HASH = 't@';
 
+        DEBUG = console.log;
+
         function save2(){
             var css = savejson();
             console.log(css);
@@ -2243,8 +2245,8 @@
                 }
             }
 
-            if ( location.href.indexOf('localhost') < 0 && !debug ){
-                console.log = function(){};
+            if ( debug ){
+                console.log = DEBUG;
             }
         }
 
@@ -3614,9 +3616,15 @@
                     document.documentElement.classList.remove('selectwhite');
                 } else if ( v == 'selectwhite'){
                     document.documentElement.classList.remove('selectblack'); 
+                } else if ( v == 'debug' ){
+                    console.log = DEBUG;
                 }
             } else {
                 document.documentElement.classList.remove(v);
+
+                if ( v == 'debug' && location.href.indexOf('localhost') < 0 ){
+                    console.log = function(){};
+                }
             }
 
             // document.documentElement.classList.toggle(v);
@@ -7091,6 +7099,11 @@
         Attach.on('input', '.autoexpand2', autoexpand2);
         
         Attach.on('keydown', '.chat', chat);
+
+
+        if ( location.href.indexOf('localhost') < 0 ){
+            console.log = function(){};
+        }
 
         canvassetup();
         window.onresize = resize;
