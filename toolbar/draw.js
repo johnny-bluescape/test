@@ -95,6 +95,8 @@ function resize2(e){
     ctx.putImageData(imgdata, 0, 0);
 
     ctx.scale(scale,scale);
+
+    minimap();
 }
 
 function sketchHandler(e){
@@ -186,9 +188,9 @@ function sketchHandler(e){
     
         console.log(e);
 
-        var bc = document.getElementById('brush_context');
+        //var bc = document.getElementById('brush_context');
         
-
+        minimap();
     }
 
     window.addEventListener( 'touchmove', move );
@@ -277,6 +279,8 @@ function sketchHandlerM(e){
         bc.style.opacity = 1;
         bc.style.pointerEvents = 'all';
         bc.style.transform = 'translateY(0)';
+
+        minimap();
     }
 
     window.addEventListener( 'mousemove', move );
@@ -312,4 +316,6 @@ function keyed(e){
     } else if ( key == 90 && e.altKey ){
         undo(true);
     }
+
+    minimap();
 }

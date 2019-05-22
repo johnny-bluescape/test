@@ -111,6 +111,8 @@ function rectanglemove(e){
       //rect.classList.remove('drawing');
       //rect.classList.add('current');
 
+      minimap();
+
       setcontextpanel.call(rec);
 
       var recs = document.getElementsByClassName('layeritem current');
@@ -377,6 +379,8 @@ function rectanglemove(e){
       setcontextpanel.call(rect);
 
       setboundingposition();
+
+      minimap();
     }
 
     window.addEventListener('mousemove', move);
@@ -678,7 +682,7 @@ function rectanglemove(e){
 
       rect.classList.remove('drawing');
       //rect.classList.add('current');
-
+      minimap();
       
 
       if ( !moved ){

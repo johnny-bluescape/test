@@ -258,7 +258,8 @@
         #tweaks {position:fixed;top:0;right:0;bottom:0;padding:8px;overflow-y:auto;width:200px;box-sizing:border-box;background:#f4f4f4;z-index:1336;color:#333;}
 
             .hidetweak #tweaks {display:none;}
-            .hidetweak .rez {right:8px !important;}
+            .hidetweak .rez {right:48px !important;}
+            .hiderez .rez {display:none !important;}
 
             #tweaks h4 {padding: 8px 8px 12px;font-weight: 600;}
 
@@ -591,8 +592,8 @@
             
             .hidebrush #brush_context {opacity:1 !important;pointer-events:all  !important;}
         
-        .canvaslabel {position: absolute;top:-28px;left:-2px;padding:3px 0 4px;background:;color:white;border-radius:6px;white-space:nowrap;font-size:14px;font-weight:500;transition:all 150ms ease-in-out;}
-            .current .canvaslabel {background:;}
+        .canvaslabel {position: absolute;top:-28px;left:-2px;padding:3px 0 4px;color:white;border-radius:6px;white-space:nowrap;font-size:14px;font-weight:500;transition:all 150ms ease-in-out;}
+            .current .canvaslabel {}
 
             .neartop .canvaslabel {top:4px;left:8px;}
 
@@ -964,7 +965,13 @@
             .textbtn {color:#555;height:36px;border-radius:6px;padding:0 16px;transition:all 150ms ease-in-out;text-transform:uppercase;font-size: 13px;margin-right:12px;background:rgba(0,0,0,.1);display:inline-flex;align-items: center;justify-content: center;font-weight: 600;cursor:pointer;}
                 .textbtn:hover {background:rgba(0,0,0,.15);color:#333;}
                 .textbtn:active {background:rgba(0,0,0,.2);color:#222;}
+
+
+        #map {padding:16px;position:fixed;bottom:16px;right:216px;z-index:8888888888;border-radius:var(--toolbarradius);background:var(--panel);box-shadow:0 6px 20px var(--shadow);user-select:none;}
+            .hidetweak #map {right:16px;}
+            .mapwrap {overflow:hidden;pointer-events: none;transform-origin: top left;}
             
+        input[type=color] {width: 100%;height: 36px;display: block;padding: 0;border: none;}
     </style>
 </head>
 <body class="rectanglex brush_tool ">
@@ -1947,6 +1954,12 @@
             <label><input type=checkbox value=light class=tweakr data-tweak=a1 /><div class=toggle></div> Light</label>
         </div> -->
         <div class=tweak>
+            <label><input type=checkbox value=hidetweak id=hidetweak class=tweakr data-tweak=a000 /><div class=toggle></div> Hide Panel</label>
+        </div>
+        <div class=tweak>
+            <label><input type=checkbox value=hiderez id=hiderez class=tweakr data-tweak=a0000 /><div class=toggle></div> Hide Resolution</label>
+        </div>
+        <div class=tweak>
             <label><input type=checkbox value=debug id=debug class=tweakr data-tweak=a00 /><div class=toggle></div> Debug</label>
         </div>
         <div class=tweak>
@@ -1985,9 +1998,9 @@
             <label><input type=checkbox value=highlight class=tweakr data-tweak=a9 /><div class=toggle></div> Grid Markers</label>
         </div>
 
-        <div class=tweak>
+        <!-- <div class=tweak>
             <label><input type=checkbox value=hidebrush class=tweakr data-tweak=a10 /><div class=toggle></div> Brush Context</label>
-        </div>
+        </div> -->
 
         <div class=tweaked>
             <div class=tweak>
@@ -2085,7 +2098,7 @@
         </div>
     </div>
 
-    <div class="toolbar minimized toolbar4">
+    <!-- <div class="toolbar minimized toolbar4">
         <div class="handle fob">
             <div class=fakehandle>
                 <svg class=close xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6 11h12v2H6z"/></svg>
@@ -2125,8 +2138,14 @@
                 .suboption {width:48px;height:100%;float:left;opacity:0;}
 
 
-            input[type=color] {width: 100%;height: 36px;display: block;padding: 0;border: none;}
+            
         </style>
+    </div> -->
+
+    <div id=map class="draggable safebounds">
+        <div id=mapwrap class=mapwrap>
+            Map
+        </div>
     </div>
 
     <div id=layers></div>
@@ -2146,6 +2165,57 @@
         HASH = 't@';
 
         DEBUG = console.log;
+
+        function minimap(){
+            var l = document.getElementById('layers');
+            var m = document.getElementById('map');
+            var mw = document.getElementById('mapwrap');
+            var c = document.getElementById('canvas2');
+            
+
+            var w = window.innerWidth;
+            var h = window.innerHeight;
+
+            var lw = l.offsetWidth;
+            var lh = l.offsetHeight;
+
+            var s = lw / 240;
+
+            var nw = lw / s;
+            var nh = lh / s;
+
+            m.style.width = nw + 'px';
+            m.style.height = nh + 'px'
+
+            mw.style.width = lw + 'px';
+            mw.style.height = lh + 'px';
+
+            s = 240 / lw;
+
+            
+            mw.style.transform = 'scale(' + ( 1 * s ) + ' )';
+
+            l = l.cloneNode(true);
+
+            l.removeAttribute('id');
+            l.removeAttribute('style');
+
+            var img = new Image();
+            img.src = c.toDataURL();
+            img.style.maxWidth = '100%';
+
+            var x = l.getElementsByClassName('layeritem');
+
+            for(var i=0;i<x.length;i++){
+                var a = x[i];
+                a.removeAttribute('id');
+                a.classList.remove('current');
+            }
+            
+            mw.empty();
+            mw.appendChild(l);
+            mw.appendChild(img);
+        }
 
         function save2(){
             var css = savejson();
@@ -5024,6 +5094,8 @@
 
             p = p.cloneNode(true);
 
+            p.classList.remove('visible', 'sublevel');
+
             p.id = token;
 
             p.classList.remove('opened');
@@ -5048,8 +5120,14 @@
             document.body.appendChild(p);
             document.getElementById('layers').appendChild(c);
 
-            setboundingbox.call(c);
-            setcontextpanel.call(c);
+            
+
+            minimap();
+
+            // setTimeout(function(){
+                setboundingbox.call(c);
+                setcontextpanel.call(c);
+            // }, 100);
         }
 
         function deletecurrent(e){
@@ -5272,6 +5350,8 @@
 
                 CANVASCOLOR = color;
             } 
+
+            minimap();
         }
 
         function colorswatch(e){
@@ -5339,6 +5419,8 @@
             }
 
             //closemenu();
+
+            minimap();
         }
 
         function closestepper(e){
@@ -5552,6 +5634,8 @@
             } else {
                 BORDERWIDTH = v;
             }
+
+            minimap();
         }
 
         function selectcolor(e){
@@ -5678,6 +5762,8 @@
 
             p.offsetLeft;
             p.classList.add('visible');
+
+            minimap();
         }
 
         function cubehandler(e){
@@ -5880,6 +5966,8 @@
 
                 e.preventDefault();
                 e.stopPropagation();
+
+                minimap();
             }
 
             window.addEventListener('touchmove', move);
@@ -6218,7 +6306,8 @@
             var m = this.getparent('menuwrap');// || this.getparent('optionwrap');
 
             var ugh = document.getElementsByClassName('opened sublevel')[0] || m;
-            var off = ugh.offset();//m.offset();
+            var fixed = window.getComputedStyle(m).getPropertyValue('position') == 'fixed' ? true : false;
+            var off = ugh.offset(fixed);//m.offset();
 
             m.classList.add('subsublevel');
             m.classList.remove('visible');
@@ -6231,9 +6320,7 @@
             var p = document.createElement('div');
             p.className = 'menuwrap';
 
-            c.className += ' contextmenu ';
-
-            var fixed = window.getComputedStyle(m).getPropertyValue('position') == 'fixed' ? true : false;
+            c.className += ' contextmenu ';           
 
             if ( fixed ){
                 p.style.position = 'fixed';
@@ -6276,7 +6363,7 @@
         }
 
         function tweakstate(e){
-            document.body.classList.toggle('hidetweak');
+            document.documentElement.classList.toggle('hidetweak');
         }
 
         function resize(){
@@ -6334,7 +6421,7 @@
             d.className = 'rez';
 
             d.style.position = 'fixed';
-            d.style.bottom = '8px';
+            d.style.top = '8px';
             d.style.right = '208px';
             d.style.zIndex = 1337;
             d.style.background = 'rgba(255,255,255,.1)';
@@ -7074,6 +7161,8 @@
 
         presave();
         parsehash();
+
+        minimap();
 
     </script>
 </body>
