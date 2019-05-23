@@ -198,6 +198,8 @@ function rectanglemove(e){
 //       rect = rect[0];
 //     }
 
+    var zscale = 100 / ZOOMLEVEL;
+
     var w = rect.offsetWidth;
     var h = rect.offsetHeight;
 
@@ -206,8 +208,8 @@ function rectanglemove(e){
     var cx = 0;
     var cy = 0;
 
-    var sx = evt.pageX;
-    var sy = evt.pageY;
+    var sx = evt.pageX * zscale;
+    var sy = evt.pageY * zscale;
 
     // var ot = rect.offsetTop;
     // var ol = rect.offsetLeft;
@@ -269,8 +271,8 @@ function rectanglemove(e){
 
         var shift = e.shiftKey;
 
-        var x = evt.pageX;
-        var y = evt.pageY;
+        var x = evt.pageX * zscale;
+        var y = evt.pageY * zscale;
         
         
         var nx = x - sx;
