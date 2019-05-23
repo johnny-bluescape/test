@@ -519,9 +519,11 @@ function rectanglemove(e){
 
     var evt = e.touches ? e.touches[0] : e;
 
+    var zscale = 100 / ZOOMLEVEL;
+
     var target = e.target;
-    var sx = evt.pageX;
-    var sy = evt.pageY;
+    var sx = evt.pageX * zscale;
+    var sy = evt.pageY * zscale;
     var _this = document.getElementById('canvas2');
     var paper = document.getElementById('layers') || document.body;//document.getElementsByClassName('paper')[0];
 
@@ -543,8 +545,8 @@ function rectanglemove(e){
     console.log(e.target);
 
     
-    var ol = paper.offset().x;
-    var ot = paper.offset().y;
+    var ol = paper.offset().x * zscale;
+    var ot = paper.offset().y * zscale;
 
     console.log(paper.offset());
 
@@ -561,7 +563,7 @@ function rectanglemove(e){
     var rect = document.createElement('div');
     rect.className = 'rectangle drawing current layeritem';
     rect.style.position = 'absolute';
-    rect.style.top = sy + scrolly - ot + 'px';
+    rect.style.top = sy - ot + 'px';
     rect.style.left = sx - ol + 'px';
     rect.style.backgroundColor = SHAPECOLOR;
     rect.style.borderColor = SHAPEBORDERCOLOR;
@@ -650,8 +652,8 @@ function rectanglemove(e){
 
       var evt = e.touches ? e.touches[0] : e;
 
-      var x = evt.pageX;
-      var y = evt.pageY;
+      var x = evt.pageX * zscale;
+      var y = evt.pageY * zscale;
       var nx = x - sx;
       var ny = y - sy;
 

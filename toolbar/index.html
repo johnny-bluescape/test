@@ -970,7 +970,11 @@
         #map {padding:16px 16px 48px;position:fixed;bottom:16px;right:216px;z-index:8888888888;border-radius:var(--toolbarradius);background:var(--panel);box-shadow:0 6px 20px var(--shadow);user-select:none;width:224px;}
             .hidetweak #map {right:16px;}
             #map.hide {padding-bottom:32px;height:auto !important;}
-            .mapwrap {overflow:hidden;pointer-events: none;transform-origin: top left;}
+            
+            .mapcontainer {overflow:hidden;height:100%;width:100%;}
+            .mapscale {height: 100%;width:100%;pointer-events:none;transform-origin:center;transform:scale(.2);}
+                .mapwrap {transform-origin: top left;}
+
 
             .hide .mapwrap {display:none;}
 
@@ -2153,8 +2157,12 @@
     </div> -->
 
     <div id=map class="draggable safebounds">
-        <div id=mapwrap class=mapwrap>
-            Map
+        <div class=mapcontainer>
+            <div class=mapscale>
+                <div id=mapwrap class=mapwrap>
+                    Map
+                </div>
+            </div>
         </div>
         <div class=mapbar>
             <div class="hidemap mapbtn">
@@ -2220,8 +2228,11 @@
 
             s = w / lw;
 
-            
-            mw.style.transform = 'scale(' + ( 1 * s ) + ' )';
+            var ns = 1 * s;
+
+            ns = ns;// / (100/ZOOMLEVEL);
+             
+            mw.style.transform = 'scale(' + ( ns ) + ' )';
 
             l = l.cloneNode(true);
 
@@ -4077,8 +4088,10 @@
 
             w.className = 'textwrap current layeritem';
 
-            var x = e.pageX;
-            var y = e.pageY;
+            var zscale = 1;//ZOOMLEVEL / 100;
+
+            var x = e.pageX * zscale;
+            var y = e.pageY * zscale;
 
             w.style.top = y - 24 + 'px';
             w.style.left = x + 'px';
@@ -4334,8 +4347,10 @@
 
             setboundingbox.call(this, e);
 
-            var sx = ev.pageX;
-            var sy = ev.pageY;
+            var zscale = 100 / ZOOMLEVEL;
+
+            var sx = ev.pageX * zscale;
+            var sy = ev.pageY * zscale;
 
             var t = this;
 
@@ -4351,8 +4366,8 @@
 
             function move(e){
                 var ev = e.touches ? e.touches[0] : e;
-                var x = ev.pageX;
-                var y = ev.pageY;
+                var x = ev.pageX * zscale;
+                var y = ev.pageY * zscale;
 
                 var nx = x - sx;
                 var ny = y - sy;
@@ -4392,17 +4407,21 @@
                 window.removeEventListener('mousemove', move);
                 window.removeEventListener('mouseup', end);
 
-                var off = t.offset();
-                var ol = off.x;
-                var ot = off.y;
+                // var off = t.offset();
+                // var ol = off.x;
+                // var ot = off.y;
+
+                var ex = Number(t.dataset.x) || 0;
+                var ey = Number(t.dataset.y) || 0;
 
                 t.style.transform = 'translate(0px, 0px)';
 
                 t.dataset.x = 0;
                 t.dataset.y = 0;
-                
-                t.style.left = ol + nx + 'px';
-                t.style.top = ot + ny + 'px';
+                console.log(ex + t.offsetLeft, ex, ol, t.offsetLeft, t.offsetTop);
+
+                t.style.left = ex + t.offsetLeft + 'px';
+                t.style.top = ey + t.offsetTop + 'px';
 
                 if ( !moved ){
                     console.log('clicked');
