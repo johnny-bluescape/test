@@ -116,6 +116,7 @@ function sketchHandler(e){
 
     blurall();
 
+
     var offset = canvas.offset();
     var ol = offset.x;
     var ot = offset.y;
@@ -211,6 +212,8 @@ function sketchHandlerM(e){
     if ( e.which == 3 ){
         return;
     }
+
+    blurall();
 
     var offset = canvas.offset();
     var ol = offset.x;

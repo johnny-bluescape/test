@@ -6485,6 +6485,20 @@
             }
         }
 
+        function zoomfit(e){
+            var z = 70 - ZOOMLEVEL;
+
+            var n = z > 0 ? 1 : -1;
+            z = Math.abs(z);
+
+            e.fake = true;
+            e.deltaY = n;
+
+            for(var i=0; i<z; i++){
+                dotspacing.call(this, e);
+            }
+        }
+
         function gridtweak(e){
             var v = this.value;
 
@@ -7148,6 +7162,7 @@
         Attach.on('click', '.zoomlevel', zoom100);
         Attach.on('click', '.zoomin', zoomin);
         Attach.on('click', '.zoomout', zoomout);
+        Attach.on('click', '.zoomfit', zoomfit);
 
         Attach.on('click', '.control', panelhandler);
 
