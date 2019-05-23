@@ -967,9 +967,19 @@
                 .textbtn:active {background:rgba(0,0,0,.2);color:#222;}
 
 
-        #map {padding:16px;position:fixed;bottom:16px;right:216px;z-index:8888888888;border-radius:var(--toolbarradius);background:var(--panel);box-shadow:0 6px 20px var(--shadow);user-select:none;}
+        #map {padding:16px 16px 48px;position:fixed;bottom:16px;right:216px;z-index:8888888888;border-radius:var(--toolbarradius);background:var(--panel);box-shadow:0 6px 20px var(--shadow);user-select:none;width:224px;}
             .hidetweak #map {right:16px;}
+            #map.hide {padding-bottom:32px;height:auto !important;}
             .mapwrap {overflow:hidden;pointer-events: none;transform-origin: top left;}
+
+            .hide .mapwrap {display:none;}
+
+            .mapbar {position: absolute;bottom: 0;left: 0;height: 48px;width: 100%;display:flex;}
+                .mapbtn {cursor:pointer;width:48px;height:48px;display:flex;align-items:center;justify-content:center;}
+                    .mapbtn svg {width:24px;heigh:24px;display:block;}
+                        .mapbtn svg * {fill:var(--icon);}
+
+                    .mapbtn.zoomlevel {font-weight:600;width:64px;}
             
         input[type=color] {width: 100%;height: 36px;display: block;padding: 0;border: none;}
     </style>
@@ -2146,6 +2156,23 @@
         <div id=mapwrap class=mapwrap>
             Map
         </div>
+        <div class=mapbar>
+            <div class="hidemap mapbtn">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5zM15 19l-6-2.11V5l6 2.11V19z"/></svg>
+            </div>
+            <div class="zoomfit mapbtn">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.57 14.86L22 13.43 20.57 12 17 15.57 8.43 7 12 3.43 10.57 2 9.14 3.43 7.71 2 5.57 4.14 4.14 2.71 2.71 4.14l1.43 1.43L2 7.71l1.43 1.43L2 10.57 3.43 12 7 8.43 15.57 17 12 20.57 13.43 22l1.43-1.43L16.29 22l2.14-2.14 1.43 1.43 1.43-1.43-1.43-1.43L22 16.29z"/></svg>
+            </div>
+            <div class="zoomin mapbtn">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+            </div>
+            <div class="zoomout mapbtn">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 13H5v-2h14v2z"/></svg>
+            </div>
+            <div class="zoomlevel mapbtn tnum" id=zoomlevel>
+                100%
+            </div>
+        </div>
     </div>
 
     <div id=layers></div>
@@ -2171,15 +2198,13 @@
             var m = document.getElementById('map');
             var mw = document.getElementById('mapwrap');
             var c = document.getElementById('canvas2');
-            
-
-            var w = window.innerWidth;
-            var h = window.innerHeight;
 
             var lw = l.offsetWidth;
             var lh = l.offsetHeight;
 
-            var s = lw / 240;
+            var w = 224;
+
+            var s = lw / w;
 
             var nw = lw / s;
             var nh = lh / s;
@@ -2190,7 +2215,7 @@
             mw.style.width = lw + 'px';
             mw.style.height = lh + 'px';
 
-            s = 240 / lw;
+            s = w / lw;
 
             
             mw.style.transform = 'scale(' + ( 1 * s ) + ' )';
@@ -6437,6 +6462,24 @@
             document.body.appendChild(d);
         }
 
+        function zoomin(e){
+            e.fake = true;
+            e.deltaY = 1;
+            
+            for(var i=0; i<5; i++){
+                dotspacing.call(this, e);
+            }
+        }
+
+        function zoomout(e){
+            e.fake = true;
+            e.deltaY = -1;
+
+            for(var i=0; i<5; i++){
+                dotspacing.call(this, e);
+            }
+        }
+
         function gridtweak(e){
             var v = this.value;
 
@@ -6476,7 +6519,9 @@
             //     return;
             // }
 
-            if ( !e.ctrlKey && !e.metaKey ){
+       
+
+            if ( !e.ctrlKey && !e.metaKey && !e.fake ){
                 return;
             }
 
@@ -6544,6 +6589,9 @@
             document.head.appendChild(s);
 
 
+            var scale = 100 * LAYERSCALE;
+            scale = Math.round(scale*100)/100;
+
             if ( LAYERSCALE !== 1 ){
                 var zt = document.getElementsByClassName('zoomtoast');
                 
@@ -6561,11 +6609,12 @@
 
                 d.onclick = resetzoom;
 
-                var scale = 100 * LAYERSCALE;
-
-                scale = Math.round(scale*100)/100;
+                
 
                 z.appendChild(document.createTextNode(scale + '%'));
+                
+                
+
                 d.appendChild(document.createTextNode('Reset'));
 
 
@@ -6575,7 +6624,11 @@
                 document.body.appendChild(t);
             }
 
-            autosave();
+            var l = document.getElementById('zoomlevel');
+            l.empty();
+            l.appendChild(document.createTextNode(scale + '%'));
+
+            //autosave();
         }
 
         function resetzoom(e){
@@ -6592,6 +6645,10 @@
 
             setboundingposition();
             setcontextpanel.call(document.getElementsByClassName('layeritem current')[0]);
+
+            var l = document.getElementById('zoomlevel');
+            l.empty();
+            l.appendChild(document.createTextNode('100%'));
 
             var zt = document.getElementsByClassName('zoomtoast');
             if ( zt ){
@@ -6999,6 +7056,30 @@
 
             s.classList.remove('showcontrols');
         }
+
+        function hidemap(e){
+            var p = this.getparent('map');
+
+            if ( p.classList.contains('hide') ){
+                p.classList.remove('hide');
+                var h = p.offsetHeight - 48;
+
+                p.style.transform = 'translateY(' + -h + 'px)';
+
+            } else {
+                var h = p.offsetHeight - 48;
+
+                p.style.transform = 'translateY(' + h + 'px)';
+
+                p.classList.add('hide');
+            }
+
+            
+        }
+
+        function zoom100(e){
+            resetzoom.call(this, e);
+        }
         
         // TEST
         function zoomtest(e) {
@@ -7041,6 +7122,10 @@
 
         Attach.on('click', '#hide', tweakstate);
 
+        Attach.on('click', '.hidemap', hidemap);
+        Attach.on('click', '.zoomlevel', zoom100);
+        Attach.on('click', '.zoomin', zoomin);
+        Attach.on('click', '.zoomout', zoomout);
 
         Attach.on('click', '.control', panelhandler);
 
