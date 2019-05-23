@@ -2193,7 +2193,10 @@
 
         DEBUG = console.log;
 
+        ZOOMLEVEL = 100;
+
         function minimap(){
+            console.log('minimap')
             var l = document.getElementById('layers');
             var m = document.getElementById('map');
             var mw = document.getElementById('mapwrap');
@@ -4218,7 +4221,13 @@
             }
 
             setcontextpanel.call(tw);
+
+            if ( this.timer ){
+                clearTimeout(this.timer);
+                this.timer = null;
+            }
             
+            this.timer = setTimeout(minimap, 500);
         }
 
         function autoexpand2(e){
@@ -4230,6 +4239,13 @@
             console.log(s, 'scroll height');
 
             this.style.height = s + 'px';
+
+            if ( this.timer ){
+                clearTimeout(this.timer);
+                this.timer = null;
+            }
+            
+            this.timer = setTimeout(minimap, 500);
         }
 
         function blurall(e){
@@ -4414,6 +4430,8 @@
 
                 setcontextpanel.call(t);
                 setboundingposition.call(t);
+
+                minimap();
             }
 
             window.addEventListener('touchmove', move);
@@ -6628,6 +6646,8 @@
             l.empty();
             l.appendChild(document.createTextNode(scale + '%'));
 
+            ZOOMLEVEL = scale;
+
             //autosave();
         }
 
@@ -6649,6 +6669,8 @@
             var l = document.getElementById('zoomlevel');
             l.empty();
             l.appendChild(document.createTextNode('100%'));
+
+            ZOOMLEVEL = 100;
 
             var zt = document.getElementsByClassName('zoomtoast');
             if ( zt ){

@@ -316,6 +316,4 @@ function keyed(e){
     } else if ( key == 90 && e.altKey ){
         undo(true);
     }
-
-    minimap();
 }

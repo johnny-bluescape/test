@@ -36,33 +36,37 @@ function rectanglemove(e){
 
     var evt = e.touches ? e.touches[0] : e;
 
-    var sx = evt.pageX;
-    var sy = evt.pageY;
+    var zscale = 100 / ZOOMLEVEL;
+
+    var sx = evt.pageX * zscale;
+    var sy = evt.pageY * zscale;
     var rec = this;
 
     var ox = parseFloat(this.style.left) || 0;
     var oy = parseFloat(this.style.top) || 0;
 
-    console.log(ox, oy);
+    console.log(ox, oy, sx, sy);
 
     var moved = false;
 
     var box = this.bounds;
+
+    
     
 
     function move(e){
       
       var evt = e.touches ? e.touches[0] : e;
 
-      var x = evt.pageX;
-      var y = evt.pageY;
+      var x = evt.pageX* zscale;
+      var y = evt.pageY* zscale;
       var nx = x - sx;
       var ny = y - sy;
 
       x = nx + ox;
       y = ny + oy;
 
-      rec.style.top = y + 'px';
+      rec.style.top = y  + 'px';
       rec.style.left = x + 'px';
 
       // if ( box ){
@@ -113,6 +117,10 @@ function rectanglemove(e){
 
       minimap();
 
+      var layer = document.getElementById('layers').offset();
+      var lx = layer.x;
+      var ly = layer.y;
+
       setcontextpanel.call(rec);
 
       var recs = document.getElementsByClassName('layeritem current');
@@ -122,11 +130,22 @@ function rectanglemove(e){
         if ( r == rec ){
           //continue;
         }
-        var ol = r.offset().x;
-        var ot = r.offset().y;
+        // var ol = r.offset().x;
+        // var ot = r.offset().y;
 
-        r.style.left = ol + 'px';
-        r.style.top = ot +  'px';
+        var ol = (Number(r.dataset.left) || 0) * 1;
+        var ot = (Number(r.dataset.top) || 0) * 1;
+
+        r.dataset.left = 0;
+        r.dataset.top = 0;
+
+        if ( rec === r ){
+          ol = ol * ZOOMLEVEL;
+          ot = ot * ZOOMLEVEL;
+        }
+
+        r.style.left = r.offsetLeft + ol + 'px';
+        r.style.top = r.offsetTop + ot + 'px';
 
         r.style.transform = 'translate(0,0)';
 
