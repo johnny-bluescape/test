@@ -2166,9 +2166,10 @@
         function minimap(){
             console.log('minimap')
             var l = document.getElementById('layers');
+            var cl = document.getElementById('canvaslayers');
             var m = document.getElementById('map');
             var mw = document.getElementById('mapwrap');
-            var c = document.getElementById('canvas2');
+            // var c = document.getElementById('canvas2');
 
             var lw = l.offsetWidth;
             var lh = l.offsetHeight;
@@ -2199,9 +2200,14 @@
             l.removeAttribute('id');
             l.removeAttribute('style');
 
-            var img = new Image();
-            img.src = c.toDataURL();
-            img.style.maxWidth = '100%';
+            cl = cl.cloneNode(true);
+
+            cl.removeAttribute('id');
+            cl.removeAttribute('style');
+
+            // var img = new Image();
+            // img.src = c.toDataURL();
+            // img.style.maxWidth = '100%';
 
             var x = l.getElementsByClassName('layeritem');
 
@@ -2212,8 +2218,9 @@
             }
             
             mw.empty();
+            mw.appendChild(cl);
             mw.appendChild(l);
-            mw.appendChild(img);
+            //mw.appendChild(img);
         }
 
         function save2(){
@@ -6621,7 +6628,7 @@
                 t.appendChild(z);
                 t.appendChild(d);
 
-                document.body.appendChild(t);
+                //document.body.appendChild(t);
             }
 
             var l = document.getElementById('zoomlevel');
