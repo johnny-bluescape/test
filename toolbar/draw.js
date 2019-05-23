@@ -280,6 +280,8 @@ function sketchHandlerM(e){
         bc.style.pointerEvents = 'all';
         bc.style.transform = 'translateY(0)';
 
+        flattencanvas();
+
         minimap();
     }
 
@@ -317,3 +319,102 @@ function keyed(e){
         undo(true);
     }
 }
+
+function flattencanvas(x){
+    var canvas = document.getElementById('canvas2');
+    var context = canvas.getContext('2d');
+
+    var img = new Image();
+
+    img.style.position = 'absolute';
+    img.style.width = '100%';
+    img.style.top = 0;
+    img.style.left = 0;
+
+    img.style.transform = 'scale(' + (100/ZOOMLEVEL) + ')';
+
+    img.onload = function(){
+
+        context.clearRect(0,0,canvas.width,canvas.height);
+        // context.scale(x, x);
+        // context.drawImage(imageObject,0,0);
+        
+    }
+
+    img.src = canvas.toDataURL();
+
+    document.getElementById('canvaslayers').appendChild(img);
+}
+
+// function canvaszoom2(x){
+//     var canvas = document.getElementById('canvas2');
+//     var context = canvas.getContext('2d');
+
+//     var imageObject = new Image();
+
+//     imageObject.onload = function(){
+
+//         context.clearRect(0,0,canvas.width,canvas.height);
+//         context.scale(x, x);
+//         context.drawImage(imageObject,0,0);
+
+//     }
+
+//     imageObject.src = canvas.toDataURL();
+// }
+
+// function canvaszoom(x){
+
+//     var canvas = document.getElementById('canvas2');
+//     var context = canvas.getContext('2d');
+
+//     var d = context.getImageData(0, 0, canvas.width, canvas.height);
+
+//     d = scaleImageData(d, x);
+    
+//     context.clearRect(0, 0, canvas.width, canvas.height);
+
+//     context.putImageData(d, canvas.width/4, canvas.height/4);
+// }
+
+// function scaleImageData(imageData, scale){
+//     var newCanvas = document.createElement('canvas');
+//     newCanvas.width = imageData.width;
+//     newCanvas.height = imageData.height;
+
+
+//     newCanvas.getContext("2d").putImageData(imageData, 0, 0);
+
+//     // Second canvas, for scaling
+//     var scaleCanvas = document.createElement('canvas');
+//     scaleCanvas.width = imageData.width;
+//     scaleCanvas.height = imageData.height;
+
+//     var scaleCtx = scaleCanvas.getContext("2d");
+
+//     scaleCtx.scale(scale, scale);
+//     scaleCtx.drawImage(newCanvas, 0, 0);
+
+//     var scaledImageData =  scaleCtx.getImageData(0, 0, scaleCanvas.width, scaleCanvas.height);
+
+//     return scaledImageData;
+// }
+
+// function canvasscale(scale, translatePos){
+//     var canvas = document.getElementById("canvas2");
+//     var context = canvas.getContext("2d");
+//     context.scale(3, 3);
+//     var img = context.getImageData(0, 0, canvas.width, canvas.height);
+    
+//     // clear canvas
+//     context.clearRect(0, 0, canvas.width, canvas.height);
+ 
+// 	context.save();
+// 	//context.translate(translatePos.x, translatePos.y);
+// 	context.scale(scale, scale);
+	
+// 	context.putImageData(img, 20, 20); // destination rectangle;
+  
+    
+// 	context.restore();
+// }

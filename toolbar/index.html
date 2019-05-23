@@ -790,8 +790,11 @@
             #hide:hover {opacity:.7;}
             #hide:active {opacity:.9;}
 
-        #layers {height:100%;pointer-events:none;position:relative;z-index:2;}
+        #layers {height:100%;pointer-events:none;position:relative;z-index:4;}
             #layers > * {pointer-events:all;}
+
+        #canvaslayers {width:100%;height:100%;pointer-events:none;position:absolute;z-index:1;top:0;left:0;}
+
 
 
         .toast {position:fixed;top:12px;right:212px;z-index:999999999999;background:var(--panel);border-radius:var(--toolbarradius);box-shadow: 0 4px 20px var(--shadow2);display:flex;padding:8px;align-items:center;}
@@ -1953,7 +1956,7 @@
             </div>
     </div>
 
-    <canvas id="canvas2" style="cursor: crosshair; position: absolute; top: 0px; left: 0px; right: 0px; bottom: 0px; width: 100%; height: 100%;z-index:1;"></canvas>
+    <canvas id="canvas2" style="cursor: crosshair; position: absolute; top: 0px; left: 0px; right: 0px; bottom: 0px; width: 100%; height: 100%;z-index:2;"></canvas>
 
     <div id=hide title="Hide/Show Tweak Panel">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
@@ -2112,50 +2115,6 @@
         </div>
     </div>
 
-    <!-- <div class="toolbar minimized toolbar4">
-        <div class="handle fob">
-            <div class=fakehandle>
-                <svg class=close xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6 11h12v2H6z"/></svg>
-                <svg class=open xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
-            </div>
-
-            <div class=menu>
-                <div class=item>Select</div>
-                <div class=item>Shapes</div>
-                <div class=item>Text</div>
-                <div class=item>Draw</div>
-                <div class=item>Components</div>
-                <div class=item>Canvas</div>
-                <div class=item>Settings</div>
-            </div>
-
-            <div class=submenu>
-                brush size color opacity
-                <div class="suboption brushsize"></div>
-                <div class="suboption brushcolor"></div>
-                <div class="suboption brushopacity"></div>
-            </div>
-        </div>
-
-        <style>
-            .toolbar {position:fixed;z-index:99999999;top:calc(100% - 64px);left:16px;}
-            .fob {left:0;top:0;}
-            .fob .fakehandle {width:36px;height:36px;background:#0262FD;box-shadow:0 3px 30px rgba(0,0,0,.25);}
-            .fob .fakehandle svg {width: 24px;height: 36px;}
-
-            .menu {position:absolute;bottom:56px;left:8px;padding: 4px 0;background:white;border-radius:6px;box-shadow:0 3px 40px rgba(0,0,0,.3);width:200px;min-height:200px;transition:all 150ms ease-in-out;opacity:0;pointer-events:none;transform:translateY(8px);}
-            .toolbar:not(.minimized) .menu {opacity:1;pointer-events:all;transform:translateY(0);}
-
-            .menu .item {font-size:16px;color:black;font-weight:600;}
-
-            .submenu {position:absolute;top:0;left:56px;padding:0 4px;background:white;border-radius:6px;width:200px;height:48px;box-sizing:border-box;opacity:0;}
-                .suboption {width:48px;height:100%;float:left;opacity:0;}
-
-
-            
-        </style>
-    </div> -->
-
     <div id=map class="draggable safebounds">
         <div class=mapcontainer>
             <div class=mapscale>
@@ -2184,6 +2143,7 @@
     </div>
 
     <div id=layers></div>
+    <div id=canvaslayers></div>
 
     <script>
         TEXTSIZE = 24;
@@ -6431,6 +6391,7 @@
         function resize(){
             screenrez();
             resize2();
+            clayersize();
         }
 
         window.addEventListener('mousedown', function(e){
@@ -6566,6 +6527,7 @@
 
 
             var l = document.getElementById('layers');
+            var cl = document.getElementById('canvaslayers');
             var d = document.getElementById('canvas2');
             var ls = LAYERSCALE;
 
@@ -6605,8 +6567,9 @@
 
             LAYERSCALE = ls = Math.max(ls + (delta * ds), ds);
 
-            l.style.transform = d.style.transform = 'scale(' + ls + ')';
-
+            l.style.transform = 'scale(' + ls + ')';
+            //d.style.transform = 'scale(' + ls + ')';
+            cl.style.transform = 'scale(' + ls + ')';
 
             setboundingposition();
             setcontextpanel.call(document.getElementsByClassName('layeritem current')[0]);
@@ -6675,11 +6638,12 @@
             gridtweak.call({value : GRIDSIZE}, e);
 
             var l = document.getElementById('layers');
-            var d = document.getElementById('canvas2');
+            //var d = document.getElementById('canvas2');
+            var cl = document.getElementById('canvaslayers');
 
-            l.style.transform = d.style.transform = 'scale(1)';
+            l.style.transform = cl.style.transform = 'scale(1)'; //d.style.transform = 'scale(1)';
 
-            l.style.transformOrigin = d.style.transformOrigin = 'center';
+            l.style.transformOrigin = cl.style.transformOrigin = 'center';//d.style.transformOrigin = 'center';
             document.body.style.backgroundPosition = 'center';
 
             setboundingposition();
@@ -7121,6 +7085,16 @@
         function zoom100(e){
             resetzoom.call(this, e);
         }
+
+        function clayersize(){
+            var l = document.getElementById('layers');
+            var c = document.getElementById('canvaslayers');
+            var w = l.offsetWidth;
+            var h = l.offsetHeight;
+
+            c.style.width = w + 'px';
+            c.style.height = h + 'px';
+        }
         
         // TEST
         function zoomtest(e) {
@@ -7289,6 +7263,8 @@
         parsehash();
 
         minimap();
+
+        clayersize();
 
     </script>
 </body>
