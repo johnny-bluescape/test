@@ -336,7 +336,7 @@
 
         .option .border {cursor:pointer;width:28px;height:28px;border-radius:50%;border:4px solid rgba(155, 155, 155, 0.15);box-sizing:border-box;position:relative;}
 
-        .slider {width:48px;height:200px;position:relative;box-shadow:inset 0 0 0 1px rgba(255,255,255,.1);border-radius:24px;touch-action: manipulation;background:#212122;cursor:pointer;}
+        .slider {width:48px;height:200px;position:relative;box-shadow:inset 0 0 0 1px rgba(255,255,255,.1);border-radius:24px;touch-action: manipulation;background:rgba(255, 255, 255, 0.05);cursor:pointer;}
 
             .hslider {width:100%;height:48px;background:transparent;box-shadow:none;margin:4px 0 24px;}
                 .hslider .track {background:rgba(0,0,0,.33);box-shadow:none;background-blend-mode:darken;z-index:1;position:absolute;top:50%;left:0;right:0;border-radius:18px;height:36px;transform:translateY(-50%);}
@@ -793,9 +793,9 @@
         #layers {height:100%;pointer-events:none;position:relative;z-index:4;}
             #layers > * {pointer-events:all;}
 
-        #canvaslayers {width:100%;height:100%;pointer-events:none;position:absolute;z-index:1;top:0;left:0;}
+        /* #canvaslayers {width:100%;height:100%;pointer-events:none;position:absolute;z-index:1;top:0;left:0;} */
 
-
+        #frame {position:absolute;top:0;left:0;z-index:1;pointer-events:none;}
 
         .toast {position:fixed;top:12px;right:212px;z-index:999999999999;background:var(--panel);border-radius:var(--toolbarradius);box-shadow: 0 4px 20px var(--shadow2);display:flex;padding:8px;align-items:center;}
             .hidetweak .toast {right:12px;}
@@ -2143,7 +2143,7 @@
     </div>
 
     <div id=layers></div>
-    <div id=canvaslayers></div>
+    <!-- <div id=canvaslayers></div> -->
 
     <script>
         TEXTSIZE = 24;
@@ -2166,10 +2166,10 @@
         function minimap(){
             console.log('minimap')
             var l = document.getElementById('layers');
-            var cl = document.getElementById('canvaslayers');
+            // var cl = document.getElementById('canvaslayers');
             var m = document.getElementById('map');
             var mw = document.getElementById('mapwrap');
-            // var c = document.getElementById('canvas2');
+            var c = document.getElementById('frame');
 
             var lw = l.offsetWidth;
             var lh = l.offsetHeight;
@@ -2200,14 +2200,14 @@
             l.removeAttribute('id');
             l.removeAttribute('style');
 
-            cl = cl.cloneNode(true);
+            // cl = cl.cloneNode(true);
 
-            cl.removeAttribute('id');
-            cl.removeAttribute('style');
+            // cl.removeAttribute('id');
+            // cl.removeAttribute('style');
 
-            // var img = new Image();
-            // img.src = c.toDataURL();
-            // img.style.maxWidth = '100%';
+            var img = new Image();
+            img.src = c.toDataURL();
+            img.style.maxWidth = '100%';
 
             var x = l.getElementsByClassName('layeritem');
 
@@ -2218,9 +2218,9 @@
             }
             
             mw.empty();
-            mw.appendChild(cl);
+            // mw.appendChild(cl);
             mw.appendChild(l);
-            //mw.appendChild(img);
+            mw.appendChild(img);
         }
 
         function save2(){
@@ -4239,6 +4239,18 @@
             hidecontext();
 
             removebounding();
+
+            closesublevel();
+        }
+
+        function closesublevel(){
+            var m = document.getElementsByClassName('opened sublevel');
+
+            while(m[0]){
+                var s = m[0].getElementsByClassName('optionwrap')[0];
+                s.style.marginLeft = 0;
+                m[0].classList.remove('sublevel', 'opened');
+            }
         }
 
         function blurelm(e){
@@ -6398,7 +6410,6 @@
         function resize(){
             screenrez();
             resize2();
-            clayersize();
         }
 
         window.addEventListener('mousedown', function(e){
@@ -6548,7 +6559,7 @@
 
 
             var l = document.getElementById('layers');
-            var cl = document.getElementById('canvaslayers');
+            // var cl = document.getElementById('canvaslayers');
             var d = document.getElementById('canvas2');
             var ls = LAYERSCALE;
 
@@ -6590,7 +6601,8 @@
 
             l.style.transform = 'scale(' + ls + ')';
             //d.style.transform = 'scale(' + ls + ')';
-            cl.style.transform = 'scale(' + ls + ')';
+            // cl.style.transform = 'scale(' + ls + ')';
+            // cl.dataset.z = ls;
 
             setboundingposition();
             setcontextpanel.call(document.getElementsByClassName('layeritem current')[0]);
@@ -6651,7 +6663,9 @@
 
             ZOOMLEVEL = scale;
 
-            //autosave();
+            //autosave();   
+
+            drawlayers2();
         }
 
         function resetzoom(e){
@@ -6660,11 +6674,12 @@
 
             var l = document.getElementById('layers');
             //var d = document.getElementById('canvas2');
-            var cl = document.getElementById('canvaslayers');
+            // var cl = document.getElementById('canvaslayers');
 
-            l.style.transform = cl.style.transform = 'scale(1)'; //d.style.transform = 'scale(1)';
+            l.style.transform = 'scale(1)'; //d.style.transform = 'scale(1)'; cl.style.transform = 
+            // cl.dataset.z = 1;
 
-            l.style.transformOrigin = cl.style.transformOrigin = 'center';//d.style.transformOrigin = 'center';
+            l.style.transformOrigin = 'center';//d.style.transformOrigin = 'center'; cl.style.transformOrigin = 
             document.body.style.backgroundPosition = 'center';
 
             setboundingposition();
@@ -6676,10 +6691,9 @@
 
             ZOOMLEVEL = 100;
 
-            var zt = document.getElementsByClassName('zoomtoast');
-            if ( zt ){
-                zt.remove();
-            }
+            document.getElementsByClassName('zoomtoast').remove();
+
+            drawlayers2();
         }
 
         function stopshare(){
@@ -7107,15 +7121,15 @@
             resetzoom.call(this, e);
         }
 
-        function clayersize(){
-            var l = document.getElementById('layers');
-            var c = document.getElementById('canvaslayers');
-            var w = l.offsetWidth;
-            var h = l.offsetHeight;
+        // function clayersize(){
+        //     var l = document.getElementById('layers');
+        //     var c = document.getElementById('canvaslayers');
+        //     var w = l.offsetWidth;
+        //     var h = l.offsetHeight;
 
-            c.style.width = w + 'px';
-            c.style.height = h + 'px';
-        }
+        //     c.style.width = w + 'px';
+        //     c.style.height = h + 'px';
+        // }
         
         // TEST
         function zoomtest(e) {
@@ -7286,7 +7300,7 @@
 
         minimap();
 
-        clayersize();
+        // clayersize();
 
     </script>
 </body>

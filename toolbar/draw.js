@@ -8,8 +8,10 @@ function canvassetup(){
     width  	= canvas.parentElement.offsetWidth,
     height 	= canvas.parentElement.offsetHeight;
 
-    canvas.height	= height;
-    canvas.width 	= width;
+    var frame = document.createElement('canvas');
+
+    canvas.height	= frame.height = height;
+    canvas.width 	= frame.width = width;
     //canvas.title 	= 'Did You Know You Can Draw Here?';
     canvas.style.cursor = 'crosshair';
 
@@ -50,19 +52,24 @@ function canvassetup(){
     var oldWidth = canvas.width;
     var oldHeight = canvas.height;
 
-    canvas.width = oldWidth * ratio;
-    canvas.height = oldHeight * ratio;
+    canvas.width = frame.width = oldWidth * ratio;
+    canvas.height = frame.height = oldHeight * ratio;
 
-    canvas.style.width = oldWidth + 'px';
-    canvas.style.height = oldHeight + 'px';
+    canvas.style.width = frame.style.width = oldWidth + 'px';
+    canvas.style.height = frame.style.height = oldHeight + 'px';
 
     context.scale(scale,scale);
+    frame.getContext('2d').scale(scale,scale);
 
-    var imgdata = context.getImageData(0,0,canvas.width,canvas.height);
+    // var imgdata = context.getImageData(0,0,canvas.width,canvas.height);
 
-    window.canvashistory.push(imgdata);
+    // window.canvashistory.push(imgdata);
+
+    frame.id = 'frame';
 
     document.body.addEventListener('keydown', keyed);
+
+    document.body.appendChild(frame);
 }
 
 function resize2(e){
@@ -96,7 +103,7 @@ function resize2(e){
 
     ctx.scale(scale,scale);
 
-    minimap();
+    //minimap();
 }
 
 function sketchHandler(e){
@@ -116,6 +123,10 @@ function sketchHandler(e){
 
     blurall();
 
+    if ( canvas.timer ){
+        clearTimeout(canvas.timer);
+        canvas.timer = null;
+    }
 
     var offset = canvas.offset();
     var ol = offset.x;
@@ -184,14 +195,18 @@ function sketchHandler(e){
         window.removeEventListener( 'touchmove', move );
         window.removeEventListener( 'touchend', end );
 
-        var imgdata = canvas.getContext('2d').getImageData(0,0,canvas.width,canvas.height);
-        canvashistory.push(imgdata);
+        // var imgdata = canvas.getContext('2d').getImageData(0,0,canvas.width,canvas.height);
+        // canvashistory.push(imgdata);
     
         console.log(e);
 
         //var bc = document.getElementById('brush_context');
         
-        minimap();
+        //minimap();
+
+        canvas.timer = setTimeout(flattencanvas, 500);
+
+        // document.documentElement.classList.add('flatten');
     }
 
     window.addEventListener( 'touchmove', move );
@@ -211,6 +226,11 @@ function sketchHandlerM(e){
 
     if ( e.which == 3 ){
         return;
+    }
+
+    if ( canvas.timer ){
+        clearTimeout(canvas.timer);
+        canvas.timer = null;
     }
 
     blurall();
@@ -261,31 +281,31 @@ function sketchHandlerM(e){
         lines[id2].ly = ny;
     }
 
-
     function end(e){
 
         window.removeEventListener( 'mousemove', move );
         window.removeEventListener( 'mouseup', end );
 
-        var imgdata = canvas.getContext('2d').getImageData(0,0,canvas.width,canvas.height);
-        canvashistory.push(imgdata);
+        // var imgdata = canvas.getContext('2d').getImageData(0,0,canvas.width,canvas.height);
+        // canvashistory.push(imgdata);
 
-        console.log(e);
+        // console.log(e);
 
-        var x = e.pageX;
-        var y = e.pageY;
+        // var x = e.pageX;
+        // var y = e.pageY;
 
-        var bc = document.getElementById('brush_context');
+        // var bc = document.getElementById('brush_context');
 
-        bc.style.left = x - (bc.offsetWidth/2) + 'px';
-        bc.style.bottom = window.innerHeight - y - (bc.offsetHeight/2) - 64  + 'px';
-        bc.style.opacity = 1;
-        bc.style.pointerEvents = 'all';
-        bc.style.transform = 'translateY(0)';
+        // bc.style.left = x - (bc.offsetWidth/2) + 'px';
+        // bc.style.bottom = window.innerHeight - y - (bc.offsetHeight/2) - 64  + 'px';
+        // bc.style.opacity = 1;
+        // bc.style.pointerEvents = 'all';
+        // bc.style.transform = 'translateY(0)';
 
-        flattencanvas();
+        //minimap();
 
-        minimap();
+        canvas.timer = setTimeout(flattencanvas, 500);
+        // document.documentElement.classList.add('flatten');
     }
 
     window.addEventListener( 'mousemove', move );
@@ -293,23 +313,23 @@ function sketchHandlerM(e){
 }
 
 function undo(x){
-    var canvas = document.getElementById('canvas2');
+    // var canvas = document.getElementById('canvas2');
 
-    if (!canvashistory.length){
-        return;
-    }
+    // if (!canvashistory.length){
+    //     return;
+    // }
 
-    if ( !canvas.redo || x ){
-        canvas.redo = canvashistory.pop();
-        if ( canvashistory.length ){
-            canvas.getContext('2d').putImageData( canvashistory[canvashistory.length-1], 0, 0);
-        }
-    } else if (canvas.redo){
-        canvashistory.push(canvas.redo);
-        canvas.getContext('2d').putImageData( canvashistory[canvashistory.length - 1], 0, 0);
+    // if ( !canvas.redo || x ){
+    //     canvas.redo = canvashistory.pop();
+    //     if ( canvashistory.length ){
+    //         canvas.getContext('2d').putImageData( canvashistory[canvashistory.length-1], 0, 0);
+    //     }
+    // } else if (canvas.redo){
+    //     canvashistory.push(canvas.redo);
+    //     canvas.getContext('2d').putImageData( canvashistory[canvashistory.length - 1], 0, 0);
 
-        canvas.redo = null;
-    }
+    //     canvas.redo = null;
+    // }
 }
 
 function keyed(e){
@@ -323,31 +343,428 @@ function keyed(e){
     }
 }
 
+LAYERS = [];
+
 function flattencanvas(x){
     var canvas = document.getElementById('canvas2');
     var context = canvas.getContext('2d');
 
     var img = new Image();
 
-    img.style.position = 'absolute';
-    img.style.width = '100%';
-    img.style.top = 0;
-    img.style.left = 0;
+    var zscale = 100/ZOOMLEVEL;
 
-    img.style.transform = 'scale(' + (100/ZOOMLEVEL) + ')';
+
+    // var d = context.getImageData(0, 0, canvas.width, canvas.height);
+
+    // LAYERS.push({data: d, z: ZOOMLEVEL});
+
+    // fuck();
+
+    // return;
+
+    // img.style.position = 'absolute';
+    // img.style.width = '100%';
+    // img.style.top = 0;
+    // img.style.left = 0;
+
+    // // img.style.transform = 'scale(' + ZOOMLEVEL/100 + ')';
+    // img.style.transform = 'scale(' + zscale + ')';
+
+    // img.dataset.scale = zscale;
+    // img.dataset.z = ZOOMLEVEL;
+
+    // img.className = 'clayer newimg';
+
+    // img.style.opacity = 0;
 
     img.onload = function(){
 
-        context.clearRect(0,0,canvas.width,canvas.height);
+        
         // context.scale(x, x);
         // context.drawImage(imageObject,0,0);
         
+        // this.style.opacity = 1;
+
+        //mergeimgs();
+
+        //mergeimgs2();
+
+        // var w = this.naturalWidth || this.width;
+        // var h = this.naturalHeight || this.height;
+
+        LAYERS.push({
+            src: canvas.toDataURL(), z: ZOOMLEVEL, image: this
+        });
+
+        context.clearRect(0,0,canvas.width,canvas.height);
+
+        drawlayers2();
+
+        minimap();
     }
 
     img.src = canvas.toDataURL();
 
-    document.getElementById('canvaslayers').appendChild(img);
+    // document.getElementById('canvaslayers').appendChild(img);
 }
+
+function fuck(){
+    var canvas = document.getElementById('canvas2');
+    var context = canvas.getContext('2d');
+    var cw = canvas.width;
+    var ch = canvas.height;
+    
+    context.clearRect(0, 0, cw, ch);
+
+    var imgs = LAYERS;
+    console.log(LAYERS)
+    for(var i=0;i<imgs.length;i++){
+        var img = imgs[i];
+        console.log(img.data);
+        context.save();
+        context.scale(.5,.5);
+        context.putImageData(img.data, 0, 0);
+        context.restore();
+    }
+}
+
+function drawlayers2(){
+
+    // var og = document.getElementsByClassName('clayer');
+
+    var canvas = document.getElementById('canvas2');
+    var frame = document.getElementById('frame');
+    var context = canvas.getContext('2d');
+    var ftx = frame.getContext('2d');
+    var cw = canvas.width;
+    var ch = canvas.height;
+    
+    context.clearRect(0, 0, cw, ch);
+
+    ftx.clearRect(0, 0, cw, ch);
+
+    var imgs = LAYERS;
+    
+    for(var i=0;i<imgs.length;i++){
+
+        console.log(imgs[i]);
+        var img = imgs[i];
+        //var m = new Image();
+
+        //m.scale = img.z;
+
+        var _this = img.image;
+
+            var w = _this.naturalWidth || _this.width;
+            var h = _this.naturalHeight || _this.height;
+            
+            var s = 1;//ZOOMLEVEL / 100;//1;//this.z/100;
+            var p = 1/window.devicePixelRatio || 1;
+
+            var scale = img.z;
+
+            console.log(scale, w, h, ZOOMLEVEL)
+            if ( scale !== ZOOMLEVEL ){
+                var diff = ZOOMLEVEL / scale;
+
+                s = diff;
+            }
+    
+            w = w * s ;
+            h = h * s ;
+    
+            var x = ( cw - w ) / 2;
+            var y = ( ch - h ) / 2;
+
+            // console.log('---lOOADKEAD', x, y, w, h, cw, ch)
+            //context.drawImage(this, x, y, w, h);
+
+            // var x = cw *p /2;
+            // var y = ch * p /2;
+
+            //ftx.save();
+            //ftx.translate(x, y)
+            //ftx.scale( p*s, p*s);
+            ftx.drawImage(_this, x*p, y*p, w*p, h*p);//-x, -y);
+            //ftx.restore();
+        
+
+       
+    }
+
+    // og.remove();
+}
+
+// function drawlayers(){
+
+//     var og = document.getElementsByClassName('clayer');
+
+//     var canvas = document.getElementById('canvas2');
+//     var frame = document.getElementById('frame');
+//     var context = canvas.getContext('2d');
+//     var ftx = frame.getContext('2d');
+//     var cw = canvas.width;
+//     var ch = canvas.height;
+    
+//     context.clearRect(0, 0, cw, ch);
+
+//     ftx.clearRect(0, 0, cw, ch);
+
+//     var imgs = LAYERS;
+    
+//     for(var i=0;i<imgs.length;i++){
+
+//         console.log(imgs[i]);
+//         var img = imgs[i];
+//         var m = new Image();
+
+//         m.scale = img.z;
+
+//         m.onload = function(){
+//             var w = this.naturalWidth || this.width;
+//             var h = this.naturalHeight || this.height;
+            
+//             var s = 1;//ZOOMLEVEL / 100;//1;//this.z/100;
+//             var p = 1/window.devicePixelRatio || 1;
+
+//             var scale = this.scale;
+
+//             console.log(scale, ZOOMLEVEL)
+//             if ( scale !== ZOOMLEVEL ){
+//                 var diff = ZOOMLEVEL / scale;
+
+//                 s = diff;
+//             }
+    
+//             w = w * s ;
+//             h = h * s ;
+    
+//             var x = ( cw - w ) / 2;
+//             var y = ( ch - h ) / 2;
+
+//             // console.log('---lOOADKEAD', x, y, w, h, cw, ch)
+//             //context.drawImage(this, x, y, w, h);
+
+//             // var x = cw *p /2;
+//             // var y = ch * p /2;
+
+//             //ftx.save();
+//             //ftx.translate(x, y)
+//             //ftx.scale( p*s, p*s);
+//             ftx.drawImage(this, x*p, y*p, w*p, h*p);//-x, -y);
+//             //ftx.restore();
+//         }
+
+//         m.src = img.src;
+//     }
+
+//     og.remove();
+// }
+
+
+// function mergeimgs2(){
+//     var cl = document.getElementById('canvaslayers');
+//     var imgs = cl.getElementsByClassName('clayer');
+//     var canvas = document.createElement('canvas');
+//     var context = canvas.getContext('2d');
+
+//     var cw = 0;
+//     var ch = 0;
+//     var ms = 0;
+
+//     for(var i=0;i<imgs.length;i++){
+//         var m = imgs[i];
+        
+//         var w = m.naturalWidth || m.width;
+//         var h = m.naturalHeight || m.height;
+        
+//         var s = m.dataset.scale || 1;
+
+//         w = w ;//* s;
+//         h = h ;//* s;
+
+//         if ( w > cw ){
+//             cw = w;
+//         }
+
+//         if ( h > ch ){
+//             ch = h;
+//         }
+
+//         if ( s > ms ){
+//             ms = s;
+//         }
+
+//         console.log(w, h, m.offsetLeft, m.offsetTop, m.offset().x, m.offset().y, s);
+//     }
+
+//     canvas.width = cw;
+//     canvas.height = ch;
+
+//     console.log(cw, ch);
+
+//     for(var i=0;i<imgs.length;i++){
+//         var m = imgs[i];
+        
+//         var w = m.naturalWidth || m.width;
+//         var h = m.naturalHeight || m.height;
+        
+//         var s = m.dataset.scale || 1;
+
+//         if ( m.classList.contains('newimg')){
+//             s = ZOOMLEVEL / 100;
+//         }
+
+//         w = w / s;
+//         h = h / s;
+
+//         var ol = (cw - w ) / 2;
+//         var ot = (ch - h ) / 2;
+        
+
+//         context.drawImage(m, ol, ot, w, h);
+//     }
+
+//     imgs.remove();
+
+//     var img = new Image();
+
+//     img.style.position = 'absolute';
+//     img.style.width = '100%';
+//     img.style.top = 0;
+//     img.style.left = 0;
+
+//     //img.style.transform = 'scale(' + ms + ')';
+//     //img.dataset.scale = ms;
+
+//     img.className = 'clayer ugh22';
+
+//     img.onload = function(){
+
+//         //context.clearRect(0,0, canvas.width, canvas.height);
+//         // context.scale(x, x);
+//         // context.drawImage(imageObject,0,0);
+        
+//         //mergeimgs();
+
+//         console.log('----MERGE2---');
+//     }
+
+//     img.src = canvas.toDataURL();
+
+//     document.getElementById('canvaslayers').appendChild(img);
+
+//     minimap();
+// }
+
+// function mergeimgs(){
+//     var canvas = document.createElement('canvas');
+//     var context = canvas.getContext('2d');
+
+//     var cw = 0;
+//     var ch = 0;
+    
+//     // canvas.width = 0;
+//     // canvas.height = 0;
+
+//     //canvas.scale = 2;
+//     //context.scale(.5,.5);
+    
+//     // context.globalAlpha = 1.0;
+//     // context.drawImage(img1, 0, 0);
+//     // context.globalAlpha = 0.5; //Remove if pngs have alpha
+//     // context.drawImage(img2, 0, 0);
+
+//     var cl = document.getElementById('canvaslayers');
+//     var lz = cl.dataset.z || 1;
+
+//     // cl.dataset.z = 1;
+//     // cl.style.transform = 'none';
+
+//     var imgs = cl.getElementsByClassName('clayer');
+//     var zscale = ZOOMLEVEL/100;
+
+//     var p = window.devicePixelRatio || 1;
+
+//     for(var i=0;i<imgs.length;i++){
+//         var m = imgs[i];
+        
+//         var w = m.naturalWidth || m.width;
+//         var h = m.naturalHeight || m.height;
+
+//         //var s = Number(m.dataset.scale) || 1;
+
+//         w = w;// / p;// * s;//* (1/zscale);
+//         h = h;// / p;// * s;//* (1/zscale);
+
+//         if ( w > cw ){
+//             cw = w;
+//         }
+
+//         if ( h > ch ){
+//             ch = h;
+//         }
+//     }
+
+
+//     canvas.width = cw;
+//     canvas.height = ch;
+
+
+//     console.log(cw + ' ugh ' + ch);
+
+//     for(var i=0;i<imgs.length;i++){
+//         var m = imgs[i];
+
+//         var nw = m.naturalWidth || m.width;
+//         var nh = m.naturalHeight || m.height;
+
+//         var s = Number(m.dataset.scale) || 1;
+//         console.log(i, imgs.length, m);
+//         if ( i === imgs.length-1 || m.classList.contains('newimg') ){
+//             lz = ZOOMLEVEL/100;
+//         }
+        
+//         nw = nw * s / ((zscale)) * zscale;//* (1/zscale);// * ( (1/zscale) - 1);
+//         nh = nh * s /  ( (zscale)) * zscale;//* (1/zscale);// * ((1/zscale) - 1);
+
+//         var x = (cw - nw) / 2;
+//         var y = (ch - nh) / 2;
+
+//         context.drawImage(m, x, y, nw, nh);
+//     }
+
+
+//     imgs.remove();
+
+//     var img = new Image();
+
+//     img.style.position = 'absolute';
+//     img.style.width = '100%';
+//     img.style.top = 0;
+//     img.style.left = 0;
+
+//     //img.style.transform = 'scale(' + (100/ZOOMLEVEL) + ')';
+
+//     img.className = 'clayer ugh22';
+
+//     img.onload = function(){
+
+//         //context.clearRect(0,0, canvas.width, canvas.height);
+//         // context.scale(x, x);
+//         // context.drawImage(imageObject,0,0);
+        
+//         //mergeimgs();
+
+//         console.log('----MERGE---');
+//     }
+
+//     img.src = canvas.toDataURL();
+
+//     document.getElementById('canvaslayers').appendChild(img);
+
+//     minimap();
+// }
 
 // function canvaszoom2(x){
 //     var canvas = document.getElementById('canvas2');
