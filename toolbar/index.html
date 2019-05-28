@@ -3137,6 +3137,8 @@
                 return;
             }
 
+            
+
             var c = p.cloneNode(true);
 
             var bounds = this.getBoundingClientRect();
@@ -4596,9 +4598,12 @@
                 return;
             }
 
+            document.body.removeEventListener('mousedown', preclosemenu);
+            document.body.removeEventListener('touchstart', preclosemenu);
+
             if ( e.target && e.type == 'click' ){
                 e.preventDefault();
-                e.stopPropagation();
+                
             }
 
             var back = t.getparent('contextpanel') || t.getparent('permapanel'); 
@@ -4633,6 +4638,10 @@
 
             var o = document.getElementsByClassName('contextpanel opened');
             var oo = document.getElementsByClassName('permapanel opened');
+
+            o.addclass('wasopened');
+            oo.addclass('wasopened');
+
             o.removeclass('opened');
             oo.removeclass('opened');
 
@@ -4647,22 +4656,22 @@
             }
             //m.remove();
 
-            var o = document.getElementsByClassName('contextpanel sublevel');
-            var oo = document.getElementsByClassName('permapanel sublevel');
+            var ooo = document.getElementsByClassName('contextpanel sublevel');
+            var oooo = document.getElementsByClassName('permapanel sublevel');
 
-            if ( !o[0] && !oo[0] ){
+            if ( !ooo[0] && !oooo[0] ){
                 return;
             }
 
-            if ( oo[0] ){
-                o = oo;
+            if ( oooo[0] ){
+                ooo = oooo;
             }
 
-            var o1 = o[0].getElementsByClassName('option')[0];
+            var o1 = ooo[0].getElementsByClassName('option')[0];
 
-            o[0].classList.add('opened');
+            ooo[0].classList.add('opened');
             
-            o.removeclass('sublevel');
+            ooo.removeclass('sublevel');
 
             var o2 = o1.getparent('optionwrap');
 
@@ -4674,7 +4683,8 @@
 
             o1.offsetLeft;
 
-            o.removeclass('opened');
+
+            ooo.removeclass('opened');
 
             var aa = document.getElementsByClassName('layeritem current')[0];
 
@@ -4684,7 +4694,13 @@
                 }, 0);
             }
 
-        }
+            setTimeout(function(){
+                var o = document.getElementsByClassName('wasopened');
+                o.removeclass('opened');
+                o.removeclass('wasopened');
+
+            }, 500);
+        }   
 
         function backbtn(e){
             var b = document.createElement('div');
@@ -4737,8 +4753,9 @@
 
             var c = this.getparent('contextpanel') || this.getparent('permapanel');
             var o = c.classList.contains('opened');
+            var o2 = c.classList.contains('wasopened');
             
-            if ( o ){
+            if ( o || o2 ){
                 return;
             }
 
@@ -7186,9 +7203,9 @@
         Attach.on('click', '.zoomout', zoomout);
         Attach.on('click', '.zoomfit', zoomfit);
 
-        Attach.on('click', '.control', panelhandler);
+        // Attach.on('click', '.control', panelhandler);
 
-        Attach.on('click', '.contextpanel .option', panelhandler);
+        // Attach.on('click', '.contextpanel .option', panelhandler);
 
         Attach.on('click', '.stepped', stepper);
 
