@@ -345,7 +345,7 @@ function drawpaths(){
     // var ctx2 = canvas2.getContext('2d');
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx2.clearRect(0, 0, canvas.width, canvas.height);
+    // ctx2.clearRect(0, 0, canvas.width, canvas.height);
 
     var w = ctx.canvas.clientWidth;
     var h = ctx.canvas.clientHeight;
