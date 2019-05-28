@@ -361,7 +361,7 @@
 
         .ui1half {}
 
-        body.type_tool {cursor:text !important;touch-action: manipulation;}
+        .type_tool {cursor:text !important;touch-action: manipulation;}
 
             #textlayer {cursor:pointer;pointer-events:none;position:fixed;top:0;left:0;right:0;bottom:0;}
                 .type_tool #textlayer {pointer-events:all;}
@@ -4653,6 +4653,13 @@
             o.removeclass('opened');
             oo.removeclass('opened');
 
+            setTimeout(function(){
+                var o = document.getElementsByClassName('wasopened');
+                o.removeclass('opened');
+                o.removeclass('wasopened');
+
+            }, 500);
+
             var m = document.getElementsByClassName('menuwrap visible');
 
             while(m[0]){
@@ -4702,12 +4709,7 @@
                 }, 0);
             }
 
-            setTimeout(function(){
-                var o = document.getElementsByClassName('wasopened');
-                o.removeclass('opened');
-                o.removeclass('wasopened');
-
-            }, 500);
+            
         }   
 
         function backbtn(e){
@@ -4938,6 +4940,7 @@
                 }
 
             } else if ( shell == 'umenu' ){
+                c.classList.remove('opened');
                 var s = document.createElement('input');
                 s.type = 'file';
                 s.multiple = true;
@@ -5038,6 +5041,7 @@
 
                 return;
             } else if ( shell == 'smeet' ){
+                c.classList.remove('opened');
                 setupvideo();
 
                 return;
