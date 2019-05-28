@@ -155,6 +155,8 @@ function sketchHandler(e){
         lines[id] = {lx: lx, ly: ly};
     }
 
+    var path = [];
+
     function move(e){
         var evt = e.touches ? e.touches[0] : e;
         var touches = e.touches;
