@@ -8,7 +8,7 @@ CANVASCOLOR = 'rgba(0,0,0,0)';
 function rectanglemove(e){
 
     console.log('mnove');
-    //e.preventDefault();
+    e.preventDefault();
     e.stopPropagation();
 
     // if ( document.documentElement.id == 'rectanglex' || document.documentElement.id == 'circlex'  || document.documentElement.id == 'linex' ){
