@@ -361,7 +361,7 @@
 
         .ui1half {}
 
-        .type_tool canvas, .type_tool {cursor:text !important;}
+        body.type_tool {cursor:text !important;cursor:pointer !important;touch-action: manipulation;}
 
         .textwrap {position:absolute;cursor: -webkit-grab;cursor:grab;}
             .textarea {cursor: default;user-select:none;padding:0;resize:none;border-radius:4px;position:relative;min-width:48px;height:100%;min-height:28px;z-index:1337;background:transparent;border:none;color:white;font-size:24px;width:100%;max-width: 100%;box-sizing: border-box;padding: 12px;pointer-events:none;overflow-y: auto;display:block;line-height:1.2;}
@@ -4398,7 +4398,7 @@
 
                 t.dataset.x = 0;
                 t.dataset.y = 0;
-                console.log(ex + t.offsetLeft, ex, ol, t.offsetLeft, t.offsetTop);
+                // console.log(ex + t.offsetLeft, ex, ol, t.offsetLeft, t.offsetTop);
 
                 t.style.left = ex + t.offsetLeft + 'px';
                 t.style.top = ey + t.offsetTop + 'px';
