@@ -974,14 +974,14 @@
 
         #map {padding:16px 16px 48px;position:fixed;bottom:16px;right:216px;z-index:8888888888;border-radius:var(--toolbarradius);background:var(--panel);box-shadow:0 6px 20px var(--shadow);user-select:none;width:224px;}
             .hidetweak #map {right:16px;}
-            #map.hide {padding-bottom:32px;height:auto !important;}
+            .maphidden #map {padding-bottom:32px;height:auto !important;}
             
             .mapcontainer {overflow:hidden;height:100%;width:100%;}
             .mapscale {height: 100%;width:100%;pointer-events:none;transform-origin:center;transform:scale(.2);}
                 .mapwrap {transform-origin: top left;}
 
 
-            .hide .mapwrap {display:none;}
+            .maphidden .mapwrap {display:none;}
 
             .mapbar {position: absolute;bottom: 0;left: 0;height: 48px;width: 100%;display:flex;}
                 .mapbtn {cursor:pointer;width:48px;height:48px;display:flex;align-items:center;justify-content:center;}
@@ -1979,6 +1979,9 @@
             <label><input type=checkbox value=hiderez id=hiderez class=tweakr data-tweak=a0000 /><div class=toggle></div> Hide Resolution</label>
         </div>
         <div class=tweak>
+            <label><input type=checkbox value=maphidden id=maphidden class=tweakr data-tweak=a00000 /><div class=toggle></div> Hide Map</label>
+        </div>
+        <div class=tweak>
             <label><input type=checkbox value=debug id=debug class=tweakr data-tweak=a00 /><div class=toggle></div> Debug</label>
         </div>
         <div class=tweak>
@@ -2138,7 +2141,7 @@
             <div class="zoomout mapbtn" title="Zoom Out">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 13H5v-2h14v2z"/></svg>
             </div>
-            <div class="zoomlevel mapbtn tnum" id=zoomlevel>
+            <div class="zoomlevel mapbtn tnum" id=zoomlevel title="Reset Zoom">
                 100%
             </div>
         </div>
@@ -7155,8 +7158,8 @@
         function hidemap(e){
             var p = this.getparent('map');
 
-            if ( p.classList.contains('hide') ){
-                p.classList.remove('hide');
+            if ( document.documentElement.classList.contains('maphidden') ){
+                document.documentElement.classList.remove('maphidden');
                 var h = p.offsetHeight - 48;
 
                 p.style.transform = 'translateY(' + -h + 'px)';
@@ -7166,7 +7169,7 @@
 
                 p.style.transform = 'translateY(' + h + 'px)';
 
-                p.classList.add('hide');
+                document.documentElement.classList.add('maphidden');
             }
 
             
