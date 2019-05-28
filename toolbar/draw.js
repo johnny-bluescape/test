@@ -173,7 +173,7 @@ function sketchHandler(e){
 
             console.log(nx,ny);
 
-            console.log(t, id2, lines)
+            console.log(t, id2, lines);
 
             with(ctx) {
                 beginPath();
@@ -184,6 +184,8 @@ function sketchHandler(e){
                 lineJoin = 'round';
                 strokeStyle = BRUSHCOLOR;//'rgba(0,0,0,1)';
                 stroke();
+
+                path.push({mx:lines[id2].lx, my: lines[id2].ly, lx: nx, ly: ny});
             }
 
             lines[id2].lx = nx;
@@ -204,14 +206,20 @@ function sketchHandler(e){
         
         //minimap();
 
-        canvas.timer = setTimeout(flattencanvas, 500);
+        //canvas.timer = setTimeout(flattencanvas, 500);
 
         // document.documentElement.classList.add('flatten');
+
+        PATHDATA.push({paths: path, color: BRUSHCOLOR, size: BRUSHSIZE, scale: ZOOMLEVEL });
+
+        minimap();
     }
 
     window.addEventListener( 'touchmove', move );
     window.addEventListener( 'touchend', end );
 }
+
+PATHDATA = [];
 
 function sketchHandlerM(e){
     e.preventDefault();
@@ -257,6 +265,18 @@ function sketchHandlerM(e){
     bc.style.pointerEvents = 'none';
     bc.style.transform = 'translateY(6px)';
 
+    var ctx = canvas.getContext('2d');
+
+    with(ctx) {
+        beginPath();
+        lineWidth = BRUSHSIZE;//20;
+        lineCap = 'round';
+        lineJoin = 'round';
+        strokeStyle = BRUSHCOLOR;//'rgba(0,0,0,1)';
+    }
+
+    var path = [];
+
     function move(e){
         var evt = e.touches ? e.touches[0] : e;
         var ctx = canvas.getContext('2d');
@@ -267,13 +287,11 @@ function sketchHandlerM(e){
         var ny = evt.pageY - ot;
 
         with(ctx) {
-            beginPath();
             moveTo(lines[id2].lx, lines[id2].ly);
             lineTo(nx, ny);
-            lineWidth = BRUSHSIZE;//20;
-            lineCap = 'round';
-            lineJoin = 'round';
-            strokeStyle = BRUSHCOLOR;//'rgba(0,0,0,1)';
+            console.log(lines[id2].lx, lines[id2].ly, nx, ny);
+
+            path.push({mx:lines[id2].lx, my: lines[id2].ly, lx: nx, ly: ny});
             stroke();
         }
 
@@ -285,6 +303,10 @@ function sketchHandlerM(e){
 
         window.removeEventListener( 'mousemove', move );
         window.removeEventListener( 'mouseup', end );
+
+        PATHDATA.push({paths: path, color: BRUSHCOLOR, size: BRUSHSIZE, scale: ZOOMLEVEL });
+
+        minimap();
 
         // var imgdata = canvas.getContext('2d').getImageData(0,0,canvas.width,canvas.height);
         // canvashistory.push(imgdata);
@@ -304,12 +326,87 @@ function sketchHandlerM(e){
 
         //minimap();
 
-        canvas.timer = setTimeout(flattencanvas, 500);
+        //canvas.timer = setTimeout(flattencanvas, 500);
         // document.documentElement.classList.add('flatten');
     }
 
     window.addEventListener( 'mousemove', move );
     window.addEventListener( 'mouseup', end );
+}
+
+function drawpaths(){
+    var data = PATHDATA;
+    var canvas = document.getElementById('canvas2');
+    var ctx = canvas.getContext('2d');
+
+    var canvas2 = document.getElementById('frame');
+    var ctx2 = canvas2.getContext('2d');
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx2.clearRect(0, 0, canvas.width, canvas.height);
+
+    var w = ctx.canvas.clientWidth;
+    var h = ctx.canvas.clientHeight;
+
+    for(var i=0;i<data.length;i++){
+        var path = data[i];
+
+        var points = path.paths;
+        var color = path.color;
+        var size = Number(path.size);
+        var scale = Number(path.scale);
+
+        scale = (ZOOMLEVEL / scale);
+
+        ctx.save();
+
+        ctx.translate((w-(w*scale))/2, (h-(h*scale))/2);
+        ctx.scale(scale, scale);
+
+
+        with(ctx) {
+            beginPath();
+            lineWidth = size;
+            lineCap = 'round';
+            lineJoin = 'round';
+            strokeStyle = color;
+        }
+
+        for(var j=0;j<points.length;j++){
+            var point = points[j];
+
+            var x1 = point.mx;
+            var y1 = point.my;
+            var x2 = point.lx;
+            var y2 = point.ly;
+
+            with(ctx) {
+                moveTo(x1, y1);
+                lineTo(x2, y2);
+            }
+        }
+
+        ctx.stroke();
+        ctx.closePath();
+
+        
+        
+        
+        //var imgdata = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+        
+        ctx.restore();
+
+        
+        //ctx2.putImageData(imgdata, 0, 0, (w-(w*scale))/2, (h-(h*scale))/2, canvas.width, canvas.height);
+        //ctx2.drawImage(canvas, (w-(w*scale))/2, (h-(h*scale))/2, w, h);
+
+        // console.log(ctx2, ctx)
+
+        
+
+        //ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
 }
 
 function undo(x){
@@ -344,6 +441,22 @@ function keyed(e){
 }
 
 LAYERS = [];
+IMGDATA = [];
+
+function writeimgdata(){
+    var imgs = IMGDATA;
+    console.log(IMGDATA);
+    var canvas = document.getElementById('frame');
+    var context = canvas.getContext('2d');
+
+    context.clearRect(0,0,canvas.width,canvas.height);
+
+    for(var i=0;i<imgs.length;i++){
+        var img = imgs[i];
+        
+        context.putImageData(img.data, 0, 0);
+    }
+}
 
 function flattencanvas(x){
     var canvas = document.getElementById('canvas2');
@@ -352,6 +465,13 @@ function flattencanvas(x){
     var img = new Image();
 
     var zscale = 100/ZOOMLEVEL;
+
+
+   
+    var imgdata = context.getImageData(0, 0, canvas.width, canvas.height);
+    // ctx.putImageData(imgData, 10, 70);
+    
+    IMGDATA.push({ data: imgdata, z: ZOOMLEVEL });
 
 
     // var d = context.getImageData(0, 0, canvas.width, canvas.height);

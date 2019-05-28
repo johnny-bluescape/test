@@ -131,11 +131,10 @@
         }
 
         * {margin:0;padding:0;-webkit-overflow-scrolling: touch;-ms-overflow-style: -ms-autohiding-scrollbar;outline:none;-webkit-tap-highlight-color: transparent;-webkit-touch-callout: none;}
-        html, body {height:100%;}
-        html {background:var(--canvas);cursor:pointer;}
+        html {background:var(--canvas);cursor:pointer;width:calc(100% + 400px);height:calc(100% + 400px);}
         html, input, textarea, button {font-family:Barlow, sans-serif;color:var(--color);}
 
-        body {cursor:pointer;width:calc(100% + 400px);height:calc(100% + 400px);}
+        body {cursor:pointer;min-height:100%;height:100%;}
 
         body.rectangle_tool, body.select_tool {cursor:crosshair;}
 
@@ -430,7 +429,7 @@
 
         .contextpanel, .permapanel {overflow:hidden;white-space:nowrap;opacity:0;pointer-events:none;transition:none;background:var(--panel);border-radius:var(--toolbarradius);box-shadow:0 3px 20px var(--shadow);min-height:48px;position:absolute;top:-64px;left:50%;transform:translate(0, 4px);z-index:2147483646;}
 
-            .permapanel {opacity:1;pointer-events:all;}
+            /* .permapanel {opacity:1;pointer-events:all;} */
             .contextpanel.visible {transition:opacity 150ms ease-in-out, transform 150ms ease-in-out;}
 
             .current:not(.drawing) .contextpanel, .current:not(.moving) .contextpanel, .contextpanel.visible {opacity:1;pointer-events:all;transform:translate(0, 0);}
@@ -2169,7 +2168,7 @@
             // var cl = document.getElementById('canvaslayers');
             var m = document.getElementById('map');
             var mw = document.getElementById('mapwrap');
-            var c = document.getElementById('frame');
+            var c = document.getElementById('canvas2');
 
             var lw = l.offsetWidth;
             var lh = l.offsetHeight;
@@ -6482,18 +6481,18 @@
             e.fake = true;
             e.deltaY = 1;
             
-            for(var i=0; i<5; i++){
-                dotspacing.call(this, e);
-            }
+            // for(var i=0; i<5; i++){
+                dotspacing.call(this, e, 5);
+            // }
         }
 
         function zoomout(e){
             e.fake = true;
             e.deltaY = -1;
 
-            for(var i=0; i<5; i++){
-                dotspacing.call(this, e);
-            }
+            // for(var i=0; i<5; i++){
+                dotspacing.call(this, e, 5);
+            // }
         }
 
         function zoomfit(e){
@@ -6543,7 +6542,7 @@
             autosave();
         }
 
-        function dotspacing(e){
+        function dotspacing(e, x){
             
             // if ( e.target.getparent('tweaks') || e.target.getparent('contextmenu') || ( !document.documentElement.classList.contains('dotgrid') && !document.documentElement.classList.contains('grid') ) ){
             //     return;
@@ -6574,6 +6573,10 @@
 
             if (e.deltaY % 1 != 0){
                 delta = delta * -1;
+            }
+
+            if ( x ){
+                delta *= x;
             }
 
             console.log(e);
@@ -6665,7 +6668,9 @@
 
             //autosave();   
 
-            drawlayers2();
+            //drawlayers2();
+
+            drawpaths();
         }
 
         function resetzoom(e){
@@ -6693,7 +6698,8 @@
 
             document.getElementsByClassName('zoomtoast').remove();
 
-            drawlayers2();
+            //drawlayers2();
+            drawpaths();
         }
 
         function stopshare(){
@@ -6908,6 +6914,8 @@
                 cx.style.left = '50%';
                 cx.style.transition = 'none';
                 cx.style.transform = 'translateX(-50%)';
+                cx.style.opacity = 1;
+                cx.style.pointerEvents = 'all';
 
                 document.body.appendChild(f);
                 document.body.appendChild(cx);
