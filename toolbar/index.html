@@ -361,7 +361,10 @@
 
         .ui1half {}
 
-        body.type_tool {cursor:text !important;cursor:pointer !important;touch-action: manipulation;}
+        body.type_tool {cursor:text !important;touch-action: manipulation;}
+
+            #textlayer {cursor:pointer;pointer-events:none;position:fixed;top:0;left:0;right:0;bottom:0;}
+                .type_tool #textlayer {pointer-events:all;}
 
         .textwrap {position:absolute;cursor: -webkit-grab;cursor:grab;}
             .textarea {cursor: default;user-select:none;padding:0;resize:none;border-radius:4px;position:relative;min-width:48px;height:100%;min-height:28px;z-index:1337;background:transparent;border:none;color:white;font-size:24px;width:100%;max-width: 100%;box-sizing: border-box;padding: 12px;pointer-events:none;overflow-y: auto;display:block;line-height:1.2;}
@@ -2142,6 +2145,7 @@
     </div>
 
     <div id=layers></div>
+    <div id=textlayer></div>
     <!-- <div id=canvaslayers></div> -->
 
     <script>
@@ -2819,6 +2823,9 @@
         }
 
         function toolhandler(e){
+            e.preventDefault();
+            e.stopPropagation();
+
             tools.call(this, e);
 
             var t = this.getparent('tool');
@@ -4026,7 +4033,6 @@
 
         function typetool(e){
             console.log('TYPETOOL');
-
             //blurelm.call(this, e);
 
             var p = e.target.getparent('textarea');
@@ -4100,7 +4106,7 @@
 
             document.getElementById('layers').appendChild(w);
 
-            t.focus();
+            
 
             document.getElementById('select_tool').click();
 
@@ -4113,6 +4119,8 @@
             //if ( e.touches ){
                 //showkeyboard.call(w, e);
             //}
+
+            t.focus();
 
             document.getElementsByClassName('contextpanel visible')[0].getElementsByClassName('textfill')[0].style.background = TEXTCOLOR;
             document.getElementsByClassName('contextpanel visible')[0].getElementsByClassName('fontsize')[0].getElementsByClassName('label')[0].innerText = TEXTSIZE;
@@ -5282,7 +5290,7 @@
             }
             blurelm.call(this);
 
-            typetool.call(this, {pageX: (window.innerWidth / 2) - 200,pageY: window.innerHeight / 2, touches: null, target: document.body })
+            // typetool.call(this, {pageX: (window.innerWidth / 2) - 200,pageY: window.innerHeight / 2, touches: null, target: document.body })
         }
 
         function minishape(e){
@@ -7266,7 +7274,7 @@
         Attach.on('click' , '.key', key);
 
         //Attach.on('click', '#shape_tool2', shape_tool2);
-        Attach.on('click', '#type_tool2', type_tool2);
+        // Attach.on('click', '#type_tool2', type_tool2);
 
         Attach.on('click', '.minishape', minishape);
 
