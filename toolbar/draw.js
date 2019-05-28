@@ -69,7 +69,7 @@ function canvassetup(){
 
     document.body.addEventListener('keydown', keyed);
 
-    document.body.appendChild(frame);
+    // document.body.appendChild(frame);
 }
 
 function resize2(e){
@@ -341,8 +341,8 @@ function drawpaths(){
     var canvas = document.getElementById('canvas2');
     var ctx = canvas.getContext('2d');
 
-    var canvas2 = document.getElementById('frame');
-    var ctx2 = canvas2.getContext('2d');
+    // var canvas2 = document.getElementById('frame');
+    // var ctx2 = canvas2.getContext('2d');
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx2.clearRect(0, 0, canvas.width, canvas.height);
