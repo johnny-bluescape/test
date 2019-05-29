@@ -218,8 +218,8 @@ function rectanglemove(e){
     // var ot = rect.offsetTop;
     // var ol = rect.offsetLeft;
 
-    var ol = rect.offset().x;
-    var ot = rect.offset().y;
+    var ol = rect.offset().x  * zscale;
+    var ot = rect.offset().y  * zscale;
 
     var re = w + ol;
     var be = h + ot;
@@ -889,6 +889,18 @@ function rectanglemove(e){
     b.style.width = w + 'px';
     b.style.height = h + 'px';
     b.style.zIndex = 2147483640;
+
+    if ( h <= 72 ){
+      b.classList.add('minheight');
+    } else {
+      b.classList.remove('minheight');
+    }
+
+    if ( w <= 72 ){
+      b.classList.add('minwidth');
+    } else {
+      b.classList.remove('minwidth');
+    }
 
     if ( this.classList.contains('canvasboard') ){
       b.style.boxShadow = 'none';
