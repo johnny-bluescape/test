@@ -189,11 +189,13 @@
 
                 .toggled .options {opacity:1;pointer-events:all;box-shadow:0 2px 20px var(--shadow2);transform:translate(0, -50%);background-color:var(--panel);}
 
+                .settingsbtn ~ .options {top:0;transform: translate(-16px, 0);transition:opacity 150ms ease-in-out,transform 150ms ease-in-out;}
+                .toggled .settingsbtn ~ .options {transform: translate(0, 0);}
+
                 .horizontal .options {left:50%;top:-12px;transform:translate(-50%, calc(-100% + 4px));}
 
                 .horizontal .toggled .options {transform:translate(-50%, -100%);}
 
-                
 
                 .controls {padding-left:48px;}
                         .control {float:left;margin-right:24px;line-height:40px;cursor: pointer;}
@@ -1228,11 +1230,13 @@
                     <div class=optionwrap>
                         <div class=moremenu>
                             <div class=mitem>Hide Toolbar</div>
-                            <div class="mitem ">Exit </div>
+                            
                             <div class="mitem ">Save</div>
                             <div class=mitem>Delete</div>
                             <!-- <div class=mgap></div> -->
                             <div class="mitem ">Properties</div>
+                            <div class=mgap></div>
+                            <div class="mitem ">Exit </div>
                         </div>
                     </div>
                 </div>
@@ -2284,6 +2288,10 @@
                 }
             }
 
+            // css.html = document.getElementById('layers').innerHTML;
+
+            // css.ugh = document.getElementById('layers').cloneNode(true);
+
             return css;
         }
 
@@ -2376,6 +2384,10 @@
                     }
                 }
             }
+
+            // var html = json.html;
+
+            // document.getElementById('layers').innerHTML = html;
         }
 
         function toolbarcolor(e){
@@ -2841,6 +2853,21 @@
             var t = this.getparent('tool');
 
             if ( this.classList.contains('settingsbtn') ){
+                if ( !t.classList.contains('toggled') ){
+                    var off = this.offset(true);
+                    var diff = window.innerHeight - off.y - off.h;
+                    var p = t.getElementsByClassName('options')[0];
+                    var ph = p.offsetHeight;
+                    var gap = 12;
+                    var m = 0;
+                    console.log(diff < ph+gap, diff, ph, gap, off.y, off.h);
+                    if ( diff < ph+gap ){
+                        var m = -ph + diff + off.h - gap;   
+                    }
+
+                    p.style.top = m + 'px';
+                }
+
                 var old = document.getElementsByClassName('tool active toggled');
                 old.removeclass('toggled');
                 t.classList.toggle('toggled');               
