@@ -51,7 +51,7 @@ function rectanglemove(e){
 
     var box = this.bounds;
 
-    
+    var top = window.pageYOffset || document.documentElement.scrollTop;
     
 
     function move(e){
@@ -96,10 +96,14 @@ function rectanglemove(e){
         r.style.transform = 'translate(' + nx + 'px,' + ny + 'px)';
       }
 
-      if ( y < 36 ){
-        rec.classList.add('neartop');
-      } else {
-        rec.classList.remove('neartop');
+      if ( rec.classList.contains('canvasboard')){
+        var ys = rec.offset().y;
+
+        if ( (ys-top) < 36 ){
+          rec.classList.add('neartop');
+        } else {
+          rec.classList.remove('neartop');
+        }
       }
 
       setboundingposition();
@@ -352,6 +356,67 @@ function rectanglemove(e){
 
           nw = w2;
           nh = h2;
+        }
+
+        if( handle > 4 ){
+          nw = w;//Math.abs(w + nx);
+          nh = h;//Math.abs(h + ny);
+
+          tx = 0;
+          ty = 0;
+
+          if ( handle == 5 ){
+            nh = Math.abs(h - ny);
+            ty = ny;
+
+            if ( ya > be ){
+              nh = ya - be;
+              ty = ty - nh;
+            }
+          }
+
+          if ( handle == 6 ){
+            nw = Math.abs(w + nx);
+
+            if ( xa < ol ) {
+              nw = ol - xa;
+              tx = -nw;
+            }
+          }
+
+          if ( handle == 7 ){
+            nh = Math.abs(h + ny);
+  
+            if ( ya < ot ) {
+                nh = ot - ya;
+                ty = -nh;
+            }
+            
+          }
+
+          if ( handle == 8 ){
+            nw = Math.abs(w - nx);
+            tx = nx;
+            
+            if ( xa > re ){
+              nw = xa - re;
+              tx = tx - nw;
+            }
+          }
+
+
+        }
+
+        if ( nh <= 72 ){
+          rect.classList.add('minheight');
+        } else {
+          rect.classList.remove('minheight');
+        }
+
+        if ( nw <= 72 ){
+          rect.classList.add('minwidth');
+        } else {
+          rect.classList.remove('minwidth');
         }
 
         rect.style.width = nw + 'px';
@@ -830,7 +895,7 @@ function rectanglemove(e){
     }
 
 
-    for(var i=0;i<4;i++){
+    for(var i=0;i<8;i++){
       var a = document.createElement('div');
       a.className = 'bhandle';
 
@@ -888,14 +953,29 @@ function rectanglemove(e){
         r.bounds = b;
   
         b.object.push(r);
-      }    
+      }
+
+      var nw = tw - tx;
+      var nh = th - ty;
     
       b.style.left = tx + 'px';
       b.style.top = ty + 'px';
       b.style.position = 'absolute';
-      b.style.width = tw - tx + 'px';
-      b.style.height = th - ty + 'px';
+      b.style.width = nw + 'px';
+      b.style.height = nh + 'px';
       b.style.zIndex = 2147483641;
+
+      if ( nh <= 72 ){
+        b.classList.add('minheight');
+      } else {
+        b.classList.remove('minheight');
+      }
+
+      if ( nw <= 72 ){
+        b.classList.add('minwidth');
+      } else {
+        b.classList.remove('minwidth');
+      }
   }
 
   function setmultibounds(e){

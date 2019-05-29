@@ -392,8 +392,6 @@ function drawpaths(){
         ctx.closePath();
 
         
-        
-        
         //var imgdata = ctx.getImageData(0, 0, canvas.width, canvas.height);
 
         
@@ -442,180 +440,180 @@ function keyed(e){
     }
 }
 
-LAYERS = [];
-IMGDATA = [];
+// LAYERS = [];
+// IMGDATA = [];
 
-function writeimgdata(){
-    var imgs = IMGDATA;
-    console.log(IMGDATA);
-    var canvas = document.getElementById('frame');
-    var context = canvas.getContext('2d');
+// function writeimgdata(){
+//     var imgs = IMGDATA;
+//     console.log(IMGDATA);
+//     var canvas = document.getElementById('frame');
+//     var context = canvas.getContext('2d');
 
-    context.clearRect(0,0,canvas.width,canvas.height);
+//     context.clearRect(0,0,canvas.width,canvas.height);
 
-    for(var i=0;i<imgs.length;i++){
-        var img = imgs[i];
+//     for(var i=0;i<imgs.length;i++){
+//         var img = imgs[i];
         
-        context.putImageData(img.data, 0, 0);
-    }
-}
+//         context.putImageData(img.data, 0, 0);
+//     }
+// }
 
-function flattencanvas(x){
-    var canvas = document.getElementById('canvas2');
-    var context = canvas.getContext('2d');
+// function flattencanvas(x){
+//     var canvas = document.getElementById('canvas2');
+//     var context = canvas.getContext('2d');
 
-    var img = new Image();
+//     var img = new Image();
 
-    var zscale = 100/ZOOMLEVEL;
+//     var zscale = 100/ZOOMLEVEL;
 
 
    
-    var imgdata = context.getImageData(0, 0, canvas.width, canvas.height);
-    // ctx.putImageData(imgData, 10, 70);
+//     var imgdata = context.getImageData(0, 0, canvas.width, canvas.height);
+//     // ctx.putImageData(imgData, 10, 70);
     
-    IMGDATA.push({ data: imgdata, z: ZOOMLEVEL });
+//     IMGDATA.push({ data: imgdata, z: ZOOMLEVEL });
 
 
-    // var d = context.getImageData(0, 0, canvas.width, canvas.height);
+//     // var d = context.getImageData(0, 0, canvas.width, canvas.height);
 
-    // LAYERS.push({data: d, z: ZOOMLEVEL});
+//     // LAYERS.push({data: d, z: ZOOMLEVEL});
 
-    // fuck();
+//     // fuck();
 
-    // return;
+//     // return;
 
-    // img.style.position = 'absolute';
-    // img.style.width = '100%';
-    // img.style.top = 0;
-    // img.style.left = 0;
+//     // img.style.position = 'absolute';
+//     // img.style.width = '100%';
+//     // img.style.top = 0;
+//     // img.style.left = 0;
 
-    // // img.style.transform = 'scale(' + ZOOMLEVEL/100 + ')';
-    // img.style.transform = 'scale(' + zscale + ')';
+//     // // img.style.transform = 'scale(' + ZOOMLEVEL/100 + ')';
+//     // img.style.transform = 'scale(' + zscale + ')';
 
-    // img.dataset.scale = zscale;
-    // img.dataset.z = ZOOMLEVEL;
+//     // img.dataset.scale = zscale;
+//     // img.dataset.z = ZOOMLEVEL;
 
-    // img.className = 'clayer newimg';
+//     // img.className = 'clayer newimg';
 
-    // img.style.opacity = 0;
+//     // img.style.opacity = 0;
 
-    img.onload = function(){
+//     img.onload = function(){
 
         
-        // context.scale(x, x);
-        // context.drawImage(imageObject,0,0);
+//         // context.scale(x, x);
+//         // context.drawImage(imageObject,0,0);
         
-        // this.style.opacity = 1;
+//         // this.style.opacity = 1;
 
-        //mergeimgs();
+//         //mergeimgs();
 
-        //mergeimgs2();
+//         //mergeimgs2();
 
-        // var w = this.naturalWidth || this.width;
-        // var h = this.naturalHeight || this.height;
+//         // var w = this.naturalWidth || this.width;
+//         // var h = this.naturalHeight || this.height;
 
-        LAYERS.push({
-            src: canvas.toDataURL(), z: ZOOMLEVEL, image: this
-        });
+//         LAYERS.push({
+//             src: canvas.toDataURL(), z: ZOOMLEVEL, image: this
+//         });
 
-        context.clearRect(0,0,canvas.width,canvas.height);
+//         context.clearRect(0,0,canvas.width,canvas.height);
 
-        drawlayers2();
+//         drawlayers2();
 
-        minimap();
-    }
+//         minimap();
+//     }
 
-    img.src = canvas.toDataURL();
+//     img.src = canvas.toDataURL();
 
-    // document.getElementById('canvaslayers').appendChild(img);
-}
+//     // document.getElementById('canvaslayers').appendChild(img);
+// }
 
-function fuck(){
-    var canvas = document.getElementById('canvas2');
-    var context = canvas.getContext('2d');
-    var cw = canvas.width;
-    var ch = canvas.height;
+// function fuck(){
+//     var canvas = document.getElementById('canvas2');
+//     var context = canvas.getContext('2d');
+//     var cw = canvas.width;
+//     var ch = canvas.height;
     
-    context.clearRect(0, 0, cw, ch);
+//     context.clearRect(0, 0, cw, ch);
 
-    var imgs = LAYERS;
-    console.log(LAYERS)
-    for(var i=0;i<imgs.length;i++){
-        var img = imgs[i];
-        console.log(img.data);
-        context.save();
-        context.scale(.5,.5);
-        context.putImageData(img.data, 0, 0);
-        context.restore();
-    }
-}
+//     var imgs = LAYERS;
+//     console.log(LAYERS)
+//     for(var i=0;i<imgs.length;i++){
+//         var img = imgs[i];
+//         console.log(img.data);
+//         context.save();
+//         context.scale(.5,.5);
+//         context.putImageData(img.data, 0, 0);
+//         context.restore();
+//     }
+// }
 
-function drawlayers2(){
+// function drawlayers2(){
 
-    // var og = document.getElementsByClassName('clayer');
+//     // var og = document.getElementsByClassName('clayer');
 
-    var canvas = document.getElementById('canvas2');
-    var frame = document.getElementById('frame');
-    var context = canvas.getContext('2d');
-    var ftx = frame.getContext('2d');
-    var cw = canvas.width;
-    var ch = canvas.height;
+//     var canvas = document.getElementById('canvas2');
+//     var frame = document.getElementById('frame');
+//     var context = canvas.getContext('2d');
+//     var ftx = frame.getContext('2d');
+//     var cw = canvas.width;
+//     var ch = canvas.height;
     
-    context.clearRect(0, 0, cw, ch);
+//     context.clearRect(0, 0, cw, ch);
 
-    ftx.clearRect(0, 0, cw, ch);
+//     ftx.clearRect(0, 0, cw, ch);
 
-    var imgs = LAYERS;
+//     var imgs = LAYERS;
     
-    for(var i=0;i<imgs.length;i++){
+//     for(var i=0;i<imgs.length;i++){
 
-        console.log(imgs[i]);
-        var img = imgs[i];
-        //var m = new Image();
+//         console.log(imgs[i]);
+//         var img = imgs[i];
+//         //var m = new Image();
 
-        //m.scale = img.z;
+//         //m.scale = img.z;
 
-        var _this = img.image;
+//         var _this = img.image;
 
-            var w = _this.naturalWidth || _this.width;
-            var h = _this.naturalHeight || _this.height;
+//             var w = _this.naturalWidth || _this.width;
+//             var h = _this.naturalHeight || _this.height;
             
-            var s = 1;//ZOOMLEVEL / 100;//1;//this.z/100;
-            var p = 1/window.devicePixelRatio || 1;
+//             var s = 1;//ZOOMLEVEL / 100;//1;//this.z/100;
+//             var p = 1/window.devicePixelRatio || 1;
 
-            var scale = img.z;
+//             var scale = img.z;
 
-            console.log(scale, w, h, ZOOMLEVEL)
-            if ( scale !== ZOOMLEVEL ){
-                var diff = ZOOMLEVEL / scale;
+//             console.log(scale, w, h, ZOOMLEVEL)
+//             if ( scale !== ZOOMLEVEL ){
+//                 var diff = ZOOMLEVEL / scale;
 
-                s = diff;
-            }
+//                 s = diff;
+//             }
     
-            w = w * s ;
-            h = h * s ;
+//             w = w * s ;
+//             h = h * s ;
     
-            var x = ( cw - w ) / 2;
-            var y = ( ch - h ) / 2;
+//             var x = ( cw - w ) / 2;
+//             var y = ( ch - h ) / 2;
 
-            // console.log('---lOOADKEAD', x, y, w, h, cw, ch)
-            //context.drawImage(this, x, y, w, h);
+//             // console.log('---lOOADKEAD', x, y, w, h, cw, ch)
+//             //context.drawImage(this, x, y, w, h);
 
-            // var x = cw *p /2;
-            // var y = ch * p /2;
+//             // var x = cw *p /2;
+//             // var y = ch * p /2;
 
-            //ftx.save();
-            //ftx.translate(x, y)
-            //ftx.scale( p*s, p*s);
-            ftx.drawImage(_this, x*p, y*p, w*p, h*p);//-x, -y);
-            //ftx.restore();
+//             //ftx.save();
+//             //ftx.translate(x, y)
+//             //ftx.scale( p*s, p*s);
+//             ftx.drawImage(_this, x*p, y*p, w*p, h*p);//-x, -y);
+//             //ftx.restore();
         
 
        
-    }
+//     }
 
-    // og.remove();
-}
+//     // og.remove();
+// }
 
 // function drawlayers(){
 

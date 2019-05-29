@@ -96,6 +96,8 @@
             --selectwidth: 2px;
 
             --menutitle: rgba(255, 255, 255, 0.54);
+
+            --canvaslabel: 14px;
         }
 
         .light {
@@ -402,8 +404,6 @@
             .rectangle .resizehandle:nth-child(2) {top:var(--handlegap);right:var(--handlegap);cursor:nesw-resize;}
             .rectangle .resizehandle:nth-child(3) {bottom:var(--handlegap);left:var(--handlegap);cursor:nesw-resize;}
             .rectangle .resizehandle:nth-child(4) {bottom:var(--handlegap);right:var(--handlegap);cursor:nwse-resize;}
-
-
             
             .boundingbox {box-shadow: 0 0 0 var(--selectwidth) var(--select);pointer-events:none;
                 padding:var(--selectgap);margin:calc(var(--selectgap) * -1) 0 0  calc(var(--selectgap) * -1);
@@ -413,15 +413,24 @@
             .selectblack .boundingbox {box-shadow: 0 0 0 var(--selectwidth) var(--select), inset 0 0 0 1px black;}
 
 
-                .bhandle {border-radius:50%;position:absolute;background:var(--handlecolor);box-shadow:0 0 0 1px var(--handlecolor);width:var(--handlesize);height:var(--handlesize);transition:box-shadow 125ms ease-in-out;pointer-events:all;}
+                .bhandle {border-radius:50%;position:absolute;background:var(--handlecolor);box-shadow:0 0 0 1px var(--handlecolor);width:var(--handlesize);height:var(--handlesize);transition:box-shadow 125ms ease-in-out, transform 125ms ease-in-out, opacity 125ms ease-in-out;pointer-events:all;}
                     .bhandle:hover, .bhandle.active {box-shadow:0 0 0 1px var(--handlecolor), inset 0 0 0 12px #fff;}
 
                     .bhandle::after {content:'';position:absolute;width:48px;height:48px;top:50%;left:50%;transform:translate(-50%, -50%);}
 
-                .boundingbox .bhandle:nth-child(1) {top:var(--handlegap);left:var(--handlegap);cursor:nwse-resize;}
-                .boundingbox .bhandle:nth-child(2) {top:var(--handlegap);right:var(--handlegap);cursor:nesw-resize;}
-                .boundingbox .bhandle:nth-child(3) {bottom:var(--handlegap);left:var(--handlegap);cursor:nesw-resize;}
-                .boundingbox .bhandle:nth-child(4) {bottom:var(--handlegap);right:var(--handlegap);cursor:nwse-resize;}
+                .boundingbox .bhandle:nth-child(1) {top:calc(var(--handlegap) - (var(--selectwidth) / 2) );left:calc(var(--handlegap) - (var(--selectwidth) / 2) );cursor:nwse-resize;}
+                .boundingbox .bhandle:nth-child(2) {top:calc(var(--handlegap) - (var(--selectwidth) / 2) );right:calc(var(--handlegap) - (var(--selectwidth) / 2) );cursor:nesw-resize;}
+                .boundingbox .bhandle:nth-child(3) {bottom:calc(var(--handlegap) - (var(--selectwidth) / 2) );left:calc(var(--handlegap) - (var(--selectwidth) / 2) );cursor:nesw-resize;}
+                .boundingbox .bhandle:nth-child(4) {bottom:calc(var(--handlegap) - (var(--selectwidth) / 2) );right:calc(var(--handlegap) - (var(--selectwidth) / 2) );cursor:nwse-resize;}
+
+
+                .boundingbox .bhandle:nth-child(5) {top:calc(var(--handlegap) - (var(--selectwidth) / 2) );left:50%;cursor:ns-resize;transform:translateX(-50%);}
+                .boundingbox .bhandle:nth-child(6) {top:50%;right:calc(var(--handlegap) - (var(--selectwidth) / 2) );cursor:ew-resize;transform:translateY(-50%);}
+                .boundingbox .bhandle:nth-child(7) {bottom:calc(var(--handlegap) - (var(--selectwidth) / 2) );left:50%;cursor:ns-resize;transform:translateX(-50%);}
+                .boundingbox .bhandle:nth-child(8) {top:50%;left:calc(var(--handlegap) - (var(--selectwidth) / 2) );cursor:ew-resize;transform:translateY(-50%);}
+
+                .boundingbox.minwidth .bhandle:nth-child(5), .boundingbox.minwidth .bhandle:nth-child(7)  {opacity:0;pointer-events:none;transform:translateX(-50%) scale(0);}
+                .boundingbox.minheight  .bhandle:nth-child(6), .boundingbox.minheight .bhandle:nth-child(8)  {opacity:0;pointer-events:none;transform:translateY(-50%) scale(0);}
             
 
 
@@ -594,10 +603,10 @@
             
             .hidebrush #brush_context {opacity:1 !important;pointer-events:all  !important;}
         
-        .canvaslabel {position: absolute;top:-28px;left:-2px;padding:3px 0 4px;color:white;border-radius:6px;white-space:nowrap;font-size:14px;font-weight:500;transition:all 150ms ease-in-out;}
+        .canvaslabel {position: absolute;top:-2px;transform:translateY(-100%);left:-2px;padding:3px 0 4px;color:white;border-radius:6px;white-space:nowrap;font-size:var(--canvaslabel);font-weight:500;transition:all 150ms ease-in-out;}
             .current .canvaslabel {}
 
-            .neartop .canvaslabel {top:4px;left:8px;}
+            .neartop .canvaslabel {left:8px;transform:translateY(4px);}
 
             .ractangle.canvasboard.current {border-color:#7754A1;box-shadow:none;}
 
@@ -6652,6 +6661,14 @@
 
             LAYERSCALE = ls = Math.max(ls + (delta * ds), ds);
 
+
+            console.log(LAYERSCALE, 'LAYERSCALE');
+
+            var clabel = 14;
+            clabel *= 1/LAYERSCALE;
+
+
+
             l.style.transform = 'scale(' + ls + ')';
             //d.style.transform = 'scale(' + ls + ')';
             // cl.style.transform = 'scale(' + ls + ')';
@@ -6659,16 +6676,29 @@
 
             setboundingposition();
             setcontextpanel.call(document.getElementsByClassName('layeritem current')[0]);
-            
+
+
+            var n2 = 'canvaslabel_scale';
+            var o2 = document.head.getElementsByClassName(n2);
+            o2.remove();
 
             var n = 'tweaked_dotgrid';
             var o = document.head.getElementsByClassName(n);
             o.remove();
 
+            var s2 = document.createElement('style');
+            s2.className = n2;
+
+            var css2 = ':root{ --canvaslabel: ' + clabel + 'px;}';
+
             var s = document.createElement('style');
             s.className = n + ' tweaked_style';
 
             var css = ':root{ --dotgrid: ' + dotgrid2 + 'px; --grid: ' + dotgrid2 + 'px;}';
+
+
+            s2.appendChild(document.createTextNode(css2));
+            document.head.appendChild(s2);
 
             s.appendChild(document.createTextNode(css));
 
@@ -6724,6 +6754,26 @@
         }
 
         function resetzoom(e){
+
+            var z = 100 - ZOOMLEVEL;
+
+            if ( z === 0 ){
+                return;
+            }
+
+            var n = z > 0 ? 1 : -1;
+            z = Math.abs(z);
+
+            e.fake = true;
+            e.deltaY = n;
+
+
+            dotspacing.call(this, e, z);
+
+
+            return;
+
+
             LAYERSCALE = DELTASCALE = 1;
             gridtweak.call({value : GRIDSIZE}, e);
 
