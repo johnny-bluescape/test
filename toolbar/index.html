@@ -605,7 +605,7 @@
             
             .hidebrush #brush_context {opacity:1 !important;pointer-events:all  !important;}
         
-        .canvaslabel {position: absolute;top:-2px;transform:translateY(-100%);left:-2px;padding:3px 0 4px;color:white;border-radius:6px;white-space:nowrap;font-size:var(--canvaslabel);font-weight:500;transition:all 150ms ease-in-out;}
+        .canvaslabel {position: absolute;top:-2px;transform:translateY(-100%);left:-2px;padding:3px 0 4px;color:white;border-radius:6px;white-space:nowrap;font-size:var(--canvaslabel);font-weight:500;transition:transform 150ms ease-in-out, left 150ms ease-in-out, top 150ms ease-in-out;}
             .current .canvaslabel {}
 
             .neartop .canvaslabel {left:8px;transform:translateY(4px);}
@@ -1000,7 +1000,7 @@
                     .mapbtn svg {width:24px;heigh:24px;display:block;}
                         .mapbtn svg * {fill:var(--icon);}
 
-                    .mapbtn.zoomlevel {font-weight:600;width:64px;}
+                    .mapbtn.zoomlevel {font-weight:600;width:64px;line-height:48px;}
             
         input[type=color] {width: 100%;height: 36px;display: block;padding: 0;border: none;}
     </style>
@@ -4116,10 +4116,19 @@
 
             w.className = 'textwrap current layeritem';
 
-            var zscale = 1;//ZOOMLEVEL / 100;
+            var zscale = 100 / ZOOMLEVEL;
 
             var x = e.pageX * zscale;
             var y = e.pageY * zscale;
+
+            var loff = document.getElementById('layers').offset();
+
+            var ol = loff.x * zscale;
+            var ot = loff.y * zscale;
+            
+
+            y = y - ot;
+            x = x - ol;
 
             w.style.top = y - 24 + 'px';
             w.style.left = x + 'px';
