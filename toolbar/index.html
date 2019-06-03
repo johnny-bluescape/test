@@ -1003,6 +1003,21 @@
                     .mapbtn.zoomlevel {font-weight:600;width:64px;line-height:48px;}
             
         input[type=color] {width: 100%;height: 36px;display: block;padding: 0;border: none;}
+
+
+        .mobileview #tweaks {width:100%;z-index:999999999999999;}
+        .mobileview #hide {z-index:999999999999999999;}
+
+            .mobileview #toolbar{bottom: 0;top: auto;left: 0;margin: 0;width:100%;}
+            .mobileview .handle {display:none;}
+            .mobileview .tools {display:flex;justify-content: space-between;background:var(--panel);}
+
+                .mobileview .tool {margin:0;padding:4px;min-width:var(--toolbtn);}
+                    .mobileview .toolbtn {background:transparent;box-shadow:none;}
+
+                    .mobileview .tool.active .toolbtn {box-shadow:none;background:var(--toolselect2);}
+
+            .mobileview #map {top:16px;bottom:auto;}
     </style>
 </head>
 <body class="rectanglex brush_tool ">
@@ -1974,9 +1989,6 @@
 
     <canvas id="canvas2" style="cursor: crosshair; position: absolute; top: 0px; left: 0px; right: 0px; bottom: 0px; width: 100%; height: 100%;z-index:2;"></canvas>
 
-    <div id=hide title="Hide/Show Tweak Panel">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
-    </div>
     <div id=tweaks>
         <h4>Tweaks </h4>
         <div class=btnwrap>
@@ -2117,6 +2129,10 @@
             </div> -->
 
         </div>
+    </div>
+
+    <div id=hide title="Hide/Show Tweak Panel">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
     </div>
 
     <div id=keyboard class=draggable>
@@ -3041,6 +3057,10 @@
         }
 
         function handlehandler(e){
+            if ( document.documentElement.classList.contains('mobileview')){
+                return;
+            }
+
             var ev = e.touches ? e.touches[0] : e;
             if( ev.which == 3 ){
                 return;
@@ -6501,6 +6521,24 @@
         function resize(){
             screenrez();
             resize2();
+
+            mobile();
+
+            minimap();
+        }
+
+        function mobile(){
+            var w = window.innerWidth;
+
+            if ( w < 800 ){
+                document.documentElement.classList.add('hidetweak');
+            }
+
+            if ( w < 666 ){
+                document.documentElement.classList.add('mobileview', 'maphidden', 'horizontal');
+            } else {
+                document.documentElement.classList.remove('mobileview');
+            }
         }
 
         window.addEventListener('mousedown', function(e){
@@ -7444,6 +7482,8 @@
         parsehash();
 
         minimap();
+
+        mobile();
 
         // clayersize();
 
