@@ -988,9 +988,11 @@
             .maphidden #map {padding-bottom:48px;height:auto !important;}
                 .maphidden .mapcontainer {display:none;}
             
-            .mapcontainer {overflow:hidden;height:calc(100% - 4px);margin:4px 4px 0;border-radius:calc(var(--toolbarradius) - 4px) calc(var(--toolbarradius) - 4px) 4px 4px;background:var(--canvas);}
+            .mapcontainer {overflow:hidden;position:relative;height:calc(100% - 4px);margin:4px 4px 0;border-radius:calc(var(--toolbarradius) - 4px) calc(var(--toolbarradius) - 4px) 4px 4px;background:var(--canvas);}
             .mapscale {height: 100%;width:100%;pointer-events:none;transform-origin:center;transform:scale(.2);}
                 .mapwrap {transform-origin: top left;}
+
+            .mapview {width:80px;height:80px;border:1px solid var(--select);position:absolute;top:0;left:0;}
 
 
             .maphidden .mapwrap {display:none;}
@@ -1018,6 +1020,17 @@
                     .mobileview .tool.active .toolbtn {box-shadow:none;background:var(--toolselect2);}
 
             .mobileview #map {top:16px;bottom:auto;}
+
+
+        .ruler {opacity:0;position:fixed;top:0;left:0;background:rgba(255, 255, 255, 0.02);font-size:12px;line-height:20px;overflow:auto;pointer-events:none;box-sizing:border-box;}
+            #rulerx {height:20px;white-space: nowrap;z-index:2;left:20px;right:0;line-height:18px;}
+                #xrule {width:calc(100% + 400px);}
+                #rulerx span {display:inline-block;width:100px;}
+            #rulery {width:20px;top:20px;bottom:0;}
+                #yrule {height:calc(100% + 400px);}
+                #rulery span {display:inline-block;height:100px;writing-mode: vertical-rl;}
+
+        .showruler .ruler {opacity:1;}
     </style>
 </head>
 <body class="rectanglex brush_tool ">
@@ -2046,6 +2059,10 @@
             <label><input type=checkbox value=highlight class=tweakr data-tweak=a9 /><div class=toggle></div> Grid Markers</label>
         </div>
 
+        <div class=tweak>
+            <label><input type=checkbox value=showruler class=tweakr data-tweak=a91 /><div class=toggle></div> Ruler</label>
+        </div>
+
         <!-- <div class=tweak>
             <label><input type=checkbox value=hidebrush class=tweakr data-tweak=a10 /><div class=toggle></div> Brush Context</label>
         </div> -->
@@ -2157,6 +2174,7 @@
                     Map
                 </div>
             </div>
+            <div class=mapview id=mapview></div>
         </div>
         <div class=mapbar>
             <div class="hidemap mapbtn" title="Hide Map">
@@ -2175,6 +2193,13 @@
                 100%
             </div>
         </div>
+    </div>
+
+    <div id=rulerx class=ruler>
+        <div id=xrule></div>
+    </div>
+    <div id=rulery class=ruler>
+        <div id=yrule></div>
     </div>
 
     <div id=layers></div>
@@ -6525,20 +6550,59 @@
             mobile();
 
             minimap();
+
+            rulersetup();
         }
 
         function mobile(){
             var w = window.innerWidth;
 
-            if ( w < 800 ){
-                document.documentElement.classList.add('hidetweak');
+            if ( w <= 768 ){
+                document.documentElement.classList.add('mobileview', 'maphidden', 'horizontal', 'hidetweak');
+            } else if (document.documentElement.classList.contains('mobileview')){
+                document.documentElement.classList.remove('mobileview', 'maphidden', 'horizontal', 'hidetweak');
+            }
+        }
+
+        function rulersetup(){
+            var rx = document.getElementById('xrule');
+            var ry = document.getElementById('yrule');
+
+            var w = rx.offsetWidth; 
+            var h = ry.offsetHeight;
+
+            var thres = 100;
+
+            w += thres - (w % thres);
+
+            h += thres - (h % thres);
+
+            var tw = w / thres;
+            var th = h / thres;
+
+            //w = w * (100/ZOOMLEVEL);
+
+            rx.empty();
+            ry.empty();
+
+            for(var i=0;i<tw;i++){
+                var x = (-w/2) + i*thres;
+                x = Math.floor(x * (100/ZOOMLEVEL));
+                var n = document.createElement('span');
+
+                n.appendChild(document.createTextNode(x));
+                rx.appendChild(n);
             }
 
-            if ( w < 666 ){
-                document.documentElement.classList.add('mobileview', 'maphidden', 'horizontal');
-            } else {
-                document.documentElement.classList.remove('mobileview');
+            for(var i=0;i<th;i++){
+                var x = (-h/2) +i * thres;
+                x = Math.floor(x * (100/ZOOMLEVEL));
+                var n = document.createElement('span');
+
+                n.appendChild(document.createTextNode(x));
+                ry.appendChild(n);
             }
+
         }
 
         window.addEventListener('mousedown', function(e){
@@ -6710,7 +6774,7 @@
             }
 
             if ( x ){
-                delta *= x;
+                delta = delta * Number(x);
             }
 
             console.log(e);
@@ -6826,6 +6890,10 @@
             //drawlayers2();
 
             drawpaths();
+
+            rulersetup();
+
+            mapview();
         }
 
         function resetzoom(e){
@@ -6842,6 +6910,7 @@
             e.fake = true;
             e.deltaY = n;
 
+            DELTASCALE = 1;
 
             dotspacing.call(this, e, z);
 
@@ -6849,32 +6918,33 @@
             return;
 
 
-            LAYERSCALE = DELTASCALE = 1;
-            gridtweak.call({value : GRIDSIZE}, e);
+            // LAYERSCALE = DELTASCALE = 1;
+            // gridtweak.call({value : GRIDSIZE}, e);
 
-            var l = document.getElementById('layers');
-            //var d = document.getElementById('canvas2');
-            // var cl = document.getElementById('canvaslayers');
+            // var l = document.getElementById('layers');
+            // //var d = document.getElementById('canvas2');
+            // // var cl = document.getElementById('canvaslayers');
 
-            l.style.transform = 'scale(1)'; //d.style.transform = 'scale(1)'; cl.style.transform = 
-            // cl.dataset.z = 1;
+            // l.style.transform = 'scale(1)'; //d.style.transform = 'scale(1)'; cl.style.transform = 
+            // // cl.dataset.z = 1;
 
-            l.style.transformOrigin = 'center';//d.style.transformOrigin = 'center'; cl.style.transformOrigin = 
-            document.body.style.backgroundPosition = 'center';
+            // l.style.transformOrigin = 'center';//d.style.transformOrigin = 'center'; cl.style.transformOrigin = 
+            // document.body.style.backgroundPosition = 'center';
 
-            setboundingposition();
-            setcontextpanel.call(document.getElementsByClassName('layeritem current')[0]);
+            // setboundingposition();
+            // setcontextpanel.call(document.getElementsByClassName('layeritem current')[0]);
 
-            var l = document.getElementById('zoomlevel');
-            l.empty();
-            l.appendChild(document.createTextNode('100%'));
+            // var l = document.getElementById('zoomlevel');
+            // l.empty();
+            // l.appendChild(document.createTextNode('100%'));
 
-            ZOOMLEVEL = 100;
+            // ZOOMLEVEL = 100;
 
-            document.getElementsByClassName('zoomtoast').remove();
+            // document.getElementsByClassName('zoomtoast').remove();
 
-            //drawlayers2();
-            drawpaths();
+            // //drawlayers2();
+            // drawpaths();
+            // rulersetup();
         }
 
         function stopshare(){
@@ -7472,10 +7542,50 @@
             console.log = function(){};
         }
 
+        function scrolling2(e){
+            var top = window.pageYOffset || document.documentElement.scrollTop;
+            var left = window.pageXOffset || document.documentElement.scrollLeft;
+
+            console.log(e, 'scrolling2', top ,left);
+
+            var x = document.getElementById('rulerx');
+            var y = document.getElementById('rulery');
+
+            x.scrollLeft = left ;
+            y.scrollTop = top ;
+
+            mapview();
+        }
+
+        function mapview(){
+            var m = document.getElementById('mapview');
+            var y = window.pageYOffset || document.documentElement.scrollTop;
+            var x = window.pageXOffset || document.documentElement.scrollLeft;
+            var z = 100 / ZOOMLEVEL;
+
+            var w = window.innerWidth;
+            var h = window.innerHeight;
+            var sh = 200/h;
+            var sw = 200/w;
+
+
+
+            y = y * sh;
+            x = x * sw;
+
+            m.style.width = w*z/20 + 'px';
+            m.style.height = h*z/20 + 'px';
+            m.style.transform = 'translate(-50%,-50%)';
+
+            m.style.left = x + m.offsetWidth + 'px';
+            m.style.top = y + m.offsetHeight + 'px';
+        }
+
         canvassetup();
         window.onresize = resize;
         screenrez();
-        window.scrollTo( 200, 200 );
+        window.onscroll = scrolling2;
+        window.scrollTo(200, 200);
         window.addEventListener('mousewheel', dotspacing, { passive: false });
 
         presave();
@@ -7484,6 +7594,8 @@
         minimap();
 
         mobile();
+
+        rulersetup();
 
         // clayersize();
 
