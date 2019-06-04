@@ -6740,20 +6740,17 @@
             autosave();
         }
 
-        function dotspacing(e, x){
+        function dotspacing(e, x, r){
             
             // if ( e.target.getparent('tweaks') || e.target.getparent('contextmenu') || ( !document.documentElement.classList.contains('dotgrid') && !document.documentElement.classList.contains('grid') ) ){
             //     return;
             // }
-
-       
 
             if ( !e.ctrlKey && !e.metaKey && !e.fake ){
                 return;
             }
 
             e.preventDefault();
-
 
             var l = document.getElementById('layers');
             // var cl = document.getElementById('canvaslayers');
@@ -6777,6 +6774,8 @@
                 delta = delta * Number(x);
             }
 
+            
+
             console.log(e);
 
             if ( DELTASCALE <= 0.01 ){ //|| delta < 0 && DELTASCALE == 0.01 
@@ -6786,6 +6785,10 @@
             }
 
             DELTASCALE = Math.max(DELTASCALE + (delta * ds), ds);
+
+            if ( r ){
+                DELTASCALE = 1;
+            }
 
             //dotgrid2 += delta;
             var dotgrid2 = GRIDSIZE * DELTASCALE;
@@ -6799,6 +6802,10 @@
 
 
             LAYERSCALE = ls = Math.max(ls + (delta * ds), ds);
+
+            if ( r ){
+                LAYERSCALE = ls = 1;
+            }
 
 
             console.log(LAYERSCALE, 'LAYERSCALE');
@@ -6912,7 +6919,7 @@
 
             DELTASCALE = 1;
 
-            dotspacing.call(this, e, z);
+            dotspacing.call(this, e, z, true);
 
 
             return;
@@ -7568,16 +7575,13 @@
             var w = window.innerWidth;
             var h = window.innerHeight;
 
-
             var lw = l.offsetWidth;
-            var lh = l.offsetHeight;
 
             var w2 = 256;
 
             var s = w2 / lw;
 
             var ns = 1 * s;
-
 
 
             // y = y * sh * .5;
