@@ -136,7 +136,7 @@
         html {background:var(--canvas);cursor:pointer;width:calc(100% + 400px);height:calc(100% + 400px);}
         html, input, textarea, button {font-family:Barlow, sans-serif;color:var(--color);}
 
-        body {cursor:pointer;min-height:100%;height:100%;}
+        body {cursor:pointer;min-height:100%;height:100%;overscroll-behavior-x: none;}
 
         body.rectangle_tool, body.select_tool {cursor:crosshair;}
 
@@ -7570,15 +7570,27 @@
 
 
 
-            y = y * sh;
-            x = x * sw;
+            // y = y * sh * .5;
+            // x = x * sw * .5;
 
-            m.style.width = w*z/20 + 'px';
-            m.style.height = h*z/20 + 'px';
-            m.style.transform = 'translate(-50%,-50%)';
+            x *= .14 * (ZOOMLEVEL/100) * .2;// / 2;
+            y *= .14 * (ZOOMLEVEL/100) * .2;// / 2;
 
-            m.style.left = x + m.offsetWidth + 'px';
-            m.style.top = y + m.offsetHeight + 'px';
+
+
+            var mw = w * .14 * (1/(ZOOMLEVEL/100)) * .2;
+            var mh = h * .14 * (1/(ZOOMLEVEL/100)) * .2;
+
+
+            x -= (m.offsetWidth/2);
+            y -= (m.offsetHeight/2);
+
+            m.style.width = mw + 'px';
+            m.style.height = mh + 'px';
+            m.style.transform = 'translate(' + x + 'px,' + y  +'px)';
+
+            m.style.left = '50%';//x + (m.offsetWidth/2) + 'px';
+            m.style.top = '50%';//y + (m.offsetHeight/2) + 'px';
         }
 
         canvassetup();
