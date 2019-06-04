@@ -1010,9 +1010,9 @@
         .mobileview #tweaks {width:100%;z-index:999999999999999;}
         .mobileview #hide {z-index:999999999999999999;}
 
-            .mobileview #toolbar{bottom: 0;top: auto;left: 0;margin: 0;width:100%;}
+            .mobileview #toolbar{bottom: 0;top: auto;left: 0;margin: 0;width:100%;pointer-events:all;}
             .mobileview .handle {display:none;}
-            .mobileview .tools {display:flex;justify-content: space-between;background:var(--panel);}
+            .mobileview .tools {display:flex;justify-content: space-between;background:var(--panel);min-width: min-content;}
 
                 .mobileview .tool {margin:0;padding:4px;min-width:var(--toolbtn);}
                     .mobileview .toolbtn {background:transparent;box-shadow:none;}
@@ -1022,8 +1022,8 @@
             .mobileview #map {top:16px;bottom:auto;}
 
 
-        .ruler {opacity:0;position:fixed;top:0;left:0;background:rgba(255, 255, 255, 0.02);font-size:12px;line-height:20px;overflow:auto;pointer-events:none;box-sizing:border-box;z-index:2147483647;}
-            #rulerx {height:20px;white-space: nowrap;z-index:2147483649;left:20px;right:0;line-height:18px;}
+        .ruler {opacity:0;position:fixed;top:0;left:0;background:rgba(255, 255, 255, 0.02);font-size:12px;line-height:20px;overflow:auto;pointer-events:none;box-sizing:border-box;z-index:2147483643;}
+            #rulerx {height:20px;white-space: nowrap;z-index:2147483644;left:20px;right:0;line-height:18px;}
                 #xrule {width:calc(100% + 400px);}
                 #rulerx span {display:inline-block;width:100px;}
             #rulery {width:20px;top:20px;bottom:0;}
