@@ -7561,25 +7561,35 @@
             var m = document.getElementById('mapview');
             var y = window.pageYOffset || document.documentElement.scrollTop;
             var x = window.pageXOffset || document.documentElement.scrollLeft;
+            var l = document.getElementById('layers');
+
             var z = 100 / ZOOMLEVEL;
 
             var w = window.innerWidth;
             var h = window.innerHeight;
-            var sh = 200/h;
-            var sw = 200/w;
+
+
+            var lw = l.offsetWidth;
+            var lh = l.offsetHeight;
+
+            var w2 = 256;
+
+            var s = w2 / lw;
+
+            var ns = 1 * s;
 
 
 
             // y = y * sh * .5;
             // x = x * sw * .5;
 
-            x *= .14 * (ZOOMLEVEL/100) * .2;// / 2;
-            y *= .14 * (ZOOMLEVEL/100) * .2;// / 2;
+            x *= ns * (ZOOMLEVEL/100) * .2;// / 2;
+            y *= ns * (ZOOMLEVEL/100) * .2;// / 2;
 
 
 
-            var mw = w * .14 * (1/(ZOOMLEVEL/100)) * .2;
-            var mh = h * .14 * (1/(ZOOMLEVEL/100)) * .2;
+            var mw = w * ns * (1/(ZOOMLEVEL/100)) * .2;
+            var mh = h * ns * (1/(ZOOMLEVEL/100)) * .2;
 
 
             x -= (m.offsetWidth/2);
@@ -7608,6 +7618,7 @@
         mobile();
 
         rulersetup();
+        mapview();
 
         // clayersize();
 
