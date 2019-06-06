@@ -7395,16 +7395,27 @@
         function hidemap(e){
             var p = this.getparent('map');
 
+            var offset = p.offset(true);
+
+            var ox = offset.x;
+            var oy = offset.y;
+
+            p.style.left = p.style.top = 0;
+            p.style.right = p.style.bottom = 'auto';
+
+
             if ( document.documentElement.classList.contains('maphidden') ){
                 document.documentElement.classList.remove('maphidden');
                 var h = p.offsetHeight - 48;
 
-                p.style.transform = 'translateY(' + -h + 'px)';
+                // p.style.transform = 'translateY(' + -h + 'px)';
+                p.style.transform = 'translate(' + ox + 'px, ' + (oy - h) + 'px)';
 
             } else {
                 var h = p.offsetHeight - 48;
 
-                p.style.transform = 'translateY(' + h + 'px)';
+                // p.style.transform = 'translateY(' + h + 'px)';
+                p.style.transform = 'translate(' + ox + 'px, ' + (oy + h) + 'px)';
 
                 document.documentElement.classList.add('maphidden');
             }
