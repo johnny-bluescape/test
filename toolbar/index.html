@@ -1002,6 +1002,9 @@
                     .mapbtn svg {width:24px;heigh:24px;display:block;}
                         .mapbtn svg * {fill:var(--icon);}
 
+                    .mapbtn:not(.on) svg.on2 {display:none;}
+                    
+
                     .mapbtn.zoomlevel {font-weight:600;width:64px;line-height:48px;}
             
         input[type=color] {width: 100%;height: 36px;display: block;padding: 0;border: none;}
@@ -2180,8 +2183,12 @@
             <div class="hidemap mapbtn" title="Hide Map">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5zM15 19l-6-2.11V5l6 2.11V19z"/></svg>
             </div>
-            <div class="zoomfit mapbtn" title=fit>
+            <!-- <div class="zoomfit mapbtn" title=fit>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.57 14.86L22 13.43 20.57 12 17 15.57 8.43 7 12 3.43 10.57 2 9.14 3.43 7.71 2 5.57 4.14 4.14 2.71 2.71 4.14l1.43 1.43L2 7.71l1.43 1.43L2 10.57 3.43 12 7 8.43 15.57 17 12 20.57 13.43 22l1.43-1.43L16.29 22l2.14-2.14 1.43 1.43 1.43-1.43-1.43-1.43L22 16.29z"/></svg>
+            </div> -->
+            <div class="zoomfull mapbtn" title="Fullscreen">
+                <svg class=on1 viewBox="0 0 24 24" ><path d="M17.586 5H15a1 1 0 0 1 0-2h6v6a1 1 0 0 1-2 0V6.414l-3.293 3.293a1 1 0 1 1-1.414-1.414L17.586 5zM6.414 19H9a1 1 0 0 1 0 2H3v-6a1 1 0 0 1 2 0v2.586l3.293-3.293a1 1 0 1 1 1.414 1.414L6.414 19z"></path></svg>
+                <svg class=on2 viewBox="0 0 24 24" ><path d="M7.586 15H5a1 1 0 0 1 0-2h6v6a1 1 0 0 1-2 0v-2.586l-4.293 4.293a1 1 0 1 1-1.414-1.414L7.586 15zm8.828-6H19a1 1 0 0 1 0 2h-6V5a1 1 0 0 1 2 0v2.586l4.293-4.293a1 1 0 0 1 1.414 1.414L16.414 9z"></path></svg>
             </div>
             <div class="zoomin mapbtn" title="Zoom In">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
@@ -2223,6 +2230,30 @@
         DEBUG = console.log;
 
         ZOOMLEVEL = 100;
+
+        function fullchange(){
+            var full = document.fullscreenElement;
+
+            if ( !full ){
+                var f = document.getElementsByClassName('zoomfull');
+                f.removeclass('on');
+                document.documentElement.classList.remove('fullscreen');
+            }
+        }
+
+        function fullscreen(){
+            this.classList.toggle('on');
+
+            var html = document.documentElement;
+            if ( !html.classList.contains('fullscreen') ){
+                html.requestFullscreen();
+                html.classList.add('fullscreen');
+                document.onfullscreenchange = fullchange;
+            } else {
+                document.exitFullscreen()
+                html.classList.remove('fullscreen');
+            }
+        }
 
         function minimap(){
             console.log('minimap')
@@ -2991,10 +3022,7 @@
 
             var safe = this.classList.contains('safebounds');
 
-            t.style.left = t.style.top = 0;
-            t.style.right = t.style.bottom = 'auto';
-
-            t.style.transform = 'translate(' + ox + 'px, ' + oy + 'px)';
+            
 
             var safegap = 8;
 
@@ -3022,6 +3050,10 @@
                 if ( !moved && ( Math.abs(xx) > thres || Math.abs(yy) > thres ) ){
                     moved = true;
                     t.classList.add('dragging');
+                    t.style.left = t.style.top = 0;
+                    t.style.right = t.style.bottom = 'auto';
+
+                    t.style.transform = 'translate(' + ox + 'px, ' + oy + 'px)';
                 } else if ( !moved ){
                     return;
                 }
@@ -3060,11 +3092,14 @@
                 window.removeEventListener('mousemove', move);
                 window.removeEventListener('mouseup', end);
 
+                t.classList.remove('dragging');
+
                 if ( !moved ){
                     //tar.click();
+                    return;
                 }
 
-                t.classList.remove('dragging');
+                
 
                 console.log(nx,ny);
 
@@ -7437,6 +7472,7 @@
         Attach.on('click', '.zoomin', zoomin);
         Attach.on('click', '.zoomout', zoomout);
         Attach.on('click', '.zoomfit', zoomfit);
+        Attach.on('click', '.zoomfull', fullscreen);
 
         // Attach.on('click', '.control', panelhandler);
 
