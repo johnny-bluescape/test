@@ -1147,9 +1147,9 @@ function rectanglemove(e){
     if ( e.which == 3|| e.target != document.body ){
         return;
     }
-    e = e.touches ? e.touches[0] : e;
-    var sx = e.pageX;
-    var sy = e.pageY;
+    var ev = e.touches ? e.touches[0] : e;
+    var sx = ev.pageX;
+    var sy = ev.pageY;
 
     //var sh = window.scrollTop || document.body.scrollTop || document.scrollTop;
 
@@ -1163,15 +1163,13 @@ function rectanglemove(e){
     marq.style.zIndex = 1337;
     marq.style.background = 'rgba(20, 115, 230,.15)';
 
-    var ev = e;
 
     //document.body.appendChild(marq);
     var moved = false;
 
-    if ( e.touches.length > 2 ){
+    if ( e.touches.length > 1 ){
       console.log(e.touches.length);
       multitouch.call(this, e);
-
 
       return;
     }
@@ -1179,7 +1177,7 @@ function rectanglemove(e){
     function move(e){
         e.preventDefault();
 
-        if ( e.touches.length > 2 ){
+        if ( e.touches.length > 1 ){
           console.log(e.touches.length);
 
           return;
