@@ -8,6 +8,8 @@ function canvassetup(){
     width  	= canvas.parentElement.offsetWidth,
     height 	= canvas.parentElement.offsetHeight;
 
+    alert(width + ' ' + height);
+
     var frame = document.createElement('canvas');
 
     canvas.height	= frame.height = height;
