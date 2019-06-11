@@ -23,7 +23,7 @@
 <html class="">
 <head>
     <meta charset=utf-8>
-    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,user-scalable=no">
     <meta name="google" content="notranslate"><!-- WTF chrome, it's not in german -->
     <meta http-equiv="Content-Language" content="en">
     <title>UI Testing Grounds</title>
@@ -133,7 +133,7 @@
         }
 
         * {margin:0;padding:0;-webkit-overflow-scrolling: touch;-ms-overflow-style: -ms-autohiding-scrollbar;outline:none;-webkit-tap-highlight-color: transparent;-webkit-touch-callout: none;}
-        html {background:var(--canvas);cursor:pointer;width:calc(100% + 400px);height:calc(100% + 400px);}
+        html {background:var(--canvas);cursor:pointer;width:calc(100% + 400px);height:calc(100% + 400px);-webkit-text-size-adjust: none;touch-action: manipulation;}
         html, input, textarea, button {font-family:Barlow, sans-serif;color:var(--color);}
 
         body {cursor:pointer;min-height:100%;height:100%;overscroll-behavior-x: none;}
