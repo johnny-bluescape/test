@@ -1067,6 +1067,77 @@ function rectanglemove(e){
     
   }
 
+  function multitouch(e){
+    var touches = e.touches;
+    var xy = [];
+    
+    for(var i=0;i<touches.length;i++){
+      var ev = touches[i];
+      var sx = ev.pageX;
+      var sy = ev.pageY;
+      xy.append({x: sx, y: sy, id: ev.identifier});
+    }
+
+    var x1 = xy[0].x;
+    var x2 = xy[1].x;
+
+    var y1 = xy[0].y;
+    var y2 = xy[1].y;
+
+    var sd = Math.sqrt(Math.pow((x2−x1),2) + Math.pow((y2−y1), 2));
+
+    var panning = false;
+    var pinching = false;
+
+    function move(e){
+      var touches = e.touches;
+
+      var xy2 = [];
+
+      for(var i=0;i<touches.length;i++){
+        var ev = touches[i];
+        var x = ev.pageX;
+        var y = ev.pageY;
+        xy2.append({x: x, y: y, id: ev.identifier});
+      }
+
+      var x1b = xy2[0].x;
+      var x2b = xy2[1].x;
+
+      var y1b = xy2[0].y;
+      var y2b = xy2[1].y;
+
+      var d = Math.sqrt(Math.pow((x2−x1),2) + Math.pow((y2−y1), 2));
+
+      var xd = (x1 - x1b)  - (x2 - x2b);
+      var yd = (y1 - y1b)  - (y2 - y2b);
+
+      if ( !panning && !pinching ){
+        if ( Math.abs(sd - d) > (Math.abs(xd) || Math.abs(yd)) ){
+          console.log('pinch')
+        } else{
+          console.log('pan')
+        }
+      }
+    }
+
+    function end(e){
+      // window.removeEventListener('mousemove', move);
+      // window.removeEventListener('mouseup', end);
+
+      window.removeEventListener('touchmove', move);
+      window.removeEventListener('touchend', end);
+
+      
+    }
+    
+    window.addEventListener('touchmove', move);
+    window.addEventListener('touchend', end);
+
+    // window.addEventListener('mouseup', end);
+    // window.addEventListener('mousemove', move);
+  }
+
   function marquee(e){
     if ( e.which == 3|| e.target != document.body ){
         return;
@@ -1087,11 +1158,27 @@ function rectanglemove(e){
     marq.style.zIndex = 1337;
     marq.style.background = 'rgba(20, 115, 230,.15)';
 
+    var ev = e;
+
     //document.body.appendChild(marq);
     var moved = false;
 
+    if ( e.touches.length > 2 ){
+      console.log(e.touches.length);
+      multitouch.call(this, e);
+
+
+      return;
+    }
+
     function move(e){
         e.preventDefault();
+
+        if ( e.touches.length > 2 ){
+          console.log(e.touches.length);
+
+          return;
+        }
 
         e = e.touches ? e.touches[0] : e;
 
