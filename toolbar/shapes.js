@@ -1084,7 +1084,8 @@ function rectanglemove(e){
     var y1 = xy[0].y;
     var y2 = xy[1].y;
 
-    var sd = Math.sqrt(Math.pow((x2−x1),2) + Math.pow((y2−y1), 2));
+    var sd = Math.sqrt(Math.pow((x2 - x1),2) + Math.pow((y2 - y1), 2));
+
 
     var panning = false;
     var pinching = false;
@@ -1107,7 +1108,9 @@ function rectanglemove(e){
       var y1b = xy2[0].y;
       var y2b = xy2[1].y;
 
-      var d = Math.sqrt(Math.pow((x2−x1),2) + Math.pow((y2−y1), 2));
+
+
+      var d = Math.sqrt(Math.pow((x2 - x1),2) + Math.pow((y2 - y1), 2));
 
       var xd = (x1 - x1b)  - (x2 - x2b);
       var yd = (y1 - y1b)  - (y2 - y2b);
@@ -1115,8 +1118,10 @@ function rectanglemove(e){
       if ( !panning && !pinching ){
         if ( Math.abs(sd - d) > (Math.abs(xd) || Math.abs(yd)) ){
           console.log('pinch')
+          pinching = true;
         } else{
-          console.log('pan')
+          console.log('pan');
+          panning = true;
         }
       }
     }
