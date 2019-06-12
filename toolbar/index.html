@@ -23,7 +23,7 @@
 <html class="">
 <head>
     <meta charset=utf-8>
-    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover">
     <meta name="google" content="notranslate"><!-- WTF chrome, it's not in german -->
     <meta http-equiv="Content-Language" content="en">
     <title>UI Testing Grounds</title>
@@ -133,9 +133,9 @@
         }
 
         * {margin:0;padding:0;-webkit-overflow-scrolling: touch;-ms-overflow-style: -ms-autohiding-scrollbar;outline:none;-webkit-tap-highlight-color: transparent;-webkit-touch-callout: none;}
-        html {background:var(--canvas);cursor:pointer;width:calc(100% + 400px);height:calc(100% + 400px);-webkit-text-size-adjust: none;touch-action: manipulation;}
+        html {background:var(--canvas);cursor:pointer;-webkit-text-size-adjust: none;touch-action: manipulation;width:100vw;max-width:100vw;height:100%;}
         html, input, textarea, button {font-family:Barlow, sans-serif;color:var(--color);}
-
+        /* width:calc(100% + 400px);height:calc(100% + 400px); */
         body {cursor:pointer;min-height:100%;height:100%;overscroll-behavior-x: none;}
 
         body.rectangle_tool, body.select_tool {cursor:crosshair;}
@@ -650,14 +650,15 @@
         .lock.unlock .locked {display:block;}
 
 
-        .grid body {background-size: var(--dotgrid) var(--dotgrid);background-image: linear-gradient(to right, var(--gridcolor) 1px, transparent 1px), linear-gradient(to bottom, var(--gridcolor) 1px, transparent 1px);background-position: center;}
-            .highlight.grid body {background-image: linear-gradient(to right, var(--gridcolor) 1px, transparent 1px), linear-gradient(to bottom, var(--gridcolor2) 1px, transparent 1px),linear-gradient(to right, var(--gridcolor2) 1px, transparent 1px), linear-gradient(to bottom, var(--gridcolor) 1px, transparent 1px);background-size:var(--dotgrid) var(--dotgrid), 1px calc(var(--dotgrid) * 9), calc(var(--dotgrid) * 9) 1px;}
+
+        .grid body #gridlayer {background-size: var(--dotgrid) var(--dotgrid);background-image: linear-gradient(to right, var(--gridcolor) 1px, transparent 1px), linear-gradient(to bottom, var(--gridcolor) 1px, transparent 1px);background-position: center;}
+            .highlight.grid body #gridlayer {background-image: linear-gradient(to right, var(--gridcolor) 1px, transparent 1px), linear-gradient(to bottom, var(--gridcolor2) 1px, transparent 1px),linear-gradient(to right, var(--gridcolor2) 1px, transparent 1px), linear-gradient(to bottom, var(--gridcolor) 1px, transparent 1px);background-size:var(--dotgrid) var(--dotgrid), 1px calc(var(--dotgrid) * 9), calc(var(--dotgrid) * 9) 1px;}
         /* .dotgrid body {background: linear-gradient(90deg, var(--canvas) calc(var(--dotgrid) - var(--dotsize)), transparent 1%) center, linear-gradient(var(--canvas) calc(var(--dotgrid) - var(--dotsize)), transparent 1%) center, var(--dotcolor);background-size: var(--dotgrid) var(--dotgrid);} */
-        .dotgrid body { background-image: radial-gradient(var(--dotcolor) var(--dotsize), transparent 0);background-size: var(--dotgrid) var(--dotgrid);background-position:center;}
-            .highlight.dotgrid body {background-image: radial-gradient(circle, var(--dotcolor) var(--dotsize), transparent 0), radial-gradient(circle, var(--dotcolor2) var(--dotsize), transparent 0);background-size: var(--dotgrid) var(--dotgrid), calc(var(--dotgrid) * 9) calc(var(--dotgrid) * 9);}
+        .dotgrid body #gridlayer { background-image: radial-gradient(var(--dotcolor) var(--dotsize), transparent 0);background-size: var(--dotgrid) var(--dotgrid);background-position:center;}
+            .highlight.dotgrid body #gridlayer {background-image: radial-gradient(circle, var(--dotcolor) var(--dotsize), transparent 0), radial-gradient(circle, var(--dotcolor2) var(--dotsize), transparent 0);background-size: var(--dotgrid) var(--dotgrid), calc(var(--dotgrid) * 9) calc(var(--dotgrid) * 9);}
 
 
-            .highlight.dotgrid body {
+            .highlight.dotgrid body #gridlayer {
             background-image:   radial-gradient(circle, var(--dotcolor2) var(--dotsize), transparent 0), 
                                 radial-gradient(circle, var(--canvas) var(--dotsize), transparent 0), 
                                 radial-gradient(circle, var(--canvas) var(--dotsize), transparent 0), 
@@ -803,8 +804,10 @@
             #hide:hover {opacity:.7;}
             #hide:active {opacity:.9;}
 
-        #layers {height:100%;pointer-events:none;position:relative;z-index:4;}
+        #layers {height:100%;pointer-events:none;position:relative;z-index:4;width:calc(100% + 400px);height:calc(100% + 400px)}
             #layers > * {pointer-events:all;}
+
+        #gridlayer {pointer-events:none;position:absolute;z-index:1;width:calc(100% + 400px);height:calc(100% + 400px);top: 0;left: 0;}
 
         /* #canvaslayers {width:100%;height:100%;pointer-events:none;position:absolute;z-index:1;top:0;left:0;} */
 
@@ -2201,6 +2204,8 @@
             </div>
         </div>
     </div>
+
+    <div id=gridlayer></div>
 
     <div id=rulerx class=ruler>
         <div id=xrule></div>
@@ -6729,6 +6734,24 @@
             // }
         }
 
+        function zoom2(e, z){
+            z = z - ZOOMLEVEL;
+            console.log("zoom2", z)
+            if ( z === 0 ){
+                return;
+            }
+
+            var n = z > 0 ? 1 : -1;
+            z = Math.abs(z);
+
+            e.fake = true;
+            e.deltaY = n;
+
+            // for(var i=0; i<z; i++){
+                dotspacing.call(this, e, z);
+            // }
+        }
+
         function zoomfit(e){
             var z = 70 - ZOOMLEVEL;
 
@@ -7440,15 +7463,15 @@
         //     c.style.height = h + 'px';
         // }
         
-        // TEST
-        function zoomtest(e) {
-            e.preventDefault();
-            console.log(e.scale, 'SCALE', e.type);
-        }
+        // // TEST
+        // function zoomtest(e) {
+        //     e.preventDefault();
+        //     console.log(e.scale, 'SCALE', e.type);
+        // }
 
-        document.addEventListener('gesturestart', zoomtest);
-        document.addEventListener('gesturechange', zoomtest);
-        document.addEventListener('gestureend', zoomtest);
+        // document.addEventListener('gesturestart', zoomtest);
+        // document.addEventListener('gesturechange', zoomtest);
+        // document.addEventListener('gestureend', zoomtest);
 
         window.onscroll = function(e) {
             console.log(e.target);
@@ -7603,7 +7626,7 @@
             var top = window.pageYOffset || document.documentElement.scrollTop;
             var left = window.pageXOffset || document.documentElement.scrollLeft;
 
-            console.log(e, 'scrolling2', top ,left);
+            // console.log(e, 'scrolling2', top ,left);
 
             var x = document.getElementById('rulerx');
             var y = document.getElementById('rulery');
@@ -7658,7 +7681,7 @@
         }
 
         canvassetup();
-        window.onresize = resize;
+        setTimeout(function(){window.onresize = resize;}, 1000);
         screenrez();
         window.onscroll = scrolling2;
         window.scrollTo(200, 200);

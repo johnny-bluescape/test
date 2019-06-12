@@ -1068,6 +1068,9 @@ function rectanglemove(e){
   }
 
   function multitouch(e){
+    e.preventDefault();
+    e.stopPropagation();
+
     var touches = e.touches;
     var xy = [];
     
@@ -1075,7 +1078,7 @@ function rectanglemove(e){
       var ev = touches[i];
       var sx = ev.pageX;
       var sy = ev.pageY;
-      xy.append({x: sx, y: sy, id: ev.identifier});
+      xy.push({x: sx, y: sy, id: ev.identifier});
     }
 
     var x1 = xy[0].x;
@@ -1084,11 +1087,19 @@ function rectanglemove(e){
     var y1 = xy[0].y;
     var y2 = xy[1].y;
 
-    var sd = Math.sqrt(Math.pow((x2 - x1),2) + Math.pow((y2 - y1), 2));
+    // var sd = Math.sqrt(Math.pow((x2 - x1),2) + Math.pow((y2 - y1), 2));
+    var sd = Math.hypot(x1-x2, y1-y2);
 
+    console.log(x1, x2, y1,y2, sd);
 
     var panning = false;
     var pinching = false;
+
+    var sz = 0;
+    var zs = ZOOMLEVEL || 0;
+
+    var wx = document.documentElement.scrollLeft;//window.pageXOffset;
+    var wy = document.documentElement.scrollTop;//window.pageYOffset;
 
     function move(e){
       var touches = e.touches;
@@ -1099,7 +1110,7 @@ function rectanglemove(e){
         var ev = touches[i];
         var x = ev.pageX;
         var y = ev.pageY;
-        xy2.append({x: x, y: y, id: ev.identifier});
+        xy2.push({x: x, y: y, id: ev.identifier});
       }
 
       var x1b = xy2[0].x;
@@ -1108,21 +1119,54 @@ function rectanglemove(e){
       var y1b = xy2[0].y;
       var y2b = xy2[1].y;
 
+      // var d = Math.sqrt(Math.pow((x2 - x1),2) + Math.pow((y2 - y1), 2));
+      var d = Math.hypot(x1b-x2b, y1b-y2b);
 
+      var xd = (x1 - x1b) - (x2 - x2b);
+      var yd = (y1 - y1b) - (y2 - y2b);
 
-      var d = Math.sqrt(Math.pow((x2 - x1),2) + Math.pow((y2 - y1), 2));
+      var nd = d - sd;
 
-      var xd = (x1 - x1b)  - (x2 - x2b);
-      var yd = (y1 - y1b)  - (y2 - y2b);
+      console.log(x1b, x2b, y1b, y2b, d, xd, yd);
 
       if ( !panning && !pinching ){
-        if ( Math.abs(sd - d) > (Math.abs(xd) || Math.abs(yd)) ){
+        if ( Math.abs(nd) > 5 ){
           console.log('pinch')
           pinching = true;
-        } else{
+        } else if ( Math.abs(xd) > 5 || Math.abs(yd) > 5 ) {
           console.log('pan');
           panning = true;
+        } else {
+          return;
         }
+      }
+
+      if ( panning ){
+        console.log('panning');
+        var y = y1b - y1;// + y2b - y2;
+        var x = x1b - x1;// + x2b - x2;
+
+        // window.scrollTo(wx - x, wy - y);
+        document.documentElement.scrollLeft = wx - x;
+        document.documentElement.scrollTop = wy - y;
+
+        console.log(wx, wy, "FIHFERF");
+        console.log(x, y, wx, wy, wx - x, wy - y);
+
+      } else if ( pinching ){
+        e.preventDefault();
+
+        console.log('pinnjbfwbef');
+
+        // nd = nd - sz;
+        var per = nd / window.innerWidth * 100;
+        console.log('pertange', per);
+
+        
+        // sz = nd;
+        console.log(per, zs, sz)
+        zoom2.call(this, e, ((per) + zs));
+
       }
     }
 
@@ -1132,8 +1176,6 @@ function rectanglemove(e){
 
       window.removeEventListener('touchmove', move);
       window.removeEventListener('touchend', end);
-
-      
     }
     
     window.addEventListener('touchmove', move);
@@ -1144,9 +1186,13 @@ function rectanglemove(e){
   }
 
   function marquee(e){
+    
     if ( e.which == 3|| e.target != document.body ){
         return;
     }
+
+    e.preventDefault();
+
     var ev = e.touches ? e.touches[0] : e;
     var sx = ev.pageX;
     var sy = ev.pageY;
@@ -1167,7 +1213,7 @@ function rectanglemove(e){
     //document.body.appendChild(marq);
     var moved = false;
 
-    if ( e.touches.length > 1 ){
+    if ( e.touches && e.touches.length > 1 ){
       console.log(e.touches.length);
       multitouch.call(this, e);
 
@@ -1176,8 +1222,9 @@ function rectanglemove(e){
 
     function move(e){
         e.preventDefault();
+        e.stopPropagation();
 
-        if ( e.touches.length > 1 ){
+        if ( e.touches && e.touches.length > 1 ){
           console.log(e.touches.length);
 
           return;

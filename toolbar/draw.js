@@ -5,15 +5,14 @@ window.canvashistory = [];
 function canvassetup(){
     var canvas 	= document.getElementById('canvas2'),
     //ctx 	= canvas.getContext('2d'),
-    width  	= canvas.parentElement.offsetWidth,
-    height 	= canvas.parentElement.offsetHeight;
+    width  	= window.innerWidth,//canvas.parentElement.offsetWidth,
+    height 	= window.innerHeight;//canvas.parentElement.offsetHeight;
 
-    alert(width + ' ' + height);
 
-    var frame = document.createElement('canvas');
+    // var frame = document.createElement('canvas');
 
-    canvas.height	= frame.height = height;
-    canvas.width 	= frame.width = width;
+    canvas.height = height; // frame.height = 
+    canvas.width = width; // = frame.width 
     //canvas.title 	= 'Did You Know You Can Draw Here?';
     canvas.style.cursor = 'crosshair';
 
@@ -54,20 +53,21 @@ function canvassetup(){
     var oldWidth = canvas.width;
     var oldHeight = canvas.height;
 
-    canvas.width = frame.width = oldWidth * ratio;
-    canvas.height = frame.height = oldHeight * ratio;
+    canvas.width = oldWidth * ratio; //frame.width = 
+    canvas.height = oldHeight * ratio; //frame.height = 
 
-    canvas.style.width = frame.style.width = oldWidth + 'px';
-    canvas.style.height = frame.style.height = oldHeight + 'px';
+    canvas.style.width = oldWidth + 'px';//  = frame.style.width
+    canvas.style.height = oldHeight + 'px'; //  = frame.style.height
 
-    context.scale(scale,scale);
-    frame.getContext('2d').scale(scale,scale);
+
+    context.scale(scale, scale);
+    // frame.getContext('2d').scale(scale, scale);
 
     // var imgdata = context.getImageData(0,0,canvas.width,canvas.height);
 
     // window.canvashistory.push(imgdata);
 
-    frame.id = 'frame';
+    // frame.id = 'frame';
 
     document.body.addEventListener('keydown', keyed);
 
