@@ -610,6 +610,8 @@
 
             .neartop .canvaslabel {left:8px;transform:translateY(4px);}
 
+            #map .canvaslabel {font-size:14px;}
+
             .ractangle.canvasboard.current {border-color:#7754A1;box-shadow:none;}
 
 
@@ -6752,6 +6754,41 @@
             // }
         }
 
+        function zoomobject(e){
+            var o = this.offset();
+            var w = o.w;
+            var h = o.h;
+
+            var ww = window.innerWidth;
+            var wh = window.innerHeight;
+
+            var sw = ww / w;
+            var sh = wh / h;
+
+            var z = sw * (ZOOMLEVEL);
+
+            if ( sw < 1 ) {
+                z = -(ZOOMLEVEL - (ZOOMLEVEL - (ZOOMLEVEL - z)));
+            } else {
+                z -= ZOOMLEVEL
+            }
+
+
+            if ( z === 0 ){
+                return;
+            }
+
+            var n = z > 0 ? 1 : -1;
+            z = Math.abs(z);
+
+            e.fake = true;
+            e.deltaY = n;
+
+
+            dotspacing.call(this, e, z, null, true);
+
+        }
+
         function zoomfit(e){
             var z = 70 - ZOOMLEVEL;
 
@@ -6803,7 +6840,7 @@
             autosave();
         }
 
-        function dotspacing(e, x, r){
+        function dotspacing(e, x, r, ugh){
             
             // if ( e.target.getparent('tweaks') || e.target.getparent('contextmenu') || ( !document.documentElement.classList.contains('dotgrid') && !document.documentElement.classList.contains('grid') ) ){
             //     return;
@@ -6841,14 +6878,17 @@
 
             console.log(e);
 
-            if ( DELTASCALE <= 0.01 ){ //|| delta < 0 && DELTASCALE == 0.01 
-                ds = 0.0005 ;
-            } else if ( DELTASCALE >= 2 ){
-                ds = 0.1;
+            if ( !ugh ){
+                if ( DELTASCALE <= 0.01 ){ //|| delta < 0 && DELTASCALE == 0.01 
+                    ds = 0.0005 ;
+                } else if ( DELTASCALE >= 2 ){
+                    ds = 0.1;
+                }
             }
 
             DELTASCALE = Math.max(DELTASCALE + (delta * ds), ds);
 
+            
             if ( r ){
                 DELTASCALE = 1;
             }
@@ -6951,7 +6991,8 @@
 
             var l = document.getElementById('zoomlevel');
             l.empty();
-            l.appendChild(document.createTextNode(scale + '%'));
+            var scalet = scale > 9 ? Math.round(scale) : scale;
+            l.appendChild(document.createTextNode(scalet + '%'));
 
             ZOOMLEVEL = scale;
 
@@ -7490,6 +7531,8 @@
             //     menuposition.call(m);
             // }
         }
+
+        Attach.on('dblclick', '.canvasboard', zoomobject);
 
         Attach.on('touchstart', '.colorwheel', spin);
         Attach.on('mousedown', '.colorwheel', spin);
