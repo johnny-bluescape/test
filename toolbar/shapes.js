@@ -6,10 +6,13 @@ CANVASBORDERCOLOR = 'rgba(255,255,255,.2)';
 CANVASCOLOR = 'rgba(0,0,0,0)';
 
 function rectanglemove(e){
+  if ( e.touches &&  e.touches.length > 1 ){
+    return;
+  }
 
     console.log('mnove');
     e.preventDefault();
-    e.stopPropagation();
+    
 
     // if ( document.documentElement.id == 'rectanglex' || document.documentElement.id == 'circlex'  || document.documentElement.id == 'linex' ){
     //   return;
@@ -53,9 +56,15 @@ function rectanglemove(e){
 
     var top = window.pageYOffset || document.documentElement.scrollTop;
     
+    
 
     function move(e){
-      
+
+      if ( e.touches &&  e.touches.length > 1 ){
+        return;
+      }
+      e.preventDefault();
+      e.stopPropagation();
       var evt = e.touches ? e.touches[0] : e;
 
       var x = evt.pageX* zscale;
@@ -1104,23 +1113,42 @@ function rectanglemove(e){
     
     var smx = (x1 + x2) / 2;
     var smy =  (y1 + y2) / 2;
+
+    var lmx = smx;
+    var lmy = smy;
   
+    var lx = smx;
+    var ly = smy;
+
+    
 
     function move(e){
       e.preventDefault();
       e.stopPropagation();
+     
+     
 
-      var touches = e.touches;
+      // for (var i=0; i < e.changedTouches.length; i++) {
+      //   console.log("changedTouches[" + i + "].identifier = " + e.changedTouches[i].identifier);
+      // } 
+    
+      
+
+      // var touches = e.touches;
 
       var xy2 = [];
 
-      for(var i=0;i<touches.length;i++){
-        var ev = touches[i];
-        var x = ev.pageX;
-        var y = ev.pageY;
-        xy2.push({x: x, y: y, id: ev.identifier});
-      }
+      // for(var i=0;i<e.touches.length;i++){
+      //   var ev = e.changedTouches[i];
+      //   var x = ev.pageX;
+      //   var y = ev.pageY;
+      //   xy2.push({x: x, y: y, id: ev.identifier});
+      // }
 
+      xy2 = [
+        {x: e.touches[0].pageX, y: e.touches[0].pageX}, {x: e.touches[1].pageX, y: e.touches[1].pageX}
+      ];
+      
       var x1b = xy2[0].x;
       var x2b = xy2[1].x;
 
@@ -1157,19 +1185,32 @@ function rectanglemove(e){
         var y = y1b - y1;// + y2b - y2;
         var x = x1b - x1;// + x2b - x2;
 
-        x = mx - smx;
-        y = my - smy;
+        x = mx - lmx;
+        y = my - lmy;
 
+        // lmx = x;
+        // lmy = y;
+
+        // x = x - lx;
+        // y = y - ly;
+
+        // lx = x;
+        // ly = y;
+        
         // window.scrollTo(wx - x, wy - y);
+        // document.documentElement.scrollLeft -= x;
+        // document.documentElement.scrollTop -= y;
         document.documentElement.scrollLeft = wx - x;
         document.documentElement.scrollTop = wy - y;
 
+        // document.getElementById('gridlayer').innerHTML +=   x  + ' ';
+        
         console.log(wx, wy, "FIHFERF");
         console.log(x, y, wx, wy, wx - x, wy - y);
 
       // }
       // if ( pinching ){
-        e.preventDefault();
+        // e.preventDefault();
 
         console.log('pinnjbfwbef');
 

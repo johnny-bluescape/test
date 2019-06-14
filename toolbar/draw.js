@@ -46,6 +46,10 @@ function canvassetup(){
 
     var scale = window.devicePixelRatio || 1;
 
+    if (!context){
+        return;
+    }
+
     var backingStoreRatio = context.webkitBackingStorePixelRatio || context.mozBackingStorePixelRatio || context.msBackingStorePixelRatio || context.oBackingStorePixelRatio || context.backingStorePixelRatio || 1;
 
     var ratio = scale / backingStoreRatio;
