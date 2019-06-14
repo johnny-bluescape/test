@@ -5,8 +5,8 @@ window.canvashistory = [];
 function canvassetup(){
     var canvas 	= document.getElementById('canvas2'),
     //ctx 	= canvas.getContext('2d'),
-    width  	= window.innerWidth,//canvas.parentElement.offsetWidth,
-    height 	= window.innerHeight;//canvas.parentElement.offsetHeight;
+    width  	= canvas.parentElement.offsetWidth,
+    height 	= canvas.parentElement.offsetHeight;
 
 
     // var frame = document.createElement('canvas');

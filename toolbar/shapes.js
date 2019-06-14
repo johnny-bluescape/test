@@ -1101,7 +1101,15 @@ function rectanglemove(e){
     var wx = document.documentElement.scrollLeft;//window.pageXOffset;
     var wy = document.documentElement.scrollTop;//window.pageYOffset;
 
+    
+    var smx = (x1 + x2) / 2;
+    var smy =  (y1 + y2) / 2;
+  
+
     function move(e){
+      e.preventDefault();
+      e.stopPropagation();
+
       var touches = e.touches;
 
       var xy2 = [];
@@ -1119,6 +1127,9 @@ function rectanglemove(e){
       var y1b = xy2[0].y;
       var y2b = xy2[1].y;
 
+      var mx = (x1b + x2b) / 2;
+      var my =  (y1b + y2b) / 2;
+
       // var d = Math.sqrt(Math.pow((x2 - x1),2) + Math.pow((y2 - y1), 2));
       var d = Math.hypot(x1b-x2b, y1b-y2b);
 
@@ -1129,7 +1140,7 @@ function rectanglemove(e){
 
       console.log(x1b, x2b, y1b, y2b, d, xd, yd);
 
-      if ( !panning && !pinching ){
+      if ( !panning || !pinching ){
         if ( Math.abs(nd) > 5 ){
           console.log('pinch')
           pinching = true;
@@ -1141,10 +1152,13 @@ function rectanglemove(e){
         }
       }
 
-      if ( panning ){
+      // if ( panning ){
         console.log('panning');
         var y = y1b - y1;// + y2b - y2;
         var x = x1b - x1;// + x2b - x2;
+
+        x = mx - smx;
+        y = my - smy;
 
         // window.scrollTo(wx - x, wy - y);
         document.documentElement.scrollLeft = wx - x;
@@ -1153,7 +1167,8 @@ function rectanglemove(e){
         console.log(wx, wy, "FIHFERF");
         console.log(x, y, wx, wy, wx - x, wy - y);
 
-      } else if ( pinching ){
+      // }
+      // if ( pinching ){
         e.preventDefault();
 
         console.log('pinnjbfwbef');
@@ -1167,7 +1182,7 @@ function rectanglemove(e){
         console.log(per, zs, sz)
         zoom2.call(this, e, ((per) + zs));
 
-      }
+      // }
     }
 
     function end(e){

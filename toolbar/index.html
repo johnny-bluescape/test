@@ -133,7 +133,7 @@
         }
 
         * {margin:0;padding:0;-webkit-overflow-scrolling: touch;-ms-overflow-style: -ms-autohiding-scrollbar;outline:none;-webkit-tap-highlight-color: transparent;-webkit-touch-callout: none;}
-        html {background:var(--canvas);cursor:pointer;-webkit-text-size-adjust: none;touch-action: manipulation;width:100vw;max-width:100vw;height:100%;}
+        html {background:var(--canvas);cursor:pointer;-webkit-text-size-adjust: none;touch-action: manipulation;width:calc(100% + 400px);height:calc(100% + 400px);}
         html, input, textarea, button {font-family:Barlow, sans-serif;color:var(--color);}
         /* width:calc(100% + 400px);height:calc(100% + 400px); */
         body {cursor:pointer;min-height:100%;height:100%;overscroll-behavior-x: none;}
@@ -806,7 +806,7 @@
             #hide:hover {opacity:.7;}
             #hide:active {opacity:.9;}
 
-        #layers {height:100%;pointer-events:none;position:relative;z-index:4;width:calc(100% + 400px);height:calc(100% + 400px)}
+        #layers {height:100%;pointer-events:none;position:relative;z-index:4;}
             #layers > * {pointer-events:all;}
 
         #gridlayer {pointer-events:none;position:absolute;z-index:1;width:calc(100% + 400px);height:calc(100% + 400px);top: 0;left: 0;}
@@ -6764,6 +6764,10 @@
 
             var sw = ww / w;
             var sh = wh / h;
+
+            if ( sw > sh ){
+                sw = sh;
+            }
 
             var z = sw * (ZOOMLEVEL);
 
