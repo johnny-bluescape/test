@@ -1083,12 +1083,17 @@ function rectanglemove(e){
     var touches = e.touches;
     var xy = [];
     
-    for(var i=0;i<touches.length;i++){
-      var ev = touches[i];
-      var sx = ev.pageX;
-      var sy = ev.pageY;
-      xy.push({x: sx, y: sy, id: ev.identifier});
-    }
+    // for(var i=0;i<touches.length;i++){
+    //   var ev = touches[i];
+    //   var sx = ev.pageX;
+    //   var sy = ev.pageY;
+    //   xy.push({x: sx, y: sy, id: ev.identifier});
+    // }
+
+    xy = [
+      {x: e.touches[0].pageX, y: e.touches[0].pageY}, 
+      {x: e.touches[1].pageX, y: e.touches[1].pageY}
+    ];
 
     var x1 = xy[0].x;
     var x2 = xy[1].x;
@@ -1105,10 +1110,10 @@ function rectanglemove(e){
     var pinching = false;
 
     var sz = 0;
-    var zs = ZOOMLEVEL || 0;
+    var zs = ZOOMLEVEL || 100;
 
-    var wx = document.documentElement.scrollLeft;//window.pageXOffset;
-    var wy = document.documentElement.scrollTop;//window.pageYOffset;
+    var wx = window.pageXOffset || document.documentElement.scrollLeft;//window.pageXOffset;
+    var wy = window.pageYOffset || document.documentElement.scrollTop;//window.pageYOffset;
 
     
     var smx = (x1 + x2) / 2;
@@ -1146,7 +1151,8 @@ function rectanglemove(e){
       // }
 
       xy2 = [
-        {x: e.touches[0].pageX, y: e.touches[0].pageX}, {x: e.touches[1].pageX, y: e.touches[1].pageX}
+        {x: e.touches[0].pageX, y: e.touches[0].pageY}, 
+        {x: e.touches[1].pageX, y: e.touches[1].pageY}
       ];
       
       var x1b = xy2[0].x;
@@ -1185,8 +1191,8 @@ function rectanglemove(e){
         var y = y1b - y1;// + y2b - y2;
         var x = x1b - x1;// + x2b - x2;
 
-        x = mx - lmx;
-        y = my - lmy;
+        x = mx - smx;
+        y = my - smy;
 
         // lmx = x;
         // lmy = y;
@@ -1200,8 +1206,12 @@ function rectanglemove(e){
         // window.scrollTo(wx - x, wy - y);
         // document.documentElement.scrollLeft -= x;
         // document.documentElement.scrollTop -= y;
-        document.documentElement.scrollLeft = wx - x;
-        document.documentElement.scrollTop = wy - y;
+        // document.documentElement.scrollLeft = wx - x;
+        // document.documentElement.scrollTop = wy - y;
+
+        document.getElementById('layers').style.transform = 'translate(' + -(wx - x) + 'px, ' + -(wy - y) + 'px)';
+        document.getElementById('layers').dataset.x = -(wx - x);
+        document.getElementById('layers').dataset.y = -(wy - y);
 
         // document.getElementById('gridlayer').innerHTML +=   x  + ' ';
         
@@ -1218,6 +1228,7 @@ function rectanglemove(e){
         var per = nd / window.innerWidth * 100;
         console.log('pertange', per);
 
+        // document.getElementById('gridlayer').innerHTML +=   per + ' ' + zs  + ' ' + d + ' - ' + sd;
         
         // sz = nd;
         console.log(per, zs, sz)

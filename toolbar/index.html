@@ -6921,8 +6921,10 @@
             clabel *= 1/LAYERSCALE;
 
 
+            var lxx = l.dataset.x || 0;
+            var lyy = l.dataset.y || 0;
 
-            l.style.transform = 'scale(' + ls + ')';
+            l.style.transform = 'scale(' + ls + ') translate(' + lxx + 'px,' + lyy +'px) ';
             //d.style.transform = 'scale(' + ls + ')';
             // cl.style.transform = 'scale(' + ls + ')';
             // cl.dataset.z = ls;
