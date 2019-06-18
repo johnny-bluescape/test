@@ -6,9 +6,9 @@ CANVASBORDERCOLOR = 'rgba(255,255,255,.2)';
 CANVASCOLOR = 'rgba(0,0,0,0)';
 
 function rectanglemove(e){
-  if ( e.touches &&  e.touches.length > 1 ){
-    return;
-  }
+  // if ( e.touches &&  e.touches.length > 1 ){
+  //   return;
+  // }
 
     console.log('mnove');
     e.preventDefault();
@@ -56,13 +56,26 @@ function rectanglemove(e){
 
     var top = window.pageYOffset || document.documentElement.scrollTop;
     
+
+    if ( e.touches && e.touches.length > 1 ){
+      console.log(e.touches.length);
+      multitouch.call(this, e);
+
+      return;
+    }
+
     
 
     function move(e){
 
-      if ( e.touches &&  e.touches.length > 1 ){
+      if ( e.touches && e.touches.length > 1 ){
+        console.log(e.touches.length);
+
+        end.call(this, e);
+
         return;
       }
+
       e.preventDefault();
       e.stopPropagation();
       var evt = e.touches ? e.touches[0] : e;
@@ -1080,6 +1093,8 @@ function rectanglemove(e){
     e.preventDefault();
     e.stopPropagation();
 
+    blurall();
+
     var touches = e.touches;
     var xy = [];
     
@@ -1112,8 +1127,8 @@ function rectanglemove(e){
     var sz = 0;
     var zs = ZOOMLEVEL || 100;
 
-    var wx = window.pageXOffset || document.documentElement.scrollLeft;//window.pageXOffset;
-    var wy = window.pageYOffset || document.documentElement.scrollTop;//window.pageYOffset;
+    var wx = 0;//window.pageXOffset || document.documentElement.scrollLeft;//window.pageXOffset;
+    var wy = 0;//window.pageYOffset || document.documentElement.scrollTop;//window.pageYOffset;
 
     
     var smx = (x1 + x2) / 2;
@@ -1125,6 +1140,9 @@ function rectanglemove(e){
     var lx = smx;
     var ly = smy;
 
+
+    var stx = Number(document.getElementById('layers').dataset.x) || 0;
+    var sty = Number(document.getElementById('layers').dataset.y) || 0;
     
 
     function move(e){
@@ -1194,6 +1212,8 @@ function rectanglemove(e){
         x = mx - smx;
         y = my - smy;
 
+// alert(mx + ' | ' + smx+ ' | ' + stx+ ' | ' + wx + ' | ' + x)
+
         // lmx = x;
         // lmy = y;
 
@@ -1209,9 +1229,21 @@ function rectanglemove(e){
         // document.documentElement.scrollLeft = wx - x;
         // document.documentElement.scrollTop = wy - y;
 
-        document.getElementById('layers').style.transform = 'translate(' + -(wx - x) + 'px, ' + -(wy - y) + 'px)';
-        document.getElementById('layers').dataset.x = -(wx - x);
-        document.getElementById('layers').dataset.y = -(wy - y);
+        document.getElementById('canvas2').style.transform = 'translate(' + (-(wx - x) + stx)  + 'px, ' + (-(wy - y) + sty)  + 'px)';
+        document.getElementById('canvas2').dataset.x = -(wx - x) + stx;
+        document.getElementById('canvas2').dataset.y = -(wy - y) + sty;
+
+        document.getElementById('gridlayer').style.transform = 'translate(' + (-(wx - x) + stx)  + 'px, ' + (-(wy - y) + sty)  + 'px)';
+        document.getElementById('gridlayer').dataset.x = -(wx - x) + stx;
+        document.getElementById('gridlayer').dataset.y = -(wy - y) + sty;
+
+        var scale = Number(document.getElementById('layers').dataset.s) || 1;
+        document.getElementById('layers').style.transform = 'scale(' + scale + ') translate(' + (-(wx - x) + stx) + 'px, ' + (-(wy - y) + sty) + 'px)';
+        document.getElementById('layers').dataset.x = -(wx - x) + stx ;
+        document.getElementById('layers').dataset.y = -(wy - y) +sty ;
+
+
+        // alert((-(wx - x) + stx) + ' | ' + (-(wy - y) + sty));
 
         // document.getElementById('gridlayer').innerHTML +=   x  + ' ';
         
@@ -1232,21 +1264,40 @@ function rectanglemove(e){
         
         // sz = nd;
         console.log(per, zs, sz)
-        zoom2.call(this, e, ((per) + zs));
+        zoom2.call(this, e, Math.round(((per) + zs)));
 
       // }
     }
 
-    function end(e){
+    function end2(e){
+      e.preventDefault();
+      e.stopPropagation();
       // window.removeEventListener('mousemove', move);
       // window.removeEventListener('mouseup', end);
 
       window.removeEventListener('touchmove', move);
-      window.removeEventListener('touchend', end);
+      window.removeEventListener('touchend', end2);
+
+
+      // // document.getElementById('canvas2').style.transform = 'translate(' + -(wx - x)  + 'px, ' + -(wy - y)  + 'px)';
+      // //   document.getElementById('canvas2').dataset.x = -(wx - x) + stx;
+      // //   document.getElementById('canvas2').dataset.y = -(wy - y) + sty;
+
+      // //   document.getElementById('gridlayer').style.transform = 'translate(' + -(wx - x)  + 'px, ' + -(wy - y)  + 'px)';
+      // //   document.getElementById('gridlayer').dataset.x = -(wx - x) + stx;
+      // //   document.getElementById('gridlayer').dataset.y = -(wy - y) + sty;
+
+      //   var scale = Number(document.getElementById('layers').dataset.s) || 1;
+      //   document.getElementById('layers').style.transform = 'scale(' + scale + ')';
+      //   document.getElementById('layers').style.left = document.getElementById('layers').dataset.x +'px';
+      //   document.getElementById('layers').style.top = document.getElementById('layers').dataset.y + 'px';
+      //   document.getElementById('layers').dataset.x = 0;
+      //   document.getElementById('layers').dataset.y = 0;
+
     }
     
     window.addEventListener('touchmove', move);
-    window.addEventListener('touchend', end);
+    window.addEventListener('touchend', end2);
 
     // window.addEventListener('mouseup', end);
     // window.addEventListener('mousemove', move);
@@ -1280,6 +1331,7 @@ function rectanglemove(e){
     //document.body.appendChild(marq);
     var moved = false;
 
+
     if ( e.touches && e.touches.length > 1 ){
       console.log(e.touches.length);
       multitouch.call(this, e);
@@ -1293,6 +1345,10 @@ function rectanglemove(e){
 
         if ( e.touches && e.touches.length > 1 ){
           console.log(e.touches.length);
+
+          marq.remove();
+
+          end.call(this, e);
 
           return;
         }
@@ -1377,7 +1433,11 @@ function rectanglemove(e){
           setmultibounds.call(boxes, e);
         }
     }
+
     function end(e){
+      e.preventDefault();
+      e.stopPropagation();
+
       window.removeEventListener('mousemove', move);
       window.removeEventListener('mouseup', end);
 
@@ -1385,7 +1445,7 @@ function rectanglemove(e){
       window.removeEventListener('touchend', end);
 
         if ( moved ){
-          marq.parentNode.removeChild(marq);
+          marq.remove();
         }
     }
     
