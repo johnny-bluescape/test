@@ -1107,7 +1107,7 @@ function rectanglemove(e){
 
     xy = [
       {x: e.touches[0].pageX, y: e.touches[0].pageY}, 
-      {x: e.touches[1].pageX, y: e.touches[1].pageY}
+      {x: (e.touches[1] || e.touches[0]).pageX, y: (e.touches[1] || e.touches[0]).pageY}
     ];
 
     var x1 = xy[0].x;
@@ -1143,6 +1143,9 @@ function rectanglemove(e){
 
     var stx = Number(document.getElementById('layers').dataset.x) || 0;
     var sty = Number(document.getElementById('layers').dataset.y) || 0;
+
+    var oxx = 0;
+    var oyy = 0;
     
 
     function move(e){
@@ -1170,7 +1173,7 @@ function rectanglemove(e){
 
       xy2 = [
         {x: e.touches[0].pageX, y: e.touches[0].pageY}, 
-        {x: e.touches[1].pageX, y: e.touches[1].pageY}
+        {x: (e.touches[1] || e.touches[0]).pageX, y: (e.touches[1] || e.touches[0]).pageY}
       ];
       
       var x1b = xy2[0].x;
@@ -1185,18 +1188,24 @@ function rectanglemove(e){
       // var d = Math.sqrt(Math.pow((x2 - x1),2) + Math.pow((y2 - y1), 2));
       var d = Math.hypot(x1b-x2b, y1b-y2b);
 
-      var xd = (x1 - x1b) - (x2 - x2b);
-      var yd = (y1 - y1b) - (y2 - y2b);
+      // var xd = (x1 - x1b) - (x2 - x2b);
+      // var yd = (y1 - y1b) - (y2 - y2b);
 
       var nd = d - sd;
 
-      console.log(x1b, x2b, y1b, y2b, d, xd, yd);
+      // console.log(x1b, x2b, y1b, y2b, d, xd, yd);
+
+      
+
+      var x = mx - smx;
+      var y = my - smy;
+
 
       if ( !panning || !pinching ){
         if ( Math.abs(nd) > 5 ){
           console.log('pinch')
           pinching = true;
-        } else if ( Math.abs(xd) > 5 || Math.abs(yd) > 5 ) {
+        } else if ( Math.abs(x) > 5 || Math.abs(y) > 5 ) {
           console.log('pan');
           panning = true;
         } else {
@@ -1206,11 +1215,11 @@ function rectanglemove(e){
 
       // if ( panning ){
         console.log('panning');
-        var y = y1b - y1;// + y2b - y2;
-        var x = x1b - x1;// + x2b - x2;
+        // var y = y1b - y1;// + y2b - y2;
+        // var x = x1b - x1;// + x2b - x2;
 
-        x = mx - smx;
-        y = my - smy;
+        // x = mx - smx;
+        // y = my - smy;
 
 // alert(mx + ' | ' + smx+ ' | ' + stx+ ' | ' + wx + ' | ' + x)
 
@@ -1228,6 +1237,8 @@ function rectanglemove(e){
         // document.documentElement.scrollTop -= y;
         // document.documentElement.scrollLeft = wx - x;
         // document.documentElement.scrollTop = wy - y;
+        
+        console.log((-(wx - x) + stx) );
 
         document.getElementById('canvas2').style.transform = 'translate(' + (-(wx - x) + stx)  + 'px, ' + (-(wy - y) + sty)  + 'px)';
         document.getElementById('canvas2').dataset.x = -(wx - x) + stx;
@@ -1242,6 +1253,15 @@ function rectanglemove(e){
         document.getElementById('layers').dataset.x = -(wx - x) + stx ;
         document.getElementById('layers').dataset.y = -(wy - y) +sty ;
 
+        var rx = document.getElementById('rulerx');
+        var ry = document.getElementById('rulery');
+
+        rx.scrollLeft += (wx - x) + stx - oxx;
+        ry.scrollTop += (wy - y) + sty - oyy;
+
+
+        oxx = (wx - x) + stx;
+        oyy = (wy - y) + sty
 
         // alert((-(wx - x) + stx) + ' | ' + (-(wy - y) + sty));
 
@@ -1332,7 +1352,7 @@ function rectanglemove(e){
     var moved = false;
 
 
-    if ( e.touches && e.touches.length > 1 ){
+    if ( e.touches && (e.touches.length > 1 || document.documentElement.classList.contains('singlepan')) ){
       console.log(e.touches.length);
       multitouch.call(this, e);
 
