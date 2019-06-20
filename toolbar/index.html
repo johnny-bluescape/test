@@ -6623,8 +6623,8 @@
             var rx = document.getElementById('xrule');
             var ry = document.getElementById('yrule');
 
-            var w = rx.offsetWidth; 
-            var h = ry.offsetHeight;
+            var w = window.innerWidth * 25; 
+            var h = window.innerHeight * 25;
 
             var thres = 100;
 
@@ -6657,7 +6657,6 @@
                 n.appendChild(document.createTextNode(x));
                 ry.appendChild(n);
             }
-
         }
 
         window.addEventListener('mousedown', function(e){
@@ -7824,6 +7823,10 @@
 
         rulersetup();
         mapview();
+
+
+            document.getElementById('rulerx').scrollLeft = (window.innerWidth * 12.5) - (window.innerWidth/2);
+            document.getElementById('rulery').scrollTop = (window.innerHeight * 12.5) + (window.innerHeight/4);
 
         // clayersize();
 
