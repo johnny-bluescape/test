@@ -76,6 +76,27 @@ function canvassetup(){
     document.body.addEventListener('keydown', keyed);
 
     // document.body.appendChild(frame);
+
+
+    var canvas = document.getElementById('minicanvas');
+    var ctx = canvas.getContext('2d');
+
+    var scale2 = window.devicePixelRatio || 1;
+
+    var backingStoreRatio = ctx.webkitBackingStorePixelRatio || ctx.mozBackingStorePixelRatio || ctx.msBackingStorePixelRatio || ctx.oBackingStorePixelRatio || ctx.backingStorePixelRatio || 1;
+
+    var ratio = scale2 / backingStoreRatio;
+
+    var oldWidth = document.getElementById('canvas2').offsetWidth;
+    var oldHeight = document.getElementById('canvas2').offsetHeight;
+
+    var xx = 3.2;
+
+    canvas.width = oldWidth * ratio * xx; //frame.width = 
+    canvas.height = oldHeight * ratio * xx; //frame.height = 
+
+    // canvas.style.width = oldWidth + 'px';//  = frame.style.width
+    // canvas.style.height = oldHeight + 'px'; //  = frame.style.height
 }
 
 function resize2(e){
@@ -427,6 +448,8 @@ function drawpaths(){
     }
 }
 
+
+
 function mapdrawpaths(){
     var data = PATHDATA;
     var canvas = document.getElementById('minicanvas');
@@ -446,6 +469,18 @@ function mapdrawpaths(){
 
     var backingStoreRatio = ctx.webkitBackingStorePixelRatio || ctx.mozBackingStorePixelRatio || ctx.msBackingStorePixelRatio || ctx.oBackingStorePixelRatio || ctx.backingStorePixelRatio || 1;
 
+    // var ratio = scale2 / backingStoreRatio;
+
+    // var oldWidth = document.getElementById('canvas2').offsetWidth;
+    // var oldHeight = document.getElementById('canvas2').offsetHeight;
+
+    // var xx = 3.2;
+
+    // canvas.width = oldWidth * ratio * xx; //frame.width = 
+    // canvas.height = oldHeight * ratio * xx; //frame.height = 
+
+    // // canvas.style.width = oldWidth + 'px';//  = frame.style.width
+    // // canvas.style.height = oldHeight + 'px'; //  = frame.style.height
     var ratio = scale2 / backingStoreRatio;
 
     var oldWidth = document.getElementById('canvas2').offsetWidth;
@@ -456,12 +491,11 @@ function mapdrawpaths(){
     canvas.width = oldWidth * ratio * xx; //frame.width = 
     canvas.height = oldHeight * ratio * xx; //frame.height = 
 
-    // canvas.style.width = oldWidth + 'px';//  = frame.style.width
-    // canvas.style.height = oldHeight + 'px'; //  = frame.style.height
 
-
-    var w = ctx.canvas.clientWidth ;
+    var w = ctx.canvas.clientWidth;
     var h = ctx.canvas.clientHeight;
+
+    var ss = 100/ZOOMLEVEL;
 
     for(var i=0;i<data.length;i++){
         var path = data[i];
@@ -471,12 +505,13 @@ function mapdrawpaths(){
         var size = Number(path.size);
         var scale = Number(path.scale);
 
-        scale = (ZOOMLEVEL / scale) ;
+        scale = (ZOOMLEVEL/scale);
 
         ctx.save();
 
         ctx.translate( oldWidth * ratio * (xx/2) - 800, oldHeight * ratio *(xx/2) - 500);// + (canvas.height) + 100;
-        ctx.scale(scale, scale);
+        //ctx.translate((w-(w*scale))/2 + x, (h-(h*scale))/2 + y);
+        ctx.scale(scale *ss, scale*ss);
 
 
         with(ctx) {
