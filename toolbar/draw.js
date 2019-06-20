@@ -138,6 +138,9 @@ function sketchHandler(e){
     var ol = offset.x;
     var ot = offset.y;
 
+    var cx = Number(canvas.dataset.x) || 0;
+    var cy = Number(canvas.dataset.y) || 0;
+
     canvas.redo = null;
 
     var lines = canvas.LINES;
@@ -193,7 +196,8 @@ function sketchHandler(e){
                 strokeStyle = BRUSHCOLOR;//'rgba(0,0,0,1)';
                 stroke();
 
-                path.push({mx:lines[id2].lx, my: lines[id2].ly, lx: nx, ly: ny});
+                // path.push({mx:lines[id2].lx, my: lines[id2].ly, lx: nx, ly: ny});
+                path.push({mx:lines[id2].lx - cx, my: lines[id2].ly - cy, lx: nx - cx, ly: ny - cy});
             }
 
             lines[id2].lx = nx;
