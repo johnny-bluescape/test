@@ -1034,10 +1034,10 @@
 
         .ruler {opacity:0;position:fixed;top:0;left:0;background:rgba(255, 255, 255, 0.02);font-size:12px;line-height:20px;overflow:auto;pointer-events:none;box-sizing:border-box;z-index:2147483643;}
             #rulerx {height:20px;white-space: nowrap;z-index:2147483644;left:20px;right:0;line-height:18px;}
-                #xrule {width:calc(100% + 400px);}
+                #xrule {}
                 #rulerx span {display:inline-block;width:100px;}
             #rulery {width:20px;top:20px;bottom:0;}
-                #yrule {height:calc(100% + 400px);}
+                #yrule {}
                 #rulery span {display:inline-block;height:100px;writing-mode: vertical-rl;}
 
         .showruler .ruler {opacity:1;}
@@ -6623,8 +6623,8 @@
             var rx = document.getElementById('xrule');
             var ry = document.getElementById('yrule');
 
-            var w = window.innerWidth * 25; 
-            var h = window.innerHeight * 25;
+            var w = window.innerWidth * 100; 
+            var h = window.innerHeight * 100;
 
             var thres = 100;
 
@@ -6650,11 +6650,11 @@
             }
 
             for(var i=0;i<th;i++){
-                var x = (-h/2) +i * thres;
-                x = Math.floor(x * (100/ZOOMLEVEL));
+                var y = (-h/2) +i * thres;
+                y = Math.floor(y * (100/ZOOMLEVEL));
                 var n = document.createElement('span');
 
-                n.appendChild(document.createTextNode(x));
+                n.appendChild(document.createTextNode(y));
                 ry.appendChild(n);
             }
         }
@@ -7825,8 +7825,8 @@
         mapview();
 
 
-            document.getElementById('rulerx').scrollLeft = (window.innerWidth * 12.5) - (window.innerWidth/2);
-            document.getElementById('rulery').scrollTop = (window.innerHeight * 12.5) + (window.innerHeight/4);
+        document.getElementById('rulerx').scrollLeft = (window.innerWidth * 50) - (window.innerWidth/2);
+        document.getElementById('rulery').scrollTop = (window.innerHeight * 50) + (window.innerHeight*2.08);
 
         // clayersize();
 
