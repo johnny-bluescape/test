@@ -427,6 +427,101 @@ function drawpaths(){
     }
 }
 
+function mapdrawpaths(){
+    var data = PATHDATA;
+    var canvas = document.getElementById('minicanvas');
+    var ctx = canvas.getContext('2d');
+
+    var x = Number(canvas.dataset.x) || 0;
+    var y = Number(canvas.dataset.y) || 0;
+    
+    // var canvas2 = document.getElementById('frame');
+    // var ctx2 = canvas2.getContext('2d');
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // ctx2.clearRect(0, 0, canvas.width, canvas.height);
+
+
+    var scale2 = window.devicePixelRatio || 1;
+
+    var backingStoreRatio = ctx.webkitBackingStorePixelRatio || ctx.mozBackingStorePixelRatio || ctx.msBackingStorePixelRatio || ctx.oBackingStorePixelRatio || ctx.backingStorePixelRatio || 1;
+
+    var ratio = scale2 / backingStoreRatio;
+
+    var oldWidth = document.getElementById('canvas2').offsetWidth;
+    var oldHeight = document.getElementById('canvas2').offsetHeight;
+
+    var xx = 3.2;
+
+    canvas.width = oldWidth * ratio * xx; //frame.width = 
+    canvas.height = oldHeight * ratio * xx; //frame.height = 
+
+    // canvas.style.width = oldWidth + 'px';//  = frame.style.width
+    // canvas.style.height = oldHeight + 'px'; //  = frame.style.height
+
+
+    var w = ctx.canvas.clientWidth ;
+    var h = ctx.canvas.clientHeight;
+
+    for(var i=0;i<data.length;i++){
+        var path = data[i];
+
+        var points = path.paths;
+        var color = path.color;
+        var size = Number(path.size);
+        var scale = Number(path.scale);
+
+        scale = (ZOOMLEVEL / scale) ;
+
+        ctx.save();
+
+        ctx.translate( oldWidth * ratio * (xx/2) - 800, oldHeight * ratio *(xx/2) - 500);// + (canvas.height) + 100;
+        ctx.scale(scale, scale);
+
+
+        with(ctx) {
+            beginPath();
+            lineWidth = size;
+            lineCap = 'round';
+            lineJoin = 'round';
+            strokeStyle = color;
+        }
+
+        for(var j=0;j<points.length;j++){
+            var point = points[j];
+
+            var x1 = point.mx;
+            var y1 = point.my;
+            var x2 = point.lx;
+            var y2 = point.ly;
+
+            with(ctx) {
+                moveTo(x1, y1);
+                lineTo(x2, y2);
+            }
+        }
+
+        ctx.stroke();
+        ctx.closePath();
+
+        
+        //var imgdata = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+        
+        ctx.restore();
+
+        
+        //ctx2.putImageData(imgdata, 0, 0, (w-(w*scale))/2, (h-(h*scale))/2, canvas.width, canvas.height);
+        //ctx2.drawImage(canvas, (w-(w*scale))/2, (h-(h*scale))/2, w, h);
+
+        // console.log(ctx2, ctx)
+
+        
+
+        //ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+}
+
 function undo(x){
     // var canvas = document.getElementById('canvas2');
 
