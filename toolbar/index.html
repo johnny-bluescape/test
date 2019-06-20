@@ -7685,8 +7685,8 @@
             var x = document.getElementById('rulerx');
             var y = document.getElementById('rulery');
 
-            x.scrollLeft = left ;
-            y.scrollTop = top ;
+            x.scrollLeft = left;
+            y.scrollTop = top;
 
             mapview();
         }
@@ -7710,6 +7710,8 @@
 
             var ns = 1 * s;
 
+            var lx = Number(l.dataset.x) || 0;
+            var ly = Number(l.dataset.y) || 0;
 
             // y = y * sh * .5;
             // x = x * sw * .5;
@@ -7723,8 +7725,8 @@
             var mh = h * ns * (1/(ZOOMLEVEL/100)) * .2;
 
 
-            x -= (m.offsetWidth/2);
-            y -= (m.offsetHeight/2);
+            x -= (m.offsetWidth/2) + (lx * .05);
+            y -= (m.offsetHeight/2) + (ly * .05);
 
             m.style.width = mw + 'px';
             m.style.height = mh + 'px';

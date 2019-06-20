@@ -1240,18 +1240,26 @@ function rectanglemove(e){
         
         console.log((-(wx - x) + stx) );
 
-        document.getElementById('canvas2').style.transform = 'translate(' + (-(wx - x) + stx)  + 'px, ' + (-(wy - y) + sty)  + 'px)';
+        // document.getElementById('canvas2').style.transform = 'translate(' + (-(wx - x) + stx)  + 'px, ' + (-(wy - y) + sty)  + 'px)';
         document.getElementById('canvas2').dataset.x = -(wx - x) + stx;
         document.getElementById('canvas2').dataset.y = -(wy - y) + sty;
 
-        document.getElementById('gridlayer').style.transform = 'translate(' + (-(wx - x) + stx)  + 'px, ' + (-(wy - y) + sty)  + 'px)';
+        drawpaths();
+
+        // document.getElementById('gridlayer').style.transform = 'translate(' + (-(wx - x) + stx)  + 'px, ' + (-(wy - y) + sty)  + 'px)';
+
+
+
+        document.getElementById('gridlayer').style.backgroundPosition = 'calc(50% - ' + ((wx - x) + stx) + 'px) calc(50% - ' + ((wy - y) + sty) + 'px)';
+
         document.getElementById('gridlayer').dataset.x = -(wx - x) + stx;
         document.getElementById('gridlayer').dataset.y = -(wy - y) + sty;
+       
 
         var scale = Number(document.getElementById('layers').dataset.s) || 1;
         document.getElementById('layers').style.transform = 'scale(' + scale + ') translate(' + (-(wx - x) + stx) + 'px, ' + (-(wy - y) + sty) + 'px)';
         document.getElementById('layers').dataset.x = -(wx - x) + stx ;
-        document.getElementById('layers').dataset.y = -(wy - y) +sty ;
+        document.getElementById('layers').dataset.y = -(wy - y) + sty ;
 
         var rx = document.getElementById('rulerx');
         var ry = document.getElementById('rulery');
@@ -1287,6 +1295,8 @@ function rectanglemove(e){
         zoom2.call(this, e, Math.round(((per) + zs)));
 
       // }
+
+      mapview();
     }
 
     function end2(e){
@@ -1294,6 +1304,8 @@ function rectanglemove(e){
       e.stopPropagation();
       // window.removeEventListener('mousemove', move);
       // window.removeEventListener('mouseup', end);
+
+      
 
       window.removeEventListener('touchmove', move);
       window.removeEventListener('touchend', end2);

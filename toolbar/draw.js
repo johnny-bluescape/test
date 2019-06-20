@@ -343,9 +343,14 @@ function sketchHandlerM(e){
 }
 
 function drawpaths(){
+
     var data = PATHDATA;
     var canvas = document.getElementById('canvas2');
     var ctx = canvas.getContext('2d');
+
+    var x = Number(canvas.dataset.x) || 0;
+    var y = Number(canvas.dataset.y) || 0;
+    
 
     // var canvas2 = document.getElementById('frame');
     // var ctx2 = canvas2.getContext('2d');
@@ -368,7 +373,7 @@ function drawpaths(){
 
         ctx.save();
 
-        ctx.translate((w-(w*scale))/2, (h-(h*scale))/2);
+        ctx.translate((w-(w*scale))/2 + x, (h-(h*scale))/2 + y);
         ctx.scale(scale, scale);
 
 
