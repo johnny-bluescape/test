@@ -6935,10 +6935,11 @@
             clabel *= 1/LAYERSCALE;
 
 
-            var lxx = l.dataset.x || 0;
-            var lyy = l.dataset.y || 0;
+            var lxx = Number(l.dataset.x) || 0;
+            var lyy = Number(l.dataset.y) || 0;
 
-            l.style.transform = 'scale(' + ls + ') translate(' + lxx + 'px,' + lyy +'px) ';
+            var scale = ls;
+            l.style.transform = 'scale(' + ls + ') translate(' + (lxx * (1/scale)) + 'px,' + (lyy * (1/scale)) +'px) ';
             //d.style.transform = 'scale(' + ls + ')';
             // cl.style.transform = 'scale(' + ls + ')';
             // cl.dataset.z = ls;
@@ -7726,7 +7727,8 @@
         
 
             var scale = Number(layers.dataset.s) || 1;
-            layers.style.transform = 'scale(' + scale + ') translate(' + (lx - x) + 'px, ' + (ly - y) + 'px)';
+            
+            layers.style.transform = 'scale(' + scale + ') translate(' + ((lx - x) * (1/scale)) + 'px, ' + ((ly - y) * (1/scale)) + 'px)';
             layers.dataset.x = lx - (x );
             layers.dataset.y = ly - (y );
 
@@ -7749,21 +7751,21 @@
             }
         }
 
-        function scrolling2(e){
-            var top = window.pageYOffset || document.documentElement.scrollTop;
-            var left = window.pageXOffset || document.documentElement.scrollLeft;
+        // function scrolling2(e){
+        //     var top = window.pageYOffset || document.documentElement.scrollTop;
+        //     var left = window.pageXOffset || document.documentElement.scrollLeft;
 
-            // console.log(e, 'scrolling2', top ,left);
+        //     // console.log(e, 'scrolling2', top ,left);
 
 
-            var x = document.getElementById('rulerx');
-            var y = document.getElementById('rulery');
+        //     var x = document.getElementById('rulerx');
+        //     var y = document.getElementById('rulery');
 
-            x.scrollLeft = left;
-            y.scrollTop = top;
+        //     x.scrollLeft = left;
+        //     y.scrollTop = top;
 
-            mapview();
-        }
+        //     mapview();
+        // }
 
         function mapview(){
             var m = document.getElementById('mapview');
@@ -7795,8 +7797,8 @@
 
 
 
-            var mw = w * ns * (1/(ZOOMLEVEL/100)) * .2;
-            var mh = h * ns * (1/(ZOOMLEVEL/100)) * .2;
+            var mw = w * ns * (1/(ZOOMLEVEL/100)) * .15;
+            var mh = h * ns * (1/(ZOOMLEVEL/100)) * .15;
 
 
             x -= (m.offsetWidth/2) + (lx * .04);
