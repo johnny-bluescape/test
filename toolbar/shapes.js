@@ -1343,6 +1343,8 @@ function rectanglemove(e){
 
     e.preventDefault();
 
+    blurall();
+
     var ev = e.touches ? e.touches[0] : e;
     var sx = ev.pageX;
     var sy = ev.pageY;
@@ -1358,6 +1360,8 @@ function rectanglemove(e){
     marq.style.left = sx + 'px';
     marq.style.zIndex = 1337;
     marq.style.background = 'rgba(20, 115, 230,.15)';
+
+    marq.className = 'marquee';
 
 
     //document.body.appendChild(marq);
@@ -1477,7 +1481,7 @@ function rectanglemove(e){
       window.removeEventListener('touchend', end);
 
         if ( moved ){
-          marq.remove();
+          setTimeout(function(){marq.remove();}, 100);
         }
     }
     

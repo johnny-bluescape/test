@@ -133,10 +133,12 @@
         }
 
         * {margin:0;padding:0;-webkit-overflow-scrolling: touch;-ms-overflow-style: -ms-autohiding-scrollbar;outline:none;-webkit-tap-highlight-color: transparent;-webkit-touch-callout: none;}
-        html {background:var(--canvas);cursor:pointer;-webkit-text-size-adjust: none;touch-action: manipulation;width:calc(100% + 400px);height:calc(100% + 400px);}
+        html {background:var(--canvas);cursor:pointer;-webkit-text-size-adjust: none;touch-action: manipulation;width:calc(100%);height:calc(100%);}
         html, input, textarea, button {font-family:Barlow, sans-serif;color:var(--color);}
         /* width:calc(100% + 400px);height:calc(100% + 400px); */
-        body {cursor:pointer;min-height:100%;height:100%;overscroll-behavior-x: none;}
+        body {cursor:pointer;min-height:100%;height:100%;overscroll-behavior-x: none;
+            overflow: hidden;
+        }
 
         body.rectangle_tool, body.select_tool {cursor:crosshair;}
 
@@ -187,7 +189,7 @@
 
                     .ui3 .tools .active .options {background:#0f0f10;}
 
-                .toggled .options {opacity:1;pointer-events:all;box-shadow:0 2px 20px var(--shadow2);transform:translate(0, -50%);background-color:var(--panel);}
+                .toggled .options, .active .meetingbtn ~ .options {opacity:1;pointer-events:all;box-shadow:0 2px 20px var(--shadow2);transform:translate(0, -50%);background-color:var(--panel);}
 
                 .settingsbtn ~ .options {top:0;transform: translate(-16px, 0);transition:opacity 150ms ease-in-out,transform 150ms ease-in-out;}
                 .toggled .settingsbtn ~ .options {transform: translate(0, 0);}
@@ -809,7 +811,7 @@
         #layers {height:100%;pointer-events:none;position:relative;z-index:4;}
             #layers > * {pointer-events:all;}
 
-        #gridlayer {pointer-events:none;position:absolute;z-index:1;width:calc(100% + 400px);height:calc(100% + 400px);top: 0;left: 0;}
+        #gridlayer {pointer-events:none;position:absolute;z-index:1;width:calc(100%);height:calc(100%);top: 0;left: 0;}
 
         /* #canvaslayers {width:100%;height:100%;pointer-events:none;position:absolute;z-index:1;top:0;left:0;} */
 
@@ -2033,6 +2035,9 @@
         </div>
         <div class=tweak>
             <label><input type=checkbox value=singlepan id=singlepan class=tweakr data-tweak=a000009 /><div class=toggle></div> One Finger Pan</label>
+        </div>
+        <div class=tweak>
+            <label><input type=checkbox value=invertscroll id=invertscroll class=tweakr data-tweak=a000007 /><div class=toggle></div> Invert Scroll</label>
         </div>
         <div class=tweak>
             <label><input type=checkbox value=ui2 id=ui2t class=tweakr data-tweak=a2 onchange="document.getElementById('ui3t').checked=false;" /><div class=toggle></div> Solid Toolbar</label>
@@ -6681,8 +6686,10 @@
 
         function blurup(e){
             var t = e.target;
+            var mm = document.getElementsByClassName('marquee');
 
-            if ( t == document.body || t.id == 'canvas2' ){
+
+            if ( mm.length == 0 && (t == document.body || t.id == 'canvas2') ){
                 // var f = document.getElementsByClassName('current');
                 // f.removeclass('current');
 
@@ -7676,11 +7683,74 @@
             console.log = function(){};
         }
 
+        function scrollpan(e){
+            e.preventDefault();
+
+            console.log('scrolling', e);
+
+            var x = e.deltaX;
+            var y = e.deltaY;
+
+            if ( document.documentElement.classList.contains('invertscroll')){
+                x = x * -1;
+                y = y * -1;
+            }
+
+            var canvas = document.getElementById('canvas2');
+            var grid = document.getElementById('gridlayer');
+            var layers = document.getElementById('layers');
+
+            var cx = Number(canvas.dataset.x) || 0;
+            var cy = Number(canvas.dataset.y) || 0;
+
+            var gx = Number(grid.dataset.x) || 0;
+            var gy = Number(grid.dataset.y) || 0;
+
+            var lx = Number(layers.dataset.x) || 0;
+            var ly = Number(layers.dataset.y) || 0;
+
+            canvas.dataset.x = cx - (x );
+            canvas.dataset.y = cy - (y );
+
+            drawpaths();
+
+
+            grid.style.backgroundPosition = 'calc(50% - ' + (gx + x) + 'px) calc(50% - ' + (gy + y) + 'px)';
+
+            grid.dataset.x = gx + (x );
+            grid.dataset.y = gy + (y );
+        
+
+            var scale = Number(layers.dataset.s) || 1;
+            layers.style.transform = 'scale(' + scale + ') translate(' + (lx - x) + 'px, ' + (ly - y) + 'px)';
+            layers.dataset.x = lx - (x );
+            layers.dataset.y = ly - (y );
+
+            var rx = document.getElementById('rulerx');
+            var ry = document.getElementById('rulery');
+
+            rx.scrollLeft += x;
+            ry.scrollTop += y;
+
+            mapview();
+
+            
+
+            setboundingposition();
+
+            var aa = document.getElementsByClassName('layeritem current')[0];
+            if ( aa ){
+                // setboundingbox.call(aa);
+                setcontextpanel.call(aa);
+            }
+        }
+
         function scrolling2(e){
             var top = window.pageYOffset || document.documentElement.scrollTop;
             var left = window.pageXOffset || document.documentElement.scrollLeft;
 
             // console.log(e, 'scrolling2', top ,left);
+
 
             var x = document.getElementById('rulerx');
             var y = document.getElementById('rulery');
@@ -7739,9 +7809,11 @@
         canvassetup();
         setTimeout(function(){window.onresize = resize;}, 1000);
         screenrez();
-        window.onscroll = scrolling2;
-        window.scrollTo(200, 200);
+        // window.onscroll = scrolling2;
+        // window.scrollTo(200, 200);
+
         window.addEventListener('mousewheel', dotspacing, { passive: false });
+        window.addEventListener('mousewheel', scrollpan, { passive: false });
 
         presave();
         parsehash();

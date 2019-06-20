@@ -260,6 +260,9 @@ function sketchHandlerM(e){
 
     canvas.redo = null;
 
+    var cx = Number(canvas.dataset.x) || 0;
+    var cy = Number(canvas.dataset.y) || 0;
+
     var lx = evt.pageX - ol;
     var ly = evt.pageY - ot;
 
@@ -299,7 +302,7 @@ function sketchHandlerM(e){
             lineTo(nx, ny);
             console.log(lines[id2].lx, lines[id2].ly, nx, ny);
 
-            path.push({mx:lines[id2].lx, my: lines[id2].ly, lx: nx, ly: ny});
+            path.push({mx:lines[id2].lx - cx, my: lines[id2].ly - cy, lx: nx - cx, ly: ny - cy});
             stroke();
         }
 
