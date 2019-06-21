@@ -1279,9 +1279,10 @@ function rectanglemove(e){
        
 
         var scale = Number(document.getElementById('layers').dataset.s) || 1;
-        document.getElementById('layers').style.transform = 'scale(' + scale + ') translate(' + (-(wx - x) + stx) + 'px, ' + (-(wy - y) + sty) + 'px)';
+        document.getElementById('layers').style.transform = 'scale(' + scale + ') translate(' + ((-(wx - x) + stx) * (1/scale)) + 'px, ' + ((-(wy - y) + sty) * (1/scale)) + 'px)';
         document.getElementById('layers').dataset.x = -(wx - x) + stx ;
         document.getElementById('layers').dataset.y = -(wy - y) + sty ;
+        
 
         var rx = document.getElementById('rulerx');
         var ry = document.getElementById('rulery');
