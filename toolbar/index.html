@@ -140,6 +140,10 @@
             overflow: hidden;
         }
 
+        .spacecadet, .spacecadet * {cursor: move !important;cursor: -moz-grab !important;cursor: -webkit-grab !important;cursor: grab !important;}
+
+        .spacecadet:active, .spacecadet *:active {cursor: move !important;cursor: -moz-grabbing !important;cursor: -webkit-grabbing !important;cursor: grabbing !important;}
+
         body.rectangle_tool, body.select_tool {cursor:crosshair;}
 
         ::-webkit-scrollbar {width:0;height:0;}
@@ -7840,8 +7844,31 @@
             m.style.top = '50%';//y + (m.offsetHeight/2) + 'px';
         }
 
+        function spacepan(e){
+            if ( !document.body.classList.contains('select_tool') ){
+                return;
+            }
+            window.addEventListener('keyup', landed);
+            window.addEventListener('mousedown', multitouch);
+
+            document.documentElement.classList.add('spacecadet');
+        }
+
+        function landed(e){
+            console.log(e);
+            window.removeEventListener('keyup', landed);
+            window.removeEventListener('mousedown', multitouch);
+
+            document.documentElement.classList.remove('spacecadet');
+        }
+
         function arrowkeys(e){
             var k = e.keyCode;
+
+            if ( k == 32 ){
+                spacepan.call(this, e);
+                return;
+            }
             
             if ( k < 37 || k > 40 ){
                 return;

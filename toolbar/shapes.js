@@ -10,6 +10,10 @@ function rectanglemove(e){
   //   return;
   // }
 
+  if (  document.documentElement.classList.contains('spacecadet') ){
+    return;
+  }
+
     console.log('mnove');
     e.preventDefault();
     
@@ -1104,11 +1108,17 @@ function rectanglemove(e){
     //   var sy = ev.pageY;
     //   xy.push({x: sx, y: sy, id: ev.identifier});
     // }
-
-    xy = [
-      {x: e.touches[0].pageX, y: e.touches[0].pageY}, 
-      {x: (e.touches[1] || e.touches[0]).pageX, y: (e.touches[1] || e.touches[0]).pageY}
-    ];
+    if ( e.touches ){
+      xy = [
+        {x: e.touches[0].pageX, y: e.touches[0].pageY}, 
+        {x: (e.touches[1] || e.touches[0]).pageX, y: (e.touches[1] || e.touches[0]).pageY}
+      ];
+    } else {
+      xy = [
+        {x: e.pageX, y: e.pageY}, 
+        {x: e.pageX, y: e.pageY}
+      ];
+    }
 
     var x1 = xy[0].x;
     var x2 = xy[1].x;
@@ -1171,11 +1181,23 @@ function rectanglemove(e){
       //   xy2.push({x: x, y: y, id: ev.identifier});
       // }
 
-      xy2 = [
-        {x: e.touches[0].pageX, y: e.touches[0].pageY}, 
-        {x: (e.touches[1] || e.touches[0]).pageX, y: (e.touches[1] || e.touches[0]).pageY}
-      ];
-      
+      // xy2 = [
+      //   {x: e.touches[0].pageX, y: e.touches[0].pageY}, 
+      //   {x: (e.touches[1] || e.touches[0]).pageX, y: (e.touches[1] || e.touches[0]).pageY}
+      // ];
+
+      if ( e.touches ){
+        xy2 = [
+          {x: e.touches[0].pageX, y: e.touches[0].pageY}, 
+          {x: (e.touches[1] || e.touches[0]).pageX, y: (e.touches[1] || e.touches[0]).pageY}
+        ];
+      } else {
+        xy2 = [
+          {x: e.pageX, y: e.pageY}, 
+          {x: e.pageX, y: e.pageY}
+        ];
+      }
+        
       var x1b = xy2[0].x;
       var x2b = xy2[1].x;
 
@@ -1310,6 +1332,9 @@ function rectanglemove(e){
       window.removeEventListener('touchmove', move);
       window.removeEventListener('touchend', end2);
 
+      window.removeEventListener('mousemove', move);
+      window.removeEventListener('mouseup', end2);
+
 
       // // document.getElementById('canvas2').style.transform = 'translate(' + -(wx - x)  + 'px, ' + -(wy - y)  + 'px)';
       // //   document.getElementById('canvas2').dataset.x = -(wx - x) + stx;
@@ -1331,13 +1356,16 @@ function rectanglemove(e){
     window.addEventListener('touchmove', move);
     window.addEventListener('touchend', end2);
 
+    window.addEventListener('mousemove', move);
+    window.addEventListener('mouseup', end2);
+
     // window.addEventListener('mouseup', end);
     // window.addEventListener('mousemove', move);
   }
 
   function marquee(e){
     
-    if ( e.which == 3|| e.target != document.body ){
+    if ( e.which == 3|| e.target != document.body || document.documentElement.classList.contains('spacecadet') ){
         return;
     }
 
