@@ -5180,10 +5180,10 @@
                                     var h = this.height || this.naturalHeight;
 
 
-                                    img.style.top = (window.innerHeight / 2) - (h/2) + 'px';
-                                    img.style.left = (window.innerWidth / 2) - (w/2) + mx + 'px';
+                                    img.style.top = (window.innerHeight / 2) - (h/2) + (-ly * (1/s)) + 'px';
+                                    img.style.left = (window.innerWidth / 2) - (w/2) + mx + (-lx * (1/s)) + 'px';
 
-                                    img.style.transform = 'translate(' + (-lx * (1/s)) + 'px,' + (-ly * (1/s)) + 'px)';
+                                    // img.style.transform = 'translate(' + (-lx * (1/s)) + 'px,' + (-ly * (1/s)) + 'px)';
 
                                     mx += w;
 
