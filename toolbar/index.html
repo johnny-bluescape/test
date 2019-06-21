@@ -1052,9 +1052,13 @@
 
         #minicanvas {position: absolute;top: 0;left: 0;width: 100%;height: 100%;}
 
+    .optionwrap .option {position:relative;}
 
-        .tool .tooltip {position:absolute;left:100%;top:50%;font-size:13px;background:var(--tool);padding:5px 8px 6px;border-radius:4px;font-weight:600;color:var(--icon);letter-spacing:.15px;white-space:nowrap;transform:translate(8px, -50%);pointer-events:none;opacity:0;transition:all 150ms ease-in-out;transition-delay:0;}
+        .tooltip {position:absolute;left:100%;top:50%;font-size:13px;background:var(--tool);padding:5px 8px 6px;border-radius:4px;font-weight:600;color:var(--icon);letter-spacing:.15px;white-space:nowrap;transform:translate(8px, -50%);pointer-events:none;opacity:0;transition:all 150ms ease-in-out;transition-delay:0;}
+            .option .tooltip {left:50%;top:0;transform:translate(-50%, calc(-100% - 8px));}
+            
             .tool:not(.toggled):hover .tooltip {transform:translate(12px, -50%);opacity:1;transition-delay:800ms;}
+            .option:hover .tooltip {transform:translate(-50%, calc(-100% - 12px));opacity:1;transition-delay:800ms;}
     </style>
 </head>
 <body class="rectanglex brush_tool ">
@@ -1079,7 +1083,7 @@
                 </div>
                 <div class="options contextpanel">
                     <div class=optionwrap>
-                        <div class="option marqueeselect current" data-menu=smenu> 
+                        <div class="option marqueeselect current" title="Selection Type" data-menu=smenu> 
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 5v4h2V5h4V3H5c-1.1 0-2 .9-2 2zm2 10H3v4c0 1.1.9 2 2 2h4v-2H5v-4zm14 4h-4v2h4c1.1 0 2-.9 2-2v-4h-2v4zm0-16h-4v2h4v4h2V5c0-1.1-.9-2-2-2z"/></svg>
                         </div><div class="option morebtn">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
@@ -1107,11 +1111,11 @@
                         </div>
                     </div> -->
                     <div class=optionwrap>
-                        <div class="option shapetype" data-menu=shapemenu>
+                        <div class="option shapetype" title="Shape Type" data-menu=shapemenu>
                             <div class="shapeicon square"></div>
-                        </div><div class="option fillcolor shapefillactual" data-menu=bgmenu2> 
+                        </div><div class="option fillcolor shapefillactual" title="Shape Color" data-menu=bgmenu2> 
                             <div class="fill shape2fill" id=shapefill style="background:rgb(255, 59, 48);"></div>
-                        </div><div class="option shapeborder shapeborderactual" data-menu=bmenu>
+                        </div><div class="option shapeborder shapeborderactual" title="Shape Border" data-menu=bmenu>
                             <div class="border"></div>
                         </div><div class="option morebtn">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
@@ -1144,11 +1148,11 @@
                         </div>
                     </div> -->
                     <div class=optionwrap>
-                        <div class="option typeface" data-menu=tfmenu>
+                        <div class="option typeface" title="Typeface" data-menu=tfmenu>
                             <div class=flyout>
                                 <div class=label>Helvetica</div>
                             </div>
-                        </div><div class="option fontsize" data-menu=fsmenu>
+                        </div><div class="option fontsize" title="Text Size" data-menu=fsmenu>
                             <div class=flyout>
                                 <div class=label>24</div><div class=icon>
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -1157,7 +1161,7 @@
                                     </svg>
                                 </div>
                             </div>
-                        </div><div class="option textcolor textcoloractual" data-menu=tcmenu>
+                        </div><div class="option textcolor textcoloractual" title="Text Color" data-menu=tcmenu>
                             <div class="fill textfill" style="background:white;"></div>
                         </div><div class="option morebtn">
                             <!-- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg> -->
@@ -1195,12 +1199,14 @@
                         </div>
                     </div> -->
                     <div class=optionwrap>
-                        <div class="option brushsize brushsizeactual" data-menu=bsmenu>
+                        <div class="option brushsize brushsizeactual" title="Pen Size" data-menu=bsmenu>
                             <div class="size" style="margin:0;">
                                 <div class="actual brushactual2"></div>
                             </div>
-                        </div><div class="option brushcolor brushcoloractual" data-menu=bcmenu>
+                            <div class=tooltip>Pen Size</div>
+                        </div><div class="option brushcolor brushcoloractual" title="Pen Color" data-menu=bcmenu>
                             <div class="fill brushfill2" id=brushfill2></div>
+                            <div class=tooltip>Stroke Color</div>
                         </div><div class="option morebtn">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
                         </div>
@@ -1218,10 +1224,10 @@
                 </div>
                 <div class="options contextpanel">
                     <div class=optionwrap>
-                        <div class="option uploadfileactual" data-menu=umenu style="padding: 0 12px;"> 
+                        <div class="option uploadfileactual" title="Upload File" data-menu=umenu style="padding: 0 12px;"> 
                             <!-- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"/></svg> -->
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg>
-                        </div><div class="option importfileactual" data-menu=imenu style="padding: 0 12px;">
+                        </div><div class="option importfileactual" title="Import File" data-menu=imenu style="padding: 0 12px;">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/></svg>
                         </div><div class="option morebtn">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
@@ -1246,9 +1252,9 @@
                 </div>
                 <div class="options contextpanel">
                     <div class=optionwrap>
-                        <div class="option canvasfillactual" data-menu=bgmenu3> 
+                        <div class="option canvasfillactual"  title="Canvas Background" data-menu=bgmenu3> 
                             <div class="fill canvasfill2" id=canvasfill style="background: linear-gradient(to right, var(--null) 3px, transparent 3px) 12.5px;box-shadow: inset 0 0 0 3px var(--null);transform: rotate(45deg);"></div>
-                        </div><div class="option canvasborder canvasborderactual" data-menu=cbmenu>
+                        </div><div class="option canvasborder canvasborderactual" title="Canvas Border" data-menu=cbmenu>
                             <div class="border" style="border-color:grey;"></div>
                         </div><div class="option morebtn">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
@@ -1263,11 +1269,11 @@
                 </div>
                 <div class="options contextpanel">
                     <div class=optionwrap>
-                        <div class="option startmeeting premeeting" data-menu=smeet style="padding: 0 12px;"> 
+                        <div class="option startmeeting premeeting" title="Start Meeting" data-menu=smeet style="padding: 0 12px;"> 
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>
-                        </div><div class="option joinmeeting premeeting" data-menu=jmeet style="padding: 0 12px;">
+                        </div><div class="option joinmeeting premeeting" title="Join Meeting" data-menu=jmeet style="padding: 0 12px;">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4zM14 13h-3v3H9v-3H6v-2h3V8h2v3h3v2z"/></svg>
-                        </div><div class="option endmeeting hangup inmeeting" data-menu=smeet style="padding: 0 12px;"> 
+                        </div><div class="option endmeeting hangup inmeeting" title="End Meeting" data-menu=smeet style="padding: 0 12px;"> 
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17,10.5V7c0-0.6-0.5-1-1-1H4C3.5,6,3,6.4,3,7v10c0,0.5,0.5,1,1,1h12c0.5,0,1-0.5,1-1v-3.5l4,4v-11L17,10.5z M12.1,15.5 L10,13.4l-2.1,2.1l-1.4-1.4L8.6,12L6.5,9.9l1.4-1.4l2.1,2.1l2.1-2.1l1.4,1.4L11.4,12l2.1,2.1L12.1,15.5z"/></svg>
                         </div><div class="option morebtn">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
@@ -1289,14 +1295,14 @@
                 <div class="options contextpanel">
                     <div class=optionwrap>
                         <div class=moremenu>
-                            <div class=mitem>Hide Toolbar</div>
+                            <div class="mitem hidebar">Hide Toolbar</div>
                             
-                            <div class="mitem ">Save</div>
-                            <div class=mitem>Delete</div>
+                            <div class="mitem ">Save Workspace</div>
+                            <div class=mitem>Delete Workspace</div>
                             <!-- <div class=mgap></div> -->
                             <div class="mitem ">Properties</div>
                             <div class=mgap></div>
-                            <div class="mitem ">Exit </div>
+                            <div class="mitem ">Exit Workspace</div>
                         </div>
                     </div>
                 </div>
