@@ -1137,9 +1137,6 @@ function rectanglemove(e){
     var sz = 0;
     var zs = ZOOMLEVEL || 100;
 
-    var wx = 0;//window.pageXOffset || document.documentElement.scrollLeft;//window.pageXOffset;
-    var wy = 0;//window.pageYOffset || document.documentElement.scrollTop;//window.pageYOffset;
-
     
     var smx = (x1 + x2) / 2;
     var smy =  (y1 + y2) / 2;
@@ -1260,11 +1257,11 @@ function rectanglemove(e){
         // document.documentElement.scrollLeft = wx - x;
         // document.documentElement.scrollTop = wy - y;
         
-        console.log((-(wx - x) + stx) );
+        // console.log((-(wx - x) + stx) );
 
         // document.getElementById('canvas2').style.transform = 'translate(' + (-(wx - x) + stx)  + 'px, ' + (-(wy - y) + sty)  + 'px)';
-        document.getElementById('canvas2').dataset.x = -(wx - x) + stx;
-        document.getElementById('canvas2').dataset.y = -(wy - y) + sty;
+        document.getElementById('canvas2').dataset.x = x + stx;
+        document.getElementById('canvas2').dataset.y = y + sty;
 
         drawpaths();
 
@@ -1272,40 +1269,38 @@ function rectanglemove(e){
 
 
 
-        document.getElementById('gridlayer').style.backgroundPosition = 'calc(50% - ' + ((wx - x) + stx) + 'px) calc(50% - ' + ((wy - y) + sty) + 'px)';
+        document.getElementById('gridlayer').style.backgroundPosition = 'calc(50% - ' + ((-x - stx) ) + 'px) calc(50% - ' + ((- y -sty)) + 'px)';
 
-        document.getElementById('gridlayer').dataset.x = -(wx - x) + stx;
-        document.getElementById('gridlayer').dataset.y = -(wy - y) + sty;
+        document.getElementById('gridlayer').dataset.x = x + stx;
+        document.getElementById('gridlayer').dataset.y = y + sty;
        
 
         var scale = Number(document.getElementById('layers').dataset.s) || 1;
-        document.getElementById('layers').style.transform = 'scale(' + scale + ') translate(' + ((-(wx - x) + stx) * (1/scale)) + 'px, ' + ((-(wy - y) + sty) * (1/scale)) + 'px)';
-        document.getElementById('layers').dataset.x = -(wx - x) + stx ;
-        document.getElementById('layers').dataset.y = -(wy - y) + sty ;
+        document.getElementById('layers').style.transform = 'scale(' + scale + ') translate(' + ((x + stx) * (1/scale)) + 'px, ' + ((y + sty) * (1/scale)) + 'px)';
+        document.getElementById('layers').dataset.x = x + stx ;
+        document.getElementById('layers').dataset.y = y + sty ;
         
 
         var rx = document.getElementById('rulerx');
         var ry = document.getElementById('rulery');
 
-        rx.scrollLeft += (wx - x) + stx - oxx;
-        ry.scrollTop += (wy - y) + sty - oyy;
+        rx.scrollLeft += -x + stx - oxx;
+        ry.scrollTop += -y + sty - oyy;
 
 
-        oxx = (wx - x) + stx;
-        oyy = (wy - y) + sty
+        oxx = -x + stx;
+        oyy = -y + sty
 
         // alert((-(wx - x) + stx) + ' | ' + (-(wy - y) + sty));
 
         // document.getElementById('gridlayer').innerHTML +=   x  + ' ';
         
-        console.log(wx, wy, "FIHFERF");
-        console.log(x, y, wx, wy, wx - x, wy - y);
-
+      
       // }
       // if ( pinching ){
         // e.preventDefault();
 
-        console.log('pinnjbfwbef');
+
 
         // nd = nd - sz;
         var per = nd / window.innerWidth * 100;
