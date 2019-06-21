@@ -902,8 +902,12 @@ function rectanglemove(e){
     var h = off.h;
 
     var b = document.createElement('div');
+    var handles = document.createElement('div');
+    // var hitbox = document.createElement('div');
 
     b.className = 'boundingbox';
+
+    // hitbox.className = 'hitbox';
 
     b.object = [this];
 
@@ -932,15 +936,17 @@ function rectanglemove(e){
       b.style.boxShadow = 'none';
     }
 
-
     for(var i=0;i<8;i++){
       var a = document.createElement('div');
       a.className = 'bhandle';
 
-      b.appendChild(a);
+      handles.appendChild(a);
     }
 
-    console.log('-----BB----')
+    b.appendChild(handles);
+    // b.appendChild(hitbox);
+
+    console.log('-----BB----');
     document.body.appendChild(b);
   }
 

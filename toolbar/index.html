@@ -440,6 +440,10 @@
                 .boundingbox.minwidth .bhandle:nth-child(5), .boundingbox.minwidth .bhandle:nth-child(7)  {opacity:0;pointer-events:none;transform:translateX(-50%) scale(0);}
                 .boundingbox.minheight  .bhandle:nth-child(6), .boundingbox.minheight .bhandle:nth-child(8)  {opacity:0;pointer-events:none;transform:translateY(-50%) scale(0);}
             
+                    .boundingbox.minwidth .bhandle::after, .boundingbox.minheight .bhandle::after  {width:24px;height:24px;}
+            
+
+                    /* .boundingbox .hitbox {width:64px;height:64px;max-width:80%;max-height:80%;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);} */
 
 
             .ellipse .resizehandle:nth-child(1) {top:-5px;left:50%;margin-left:-4px;cursor:ns-resize;}
@@ -7943,6 +7947,9 @@
         document.getElementById('rulery').scrollTop = (window.innerHeight * 50) + (window.innerHeight*2.08);
 
         window.addEventListener('keydown', arrowkeys);
+
+        mapview();
+
 
         // clayersize();
 
