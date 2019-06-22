@@ -4220,6 +4220,11 @@
             console.log('TYPETOOL');
             //blurelm.call(this, e);
 
+            if ( document.documentElement.classList.contains('spacecadet') ){
+                return;
+            }
+            
+
             var p = e.target.getparent('textarea');
             var b = e.target.getparent('toolbar');
             var pp = e.target.getparent('panel');
@@ -7896,7 +7901,7 @@
         }
 
         function spacepan(e){
-            if ( !document.body.classList.contains('select_tool') ){
+            if ( !document.body.classList.contains('select_tool') && !document.body.classList.contains('rectangle_tool')  && !document.body.classList.contains('type_tool') && !document.body.classList.contains('brush_tool') && !document.body.classList.contains('canvas_tool') ){
                 return;
             }
             window.addEventListener('keyup', landed);

@@ -10,7 +10,7 @@ function rectanglemove(e){
   //   return;
   // }
 
-  if (  document.documentElement.classList.contains('spacecadet') ){
+  if ( document.documentElement.classList.contains('spacecadet') ){
     return;
   }
 
@@ -208,6 +208,11 @@ function rectanglemove(e){
   }
 
   function rectangleresize(e){
+
+    if ( document.documentElement.classList.contains('spacecadet') ){
+      return;
+    }
+
     e.preventDefault();
     e.stopPropagation();
     
@@ -586,6 +591,11 @@ function rectanglemove(e){
   }
 
   function rectanglex(e, round, line){
+
+    if ( document.documentElement.classList.contains('spacecadet') ){
+      return;
+    }
+    
     console.log('xxxx')
 
     console.log(e.target);

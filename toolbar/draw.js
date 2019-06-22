@@ -255,6 +255,11 @@ function sketchHandler(e){
 PATHDATA = [];
 
 function sketchHandlerM(e){
+
+    if ( document.documentElement.classList.contains('spacecadet') ){
+        return;
+    }
+    
     e.preventDefault();
     e.stopPropagation();
     
