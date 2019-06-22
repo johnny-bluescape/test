@@ -6677,8 +6677,8 @@
 
             //w = w * (100/ZOOMLEVEL);
 
-            rx.empty();
-            ry.empty();
+            var xr = document.createElement('div');
+            var yr = document.createElement('div');
 
             for(var i=0;i<tw;i++){
                 var x = (-w/2) + i*thres;
@@ -6686,7 +6686,7 @@
                 var n = document.createElement('span');
 
                 n.appendChild(document.createTextNode(x));
-                rx.appendChild(n);
+                xr.appendChild(n);
             }
 
             for(var i=0;i<th;i++){
@@ -6695,8 +6695,14 @@
                 var n = document.createElement('span');
 
                 n.appendChild(document.createTextNode(y));
-                ry.appendChild(n);
+                yr.appendChild(n);
             }
+
+            rx.empty();
+            ry.empty();
+
+            rx.appendChild(xr);
+            ry.appendChild(yr);
         }
 
         window.addEventListener('mousedown', function(e){
@@ -6909,7 +6915,7 @@
 
             if ( e.ctrlKey || e.metaKey ){
                 var ts = e.timeStamp;
-                if ( ts - SCROLLTIME < 11 ){
+                if ( ts - SCROLLTIME < 1 ){
                     return;
                 }
                 SCROLLTIME = ts;
@@ -6936,7 +6942,6 @@
             if ( x ){
                 delta = delta * Number(x);
             }
-
             
 
             console.log(e);
@@ -6990,9 +6995,6 @@
             // cl.dataset.z = ls;
 
             l.dataset.s = ls;
-
-            setboundingposition();
-            setcontextpanel.call(document.getElementsByClassName('layeritem current')[0]);
 
 
             var n2 = 'canvaslabel_scale';
@@ -7068,10 +7070,25 @@
 
             //drawlayers2();
 
+            setboundingposition();
+            setcontextpanel.call(document.getElementsByClassName('layeritem current')[0]);
+
             drawpaths();
 
-            rulersetup();
+            // rulersetup();
 
+             if ( window.RULERTIMER ){
+                clearTimeout(RULERTIMER);
+                RULERTIMER = null;
+            }
+            window.RULERTIMER = setTimeout(rulersetup, 4);
+
+            // if ( window.MAPTIMER ){
+            //     clearTimeout(MAPTIMER);
+            //     MAPTIMER = null;
+            // }
+            // window.MAPTIMER = setTimeout(mapview, 100);
+            
             mapview();
         }
 
@@ -7781,10 +7798,10 @@
             drawpaths();
 
 
-            grid.style.backgroundPosition = 'calc(50% - ' + (gx + x) + 'px) calc(50% - ' + (gy + y) + 'px)';
+            grid.style.backgroundPosition = 'calc(50% - ' + -(gx - x) + 'px) calc(50% - ' + -(gy - y) + 'px)';
 
-            grid.dataset.x = gx + (x );
-            grid.dataset.y = gy + (y );
+            grid.dataset.x = gx - (x );
+            grid.dataset.y = gy - (y );
         
 
             var scale = Number(layers.dataset.s) || 1;
