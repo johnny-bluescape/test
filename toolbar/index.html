@@ -4662,7 +4662,7 @@
             }
         }
 
-        function setcontextpanel(x){
+        function setcontextpanel(x, ff){
 
             if ( !this || !this.className ){
                 return;
@@ -4673,7 +4673,10 @@
 
             var c = document.getElementById(cid);
 
-            c.offsetLeft;
+            
+            if ( !ff ){
+                c.offsetLeft;
+            }
 
             c.classList.add('visible');
         }
@@ -6907,13 +6910,13 @@
             //     return;
             // }
 
-            if ( !e.ctrlKey && !e.metaKey && !e.fake ){
+            if ( !e.ctrlKey && !e.metaKey && !e.fake && !e.altKey ){
                 return;
             }
 
             e.preventDefault();
 
-            if ( e.ctrlKey || e.metaKey ){
+            if ( e.ctrlKey || e.metaKey  || e.altKey ){
                 var ts = e.timeStamp;
                 if ( ts - SCROLLTIME < 1 ){
                     return;
@@ -7070,8 +7073,7 @@
 
             //drawlayers2();
 
-            setboundingposition();
-            setcontextpanel.call(document.getElementsByClassName('layeritem current')[0]);
+            
 
             drawpaths();
 
@@ -7081,7 +7083,7 @@
                 clearTimeout(RULERTIMER);
                 RULERTIMER = null;
             }
-            window.RULERTIMER = setTimeout(rulersetup, 4);
+            window.RULERTIMER = setTimeout(rulersetup, 100);
 
             // if ( window.MAPTIMER ){
             //     clearTimeout(MAPTIMER);
@@ -7090,6 +7092,9 @@
             // window.MAPTIMER = setTimeout(mapview, 100);
             
             mapview();
+
+            setboundingposition();
+            setcontextpanel.call(document.getElementsByClassName('layeritem current')[0], true);
         }
 
         function resetzoom(e){
@@ -7753,7 +7758,7 @@
         function scrollpan(e, manual){
 
             if ( !manual ){
-                if ( e.ctrlKey || e.metaKey ){
+                if ( e.ctrlKey || e.metaKey || e.altKey ){
                     return;
                 }
 
