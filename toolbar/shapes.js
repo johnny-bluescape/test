@@ -595,7 +595,7 @@ function rectanglemove(e){
     if ( document.documentElement.classList.contains('spacecadet') ){
       return;
     }
-    
+
     console.log('xxxx')
 
     console.log(e.target);
@@ -1325,8 +1325,8 @@ function rectanglemove(e){
         // document.getElementById('gridlayer').innerHTML +=   per + ' ' + zs  + ' ' + d + ' - ' + sd;
         
         // sz = nd;
-        console.log(per, zs, sz)
-        zoom2.call(this, e, Math.round(((per) + zs)));
+        console.log(per, zs, sz, per + zs);
+        zoom2.call(this, e, Math.round(per + zs));
 
       // }
 

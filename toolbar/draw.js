@@ -259,7 +259,7 @@ function sketchHandlerM(e){
     if ( document.documentElement.classList.contains('spacecadet') ){
         return;
     }
-    
+
     e.preventDefault();
     e.stopPropagation();
     
@@ -465,6 +465,8 @@ function mapdrawpaths(){
     
     // var canvas2 = document.getElementById('frame');
     // var ctx2 = canvas2.getContext('2d');
+
+    console.log(canvas.height, canvas.width);
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     // ctx2.clearRect(0, 0, canvas.width, canvas.height);
