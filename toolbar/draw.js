@@ -90,10 +90,13 @@ function canvassetup(){
     var oldWidth = document.getElementById('canvas2').offsetWidth;
     var oldHeight = document.getElementById('canvas2').offsetHeight;
 
-    var xx = 3.2;
+    // var xx = 1;//3.2;
 
-    canvas.width = oldWidth * ratio * xx; //frame.width = 
-    canvas.height = oldHeight * ratio * xx; //frame.height = 
+    canvas.width = oldWidth * ratio; //frame.width = 
+    canvas.height = oldHeight * ratio; //frame.height = 
+    // ctx.scale(.32,.32);
+
+    // ctx.translate(1000, oldHeight * ratio * xx)
 
     // canvas.style.width = oldWidth + 'px';//  = frame.style.width
     // canvas.style.height = oldHeight + 'px'; //  = frame.style.height
@@ -458,6 +461,7 @@ function drawpaths(){
 function mapdrawpaths(){
     var data = PATHDATA;
     var canvas = document.getElementById('minicanvas');
+    var canvas2 = document.getElementById('canvas2');
     var ctx = canvas.getContext('2d');
 
     var x = Number(canvas.dataset.x) || 0;
@@ -466,9 +470,9 @@ function mapdrawpaths(){
     // var canvas2 = document.getElementById('frame');
     // var ctx2 = canvas2.getContext('2d');
 
-    console.log(canvas.height, canvas.width);
+    console.log(canvas2.height, canvas2.width);
 
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.clearRect(0, 0, canvas2.width, canvas2.height);
     // ctx2.clearRect(0, 0, canvas.width, canvas.height);
 
 
@@ -493,11 +497,12 @@ function mapdrawpaths(){
     var oldWidth = document.getElementById('canvas2').offsetWidth;
     var oldHeight = document.getElementById('canvas2').offsetHeight;
 
-    var xx = 3.2;
+    // var xx = 1;//3.2;
 
-    canvas.width = oldWidth * ratio * xx; //frame.width = 
-    canvas.height = oldHeight * ratio * xx; //frame.height = 
-
+    canvas.width = oldWidth * ratio; //frame.width = 
+    canvas.height = oldHeight * ratio; //frame.height = 
+    ctx.scale(.28,.28);
+    ctx.translate(oldWidth * ratio * 1.28, oldHeight * ratio * 1.28)
 
     var w = ctx.canvas.clientWidth;
     var h = ctx.canvas.clientHeight;
@@ -516,7 +521,8 @@ function mapdrawpaths(){
 
         ctx.save();
 
-        ctx.translate( oldWidth * ratio * (xx/2) - 800, oldHeight * ratio *(xx/2) - 500);// + (canvas.height) + 100;
+        ctx.translate(window.innerWidth /2, window.innerHeight /2);
+        // ctx.translate( oldWidth * ratio  - (window.innerWidth), oldHeight * ratio  - (window.innerHeight));// + (canvas.height) + 100;
         //ctx.translate((w-(w*scale))/2 + x, (h-(h*scale))/2 + y);
         ctx.scale(scale *ss, scale*ss);
 
