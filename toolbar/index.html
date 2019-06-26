@@ -1573,6 +1573,8 @@
                     </div>
                 </div><div class="option textcolor" data-menu=textcolormenu>
                     <div class="fill textfill" id="textfill" style="background:white;"></div>
+                </div><div class="option textbg opensubmenu" data-menu=textbgmenu>
+                    <div class="fill textbg2" id="textbg2" style="background: linear-gradient(to right, var(--null) 3px, transparent 3px) 12.5px;box-shadow: inset 0 0 0 3px var(--null);transform: rotate(45deg);"></div>
                 </div><div class="option shapeup">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8-8 8z"/></svg>
                 </div><div class="option shapeback">
@@ -1853,6 +1855,11 @@
 
         <div id=textcolormenu>
             <div class=menutitle>Text Color</div>
+ 
+        </div>
+
+        <div id=textbgmenu>
+            <div class=menutitle>Text Background</div>
  
         </div>
 
@@ -4464,6 +4471,7 @@
         function blurelm(e){
             console.log('BLUR')
             var a = document.activeElement;//.blur();
+            a.blur();
             var c = document.getElementsByClassName('layeritem current');
             console.log(c[0]);
             if ( !c[0] || c[0] && (c[0] == a || this.getparent('current')) ){
@@ -5108,6 +5116,13 @@
                 var bc = window.getComputedStyle(rec).color;
                 setchip(bc, p);
 
+            }  else if ( shell == 'textbgmenu' ){
+                m.appendChild(s);
+
+                var rec = document.getElementsByClassName('layeritem current')[0].getElementsByClassName('textarea')[0];
+                var bc = window.getComputedStyle(rec).backgroundColor;
+                setchip(bc, p);
+
             } else if ( shell == 'fsmenu' ){
                 var step = stepper2.call(this, e);
                 step.classList.add('menud');
@@ -5658,6 +5673,7 @@
             }
 
             var fill = true;
+            var color2 = false;
 
             if ( l.classList.contains('rectangle')) {
                 if ( m.classList.contains('bordermenu')){
@@ -5667,18 +5683,30 @@
                     l.style.backgroundColor = a;
                 }
             } else if ( l.classList.contains('textwrap')){
-                l.getElementsByClassName('textarea')[0].style.color = a;
+                if ( m.classList.contains('textbgmenu')){
+                    l.getElementsByClassName('textarea')[0].style.backgroundColor = a;
+                    fill = false;
+                    color2 = true;
+                    l.style.boxShadow = 'rgba(0, 0, 0, 0.15) 0px 3px 10px';
+                } else {
+                    l.getElementsByClassName('textarea')[0].style.color = a;
+                }
             }
 
             var p = document.getElementById(id);
+            var f = p.getElementsByClassName('fill')[0];
 
             if ( fill ){
-                var f = p.getElementsByClassName('fill')[0];
+                f.style.background = a;
+                f.style.boxShadow = 'none';
+            } else if (color2){
+                 f = p.getElementsByClassName('textbg2')[0];
 
                 f.style.background = a;
                 f.style.boxShadow = 'none';
+                f.style.boxSizing =  'border-box';
             } else {
-                var f = p.getElementsByClassName('border')[0];
+                 f = p.getElementsByClassName('border')[0];
 
                 f.style.background = 'transparent';
                 f.style.boxShadow = 'none';
@@ -5693,6 +5721,11 @@
                     f.style.border = '3px solid var(--null)';
                     f.style.backgroundPosition = '9.5px';
                 }
+
+                if ( color2 ){
+                    l.style.boxShadow = 'none';
+                }
+                
                 f.style.transform = 'rotate(45deg)';
             }
 
@@ -6439,8 +6472,11 @@
                 sw = sw.getElementsByClassName('textfill')[0];
                 f = f.getElementsByClassName('textarea')[0];
                 f.style.color = sw.style.backgroundColor = 'hsla(' + h + ', ' + s + '%, ' + l + '%, ' + (a/100) + ')';
-
-
+            } else if ( me == 'textbgmenu'){
+                var sw = document.getElementsByClassName('contextpanel visible')[0];
+                sw = sw.getElementsByClassName('textbg2')[0];
+                f = f.getElementsByClassName('textarea')[0];
+                f.style.backgroundColor = sw.style.backgroundColor = 'hsla(' + h + ', ' + s + '%, ' + l + '%, ' + (a/100) + ')';
             }
           }
         }
