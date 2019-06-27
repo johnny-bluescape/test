@@ -15,6 +15,8 @@
 
             --hovertool:#333C43;
             --presstool:#38454F;
+
+            --blue: #0072FF;
             
         }
         * {margin:0;padding:0;}
@@ -28,9 +30,9 @@
             #navright {display:flex;align-items:center;padding-right:8px;}
             #logo {display:flex;align-items:center;justify-content:center;height:100%;width:56px;}
             #workspace {display:flex;align-items:center;justify-content:center;font-size:18px;height:100%;font-weight:500;padding:0 12px;}
-        #toolbar {position:fixed;top:56px;left:0;bottom:0;width:56px;z-index:2;}
-            #meetings {background:var(--bars);margin-top:1px;margin-bottom:1px;width:100%;}
-            #tools {overflow-y:auto;background:var(--bars);position:absolute;top:150px;bottom:0;left:0;width:100%;}
+        #toolbar {position:fixed;top:56px;left:0;bottom:0;width:56px;z-index:4;}
+            #meetings {background:var(--bars);margin-top:1px;margin-bottom:1px;width:100%;padding:8px 0;z-index:2;}
+            #tools {overflow-y:auto;background:var(--bars);position:absolute;top:166px;bottom:0;left:0;width:100%;padding:8px 0;}
 
         .tbtn {width:100%;height:48px;margin-bottom:2px;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;transition:all 150ms ease-in-out;}
             .tbtn:last-child {margin:0;}
@@ -61,18 +63,46 @@
 
         .disabled {pointer-events:none;opacity:.2;}
 
-        #panels {position:fixed;top:57px;left:56px;}
+        #panels {position:fixed;top:57px;left:56px;z-index:1;}
 
-        .panel {width:200px;height:200px;border:4px solid var(--presstool);background:#21272A;position:absolute;top:0;left:0;box-sizing:border-box;transition:all 150ms ease-in-out;transform:translateX(-8px);opacity:0;pointer-events:none;}
-            .panel.visible {transform:translateX(0);opacity:1;pointer-events:all;}
-            #userpanel {}
-            #callpanel {top:50px;}
-            #activitypanel {top:100px;}
-            #selectpanel {top:149px;}
-            #penpanel {top:199px;}
-            #textpanel {top:249px;}
-            #apppanel {top:299px;}
-            #canvaspanel {top:349px;}
+        .panel {width:200px;height:200px;border:4px solid var(--presstool);background:#21272A;position:absolute;top:0;left:0;box-sizing:border-box;transition:all 150ms ease-in-out;transform:translate(-4px, 0);opacity:0;pointer-events:none;}
+            .panel.visible {transform:translate(0,0);opacity:1;pointer-events:all;}
+            #userpanel {top:4px;}
+            #callpanel {top:54px;}
+            #activitypanel {top:104px;}
+            #selectpanel {top:169px;}
+            #penpanel {top:219px;}
+            #textpanel {top:269px;}
+            #apppanel {top:319px;}
+            #canvaspanel {top:369px;}
+        
+
+.badge {
+    min-width: 18px;
+    height: 18px;
+    padding: 0 4px;
+    border-radius: 9px;
+    font-size: 10px;
+    font-weight: 700;
+    box-sizing: border-box;
+    background: var(--blue);
+    position: absolute;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 2px;
+    left: 38px;
+    border: 2px solid var(--bars);
+    transform: translateX(-50%);
+    transition: border-color 150ms ease-in-out;
+}
+
+.tbtn:hover .badge {border-color: var(--hovertool);}
+
+.tbtn:active .badge, .tbtn.selected .badge {border-color: var(--presstool);}
+
+
     </style>
     <script src="../js/gator.js"></script>
 </head>
@@ -122,6 +152,7 @@
     <div id=toolbar>
         <div id=meetings>
             <div class="tbtn nontool" id=user>
+                <div class=badge>3</div>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                         <path fill-rule="evenodd" d="M10.5,13.3231775 L13.8,13.3231775 C13.8,14.2344474 13.0612698,14.9731775 12.15,14.9731775 C11.2387302,14.9731775 10.5,14.2344474 10.5,13.3231775 Z M5.51092852,20.5598697 C5.65855932,19.7720861 7.28805796,19.1065482 9.55468007,18.8231775 C10.1855833,19.3513401 11.0484463,19.6768225 12,19.6768225 C12.9515537,19.6768225 13.8144167,19.3513401 14.4453199,18.8231775 C16.711942,19.1065482 18.3414407,19.7720861 18.4890715,20.5598697 C16.6699901,21.8909728 14.4267676,22.6768225 12,22.6768225 C9.57323244,22.6768225 7.33000991,21.8909728 5.51092852,20.5598697 Z M13.6300385,4.95830315 C11.9074039,7.26012607 9.46226788,8.96230257 6.64285714,9.70731983 L6.64285714,11.7231775 C6.64285714,13.6963757 7.78585968,15.4026114 9.44588314,16.2159028 L9.28463568,16.8771597 C8.03941808,17.0263074 7.01124808,17.2748592 6.3550412,17.5830535 C4.98449872,16.8890246 4.5,15.65676 4.5,13.5818052 C4.5,3.59759666 7.85786438,1.32317753 12,1.32317753 C16.1421356,1.32317753 19.5,3.51953735 19.5,13.5818052 C19.5,15.65676 19.0155013,16.8890246 17.6449588,17.5830535 C16.9891856,17.2750629 15.9619409,17.026636 14.7178331,16.8774555 L14.5569512,16.2145131 C16.2154412,15.4006688 17.3571429,13.6952525 17.3571429,11.7231775 L17.3571429,8.65157339 C15.8406239,7.75092095 14.5590809,6.47961141 13.6300385,4.95830315 L13.6300385,4.95830315 Z"/>
                       </svg>
@@ -165,32 +196,33 @@
                     </svg>
                 </div>
         </div>
-        <div id=panels>
-            <div class=panel id=userpanel>
-                
-            </div>
-            <div class=panel id=callpanel>
-                
-            </div>
-            <div class=panel id=activitypanel>
+    </div>
+    <div id=panels>
+        <div class=panel id=userpanel>
             
-            </div>
-            <div class=panel id=selectpanel>
-            
-            </div>
-            <div class=panel id=penpanel>
-
-            </div>
-            <div class=panel id=textpanel>
-
-            </div>
-            <div class=panel id=apppanel>
-
-            </div>
-            <div class=panel id=canvaspanel>
-
-            </div>
         </div>
+        <div class=panel id=callpanel>
+            
+        </div>
+        <div class=panel id=activitypanel>
+        
+        </div>
+        <div class=panel id=selectpanel>
+        
+        </div>
+        <div class=panel id=penpanel>
+
+        </div>
+        <div class=panel id=textpanel>
+
+        </div>
+        <div class=panel id=apppanel>
+
+        </div>
+        <div class=panel id=canvaspanel>
+
+        </div>
+    
     </div>
     <script>
         function toggle(e){
