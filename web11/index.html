@@ -28,11 +28,15 @@
         #nav {position:fixed;top:0;left:0;right:0;height:56px;background:var(--bars);display:flex;}
             #navleft {display:flex;width:100%;align-items:center;}
             #navright {display:flex;align-items:center;padding-right:8px;}
-            #logo {display:flex;align-items:center;justify-content:center;height:100%;width:56px;}
+            #logo {display:flex;align-items:center;justify-content:center;height:100%;width:56px;transition:all 150ms ease-in-out;cursor:pointer;}
             #workspace {display:flex;align-items:center;justify-content:center;font-size:18px;height:100%;font-weight:500;padding:0 16px;}
         #toolbar {position:fixed;top:56px;left:0;bottom:0;width:56px;z-index:4;}
             #meetings {background:var(--bars);margin-top:1px;margin-bottom:1px;width:100%;padding:8px 0;z-index:2;}
             #tools {overflow-y:auto;background:var(--bars);position:absolute;top:166px;bottom:0;left:0;width:100%;padding:8px 0;}
+
+
+        #logo:hover {background-color:var(--hovertool);}
+        #logo:active {background-color:var(--presstool);}
 
         .tbtn {width:100%;height:48px;margin-bottom:2px;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;transition:all 150ms ease-in-out;}
             .tbtn:last-child {margin:0;}
@@ -63,7 +67,7 @@
 
         .disabled {pointer-events:none;opacity:.2;}
 
-        #panels {position:fixed;top:57px;left:56px;z-index:1;}
+        #panels {position:fixed;top:57px;left:56px;bottom:0;z-index:1;}
 
         .panel {width:200px;height:200px;border:4px solid var(--presstool);background:#21272A;position:absolute;top:0;left:0;box-sizing:border-box;transition:all 150ms ease-in-out;transform:translate(-4px, 0);opacity:0;pointer-events:none;}
             .panel.visible {transform:translate(0,0);opacity:1;pointer-events:all;}
@@ -102,7 +106,8 @@
 
 .tbtn:active .badge, .tbtn.selected .badge {border-color: var(--presstool);}
 
-
+        .tooltip {left: 64px;position: fixed;transition: all 150ms ease-in-out;transform:translateX(-4px);pointer-event:none;opacity:0;padding:0 8px;line-height:24px;background:rgba(47, 51, 56, 0.8);color:#ccc;border-radius:4px;font-size:12px;font-weight:600;transition-delay:0s;}
+        .tbtn:not(.toggled):hover .tooltip {opacity:1;transform:translateX(0);transition-delay:.8s;}
     </style>
     <script src="../js/gator.js"></script>
 </head>
@@ -159,17 +164,25 @@
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                         <path fill-rule="evenodd" d="M10.5,13.3231775 L13.8,13.3231775 C13.8,14.2344474 13.0612698,14.9731775 12.15,14.9731775 C11.2387302,14.9731775 10.5,14.2344474 10.5,13.3231775 Z M5.51092852,20.5598697 C5.65855932,19.7720861 7.28805796,19.1065482 9.55468007,18.8231775 C10.1855833,19.3513401 11.0484463,19.6768225 12,19.6768225 C12.9515537,19.6768225 13.8144167,19.3513401 14.4453199,18.8231775 C16.711942,19.1065482 18.3414407,19.7720861 18.4890715,20.5598697 C16.6699901,21.8909728 14.4267676,22.6768225 12,22.6768225 C9.57323244,22.6768225 7.33000991,21.8909728 5.51092852,20.5598697 Z M13.6300385,4.95830315 C11.9074039,7.26012607 9.46226788,8.96230257 6.64285714,9.70731983 L6.64285714,11.7231775 C6.64285714,13.6963757 7.78585968,15.4026114 9.44588314,16.2159028 L9.28463568,16.8771597 C8.03941808,17.0263074 7.01124808,17.2748592 6.3550412,17.5830535 C4.98449872,16.8890246 4.5,15.65676 4.5,13.5818052 C4.5,3.59759666 7.85786438,1.32317753 12,1.32317753 C16.1421356,1.32317753 19.5,3.51953735 19.5,13.5818052 C19.5,15.65676 19.0155013,16.8890246 17.6449588,17.5830535 C16.9891856,17.2750629 15.9619409,17.026636 14.7178331,16.8774555 L14.5569512,16.2145131 C16.2154412,15.4006688 17.3571429,13.6952525 17.3571429,11.7231775 L17.3571429,8.65157339 C15.8406239,7.75092095 14.5590809,6.47961141 13.6300385,4.95830315 L13.6300385,4.95830315 Z"/>
                       </svg>
+                      <div class=tooltip>
+                            Users
+                        </div>
             </div>
             <div class="tbtn nontool" id=call>
                     <svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24">
                         <path fill-rule="evenodd" d="M20.1424569,3.52941707 C20.5747388,3.61604102 21,4.04777086 21,4.60342831 C21,7.5867927 20.1424569,12.4816942 15.9287237,16.4975108 C12.105887,20.140791 7.61279867,21 4.63521852,21 C4.08084138,21 3.64548746,20.5525806 3.5632896,20.140791 L3.03602965,16.8595494 C2.90656686,16.3839307 3.12714625,15.8221508 3.679187,15.5707359 L7.5381311,13.9239187 C7.99533244,13.7406827 8.51667515,13.852787 8.86017677,14.2461221 C9.55576968,15.1110574 10.0272676,15.6924134 10.2746707,15.99019 C10.4336785,16.1815733 10.6405682,16.3122948 10.8879274,16.1815733 C13.5281575,14.7862957 14.6520745,13.7721891 16.1147823,10.9552763 C16.2461555,10.7022751 16.2178758,10.5590068 16.0427829,10.4107727 C15.6064411,10.0413646 14.9987873,9.52979568 14.2198214,8.87606582 C13.759328,8.51184883 13.7068826,7.93668994 13.8982427,7.55145195 L15.541867,3.68501147 C15.7505887,3.22493143 16.2341125,2.87827098 16.8281817,3.04060472 L20.1424569,3.52941707 Z" transform="matrix(-1 0 0 1 24 0)"/>
                       </svg>
-                      
+                      <div class=tooltip>
+                            Meetings
+                        </div>
             </div>
             <div class="tbtn nontool" id=activity>
                     <svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24">
                         <path fill-rule="evenodd" d="M9.27272727,17 L4,17 C2.8954305,17 2,16.1045695 2,15 L2,5 C2,3.8954305 2.8954305,3 4,3 L20,3 C21.1045695,3 22,3.8954305 22,5 L22,15 C22,16.1045695 21.1045695,17 20,17 L14.7272727,17 L12,21 L9.27272727,17 Z M7.5,11.5 C8.19035594,11.5 8.75,10.9403559 8.75,10.25 C8.75,9.55964406 8.19035594,9 7.5,9 C6.80964406,9 6.25,9.55964406 6.25,10.25 C6.25,10.9403559 6.80964406,11.5 7.5,11.5 Z M12,11.5 C12.6903559,11.5 13.25,10.9403559 13.25,10.25 C13.25,9.55964406 12.6903559,9 12,9 C11.3096441,9 10.75,9.55964406 10.75,10.25 C10.75,10.9403559 11.3096441,11.5 12,11.5 Z M16.5,11.5 C17.1903559,11.5 17.75,10.9403559 17.75,10.25 C17.75,9.55964406 17.1903559,9 16.5,9 C15.8096441,9 15.25,9.55964406 15.25,10.25 C15.25,10.9403559 15.8096441,11.5 16.5,11.5 Z"/>
                       </svg>
+                      <div class=tooltip>
+                            Activity
+                        </div>
             </div>
         </div>
         <div id=tools>
@@ -177,26 +190,41 @@
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                         <path fill-rule="evenodd" d="M18.5,16.2775712 C18.9427113,16.2775712 19.1670158,15.7446582 18.857558,15.4280683 L6.85755798,3.1515017 C6.54426079,2.83098388 6,3.05280064 6,3.50100462 L6,20.5010046 C6,20.9379424 6.52103086,21.1646855 6.84077198,20.8668932 L11.7683501,16.2775712 L18.5,16.2775712 Z"/>
                     </svg>
+                    <div class=tooltip>
+                        Selection Tool
+                    </div>
                 </div>
                 <div class=tbtn id=pen>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                         <path fill-rule="evenodd" d="M3.00012095,17.5177058 L17.2214154,3.29285429 C17.6118944,2.9022847 18.2450594,2.90221126 18.635629,3.29269026 C18.6356719,3.29273322 18.6357149,3.29277618 18.6357579,3.29281915 L20.7051565,5.36275678 C21.0956535,5.75330564 21.0956131,6.38646799 20.7050661,6.77696694 L6.4822882,20.9980028 L3.00012095,20.9980028 L3.00012095,17.5177058 Z"/>
                     </svg>
+                    <div class=tooltip>
+                            Draw Tool
+                        </div>
                 </div>
                 <div class=tbtn id=text>
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                         <path fill-rule="evenodd" d="M13.5,7 L13.5,20 L10.5,20 L10.5,7 L4,7 L4,4 L20,4 L20,7 L13.5,7 Z"/>
                     </svg>
+                    <div class=tooltip>
+                            Text Tool
+                        </div>
                 </div>
                 <div class=tbtn id=app>
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                         <path fill-rule="evenodd" d="M10.5,10.5 L10.5,4 L13.5,4 L13.5,10.5 L20,10.5 L20,13.5 L13.5,13.5 L13.5,20 L10.5,20 L10.5,13.5 L4,13.5 L4,10.5 L10.5,10.5 Z"/>
                     </svg>
+                    <div class=tooltip>
+                        Upload Files
+                    </div>
                 </div>
                 <div class=tbtn id=canvas>
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                         <path fill-rule="evenodd" d="M2.5,1 C3.32842712,1 4,1.67157288 4,2.5 C4,3.32842712 3.32842712,4 2.5,4 C1.67157288,4 1,3.32842712 1,2.5 C1,1.67157288 1.67157288,1 2.5,1 Z M2.5,20 C3.32842712,20 4,20.6715729 4,21.5 C4,22.3284271 3.32842712,23 2.5,23 C1.67157288,23 1,22.3284271 1,21.5 C1,20.6715729 1.67157288,20 2.5,20 Z M21.5,20 C22.3284271,20 23,20.6715729 23,21.5 C23,22.3284271 22.3284271,23 21.5,23 C20.6715729,23 20,22.3284271 20,21.5 C20,20.6715729 20.6715729,20 21.5,20 Z M21.5,1 C22.3284271,1 23,1.67157288 23,2.5 C23,3.32842712 22.3284271,4 21.5,4 C20.6715729,4 20,3.32842712 20,2.5 C20,1.67157288 20.6715729,1 21.5,1 Z M7,7 L7,17 L17,17 L17,7 L7,7 Z M6,5 L18,5 C18.5522847,5 19,5.44771525 19,6 L19,18 C19,18.5522847 18.5522847,19 18,19 L6,19 C5.44771525,19 5,18.5522847 5,18 L5,6 C5,5.44771525 5.44771525,5 6,5 Z"/>
                     </svg>
+                    <div class=tooltip>
+                            Canvas Tool
+                    </div>
                 </div>
         </div>
     </div>
