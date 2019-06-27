@@ -50,11 +50,12 @@
             .tbtn:hover {background-color:var(--hovertool);}
             .tbtn:hover svg *, .tbtn:active svg *, .tbtn.selected svg * {fill:rgba(255,255,255,1);}
                 .tbtn.selected::after {opacity:.6;}
+                    .tbtn.toggled::after {transform:rotate(180deg);}
                 
             .tbtn:active, .tbtn.selected {background-color:var(--presstool);}
 
 
-            .tbtn::after {content:'';position:absolute;top:50%;right:4px;margin-top:-4px;width:8px;height:8px;opacity:.35;background:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 8 8"><polygon fill="white" points="2.939 .818 6.121 4 2.939 7.182 1.879 6.121 4 4 1.879 1.879"/></svg>') no-repeat center center / contain;}
+            .tbtn::after {transition:all 150ms ease-in-out;content:'';position:absolute;top:50%;right:4px;margin-top:-4px;width:8px;height:8px;opacity:.35;background:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 8 8"><polygon fill="white" points="2.939 .818 6.121 4 2.939 7.182 1.879 6.121 4 4 1.879 1.879"/></svg>') no-repeat center center / contain;}
 
         .btn {display:flex;align-items:center;position:relative;justify-content:center;width:48px;height:100%;margin-left:2px;cursor:pointer;transition:all 150ms ease-in-out;border-radius:0;}
             .btn svg {display:block;width:24px;height:24px;}
