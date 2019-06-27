@@ -53,7 +53,7 @@
 
             .tbtn::after {content:'';position:absolute;top:50%;right:4px;margin-top:-4px;width:8px;height:8px;opacity:.35;background:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 8 8"><polygon fill="white" points="2.939 .818 6.121 4 2.939 7.182 1.879 6.121 4 4 1.879 1.879"/></svg>') no-repeat center center / contain;}
 
-        .btn {display:flex;align-items:center;justify-content:center;width:48px;height:100%;margin-left:2px;cursor:pointer;transition:all 150ms ease-in-out;border-radius:0;}
+        .btn {display:flex;align-items:center;position:relative;justify-content:center;width:48px;height:100%;margin-left:2px;cursor:pointer;transition:all 150ms ease-in-out;border-radius:0;}
             .btn svg {display:block;width:24px;height:24px;}
                 .btn svg * {fill:rgba(255,255,255,.9);transition:fill 150ms ease-in-out;}
 
@@ -106,8 +106,11 @@
 
 .tbtn:active .badge, .tbtn.selected .badge {border-color: var(--presstool);}
 
-        .tooltip {left: 64px;position: fixed;transition: all 150ms ease-in-out;transform:translateX(-4px);pointer-event:none;opacity:0;padding:0 8px;line-height:24px;background:rgba(47, 51, 56, 0.8);color:#ccc;border-radius:4px;font-size:12px;font-weight:600;transition-delay:0s;}
+        .tooltip {left: 64px;position: fixed;white-space:nowrap;transition: all 150ms ease-in-out;transform:translateX(-4px);pointer-event:none;opacity:0;padding:0 8px;line-height:24px;background:rgba(47, 51, 56, 0.8);color:#ccc;border-radius:4px;font-size:12px;font-weight:600;transition-delay:0s;}
         .tbtn:not(.toggled):hover .tooltip {opacity:1;transform:translateX(0);transition-delay:.8s;}
+
+        #nav .tooltip {left:50%;position:absolute;top:auto;bottom:0;transform:translate(-50%, calc(100% + 4px));transition-delay:0s;}
+        #nav .btn:hover .tooltip {left:50%;position:absolute;top:auto;bottom:0;transform:translate(-50%, calc(100% + 8px));opacity:1;transition-delay:.8s;}
     </style>
     <script src="../js/gator.js"></script>
 </head>
@@ -130,23 +133,40 @@
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                     <path fill-rule="evenodd" d="M15.5273023,16.9415159 C12.3888727,19.3840137 7.8491914,19.1628999 4.96446609,16.2781746 C1.84027176,13.1539803 1.84027176,8.08866043 4.96446609,4.96446609 C8.08866043,1.84027176 13.1539803,1.84027176 16.2781746,4.96446609 C19.1628999,7.8491914 19.3840137,12.3888727 16.9415159,15.5273023 L21.3786797,19.9644661 L19.9644661,21.3786797 L15.5273023,16.9415159 L15.5273023,16.9415159 Z M6.37867966,6.37867966 C4.03553391,8.72182541 4.03553391,12.5208153 6.37867966,14.863961 C8.72182541,17.2071068 12.5208153,17.2071068 14.863961,14.863961 C17.2071068,12.5208153 17.2071068,8.72182541 14.863961,6.37867966 C12.5208153,4.03553391 8.72182541,4.03553391 6.37867966,6.37867966 Z"/>
                 </svg>
+                <div class=tooltip>
+                        Search
+                </div>
             </div>
             <div id=present class="btn disabled">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                     <polygon fill-rule="evenodd" points="12 4 20 20 4 20" transform="rotate(90 12 12)"/>
                     </svg>
+                    <div class=tooltip>
+                            Present
+                    </div>
             </div>
 
                 <div id=zoomout class=btn>
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                             <rect width="14" height="2.625" x="5" y="10.688" fill-rule="evenodd"/>
                         </svg>
+                        <div class=tooltip>
+                               Zoom Out
+                        </div>
                 </div>
-                <div id=zoomnum class=btn>100</div>
+                <div id=zoomnum class=btn>
+                    100
+                    <div class=tooltip>
+                            Current Zoom
+                    </div>
+                </div>
                 <div id=zoomin class=btn>
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                             <path fill-rule="evenodd" d="M10.6875,10.6875 L10.6875,5 L13.3125,5 L13.3125,10.6875 L19,10.6875 L19,13.3125 L13.3125,13.3125 L13.3125,19 L10.6875,19 L10.6875,13.3125 L5,13.3125 L5,10.6875 L10.6875,10.6875 Z"/>
                           </svg>
+                          <div class=tooltip>
+                                Zoom In
+                        </div>
                 </div>
                 
 
@@ -154,6 +174,9 @@
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                         <path fill-rule="evenodd" d="M2.67648321,19 C2.17866838,19 1.48221657,18.9644554 1.18120514,18.6570102 C0.814490718,18.2833366 1.0855538,17.2732027 1.28449637,16.5373999 L1.29213626,16.5088427 C1.34042032,16.3296009 1.38595403,16.1600807 1.41651357,16.0188139 L3.82766092,5.93266497 C4.01101813,5.06744353 4.46941116,5 5.0983264,5 C5.1967281,5 5.29849136,5.0024304 5.40850568,5.00607599 C5.4470107,5.00607599 5.48582131,5.00607599 5.52524311,5.00850639 C5.61080981,5.01093679 5.69882127,5.01093679 5.79049988,5.01093679 L18.4183111,5.01093679 C18.4583441,5.01093679 18.4977659,5.00850639 18.5368821,5.00850639 L18.6484244,5.00850639 C18.6841791,5.00850639 18.7196281,5.00850639 18.7547716,5.00850639 C19.5798791,5.00850639 20.1391186,5.07838031 20.3582304,6.00891869 L22.6453061,16.0212443 C22.6660866,16.1208906 22.6908398,16.233904 22.7177322,16.3536011 L22.7247609,16.3855001 C22.9044509,17.187835 23.149844,18.284248 22.8806145,18.6591368 C22.6602802,18.9580756 21.8528973,18.9933164 21.2643207,18.9933164 C21.0727124,18.9933164 20.8823265,18.9884556 20.7053868,18.986329 L20.6778832,18.9838986 C20.5452548,18.980253 20.4199607,18.9790378 20.3136135,18.9790378 L16.9413688,18.9790378 L15.7046244,16.0573964 L19.1370714,16.0573964 L12.0280067,8.73582449 L4.91833074,16.0573964 L8.35108335,16.0573964 L7.11189419,18.9790378 L3.69289336,18.9790378 C3.57065522,18.9790378 3.43313731,18.9826834 3.28675714,18.9872404 L3.2561976,18.9872404 C3.03433537,18.9942278 2.84945019,19 2.67648321,19 Z"/>
                       </svg>
+                      <div class=tooltip style="margin-left:-16px;">
+                            Send To Wall
+                    </div>
             </div>
         </div>
     </div>
