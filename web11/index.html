@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1, minimum-scale=1" name="viewport">
+    <title>Web 1.1</title>
+    <!-- <link rel="shortcut icon" type="image/x-icon" href="./favicon.ico"/>
+    <link rel="shortcut icon" type="image/png" href="./favicon.png"/>
+    <link rel="stylesheet" type="text/css" href="./css/basic.css"> -->
+    <link href="https://fonts.googleapis.com/css?family=Barlow:400,500,600,700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bars:#2F3338;
+            --bg:#211F20;
+
+            --hovertool:#333C43;
+            --presstool:#38454F;
+            
+        }
+        * {margin:0;padding:0;}
+        html {font:normal 14px 'Barlow', sans-serif;color:white;background:var(--bg);}
+        body {}
+
+        a {}
+
+        #nav {position:fixed;top:0;left:0;right:0;height:56px;background:var(--bars);display:flex;}
+            #navleft {display:flex;width:100%;align-items:center;}
+            #navright {display:flex;align-items:center;padding-right:8px;}
+            #logo {display:flex;align-items:center;justify-content:center;height:100%;width:56px;}
+            #workspace {display:flex;align-items:center;justify-content:center;font-size:18px;height:100%;font-weight:500;padding:0 12px;}
+        #toolbar {position:fixed;top:56px;left:0;bottom:0;width:56px;z-index:2;}
+            #meetings {background:var(--bars);margin-top:1px;margin-bottom:1px;width:100%;}
+            #tools {overflow-y:auto;background:var(--bars);position:absolute;top:150px;bottom:0;left:0;width:100%;}
+
+        .tbtn {width:100%;height:48px;margin-bottom:2px;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;transition:all 150ms ease-in-out;}
+            .tbtn:last-child {margin:0;}
+            .tbtn svg {display:block;width:24px;height:24px;}
+                    .tbtn svg * {fill:rgba(255,255,255,.9);transition:fill 150ms ease-in-out;}
+
+
+            .tbtn:hover {background-color:var(--hovertool);}
+            .tbtn:hover svg *, .tbtn:active svg *, .tbtn.selected svg * {fill:rgba(255,255,255,1);}
+                .tbtn.selected::after {opacity:.6;}
+                
+            .tbtn:active, .tbtn.selected {background-color:var(--presstool);}
+
+
+            .tbtn::after {content:'';position:absolute;top:50%;right:4px;margin-top:-4px;width:8px;height:8px;opacity:.35;background:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 8 8"><polygon fill="white" points="2.939 .818 6.121 4 2.939 7.182 1.879 6.121 4 4 1.879 1.879"/></svg>') no-repeat center center / contain;}
+
+        .btn {display:flex;align-items:center;justify-content:center;width:48px;height:48px;margin-left:8px;cursor:pointer;transition:all 150ms ease-in-out;border-radius:4px;}
+            .btn svg {display:block;width:24px;height:24px;}
+                .btn svg * {fill:rgba(255,255,255,.9);transition:fill 150ms ease-in-out;}
+
+
+        .btn:hover {background-color:var(--hovertool);}
+        .btn:active {background-color:var(--presstool);}
+            .btn:hover svg *, .btn:active svg * {fill:rgba(255,255,255,1);}
+ 
+
+        #zoomnum {margin:0 -8px 0 0;color:rgba(255,255,255,.4);font-weight:600;font-size:16px;}
+
+        .disabled {pointer-events:none;opacity:.2;}
+
+        #panels {position:fixed;top:57px;left:56px;}
+
+        .panel {width:200px;height:200px;border:4px solid var(--presstool);background:#21272A;position:absolute;top:0;left:0;box-sizing:border-box;transition:all 150ms ease-in-out;transform:translateX(-8px);opacity:0;pointer-events:none;}
+            .panel.visible {transform:translateX(0);opacity:1;pointer-events:all;}
+            #userpanel {}
+            #callpanel {top:50px;}
+            #activitypanel {top:100px;}
+            #selectpanel {top:149px;}
+            #penpanel {top:199px;}
+            #textpanel {top:249px;}
+            #apppanel {top:299px;}
+            #canvaspanel {top:349px;}
+    </style>
+    <script src="../js/gator.js"></script>
+</head>
+<body>
+    <div id=nav>
+        <div id=navleft>
+            <div id=logo>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" style="margin-right: -8px;">
+                          <path fill="#0072FF" d="M1.13686838e-13,0 L3.99799993,4 L8,4 L8,8.00159467 L12,12 L12,0.549899752 C12,0.246221983 11.753778,0 11.4501002,0 L1.13686838e-13,0 Z" transform="translate(14 3)"/>
+                          <path fill="#FFF" d="M13.7295764,24.3233074 L10.1099244,24.3233074 L10.1099244,20.6457669 L13.4661372,20.6457669 C14.4938355,20.6457669 15.6265123,21.4172958 15.6265123,22.4459607 C15.6265123,23.5004239 14.7572747,24.3233074 13.7295764,24.3233074 L13.7295764,24.3233074 Z M10.1099244,13.7032177 L13.3873412,13.7032177 C14.3887328,13.7032177 15.2316638,14.4235133 15.2316638,15.4514514 C15.2316638,16.4802374 14.3887328,17.3031208 13.3873412,17.3031208 L10.1099244,17.3031208 L10.1099244,13.7032177 Z M16.4695674,18.8461787 C17.707471,18.2027938 19.5256109,16.7630506 19.5256109,14.7832371 C19.5256109,12.0832492 16.9702632,10 13.8617303,10 L6,10 L6,28 L14.2565789,28 C17.3914184,28 20,25.9168719 20,23.0372643 C20,20.671323 17.8658075,19.4119262 16.4695674,18.8461787 L16.4695674,18.8461787 Z"/>
+                      </svg>
+            </div>
+            <div id=workspace>Workspace</div>
+        </div>
+        <div id=navright>
+            <div id=search class=btn>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path fill-rule="evenodd" d="M15.5273023,16.9415159 C12.3888727,19.3840137 7.8491914,19.1628999 4.96446609,16.2781746 C1.84027176,13.1539803 1.84027176,8.08866043 4.96446609,4.96446609 C8.08866043,1.84027176 13.1539803,1.84027176 16.2781746,4.96446609 C19.1628999,7.8491914 19.3840137,12.3888727 16.9415159,15.5273023 L21.3786797,19.9644661 L19.9644661,21.3786797 L15.5273023,16.9415159 L15.5273023,16.9415159 Z M6.37867966,6.37867966 C4.03553391,8.72182541 4.03553391,12.5208153 6.37867966,14.863961 C8.72182541,17.2071068 12.5208153,17.2071068 14.863961,14.863961 C17.2071068,12.5208153 17.2071068,8.72182541 14.863961,6.37867966 C12.5208153,4.03553391 8.72182541,4.03553391 6.37867966,6.37867966 Z"/>
+                </svg>
+            </div>
+            <div id=present class="btn disabled">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <polygon fill-rule="evenodd" points="12 4 20 20 4 20" transform="rotate(90 12 12)"/>
+                    </svg>
+            </div>
+
+                <div id=zoomout class=btn>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                            <rect width="14" height="2.625" x="5" y="10.688" fill-rule="evenodd"/>
+                        </svg>
+                </div>
+                <div id=zoomnum class=btn>100</div>
+                <div id=zoomin class=btn>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                            <path fill-rule="evenodd" d="M10.6875,10.6875 L10.6875,5 L13.3125,5 L13.3125,10.6875 L19,10.6875 L19,13.3125 L13.3125,13.3125 L13.3125,19 L10.6875,19 L10.6875,13.3125 L5,13.3125 L5,10.6875 L10.6875,10.6875 Z"/>
+                          </svg>
+                </div>
+                
+
+            <div id=sendtowall class=btn>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                        <path fill-rule="evenodd" d="M2.67648321,19 C2.17866838,19 1.48221657,18.9644554 1.18120514,18.6570102 C0.814490718,18.2833366 1.0855538,17.2732027 1.28449637,16.5373999 L1.29213626,16.5088427 C1.34042032,16.3296009 1.38595403,16.1600807 1.41651357,16.0188139 L3.82766092,5.93266497 C4.01101813,5.06744353 4.46941116,5 5.0983264,5 C5.1967281,5 5.29849136,5.0024304 5.40850568,5.00607599 C5.4470107,5.00607599 5.48582131,5.00607599 5.52524311,5.00850639 C5.61080981,5.01093679 5.69882127,5.01093679 5.79049988,5.01093679 L18.4183111,5.01093679 C18.4583441,5.01093679 18.4977659,5.00850639 18.5368821,5.00850639 L18.6484244,5.00850639 C18.6841791,5.00850639 18.7196281,5.00850639 18.7547716,5.00850639 C19.5798791,5.00850639 20.1391186,5.07838031 20.3582304,6.00891869 L22.6453061,16.0212443 C22.6660866,16.1208906 22.6908398,16.233904 22.7177322,16.3536011 L22.7247609,16.3855001 C22.9044509,17.187835 23.149844,18.284248 22.8806145,18.6591368 C22.6602802,18.9580756 21.8528973,18.9933164 21.2643207,18.9933164 C21.0727124,18.9933164 20.8823265,18.9884556 20.7053868,18.986329 L20.6778832,18.9838986 C20.5452548,18.980253 20.4199607,18.9790378 20.3136135,18.9790378 L16.9413688,18.9790378 L15.7046244,16.0573964 L19.1370714,16.0573964 L12.0280067,8.73582449 L4.91833074,16.0573964 L8.35108335,16.0573964 L7.11189419,18.9790378 L3.69289336,18.9790378 C3.57065522,18.9790378 3.43313731,18.9826834 3.28675714,18.9872404 L3.2561976,18.9872404 C3.03433537,18.9942278 2.84945019,19 2.67648321,19 Z"/>
+                      </svg>
+            </div>
+        </div>
+    </div>
+    <div id=toolbar>
+        <div id=meetings>
+            <div class="tbtn nontool" id=user>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path fill-rule="evenodd" d="M10.5,13.3231775 L13.8,13.3231775 C13.8,14.2344474 13.0612698,14.9731775 12.15,14.9731775 C11.2387302,14.9731775 10.5,14.2344474 10.5,13.3231775 Z M5.51092852,20.5598697 C5.65855932,19.7720861 7.28805796,19.1065482 9.55468007,18.8231775 C10.1855833,19.3513401 11.0484463,19.6768225 12,19.6768225 C12.9515537,19.6768225 13.8144167,19.3513401 14.4453199,18.8231775 C16.711942,19.1065482 18.3414407,19.7720861 18.4890715,20.5598697 C16.6699901,21.8909728 14.4267676,22.6768225 12,22.6768225 C9.57323244,22.6768225 7.33000991,21.8909728 5.51092852,20.5598697 Z M13.6300385,4.95830315 C11.9074039,7.26012607 9.46226788,8.96230257 6.64285714,9.70731983 L6.64285714,11.7231775 C6.64285714,13.6963757 7.78585968,15.4026114 9.44588314,16.2159028 L9.28463568,16.8771597 C8.03941808,17.0263074 7.01124808,17.2748592 6.3550412,17.5830535 C4.98449872,16.8890246 4.5,15.65676 4.5,13.5818052 C4.5,3.59759666 7.85786438,1.32317753 12,1.32317753 C16.1421356,1.32317753 19.5,3.51953735 19.5,13.5818052 C19.5,15.65676 19.0155013,16.8890246 17.6449588,17.5830535 C16.9891856,17.2750629 15.9619409,17.026636 14.7178331,16.8774555 L14.5569512,16.2145131 C16.2154412,15.4006688 17.3571429,13.6952525 17.3571429,11.7231775 L17.3571429,8.65157339 C15.8406239,7.75092095 14.5590809,6.47961141 13.6300385,4.95830315 L13.6300385,4.95830315 Z"/>
+                      </svg>
+            </div>
+            <div class="tbtn nontool" id=call>
+                    <svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24">
+                        <path fill-rule="evenodd" d="M20.1424569,3.52941707 C20.5747388,3.61604102 21,4.04777086 21,4.60342831 C21,7.5867927 20.1424569,12.4816942 15.9287237,16.4975108 C12.105887,20.140791 7.61279867,21 4.63521852,21 C4.08084138,21 3.64548746,20.5525806 3.5632896,20.140791 L3.03602965,16.8595494 C2.90656686,16.3839307 3.12714625,15.8221508 3.679187,15.5707359 L7.5381311,13.9239187 C7.99533244,13.7406827 8.51667515,13.852787 8.86017677,14.2461221 C9.55576968,15.1110574 10.0272676,15.6924134 10.2746707,15.99019 C10.4336785,16.1815733 10.6405682,16.3122948 10.8879274,16.1815733 C13.5281575,14.7862957 14.6520745,13.7721891 16.1147823,10.9552763 C16.2461555,10.7022751 16.2178758,10.5590068 16.0427829,10.4107727 C15.6064411,10.0413646 14.9987873,9.52979568 14.2198214,8.87606582 C13.759328,8.51184883 13.7068826,7.93668994 13.8982427,7.55145195 L15.541867,3.68501147 C15.7505887,3.22493143 16.2341125,2.87827098 16.8281817,3.04060472 L20.1424569,3.52941707 Z" transform="matrix(-1 0 0 1 24 0)"/>
+                      </svg>
+                      
+            </div>
+            <div class="tbtn nontool" id=activity>
+                    <svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24">
+                        <path fill-rule="evenodd" d="M9.27272727,17 L4,17 C2.8954305,17 2,16.1045695 2,15 L2,5 C2,3.8954305 2.8954305,3 4,3 L20,3 C21.1045695,3 22,3.8954305 22,5 L22,15 C22,16.1045695 21.1045695,17 20,17 L14.7272727,17 L12,21 L9.27272727,17 Z M7.5,11.5 C8.19035594,11.5 8.75,10.9403559 8.75,10.25 C8.75,9.55964406 8.19035594,9 7.5,9 C6.80964406,9 6.25,9.55964406 6.25,10.25 C6.25,10.9403559 6.80964406,11.5 7.5,11.5 Z M12,11.5 C12.6903559,11.5 13.25,10.9403559 13.25,10.25 C13.25,9.55964406 12.6903559,9 12,9 C11.3096441,9 10.75,9.55964406 10.75,10.25 C10.75,10.9403559 11.3096441,11.5 12,11.5 Z M16.5,11.5 C17.1903559,11.5 17.75,10.9403559 17.75,10.25 C17.75,9.55964406 17.1903559,9 16.5,9 C15.8096441,9 15.25,9.55964406 15.25,10.25 C15.25,10.9403559 15.8096441,11.5 16.5,11.5 Z"/>
+                      </svg>
+            </div>
+        </div>
+        <div id=tools>
+                <div class="tbtn selected" id=select>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path fill-rule="evenodd" d="M18.5,16.2775712 C18.9427113,16.2775712 19.1670158,15.7446582 18.857558,15.4280683 L6.85755798,3.1515017 C6.54426079,2.83098388 6,3.05280064 6,3.50100462 L6,20.5010046 C6,20.9379424 6.52103086,21.1646855 6.84077198,20.8668932 L11.7683501,16.2775712 L18.5,16.2775712 Z"/>
+                    </svg>
+                </div>
+                <div class=tbtn id=pen>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path fill-rule="evenodd" d="M3.00012095,17.5177058 L17.2214154,3.29285429 C17.6118944,2.9022847 18.2450594,2.90221126 18.635629,3.29269026 C18.6356719,3.29273322 18.6357149,3.29277618 18.6357579,3.29281915 L20.7051565,5.36275678 C21.0956535,5.75330564 21.0956131,6.38646799 20.7050661,6.77696694 L6.4822882,20.9980028 L3.00012095,20.9980028 L3.00012095,17.5177058 Z"/>
+                    </svg>
+                </div>
+                <div class=tbtn id=text>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                        <path fill-rule="evenodd" d="M13.5,7 L13.5,20 L10.5,20 L10.5,7 L4,7 L4,4 L20,4 L20,7 L13.5,7 Z"/>
+                    </svg>
+                </div>
+                <div class=tbtn id=app>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                        <path fill-rule="evenodd" d="M10.5,10.5 L10.5,4 L13.5,4 L13.5,10.5 L20,10.5 L20,13.5 L13.5,13.5 L13.5,20 L10.5,20 L10.5,13.5 L4,13.5 L4,10.5 L10.5,10.5 Z"/>
+                    </svg>
+                </div>
+                <div class=tbtn id=canvas>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                        <path fill-rule="evenodd" d="M2.5,1 C3.32842712,1 4,1.67157288 4,2.5 C4,3.32842712 3.32842712,4 2.5,4 C1.67157288,4 1,3.32842712 1,2.5 C1,1.67157288 1.67157288,1 2.5,1 Z M2.5,20 C3.32842712,20 4,20.6715729 4,21.5 C4,22.3284271 3.32842712,23 2.5,23 C1.67157288,23 1,22.3284271 1,21.5 C1,20.6715729 1.67157288,20 2.5,20 Z M21.5,20 C22.3284271,20 23,20.6715729 23,21.5 C23,22.3284271 22.3284271,23 21.5,23 C20.6715729,23 20,22.3284271 20,21.5 C20,20.6715729 20.6715729,20 21.5,20 Z M21.5,1 C22.3284271,1 23,1.67157288 23,2.5 C23,3.32842712 22.3284271,4 21.5,4 C20.6715729,4 20,3.32842712 20,2.5 C20,1.67157288 20.6715729,1 21.5,1 Z M7,7 L7,17 L17,17 L17,7 L7,7 Z M6,5 L18,5 C18.5522847,5 19,5.44771525 19,6 L19,18 C19,18.5522847 18.5522847,19 18,19 L6,19 C5.44771525,19 5,18.5522847 5,18 L5,6 C5,5.44771525 5.44771525,5 6,5 Z"/>
+                    </svg>
+                </div>
+        </div>
+        <div id=panels>
+            <div class=panel id=userpanel>
+                
+            </div>
+            <div class=panel id=callpanel>
+                
+            </div>
+            <div class=panel id=activitypanel>
+            
+            </div>
+            <div class=panel id=selectpanel>
+            
+            </div>
+            <div class=panel id=penpanel>
+
+            </div>
+            <div class=panel id=textpanel>
+
+            </div>
+            <div class=panel id=apppanel>
+
+            </div>
+            <div class=panel id=canvaspanel>
+
+            </div>
+        </div>
+    </div>
+    <script>
+        function toggle(e){
+            var selected = this.classList.contains('selected');
+            var toggled = this.classList.contains('toggled');
+            var nontool = this.classList.contains('nontool');
+            var old = document.getElementsByClassName('tbtn selected');
+            while(old[0]){
+                old[0].classList.remove('selected', 'toggled');
+            }
+
+            old = document.getElementsByClassName('panel visible');
+            while(old[0]){
+                old[0].classList.remove('visible');
+            }
+
+            this.classList.add('selected');
+
+
+            if ( selected || nontool ){
+                var m = this.id + 'panel';
+                var p = document.getElementById(m);
+                if ( !toggled || nontool ){
+                    this.classList.add('toggled');
+                    p.classList.add('visible');
+                }
+            } else {
+                
+            }
+        }
+        Attach.on('click', '.tbtn', toggle);
+    </script>
+</body>
+</html>
