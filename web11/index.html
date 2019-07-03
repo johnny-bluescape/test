@@ -136,7 +136,7 @@
     <div id=nav>
         <div id=navleft>
             <div id=logo>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" style="margin-right: -6px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" style="margin-right: -8px;">
                           <path fill="#0072FF" d="M1.13686838e-13,0 L3.99799993,4 L8,4 L8,8.00159467 L12,12 L12,0.549899752 C12,0.246221983 11.753778,0 11.4501002,0 L1.13686838e-13,0 Z" transform="translate(14 3)"/>
                           <path fill="#FFF" d="M13.7295764,24.3233074 L10.1099244,24.3233074 L10.1099244,20.6457669 L13.4661372,20.6457669 C14.4938355,20.6457669 15.6265123,21.4172958 15.6265123,22.4459607 C15.6265123,23.5004239 14.7572747,24.3233074 13.7295764,24.3233074 L13.7295764,24.3233074 Z M10.1099244,13.7032177 L13.3873412,13.7032177 C14.3887328,13.7032177 15.2316638,14.4235133 15.2316638,15.4514514 C15.2316638,16.4802374 14.3887328,17.3031208 13.3873412,17.3031208 L10.1099244,17.3031208 L10.1099244,13.7032177 Z M16.4695674,18.8461787 C17.707471,18.2027938 19.5256109,16.7630506 19.5256109,14.7832371 C19.5256109,12.0832492 16.9702632,10 13.8617303,10 L6,10 L6,28 L14.2565789,28 C17.3914184,28 20,25.9168719 20,23.0372643 C20,20.671323 17.8658075,19.4119262 16.4695674,18.8461787 L16.4695674,18.8461787 Z"/>
                       </svg>
@@ -309,10 +309,25 @@
             var selected = this.classList.contains('selected');
             var toggled = this.classList.contains('toggled');
             var nontool = this.classList.contains('nontool');
-            var old = document.getElementsByClassName('tbtn selected');
+            var tools = document.getElementById('tools');
+            var meetings = document.getElementById('meetings');
+
+            var parent = document.getElementById('toolbar');
+
+            if ( nontool ){
+                parent = meetings;
+                var old = tools.getElementsByClassName('tbtn selected toggled');
+                while(old[0]){
+                    old[0].classList.remove('toggled');
+                }
+            }
+            
+            var old = parent.getElementsByClassName('tbtn selected');
             while(old[0]){
                 old[0].classList.remove('selected', 'toggled');
             }
+
+            
 
             old = document.getElementsByClassName('panel visible');
             while(old[0]){
@@ -325,9 +340,13 @@
             if ( selected || nontool ){
                 var m = this.id + 'panel';
                 var p = document.getElementById(m);
-                if ( !toggled || nontool ){
+                if ( !toggled  ){
                     this.classList.add('toggled');
                     p.classList.add('visible');
+                }
+
+                if ( nontool && toggled ){
+                    this.classList.remove('selected');
                 }
             } else {
                 
